@@ -1,0 +1,52 @@
+{
+    "tracks":[
+        {
+            "title":"Sunset at Sandy Isle",
+            "path":"Blue_Dot_Sessions_-_02_-_Sunset_at_Sandy_Isle.mp3",
+            "caption":"Music by Blue Dot Sessions",
+            "duration":"60"
+        },
+        {
+            "title":"Turning to You",
+            "path":"Blue_Dot_Sessions_-_04_-_Turning_to_You.mp3",
+            "caption":"Music by Blue Dot Sessions",
+            "duration":"60"
+        },
+        {
+            "title":"Venndet",
+            "path":"Blue_Dot_Sessions_-_05_-_Venndet.mp3",
+            "caption":"Music by Blue Dot Sessions",
+            "duration":"60"
+        },
+        {
+            "title":"Pat Dog",
+            "path":"Blue_Dot_Sessions_-_06_-_Pat_Dog.mp3",
+            "caption":"Music by Blue Dot Sessions",
+            "duration":"60"
+        },
+        {
+            "title":"Solage",
+            "path":"Blue_Dot_Sessions_-_08_-_Solage.mp3",
+            "caption":"Music by Blue Dot Sessions",
+            "duration":"60"
+        },
+        {
+            "title":"This Must Be The One",
+            "path":"Monplaisir_-_13_-_This_must_be_the_one.mp3",
+            "caption":"Music by Monplaisir",
+            "duration":"60"
+        },
+        {
+            "title":"Again and Again",
+            "path":"Monplaisir_-_16_-_Again_and_Again.mp3",
+            "caption":"Music by Monplaisir",
+            "duration":"60"
+        },
+        {
+            "title":"Thank Your Lucky Stars",
+            "path":"Squire_Tuck_-_01_-_Thank_Your_Lucky_Stars.mp3",
+            "caption":"Music by Squire Tuck",
+            "duration":"60"
+        }
+    ]
+}

@@ -1,0 +1,108 @@
+<style>
+
+</style>
+
+<div ng-controller="dashboard" ng-cloak>
+  <div class="progress" style="position:fixed;top:0;width:100%;left:0;height:2px;margin:0;" ng-show="loading">
+    <div class="indeterminate"></div>
+  </div>
+
+  <div ng-hide="events.length==0 && !loading" class="page-header">
+    <h1>My Shoots</h1>
+  </div>
+
+  <div ng-show="events.length==0 && !loading" class="text-center">
+    <h1>Welcome to
+      <img src="/images/logo_web.svg" />
+    </h1>
+
+    <% if (!sails.config.LOCALONLY) { %>
+  <!-- <div class="row"> -->
+      <div class="alert-info alert text-left col-md-8 col-md-offset-2 lead" style="margin-top:2em;">
+          <div class="pull-left" style="line-height: 60px">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        Looking for how to contribute?
+      </div>
+        <div class="pull-right">
+        <a href='https://play.google.com/store/apps/details?id=uk.ac.ncl.di.bootlegger&hl=en&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'
+          style="display:inline-block;">
+          <img style="height:60px;vertical-align:inherit" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'
+          />
+        </a>
+       
+        <!-- <a href="https://itunes.apple.com/gb/app/bootlegger/id1053074626?mt=8" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-lrg.svg) no-repeat;padding:10px;width:135px;height:60px;background-size:contain;background-position:center;"
+          style="display:inline-block;"></a> -->
+        </div>
+      <div class="clearfix"></div>
+      </div>
+    <!-- </div> -->
+
+      <% } %>
+        <a href="/commission/new" class="btn btn-lg btn-success">
+          <i class="fa fa-plus"></i> Start a Shoot Now</a>
+  </div>
+
+  <div ng-if="events.length > 0" class="row">
+    <div class="my-animation col-xs-12 col-sm-6 col-md-4">
+      <div style="min-height:270px;background:#fbfbfb" class="text-center">
+        <a href="/commission/new" class="btn" style="width:100%;height:270px;padding-top:120px;">
+          <i class="fa fa-plus"></i> Start a Shoot Now</a>
+      </div>
+    </div>
+    <div ng-repeat="event in events" class="my-animation col-xs-12 col-sm-6 col-md-4">
+      <div>
+        <div class="panel panel-default text-center" style="min-height:270px;">
+          <div style=" margin-bottom:30px;">
+            <!-- Go to www.addthis.com/dashboard to customize your tools -->
+
+            <div style="position:relative;background:url(/images/event_back.png);background-size:cover;width:100%;height:140px;">
+              <div style="height:140px;overflow:hidden;position:absolute;width:100%;">
+                <div ng-show="event.iconbackground!=''" style="background:url('{{event.iconbackground}}');background-size:cover;position:absolute;width:100%;height:100%;top:0;left:0;">
+                </div>
+              </div>
+              <div ng-show="event.icon" style="background:white;position:absolute;bottom:-25px;overflow:hidden;border-radius:25px;width:50px;height:50px;display:inline-block;margin-left:-25px;color:white;">
+                <img ng-src="{{event.icon}}" style="width:50px;height:50px;display:inline-block;" />
+              </div>
+              <!-- <a class="btn btn-link" style="position:absolute;right:10px;top:10px;" href="/event/view/{{event.id}}"><i class="fa fa-cog fa-2x" style="color:white;"></i></a> -->
+
+              <% if (!sails.config.LOCALONLY) { %>
+                <span ng-if="event.joincode" style="position:absolute;right:16px;bottom:10px;">
+                  <i class="fa fa-key fa-2x" style="color:white;"></i>
+                  <span style="color:white;font-size:2em;">{{event.joincode}}</span>
+                </span>
+                <% } %>
+
+                  <div style="position:absolute;left:5px;top:5px;" class="addthis_toolbox" addthis:url="<%- sails.config.master_url %>/s/{{event.offlinecode}}"
+                    addthis:title="{{event.name}}">
+                    <a class="addthis_button_preferred_1"></a>
+                    <a class="addthis_button_preferred_2"></a>
+                    <a class="addthis_button_preferred_3"></a>
+                    <a class="addthis_button_preferred_4"></a>
+                    <a class="addthis_button_compact"></a>
+                    <a class="addthis_counter addthis_bubble_style"></a>
+                  </div>
+            </div>
+          </div>
+          <div>
+            <h2 style="min-height:2.2em" class="truncate">{{event.name}}</h2>
+            <!-- <p><strong>{{formatDate(event.starts) | date:'d MMM yy'}}</strong> to <strong>{{formatDate(event.ends) | date:'d MMM yy'}}</strong></p> -->
+            <!-- <p style="margin-top:10px;text-overflow: ellipsis;word-wrap: break-word;overflow: hidden;max-height: 3.2em;line-height: 1.6em;min-height:4.2em;padding:1em;">{{event.description}}</p> -->
+
+          </div>
+          <div class="text-center" style="position:absolute;bottom:3em;width:92%;">
+            <a href="/event/view/{{event.id}}">Settings</a> &middot;
+            <a href="/commission/{{event.id}}">Template</a> &middot;
+            <a href="/shoot/{{event.id}}">Videos</a> &middot;
+            <!-- <a class="btn btn-link" href="/watch/view/{{event.id}}">Editing</a> -->
+            <a href="/watch/edits/{{event.id}}">Stories</a> &middot;
+            <a href="/post/{{event.id}}">Export</a>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+
+  </div>
+</div>

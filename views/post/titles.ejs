@@ -1,0 +1,43 @@
+<style>
+	    .btn-file {
+	    position: relative;
+	    overflow: hidden;
+	    }
+	    .btn-file input[type=file] {
+	    position: absolute;
+	    top: 0;
+	    right: 0;
+	    min-width: 100%;
+	    min-height: 100%;
+	    font-size: 999px;
+	    text-align: right;
+	    filter: alpha(opacity=0);
+	    opacity: 0;
+	    outline: none;
+	    background: white;
+	    cursor: inherit;
+	    display: block;
+	    }
+</style>
+<div class="row">
+	<div class="col-sm-2">
+
+		<label>Title Generator</label>
+	</div>
+<div class="col-sm-6">
+<p>If you want to credit contributors, you can download the full list of people:</p>
+	<a class="btn btn-primary" href="/post/module_function/titles?func=getedl&event=<%-event %>&apikey=<%-apikey %>"><i class="fa fa-download"></i> Download Titles</a>
+</div>
+
+
+		<div class="col-sm-4" id="desc">
+			<div class="" style="margin-right: -40px;margin-left:20px;margin-top: -10px;margin-bottom: -13px;display:inline-block;right:25px;left:inherit;position:relative;float:right;">
+			    <div class="arrow"></div>
+			    <h3 class="popover-title"><%- name %></h3>
+			    <div class="popover-content">
+			      <p><%- description %></p>
+			    </div>
+			</div>
+		</div>
+
+</div>

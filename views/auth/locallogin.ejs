@@ -1,0 +1,138 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= __('LOGIN') %>
+    </title>
+    <!--SCRIPTS-->
+    <script src="/js/dependencies/0socket.io.js"></script>
+    <script src="/js/dependencies/2jquery-2.0.3.min.js"></script>
+    <script src="/js/dependencies/3angular.min.js"></script>
+    <script src="/js/dependencies/ngsails.io.js"></script>
+    <script src="/js/1app.js"></script>
+    <script src="/js/admin_controller.js"></script>
+    <script src="/js/angular-animate.min.js"></script>
+    <script src="/js/angular-bootstrap-switch.js"></script>
+    <script src="/js/angular-dragdrop.js"></script>
+    <script src="/js/angular-google-maps.min.js"></script>
+    <script src="/js/angular-knob.js"></script>
+    <script src="/js/angular-loading-spinner.js"></script>
+    <script src="/js/angular-sanitize.min.js"></script>
+    <script src="/js/angular-spinner.min.js"></script>
+    <script src="/js/angular-ui-sortable.js"></script>
+    <script src="/js/bootstrap-datepicker.js"></script>
+    <script src="/js/bootstrap-slider.js"></script>
+    <script src="/js/bootstrap-switch.js"></script>
+    <script src="/js/bootstrap-tokenfield.min.js"></script>
+    <script src="/js/bootstrap-wysiwyg.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstro.min.js"></script>
+    <script src="/js/checklist-model.js"></script>
+    <script src="/js/commission_controller.js"></script>
+    <script src="/js/controller_api.js"></script>
+    <script src="/js/dashboard_controller.js"></script>
+    <script src="/js/dirPagination.js"></script>
+    <script src="/js/event_controller.js"></script>
+    <script src="/js/export_controller.js"></script>
+    <script src="/js/handlebars-v1.1.2.js"></script>
+    <script src="/js/holder.js"></script>
+    <script src="/js/jasny-bootstrap.min.js"></script>
+    <script src="/js/jquery-ui.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
+    <script src="/js/jquery.hotkeys.js"></script>
+    <script src="/js/jquery.knob.js"></script>
+    <script src="/js/lodash.min.js"></script>
+    <script src="/js/log_controller.js"></script>
+    <script src="/js/modernizr.js"></script>
+    <script src="/js/moment.js"></script>
+    <script src="/js/newshoot_controller.js"></script>
+    <script src="/js/ngStorage.min.js"></script>
+    <script src="/js/rzslider.min.js"></script>
+    <script src="/js/shoot_controller.js"></script>
+    <script src="/js/slider.js"></script>
+    <script src="/js/spin.min.js"></script>
+    <script src="/js/ui-bootstrap-tpls-0.13.0.min.js"></script>
+    <script src="/js/ui-grid.min.js"></script>
+    <script src="/js/ui-utils.js"></script>
+    <script src="/js/vg-buffering.min.js"></script>
+    <script src="/js/vg-controls.min.js"></script>
+    <script src="/js/videogular.min.js"></script>
+    <script src="/js/watch_controller.js"></script>
+    <!--SCRIPTS END-->
+    <!--STYLES-->
+    <link rel="stylesheet" href="/styles/bootstrap-tokenfield.css">
+    <link rel="stylesheet" href="/styles/carousel.css">
+    <link rel="stylesheet" href="/styles/datepicker.css">
+    <link rel="stylesheet" href="/styles/ekko-lightbox.min.css">
+    <link rel="stylesheet" href="/styles/font-awesome.css">
+    <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/jasny-bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/jquery-ui.css">
+    <link rel="stylesheet" href="/styles/opensans.css">
+    <link rel="stylesheet" href="/styles/rzslider.min.css">
+    <link rel="stylesheet" href="/styles/ui-grid.min.css">
+    <link rel="stylesheet" href="/styles/videogular.css">
+    <link rel="stylesheet" href="/styles/x_app.css">
+    <!--STYLES END-->
+</head>
+
+<body>
+
+    <div class="container lead" id="privacy">
+        <p>&nbsp;</p>
+
+        <%- __('GLOBAL_RELEASE') %>
+            <a href="/privacy">
+                <%- __('FINDOUTMORE') %>
+            </a>
+            <br>
+            <br>
+            <div class="checkbox">
+                <label for="consent">
+                    <input type="checkbox" id="consent" name="consent" value="consent" />
+                    <strong>I understand and want to continue</strong>
+                </label>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 text-right">
+                    
+                    <button class="btn btn-primary" onclick="if ($('#consent').prop('checked')) {$('#entrybox').show();$('#privacy').hide();}">
+                        <%= __('CONTINUE') %>
+                            <i class="fa fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+    </div>
+
+    <div class="container" id="entrybox" style="display:none">
+        <div class="text-center">
+            <h4>
+                <%= __('MYNAME') %>
+            </h4>
+            <br>
+            <form action="/auth/locallogin" method="post">
+                <div class="form-group">
+                    <input class="form-control input-lg" pattern=".{3,}" placeholder="<%= __('FIRSTNAME') %>" required id="first_name" title="<%= __('LONGER_NAME') %>"
+                        type="text" class="validate" name="firstName" />
+                        <br>
+                    <div class="pull-left">
+                        <button class="btn" onclick="$('#entrybox').hide();$('#privacy').show();">
+                            <i class="fa fa-chevron-left"></i>
+                            <%= __('BACK') %>
+                        </button>
+                    </div>
+                    <div class="pull-right">
+                        <button class="btn btn-primary" type="submit" name="action">
+                            <%= __('CONTINUE') %>
+                                <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+
+</html>

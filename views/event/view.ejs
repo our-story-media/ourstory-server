@@ -1,0 +1,556 @@
+<div class="thispage" ng-controller="event" ng-cloak>
+
+    <div class="progress" style="position:fixed;top:0;width:100%;left:0;height:2px;margin:0;"  ng-show="loading">
+        <div class="indeterminate"></div>
+    </div>
+
+  <div class="hidden-xs row" ng-show="event.eventtype.roleimg" style="margin-top:2em;">
+    <div class="alert alert-success col-sm-8 col-sm-offset-2" >
+      <i class="fa fa-check fa-3x" style="float:left;margin-right:10px;"></i>
+      <h3 style="margin:0">Ready to Shoot!
+        <small style="display:block;">Contributors should download the App to get started...</small>
+      </h3>
+    </div>
+  </div>
+
+  <div class="hidden-xs row" ng-show="!event.eventtype.roleimg" style="margin-top:2em;">
+      <div class="alert alert-warning col-sm-8 col-sm-offset-2" >
+        <i class="fa fa-info fa-3x" style="float:left;margin-right:10px;"></i>
+        <h3 style="margin:0">Not Quite Ready!
+          <small style="display:block;">Make sure to add a Theme Selection Image...</small>
+        </h3>
+      </div>
+    </div>
+
+
+<div class="row">
+  <div class="alert text-center col-sm-8 col-sm-offset-2" ng-class="{'alert-warning':(dirty && !loading)}">
+    <span ng-show="dirty && !loading" class="text-danger">
+      <small>Changes not saved</small>
+    </span>
+    <span class="text-muted" ng-hide="dirty && !loading">
+      <small><i class="fa fa-clock-o"></i> last saved at {{event.updatedAt | date:'dd/MM HH:mm:ss'}}</small>
+    </span>
+      <button ng-show="dirty && !loading" type="button" class="btn btn-success" ng-click="updaterelease()">Save</button>
+      
+  </div>
+</div>
+
+  <div class="clearfix"></div>
+
+  <div class="form-horizontal col-xs-12">
+    <div class="form-group">
+      <div class="row">
+        <label for="inputEmail2" class="col-sm-4 control-label">Contribution starts</label>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          <input name="starts" style="margin:0" class="form-control datepicker input-lg" size="16" type="text" data-date-format="dd-mm-yyyy"
+            value="<%= event.starts %>" readonly required>
+            </div>
+        </div>
+        <div class="col-sm-3 col-md-2">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+          <input name="starts_time" class="input-lg form-control" size="5" type="text" ng-blur="updatestarttime()" value="<%= event.starts_time %>">
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <div class="row">
+        <label for="inputEmail4" class="col-sm-4 control-label">Contribution stops</label>
+        <div class="col-sm-3">
+          <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              <input name="ends" style="margin:0" class="form-control datepicker input-lg" size="16" type="text" value="<%= event.ends %>" data-date-format="dd-mm-yyyy"
+            readonly required>
+          
+          </div>
+        </div>
+        <div class="col-sm-3 col-md-2">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+          <input name="ends_time" class="input-lg form-control" size="5" type="text" ng-blur="updateendtime()" value="<%= event.ends_time %>">
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+    <% if (!sails.config.LOCALONLY) { %>
+        <form action="/event/background/<%- event.id %>?apikey=<%- apikey%>" method="post" enctype="multipart/form-data">
+          <label class="col-sm-4 control-label" data-delay="300" data-toggle="tooltip" title="Loads a background that contributors will see when they log into the mobile app">Background Image for Shoot
+            <i style="color:silver" class="fa fa-question-circle"></i>
+          </label>
+          <div class="col-sm-6">
+
+
+            <div class="fileinput fileinput-new" data-provides="fileinput">
+              <div class="fileinput-new thumbnail" style="width: 150px; height: 60px;float:left;">
+                <img data-src="holder.js/140x50?text=png \n jpg" alt="...">
+              </div>
+              <div class="fileinput-preview fileinput-exists thumbnail" style="width: 150px; height: 60px;overflow:hidden;float:left;">
+
+              </div>
+              <div style="float:right;width:10px;">
+                <span class="btn btn-link btn-file">
+                  <span class="fileinput-new">
+                    <i class="fa fa-folder-open"></i>
+                  </span>
+                  <span class="fileinput-exists">
+                    <i class="fa fa-folder-open"></i>
+                  </span>
+                  <input type="file" accept="image/png, image/jpeg" name="image" required />
+                </span>
+                <a href="/event/clearbackground/<%- event.id %>?apikey=<%- apikey%>" class="btn btn-link" data-toggle="tooltip" title="remove background">
+                  <i class="fa fa-times"></i>
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+        </form>
+
+          <% } %>
+            <div class="clearfix"></div>
+            <div id="info" class="col-xs-12 col-sm-8 col-sm-offset-2">
+
+              <div class="form-group">
+                <label tooltip-popup-delay="300" tooltip=" A description of what this template can be used for. You can use this in multiple shoots.">Shoot Description
+                  <i style="color:silver" class="fa fa-question-circle"></i>
+                </label>
+                <textarea type="text" ng-model="event.description" class="form-control" rows="3"></textarea>
+              </div>
+            </div>
+
+      </div>
+
+     
+  </div>
+
+  <div class="clearfix"></div>
+  <div class="page-header">
+    <h1>Privacy &amp; Access
+    </h1>
+  </div>
+  <div class="form-horizontal ">
+
+    <div class="col-sm-8 col-sm-offset-2">
+      <div class="row">
+        <div class="col-sm-8 col-sm-offset-3 text-muted">
+          <label data-delay="300" data-toggle="tooltip" title="If enabled, anyone who <strong>contributes</strong> to your shoot can view and their stories, and everyone eles's videos. If disabled, contributors can only playback their own video."
+            data-html="true">
+            <i ng-show="event.publicview" class="fa fa-check"></i>
+            <i ng-hide="event.publicview" class="fa fa-times"></i>
+            Contributors Can View All Footage
+            <i style="color:silver" class="fa fa-question-circle"></i>
+          </label>
+          <br>
+          <label data-delay="300" data-toggle="tooltip" title="Turning this on enables anyone using the Our Story app to contribute to your shoot. Turning it off allows only invited contributors to take part.">
+            <i ng-show="event.public" class="fa fa-check"></i>
+            <i ng-hide="event.public" class="fa fa-times"></i>
+            Anyone Can Contribute
+            <i style="color:silver" class="fa fa-question-circle"></i>
+          </label>
+
+          <br>
+
+          <label data-delay="300" data-toggle="tooltip" title="If enabled, anyone (even those who have not contributed to the shoot) who have logged in to Our Story can edit the content in the shoot."
+            data-html="true">
+            <i ng-show="event.publicedit" class="fa fa-check"></i>
+            <i ng-hide="event.publicedit" class="fa fa-times"></i>
+            Any Logged In User Can Edit Footage
+            <i style="color:silver" class="fa fa-question-circle"></i>
+          </label>
+
+
+
+         
+            <br>
+            <label data-delay="300" data-toggle="tooltip" title="If enabled, contributors can share their stories on social media, allowing them the to post videos as links."
+              data-html="true">
+              <% if (!sails.config.LOCALONLY) { %>
+                <i ng-show="event.publicshare" class="fa fa-check"></i>
+                <i ng-hide="event.publicshare" class="fa fa-times"></i>
+              <% } else { %>
+                <i class="fa fa-times"></i>
+              <% } %>
+              Footage can be Shared on Social Media
+              <i style="color:silver" class="fa fa-question-circle"></i>
+            </label>
+
+           
+
+        </div>
+      </div>
+
+      
+      <div class="row" style="margin-top:2em;">
+        <div class="col-sm-12">
+
+          <div class="row">
+            <div class="col-xs-3 text-center">
+              <strong>Totally Private</strong>
+            </div>
+            <div class="col-xs-3 text-center">
+              <strong>Invite Only (or code), Public Editing</strong>
+            </div>
+            <div class="col-xs-3 text-center">
+              <strong>Public Contribute, Private Editing</strong>
+            </div>
+            <div class="col-xs-3 text-center">
+              <strong>Totally Public</strong>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-offset-1 col-sm-10">
+              <rzslider class="custom-slider" rz-slider-model="permissions.value" rz-slider-options="permissions.options"></rzslider>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <% if (!sails.config.LOCALONLY) { %>
+  <div ng-show="!event.public && event.joincode" class="well col-sm-4 col-sm-offset-4 text-center" style="margin-top:2em;">
+    <h1><i class="fa fa-key"></i>{{event.joincode}}</h1>
+    <span class="text-muted">Give this code to contributors to join this shoot</span>
+  </div>
+    <% } %>
+  
+
+  <div class="clearfix"></div>
+  <div class="page-header">
+    <h1>Theme Selection Image</h1>
+    <p class="text-center">Add an image that represents the themes relevant to your shoot</p>
+  </div>
+
+  <div class="form-horizontal col-sm-8 col-sm-offset-2">
+    <form action="/event/map/<%- event.id %>?apikey=<%-apikey %>" method="post" enctype="multipart/form-data">
+      <div class="input-group">
+        <span class="input-group-btn">
+          <span class="btn btn-primary btn-file">
+            Browse&hellip;
+            <input type="file" name="map" required>
+          </span>
+        </span>
+        <input type="text" class="form-control" readonly>
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-primary">Upload</button>
+        </span>
+        
+      </div>
+      <% if (event.eventtype.roleimg !== true && event.eventtype.roleimg != "") { %>
+        <div>
+          <a href="/event/clearroleimg/<%- event.id %>?apikey=<%- apikey%>" class="btn btn-link" data-toggle="tooltip" title="remove camera image">
+            <i class="fa fa-times"></i> Remove Image
+          </a>
+          <span>Drag each <i class="label label-primary" style="cursor:move;">Theme</i> over the part of the image that represents it to help the contributor decide what to capture</span>
+        </div>
+      <% } %>
+    </form>
+    <div class="panel" id="map" style="position:relative;">
+      <% if (event.eventtype.roleimg === true || event.eventtype.roleimg == "" || typeof event.eventtype.roleimg == 'undefined') { %>
+        <img id="roleimg" src="holder.js/100px300?text=png, jpg" style="opacity:0.6;" />
+        <% } else { %>
+          <img id="roleimg" src="<%- event.eventtype.roleimg %>?cachbust=<%- Date.now() %>" style="width:100%;opacity:0.6;" />
+          <% } %>
+            <% _.each(event.eventtype.roles,function(r) { %>
+              <i class="draggable label label-primary" data-role="<%- r.id %>" data-x="<%- (r.position)?r.position[0]:0 %>" data-y="<%- (r.position)?r.position[1]:0 %>"
+                style="cursor:move;">
+                <%- r.name %>
+              </i>
+              <% }); %>
+    </div>
+  </div>
+  <!-- </div> -->
+
+  <div class="clearfix"></div>
+  <div class="page-header">
+    <h1>Rights &amp; Releases </h1>
+  </div>
+  
+<% if (!sails.config.LOCALONLY) { %>
+  <div class="col-sm-8 col-sm-offset-2" style="margin-top:2em;">
+    <label class="control-label" data-delay="300" data-toggle="tooltip" title="Terms and Conditions that contributors will need to agree to before taking part in the shoot">Participant Release
+      <i style="color:silver" class="fa fa-question-circle"></i>
+    </label>
+    <p>This is a release that explains what you will do with the video contributed and what rights of ownership and credit contributors
+      will get.</p>
+    <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor2">
+      <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size">
+          <i class="fa fa-text-height"></i>&nbsp;
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          <li>
+            <a data-edit="fontSize 5">
+              <font size="5">Huge</font>
+            </a>
+          </li>
+          <li>
+            <a data-edit="fontSize 3">
+              <font size="3">Normal</font>
+            </a>
+          </li>
+          <li>
+            <a data-edit="fontSize 1">
+              <font size="1">Small</font>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <a class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)">
+          <i class="fa fa-bold"></i>
+        </a>
+        <a class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)">
+          <i class="fa fa-italic"></i>
+        </a>
+        <a class="btn" data-edit="strikethrough" title="Strikethrough">
+          <i class="fa fa-strikethrough"></i>
+        </a>
+        <a class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)">
+          <i class="fa fa-underline"></i>
+        </a>
+      </div>
+      <div class="btn-group">
+        <a class="btn" data-edit="insertunorderedlist" title="Bullet list">
+          <i class="fa fa-list-ul"></i>
+        </a>
+        <a class="btn" data-edit="insertorderedlist" title="Number list">
+          <i class="fa fa-list-ol"></i>
+        </a>
+      </div>
+    </div>
+    <div id="editor2" class="form-control">
+      <%- event.release %>
+    </div>
+    
+
+<br><br>
+    <div>
+      <label tooltip-popup-delay="300" tooltip="A document that can be shown to people in shot by participants using the Our Story app. Each shot can be configured to require this release or not">Per-Shot Confirmation
+        <i style="color:silver" class="fa fa-question-circle"></i>
+      </label>
+      <p>This is a release that can be shown to people in shot by participants using the Our Story app. Each shot can be configured
+        to require this release on not.</p>
+      <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
+        <div class="btn-group">
+          <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size">
+            <i class="fa fa-text-height"></i>&nbsp;
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a data-edit="fontSize 5">
+                <font size="5">Huge</font>
+              </a>
+            </li>
+            <li>
+              <a data-edit="fontSize 3">
+                <font size="3">Normal</font>
+              </a>
+            </li>
+            <li>
+              <a data-edit="fontSize 1">
+                <font size="1">Small</font>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="btn-group">
+          <a class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)">
+            <i class="fa fa-bold"></i>
+          </a>
+          <a class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)">
+            <i class="fa fa-italic"></i>
+          </a>
+          <a class="btn" data-edit="strikethrough" title="Strikethrough">
+            <i class="fa fa-strikethrough"></i>
+          </a>
+          <a class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)">
+            <i class="fa fa-underline"></i>
+          </a>
+        </div>
+        <div class="btn-group">
+          <a class="btn" data-edit="insertunorderedlist" title="Bullet list">
+            <i class="fa fa-list-ul"></i>
+          </a>
+          <a class="btn" data-edit="insertorderedlist" title="Number list">
+            <i class="fa fa-list-ol"></i>
+          </a>
+        </div>
+        <div class="btn-group">
+          <a class="btn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)">
+            <i class="icon-undo"></i>
+          </a>
+          <a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)">
+            <i class="icon-repeat"></i>
+          </a>
+        </div>
+      </div>
+      <div id="editor" class="form-control">
+        <%- event.shotrelease %>
+      </div>
+    </div>
+    
+  </div>
+  <% } else { %>
+  <div class="alert alert-info" style="margin-top:2em;">
+    Privacy policies and rights releases are administered in person using Our Story Titan
+  </div>
+  <%}%>
+  <div class="clearfix"></div>
+  <div class="row col-sm-8 col-sm-offset-2">
+    <div class="alert text-right " ng-class="{'alert-warning':dirty}">
+      <div class="col-sm-offset-2">
+      <span ng-show="dirty" class="text-danger">
+        <small>Changes not saved</small>
+      </span>
+
+      <span class="text-muted" ng-hide="dirty">
+        <!-- <small>last saved at {{event.updatedAt | date:'dd/MM HH:mm:ss'}}</small> -->
+        
+        <small><i class="fa fa-clock-o"></i> last saved at {{event.updatedAt | date:'dd/MM HH:mm:ss'}}</small>
+      </span>
+      <!-- <span ng-show="lastsavedat && !showmsg" class="text-muted">
+            
+            <small>last saved at {{lastsavedat | date:'HH:mm:ss'}}</small>
+          </span> -->
+
+      <i ng-show="loading" class="fa fa-spinner fa-spin"></i>
+
+      <div ng-show="dirty" class="btn-group" dropdown>
+        <button type="button" class="btn btn-sm btn-success" ng-click="updaterelease()">Save</button>
+        <span class="sr-only">Save Options</span>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <br>
+
+  <!-- </div> -->
+
+
+
+
+  <div class="clearfix"></div>
+  <% if (!sails.config.LOCALONLY) { %>
+    <div class="page-header">
+      <h1>Production Team</h1>
+    </div>
+
+
+    <div class="clearfix"></div>
+    <ul id="eventcodes" class="list-group loading publicbox col-md-8 col-sm-offset-2" ng-show="!event.public">
+      <a class="list-group-item active" href="#" data-delay="300" data-toggle="tooltip" title="Invites contributors to the production team via the mobile app">Participant Invites
+        <i style="color:silver" class="fa fa-question-circle"></i>
+      </a>
+      <li ng-repeat="code in codes" class="list-group-item">
+        <span class="badge pull-left">{{code.status}}</span>&nbsp;
+        <strong ng-show="code.uid">{{code.user.profile.displayName}}</strong>
+
+        <span class="text-muted">{{code.email}}</span>
+
+        <button style="padding:3px;" ng-click="remcode(code.code)" class="btn btn-link pull-right">
+          <i class="fa fa-minus"></i>
+        </button>
+
+        <button ng-hide="code.uid" style="padding:3px;" ng-click="resendcode(code.code)" class="btn btn-link pull-right">
+          <i class="fa fa-refresh"></i>
+        </button>
+      </li>
+
+      <li class="list-group-item" ng-show="codes.length==0">
+        <span class="text-mute">no codes sent</span>
+      </li>
+
+      <div class="list-group-item">
+        <label class="col-sm-3 control-label" for="number">Contact Info.</label>
+        <input type="email" id="email" class="form-control" style="display:inline-block;width:30%" placeholder="dave@ourstory.video"
+        />
+        <!-- <input type="tel" id="number" class="form-control" style="display:inline-block;width:30%" placeholder="+443448957464" /> -->
+        <button class="btn" ng-click="addcode();" style="display:inline-block;">Add</button>
+      </div>
+      <!-- </div> -->
+    </ul>
+
+    <!-- </div> -->
+
+
+
+    <div class="clearfix"></div>
+
+    <!-- <div class="col-xs-12"> -->
+    <div class="list-group loading col-md-8 col-sm-offset-2" id="eventadmins">
+
+      <a class="list-group-item active" href="#" data-delay="300" data-toggle="tooltip" title="Adds users who can edit the shoot settings via the website">Shoot Administrators
+        <i style="color:silver" class="fa fa-question-circle"></i>
+      </a>
+      <!-- {{#each this}} -->
+      <div class="list-group-item" ng-repeat="admin in admins">
+        {{admin.name}}
+        <span ng-bind-html="admin.isme?'(you)':''"> </span>
+        <button ng-hide="admin.isme" style="padding:3px;" ng-click="removeadmin('{{this.id}}')" class="btn btn-link pull-right">
+          <i class="fa fa-minus"></i>
+        </button>
+      </div>
+      <!-- {{else}} -->
+      <!-- <div ng-show="admins.length == 1" class="list-group-item"><span class="text-mute">only you have access to this shoot</span></div> -->
+      <!-- {{/each}} -->
+      <div class="list-group-item">
+        <label class="col-sm-4 control-label" for="number">Add a New Admin</label>
+        <div class="input-group cold-xs-12 col-sm-7">
+          <input type="email" id="admina" class="form-control" placeholder="email" required="true" />
+          <span class="input-group-btn">
+            <button class="btn" ng-click="addadmin();">Add</button>
+          </span>
+        </div>
+        <div class="text-warning text-center">
+          <i class="fa fa-info"></i> Currently, you can only add users with accounts already in Our Story.</div>
+      </div>
+    </div>
+    <% } %>
+
+
+
+
+      <div class="clearfix"></div>
+
+
+
+      <div class="clearfix"></div>
+      <div class="col-xs-12 text-center">
+        <button type="button" class="btn btn-danger" data-toggle="collapse" data-target="#dang">
+          <i class="glyphicon glyphicon-warning-sign"></i> Dangerous Advanced Options
+        </button>
+      </div>
+      <div class="clearfix"></div>
+      <div id="dang" class="collapse">
+
+        <div class="clearfix"></div>
+        <br>
+        <br>
+        <div class="col-xs-12 text-center">
+          <a href="/event/remove/<%= event.id %>?apikey=<%- apikey %>" class="btn btn-danger">
+            <i class="glyphicon glyphicon-trash"></i> Delete This Shoot Forever</a>
+        </div>
+
+      </div>
+
+
+</div>

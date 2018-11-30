@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Our Story</title>
+  <link rel="stylesheet" href="/landing/app.css">
+  <script src="/landing/app.js"></script>
+  <!-- <script>require('initialize');</script> -->
+  <script async src="https://www.googletagmanager.com/gtag/js"></script>
+  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  <link rel="icon" type="image/png" href="/images/favicon.png?" sizes="any">
+</head>
+
+<body>
+  <section class="hero is-dark is-medium is-bold">
+    <div class="hero-head is-white">
+      <!-- <header> -->
+      <div class="container">
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+          <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+              <img src="/images/logo1.svg" height="58">
+              <!-- Our Story -->
+            </a>
+            <a role="button" data-target="navMenu" class="navbar-burger" aria-label="menu" aria-expanded="false">
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </a>
+          </div>
+          <div class="navbar-menu has-text-centered-mobile" id="navMenu">
+
+            <div class="navbar-end">
+              <a class="navbar-item" href="https://guide.ourstory.video">
+                How it Works
+              </a>
+              <div class="navbar-item">
+                <a class="button is-primary" href="/getstarted">
+                  <span>Get Started</span>
+                </a>
+              </div>
+            </div>
+
+
+          </div>
+
+        </nav>
+      </div>
+      <!-- </header> -->
+    </div>
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered" id="bootlegger" style="display: none">
+          <div class="column is-four-fifths">
+            <article class="message is-success">
+              <div class="message-body">
+                <strong>What happened to Bootlegger?</strong><br>
+                Our Story is the evolution of the Bootlegger media research platform. Bootlegger projects still exist within Our Story, and leverage new features introduced in Our Story.</div>
+            </article>
+          </div>
+        </div>
+
+        <div class="columns is-centered" id="ifrc" style="display: none">
+            <div class="column is-four-fifths">
+              <article class="message is-success">
+                <div class="message-body">
+                  <strong>IFRC Edition</strong><br>
+                  This edition of Our Story is designed for Monitoring and Evaluation in the field. <a href="https://guide.ourstory.video">Visit Here</a> to find out which edition is best for you.</div>
+              </article>
+            </div>
+          </div>
+
+        <div class="columns is-gapless is-centered">
+          <div class="column is-two-fifths">
+            <!-- <section class="section"> -->
+            <h1 class="title">
+              Collaboratively plan, capture, and make video stories
+            </h1>
+            <h2 class="subtitle">
+              End-to-end video production empowering communities to produce high-value content
+            </h2>
+
+            <div class="columns is-mobile">
+              <div class="column">
+                <!-- <a href="https://itunes.apple.com/us/app/bootlegger/id1053074626?ls=1&mt=8">
+                  <img src="/images/ios.svg" style="height:40px">
+                </a> -->
+
+                <a id="android" href="https://play.google.com/store/apps/details?id=uk.ac.ncl.di.bootlegger.ifrc">
+                  <img src="/images/google.svg" style="height:40px">
+                </a>
+                <span style="position: relative;display: inline-block"">
+
+                <img src="/images/ios.svg"
+                  style="height:40px;opacity: 0.5;">
+                  <span style="position: absolute;left:5px;bottom:-15px;font-family: monospace;font-size: 10pt;opacity: 0.5;">In
+                    Development</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-hidden-mobile is-two-fifths is-three-fifths-mobile">
+            <div class="circlecrop has-text-centered">
+              <video class="video" autoplay muted loop>
+                <!-- <source src="https://bootleggerlive.s3.amazonaws.com/static/BootleggerHighlights.webm" type="video/webm"> -->
+                <source src="/BootleggerHighlights.mp4" type="video/mp4">
+              </video>
+              <img src="/images/logo-only-white.svg" class="people">
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <div class="hero-body">
+    <div class="storycontainer container">
+      <div class="columns is-gapless is-centered has-text-centered">
+        <div class="column is-three-fifths">
+          <div class="storycircle odometer" id="stories">0</div>
+          <br>
+          <div class="inner-text">
+            <h1 class="title">Stories Shared So Far</h1>
+
+            <span class="odometer" id="mins">0</span>
+            <span class="heading">Mins of Video &middot;</span>
+            <span class="odometer" id="media">0</span>
+            <span class="heading">Contributions &middot;</span>
+            <span class="odometer" id="users">0</span>
+            <span class="heading">Contributors</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-two-thirds">
+          <h1 class="title">Plan &amp; Capture</h1>
+          <h2 class="subtitle">
+            Define what type, style and content you want the community to contribute. Support them in producing
+            high-quality, production
+            ready videos.
+          </h2>
+
+          <div class="phone">
+            <img src="/images/capture.png" />
+            <img src="/images/singlephone.svg" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container has-text-right">
+      <div class="columns">
+        <div class="column is-one-third">&nbsp;</div>
+        <div class="column is-two-thirds">
+          <h1 class="title">Review &amp; Tag</h1>
+          <h2 class="subtitle">
+            Collaborate and improve content through community review. Tag content for use in your stories.
+          </h2>
+
+          <div class="phone">
+            <img src="/images/tagging.png" />
+            <img src="/images/singlephone.svg" />
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-two-thirds">
+          <h1 class="title">Build &amp; Share</h1>
+          <h2 class="subtitle">
+            Build a story using the simple editor. Add titles and music to enhance your production. Share with your
+            community.
+          </h2>
+
+          <div class="phone">
+            <img src="/images/editing.png" />
+            <img src="/images/singlephone.svg" />
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  </div>
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <a href="/privacy">Privacy</a> &middot;
+      <a href="/terms">Terms</a> &middot;
+      <a href="https://guide.ourstory.video">Our Guide</a> &middot;
+      <a href="https://platform.ourstory.video">Platform</a> &middot;
+      <span>&copy; Our Story 2018</span>
+    </div>
+  </footer>
+</body>

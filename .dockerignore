@@ -1,0 +1,15 @@
+.git
+.gitignore
+node_modules
+config/local.js
+config/local.*
+ssl
+.vscode
+cast
+development notes
+server_config
+docker
+upload
+assets/landing/node_modules
+assets/landing/app
+.tmp

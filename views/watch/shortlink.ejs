@@ -1,0 +1,104 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <link href='/styles/opensans.css' rel='stylesheet' type='text/css'>
+        <!-- <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'> -->
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
+        <!-- <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#async=1&pubid=ra-550c037118e0ae97"></script> -->
+        <style>
+        body
+        {
+            margin:0;
+            padding: 0;
+            font-family:"Open Sans",sans;
+            font-weight:300;
+            font-style: normal;
+        }
+
+        h1{
+          font-weight:300;
+          text-shadow:0 0 20px rgba(0,0,0,0.5)
+        }
+
+        h1 small{
+          font-size:0.7em;
+        }
+
+        video
+        {
+            margin:auto auto;
+            width:70%;
+            display:block;
+            margin-top:6%;
+            box-shadow:0 0 20px rgba(0,0,0,0.5)
+        }
+
+        @media (max-width: 600px) {
+          video
+          {
+            width:100%;
+            margin-top:0;
+          }
+        }
+        </style>
+        
+        <% if (typeof(edit) != 'undefined'){ %>
+        <title><%- edit.title %></title>
+        <meta property="og:title" content="<%- edit.title %>" />
+        <meta property="og:description" content="<%- edit.description %>" />
+        <meta property="og:type" content="video.other" />
+        <meta property="og:image" content="<%- sails.config.S3_TRANSCODE_URL + edit.shortlink %>-00001.png" />
+        <meta property="og:url" content="<%- sails.config.master_url %>/v/<%- edit.shortlink %>" />
+        <meta property="og:video" content="<%- sails.config.S3_TRANSCODE_URL + edit.shortlink %>.mp4" />
+        <meta property="og:video:type" content="video/mp4" />
+        <meta property="og:video:width" content="854" />
+        <meta property="og:video:height" content="480" />
+        <meta name="twitter:card" content="player">
+        <meta name="twitter:site" content="@BootleggerTV">
+        <meta name="twitter:title" content="<%- edit.title %>">
+        <meta name="twitter:image" content="<%- sails.config.S3_TRANSCODE_URL + edit.shortlink %>-00001.png">
+        <meta name="twitter:player" content="<%- sails.config.master_url %>/v/<%- edit.shortlink %>">
+        <meta name="twitter:player:width" content="854">
+        <meta name="twitter:player:height" content="480">
+        <meta name="twitter:player:stream" content="<%- sails.config.S3_TRANSCODE_URL + edit.shortlink %>.mp4">
+        <meta name="twitter:player:stream:content_type" content="video/mp4">
+        <meta property="author" content="<%- edit.user.profile.displayName %>">
+        <% } else { %>
+        <title>This video cannot be shared</title>
+        <% } %>
+        
+    </head>
+    <% if (typeof(edit) != 'undefined'){ %>
+    <body style="height:100%;width:100%;overflow:hidden;background:#1f1f1f">
+     <% if (edit.path) { %>
+     <div style="position:absolute;left:5px;top:5px;" class="addthis_toolbox" addthis:url="<%- sails.config.master_url %>/v/<%- edit.shortlink %>" addthis:title="<%- edit.title %>">
+        <a class="addthis_button_preferred_1"></a>
+        <a class="addthis_button_preferred_2"></a>
+        <a class="addthis_button_preferred_3"></a>
+        <a class="addthis_button_preferred_4"></a>
+        <a class="addthis_button_compact"></a>
+        <a class="addthis_counter addthis_bubble_style"></a>
+    </div>
+     
+        <video controls autoplay >
+            <source src="/watch/getvideo/<%- edit.id %>"></source>
+        </video>
+        <% } else { %>
+        <% if (edit.failed) { %>
+          <div style="width:30%;font-size:30pt;color:#444;margin:auto auto; margin-top:20%;font-family:sans-serif;color:orange;"><i class="fa fa-alert"></i>There was a problem editing this video!</div>
+         <% } else {%>
+        <div style="width:30%;font-size:30pt;color:#444;margin:auto auto; margin-top:20%;font-family:sans-serif;text-align:center;"><i class="fa fa-spin fa-gear"></i><br> This video is still being edited...</div>
+        <% }} %>
+        <h1 style="color:white;text-align:center;"><%- edit.title %><br><small><%- edit.description %></small></h1>
+        <script>
+        addthis.toolbox('.addthis_toolbox');
+        </script>
+    </body>
+    <% } else { %>
+    <body style="height:100%;width:100%;overflow:hidden;background:#1f1f1f">
+        <h1 style="color:white;text-align:center;"> Micro-Edits from this shoot cannot be shared, sorry.</h1>
+    </body>
+    <% } %>
+</html>

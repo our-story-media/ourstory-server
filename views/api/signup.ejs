@@ -1,0 +1,142 @@
+<style>
+	
+	.transp {
+  background-color: #FEFEFE;
+  background-image: -webkit-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -webkit-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+  background-image: -moz-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -moz-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+  background-image: -o-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -o-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+  background-image: -ms-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -ms-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+  background-image: linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+  -webkit-background-size:30px 30px;
+  -moz-background-size:30px 30px;
+  background-size:30px 30px;
+  background-position:0 0, 15px 15px;
+}
+
+.selected
+{
+	background:#efefef;
+}
+
+
+input[type=radio]
+{
+	margin-top: 33px;
+    height: 20px;
+}
+</style>
+<div ng-app="apiApp" ng-controller="apisignup" ng-cloak>
+<h1>Developer API <small>Integrate with your App</small></h1>
+<p>Using the API, you can integrate with Our Story to create rich custom applications for commissioning, capture and management of media and meta-data.</p>
+<div class="well">
+	<strong>Some <em>Fine</em> Print</strong>
+	<ul>
+		<li>
+The Our Story platform is in ongoing development. Although we will make every effort to maintain a standard API, we cannot gaurentee 100% consistancy and uptime.
+</li>
+<li>
+We reserve the right to remove content from our services for any reason, and also to remove API access to users.
+</li>
+<li>
+However, we welcome any suggestions, comments or examples of using the API which you want to send us!
+</li>
+</div>
+
+<i class="fa fa-spin fa-spinner" ng-show="loading"></i>
+
+<button class="btn btn-lg btn-success" ng-show="!apikey && !loading" id="doit" ng-click="signup()">Signup to use the API</button>
+
+<div class="input-group" id="live" ng-show="apikey && !loading">
+	<div class="input-group-btn">
+	<div>
+		<button class="btn btn-lg btn-danger" ng-show="apikey.apiaccess=='locked'" id="locked" disabled>Locked Out</button><button class="btn btn-lg btn-success" ng-click="refresh()" ng-hide="apikey.apiaccess=='locked'"><i class="fa fa-refresh"></i> Refresh Key</button>
+	</div>
+	</div>
+	<div type="text" disabled class="form-control input-lg" >{{apikey.apikey}}</div>
+</div>
+
+<br>
+
+<div class="list-group" ng-show="apikey && !loading">
+	<div class="list-group-item">
+		<div class="list-group-header">
+			<h4 class="list-group-item-heading">On Behalf of a User</h4>
+		</div>
+	</div>
+	<div class="list-group-item" ng-class="{selected:apikey.apitype=='redirect'}">
+		<div class="row">
+		<input type="radio" name="apitype" ng-model="apikey.apitype" value="redirect" class="col-xs-1" />
+		<div class="col-xs-11">
+		<b>Hosted Server Application</b>
+		<p>Receive the completed user login session as a callback to a specified url</p>
+		<input class="form-control" ng-model="apikey.redirecturl" placeholder="redirect url of your application" />
+		</div>
+		</div>	
+	</div>
+	
+	<div class="list-group-item" ng-class="{selected:apikey.apitype=='native'}">
+		<div class="row">
+		<input type="radio" name="apitype" ng-model="apikey.apitype" value="native" class="col-xs-1" />
+		<div class="col-xs-11">
+			<b>Native or Mobile Application</b>
+			<p>Receive the completed user login session as a url redirect to Our Story://session</p>
+			
+		<input class="form-control" style="visibility:hidden" />
+		</div>
+		</div>	
+	</div>
+</div>
+<div class="list-group" ng-show="apikey && !loading">
+	<div class="list-group-item">
+		<div class="list-group-header">
+			<h4 class="list-group-item-heading">Just Your Account</h4>
+		</div>
+	</div>
+	<div class="list-group-item">
+		<div class="row">
+		<div class="col-xs-1 text-center" style="padding-top:25px">
+			<button class="btn btn-lg btn-link" ng-click="refreshservertoken()"><i class="fa fa-refresh"></i></button>
+		</div>
+		<div class="col-xs-11">
+			<b>Server User Access Token</b>
+			<p>Use this token for access to the API from your server code.</p>
+			<p>
+				<div type="text" disabled class="form-control input-lg" >{{apikey.servertoken}}</div>
+			</p>
+		</div>
+		</div>	
+	</div>
+</div>
+<div class="pull-right"  ng-show="apikey && !loading"><span class="text-muted btn">{{lastsaved}}</span> <button ng-click="update()" class="btn btn-success pull-right">Update</button></div>
+<div class="clearfix"></div>
+
+<div class="row">
+	<div class="col-xs-4">
+		<h2>Our Story Platform</h2>
+		<p>The platform opens up a variety of points of integration, from a fully functioning automatic camera-crew to an easy to use meta-data and media store.</p>
+	</div>
+	<div class="col-xs-4">
+		<h2>Dive In</h2>
+		<p>You can get started working with the REST and Websocket API right away. Use our interactive docs to find out how to integrate and experiment with the endpoints.</p>
+	</div>
+	<div class="col-xs-4">
+		<h2>Examples</h2>
+		<p>Clone our reference code examples or use the same open-source code we ddeploy in the Our Story mobile applications to kick start your integration.</p>
+		
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-4">
+		
+		<a href="/platform"><i class="fa fa-cube"></i> About the Our Story Platform</a>
+	</div>
+	<div class="col-xs-4">
+		
+		<a href="/api/docs"><i class="fa fa-book"></i> Api Docs</a>
+	</div>
+	<div class="col-xs-4">
+		
+		<a href="https://github.com/digitalinteraction/Our Story-api-examples"><i class="fa fa-github"></i> Our Story Examples</a>
+	</div>
+</div>

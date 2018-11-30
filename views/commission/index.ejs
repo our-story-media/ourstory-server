@@ -1,0 +1,414 @@
+<style>
+	.limitheight {
+		height: 185px;
+		overflow-y: scroll;
+		overflow-x: hidden;
+	}
+
+	.list-group-item {
+		cursor: pointer;
+	}
+
+	.shothidden {
+		opacity: 0.5;
+	}
+
+	.selected {
+		background: #f2f2f2;
+	}
+
+	.iconSpan {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+	}
+
+	#roles,
+	#coverage,
+	#phases {
+		box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+	}
+
+	#roles .progress {
+		height: 4px;
+		width: 100%;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		margin-bottom: 0;
+	}
+
+	.placeholder_clip {
+		width: 50%;
+		height: 130px;
+		/*background: #f2f2f2;*/
+		float: left;
+		box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+	}
+
+	.nav-tabs>li:last-child {
+		float: right;
+	}
+
+	.nav-tabs>li:last-child>a {
+		padding: 0;
+	}
+
+	.tab-pane {
+		padding-top: 20px;
+	}
+
+	.badge-boot {
+		background: none;
+		color: silver;
+	}
+
+	#editor,
+	#editor2 {
+		overflow-y: scroll;
+		max-height: 300px;
+		min-height: 300px;
+	}
+
+	.media {
+		/*box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.63);*/
+		border-bottom: 1px solid #efefef;
+	}
+</style>
+
+<div ng-app="commissionApp" ng-controller="commission" ng-cloak style="position:relative">
+	<div style="position:absolute;width:100%;height:100%;z-index:100;background:rgba(255,255,255,0.6);" class="text-center"
+	 ng-show="loading">
+		<i class="fa fa-spinner fa-4x fa-spin" style="margin-top:20%;"></i>
+	</div>
+
+	<div class="alert text-right" ng-class="{'alert-warning':showmsg}">
+		<span ng-show="showmsg" class="text-danger">
+			<small>Changes not saved</small>
+		</span>
+		<span ng-hide="showmsg" class="text-muted">
+			<small>last saved at {{eventinfo.updatedAt | date:'dd/MM HH:mm:ss'}}</small>
+		</span>
+		<!-- <span ng-show="lastsavedat && !showmsg" class="text-muted">
+				
+				<small>last saved at {{lastsavedat | date:'HH:mm:ss'}}</small>
+			</span> -->
+
+		<i ng-show="loading" class="fa fa-spinner fa-spin"></i>
+
+		<div ng-show="showmsg" class="btn-group" dropdown>
+			<button type="button" class="btn btn-sm btn-success" ng-click="save()">Save</button>
+			<span class="sr-only">Save Options</span>
+		</div>
+	</div>
+
+	<div class="alert alert-success" ng-show="success">Shoot Information Updated!
+		<a href="/">Back to Dashboard</a>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="list-group" style="border-radius: 6px;" id="phases">
+				<div class="list-group-item active" tooltip-popup-delay="300" tooltip="Can be used to organise time periods in your shoot, e.g. day or night.">Phases
+					<i style="color:silver" class="fa fa-question-circle"></i>
+
+
+					<button ng-click="addphase()" class="btn btn-link pull-right" style="padding:0;color:white;display:inline-block;margin:-2px;">
+						<i class="fa fa-plus fa-2x"></i>
+					</button>
+				</div>
+				<!-- <div class="list-group-item text-muted" style="padding:5px;min-height:50px;"> -->
+
+				<!-- <small>Users of this template will still be able to add their own phases (but without set themes).</small> -->
+				<!-- </div> -->
+
+				<div class="limitheight" ui-sortable="{ 'ui-floating': true, 'axis': 'y' }" ng-model="event.phases">
+
+					<!-- {{eventinfo.currentphase}} -->
+					<div class="list-group-item" style="border-radius: 0" ng-repeat="phase in event.phases | filter:phasefilter track by $index"
+					 ng-class="{'selected':(selection.currentphase==phase)}">
+
+						<div ng-hide="phase.editing">
+
+							<button class="btn btn-link pull-right" style="margin:-4px;" ng-click="selection.currentphase=phase;selection.currentrole=null;selection.currentcoverage=null;">
+								<i class="fa fa-code-fork"></i>
+							</button>
+							<button class="btn btn-link pull-right" style="margin:-4px;" ng-click="phase.editing=true">
+								<i class="fa fa-edit"></i>
+							</button>
+							<span class="badge badge-boot pull-right">{{phase.roles.length}}</span>
+							<h4 class="list-group-item-heading" style="display:inline-block;" tooltip="Click to make current Phase"
+							 tooltip-placement="right" ng-click="changemetaphase($index)"><span ng-show="eventinfo.currentphase==$index"
+								 class="badge badge-success">CURRENT</span>{{phase.name}}</h4>
+
+							<!-- <button ng-show="">MAKE CURRENT</button> -->
+
+							<!-- <button class="btn btn-link" style="margin:-4px;" ng-click="changemetaphase($index)"> -->
+							<!-- <i class="fa fa-check"></i> -->
+							<!-- </button> -->
+
+						</div>
+
+						<div ng-show="phase.editing" class="clearfix">
+							<div style="float:right;width:15%;">
+								<button class="btn btn-link pull-right" ng-click="removePhase($index)">
+									<i class="fa fa-times"></i>
+								</button>
+								<button class="btn btn-link pull-right" ng-click="stopEditing(phase)">
+									<i class="fa fa-save"></i>
+								</button>
+							</div>
+							<div class="pull-left" style="width:85%">
+								<input type="text" class="form-control" ng-model="phase.name" placeholder="name" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div <% if (sails.config.LIVEMODE) { %>class="col-sm-4"
+			<% } else { %>class="col-sm-6"
+			<% } %>>
+			<div class="list-group" id="roles" style="border-radius: 6px;">
+
+				<div href="#" class="list-group-item active" tooltip-popup-delay="300" tooltip="Can be used to help participants categorise the videos they contribute">Themes
+					<i style="color:silver" class="fa fa-question-circle"></i>
+
+					<button ng-click="addrole()" class="btn btn-link pull-right" style="padding:0;margin:-2px;color:white;">
+						<i class="fa fa-plus fa-2x"></i>
+					</button>
+				</div>
+
+				<div class="limitheight" ui-sortable="{ 'ui-floating': true, 'axis': 'y' }" ng-model="event.roles">
+					<div class="list-group-item" style="border-radius: 0" ng-repeat="role in event.roles | filter:rolefilter track by role.id"
+					 ng-class="{'selected':(selection.currentrole==role)}" ng-click="selection.currentrole=role;selection.currentcoverage=null;selection.currentphase=null">
+
+						<div ng-hide="role.editing">
+							<button class="btn btn-link pull-right" style="padding:2px;" ng-click="role.editing=true">
+								<i class="fa fa-edit"></i>
+							</button>
+							<span class="badge badge-boot pull-right">{{role.shot_ids.length}}</span>
+							<h4 class="list-group-item-heading">
+								<i class="fa fa-check" ng-click="takefromphase(role.id,$event)" ng-show="inPhase(role) && selection.currentphase!=null"
+								 style="color:green;"></i>
+								<i class="fa fa-check" ng-click="addtophase(role.id,$event)" ng-show="!inPhase(role) && selection.currentphase!=null"
+								 style="color:silver;"></i>
+								{{role.name}}
+							</h4>
+							<!-- <p class="list-group-item-text">{{role.description}}</p> -->
+
+						</div>
+
+						<div ng-show="role.editing" class="clearfix">
+							<div style="float:right;width:15%;">
+								<button class="btn btn-link pull-right" ng-click="removeRole(role.id)">
+									<i class="fa fa-times"></i>
+								</button>
+								<button class="btn btn-link pull-right" ng-click="stopEditing(role)">
+									<i class="fa fa-save"></i>
+								</button>
+							</div>
+							<div class="pull-left" style="width:85%">
+								<input type="text" class="form-control" ng-model="role.name" placeholder="name" />
+								<!-- <input type="text" class="form-control" ng-model="role.description" placeholder="description" /> -->
+							</div>
+						</div>
+
+
+						<!-- <progress>
+		    				<bar value="vidCount(role.id)" type="success">&nbsp;</bar>
+		    				<bar value="picCount(role.id)" type="info">&nbsp;</bar>
+		    				<bar value="audCount(role.id)" type="warning">&nbsp;</bar>
+		    			</progress> -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- </div> -->
+
+		<div class="col-sm-6" ng-repeat="m in event.shot_types track by m.id" style="background:white;margin-bottom:10px;"
+		 ng-class="{'shothidden':m.hidden}">
+
+			<div class="media row">
+
+				<div class="col-md-4" style="padding:0;">
+					<img style="width:100%" class="media-object" ng-src="/data/icons/{{m.icon}}" />
+
+					<i class="fa fa-check fa-5x" style="position:absolute;width:100%;height:100%;text-align:center;left:0;top:0;color:green"
+					 ng-click="takefromrole(m.id,$event)" ng-show="inRole(m) && selection.currentrole!=null"></i>
+
+					<i class="fa fa-check fa-5x" style="position:absolute;width:100%;height:100%;text-align:center;left:0;top:0;color:silver;"
+					 ng-click="addtorole(m.id,$event)" ng-show="!inRole(m) && selection.currentrole!=null"></i>
+
+					<i class="fa fa-check fa-5x" style="position:absolute;width:100%;height:100%;text-align:center;left:0;top:0;color:green"
+					 ng-click="takefromcoverage(m,$event)" ng-show="inCoverage(m) && selection.currentcoverage!=null"></i>
+
+					<i class="fa fa-check fa-5x" style="position:absolute;width:100%;height:100%;text-align:center;left:0;top:0;color:silver;"
+					 ng-click="addtocoverage(m,$event)" ng-show="!inCoverage(m) && selection.currentcoverage!=null"></i>
+
+					<button class="btn btn-link" tooltip="Requires a video release" tooltip-append-to-body="true" ng-click="m.release=!m.release">
+						<i class="fa" ng-class="{'fa-lock':m.release, 'fa-unlock-alt':m.release==undefined || m.release==false}" ng-model="m.release"></i>
+					</button>
+
+					<span class="label label-success" style="position:absolute;top:0px;left:0px;" ng-show="m.footage>0">{{m.footage}}
+						taken</span>
+				</div>
+				<div class="col-md-8">
+					<div style="float:right;width:15%;text-align: right;">
+						<button class="btn btn-link" ng-click="m.hidden=!m.hidden">
+							<i class="fa" ng-class="{'fa-eye-slash':m.hidden, 'fa-eye':m.hidden==undefined || m.hidden==false}" ng-model="m.hidden"></i>
+						</button>
+						<button class="btn btn-link" ng-click="clone(m)">
+							<i class="fa fa-files-o"></i>
+						</button>
+						<button class="btn btn-link" ng-show="m.footage == 0" ng-click="remove(m)">
+							<i class="fa fa-times"></i>
+						</button>
+						<button class="btn btn-link" ng-click="m.editing=!m.editing">
+							<i class="fa" ng-class="{'fa-edit':!m.editing,'fa-save':m.editing}"></i>
+						</button>
+					</div>
+					<div style="float:left;width:85%;">
+						<div ng-show="m.editing">
+							<input type="text" class="form-control" ng-model="m.name" />
+							<textarea class="form-control" ng-model="m.description" minlength="10" required></textarea>
+							<div class="col-sm-6" style="padding:0;">
+								<div>
+									<input style="width:50%;display:inline-block;" class="form-control" ng-model="m.wanted" min="1" max="50"
+									 required />
+									<span>shots</span>
+								</div>
+							</div>
+							<div class="col-sm-6" style="padding:0;">
+								<div>
+									<input style="width:50%;display:inline-block;" class="form-control" ng-model="m.max_length" min="5" max="1200"
+									 required />
+									<span>secs</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<h4 class="media-heading" ng-hide="m.editing">{{m.name}}</h4>
+					<p ng-hide="m.editing" ng-bind-html="m.description | shotvalue"></p>
+					<span class="text-muted" ng-hide="m.editing">{{m.wanted}} shots of {{m.max_length}}s wanted</span>
+				</div>
+
+			</div>
+
+
+		</div>
+		<div class="col-sm-6">
+
+			<div class="row">
+
+				<div class="col-xs-12" style="margin-bottom:10px;min-height:100px;background: #fbfbfb;">
+					<button ng-click="showallshots()" class="btn btn-link" style="text-align: center;width: 100%;display: block;height: 100%;padding-top: 37px;"
+					 tooltip-popup-delay="300" tooltip="Loads shot overlays from Our Story’s own library of shots"><i class="fa fa-plus"></i>
+						Add Shot from the Archive</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- </div> -->
+
+
+	<div class="modal fade" data-show="true" id="allshotsdialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+	 aria-hidden="true">
+		<div class="modal-dialog modal-lg" style="margin:auto auto;margin-top:5%;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Add From the Shot Archive
+
+					</h4>
+				</div>
+				<div class="modal-body">
+
+					<tabset>
+						
+						<tab heading="Archive">
+								<input type="text" ng-model="allshotsfilter" class="form-control" placeholder="enter search term" />
+								<br>
+								<div class="list-group" id="allshots" style="overflow-y:scroll;overflow-x: hidden;max-height:400px;">
+									<div class="row">
+										<div ng-repeat="m in allshots | filter:allshotsfilter" class="col-xs-6 col-sm-4 col-md-3 " style="position:relative;cursor:pointer;padding:1px;"
+										 ng-click="addshot(m)">
+											<img style="width:100%;" class="media-object" ng-src="/data/icons/{{m.icon}}" />
+										</div>
+									</div>
+								</div>
+							</tab>
+						<tab heading="Add New">
+							<form action="/api/commission/addshot/<%- event.id %>?apikey=<%- apikey %>" method="post" enctype="multipart/form-data">
+								
+										<!-- <div class="fileinput fileinput-new" data-provides="fileinput"> -->
+											<!-- <div class="fileinput-new thumbnail" style="width: 200px; height: 113px;float:left;">
+												<img data-src="holder.js/100%x100%" alt="...">
+											</div> -->
+											<!-- <div class="fileinput-preview fileinput-exists thumbnail" style="width: 200px; height: 113px;overflow:hidden;float:left;"> -->
+
+											<!-- </div> -->
+											<!-- <div style="float:right;width:10px;"> -->
+												<!-- <span class="btn btn-link btn-file"><span class="fileinput-new"><i class="fa fa-folder-open"></i></span><span
+													 class="fileinput-exists"><i class="fa fa-folder-open"></i></span> -->
+													 
+													 
+													 <input type="file" name="image"></span>
+
+												<!-- <a href="#" class="btn btn-link fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i></a> -->
+											<!-- </div> -->
+										<!-- </div> -->
+									
+									<input type="submit" value="Add Shot" class="btn btn-lg btn-primary" />
+							</form>
+						</tab>
+							<div class="clearfix"></div>
+					</tabset>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<div id="shoteditor">
+
+
+	</div>
+	<!-- </tab> -->
+
+	<div class="alert text-right" ng-class="{'alert-warning':showmsg}">
+		<span ng-show="showmsg" class="text-danger">
+			<small>Changes not saved</small>
+		</span>
+
+		<span ng-hide="showmsg" class="text-muted">
+			<small>last saved at {{eventinfo.updatedAt | date:'dd/MM HH:mm:ss'}}</small>
+		</span>
+		<!-- <span ng-show="lastsavedat && !showmsg" class="text-muted">
+				
+				<small>last saved at {{lastsavedat | date:'HH:mm:ss'}}</small>
+			</span> -->
+
+		<i ng-show="loading" class="fa fa-spinner fa-spin"></i>
+
+		<div ng-show="showmsg" class="btn-group" dropdown>
+			<button type="button" class="btn btn-sm btn-success" ng-click="save()">Save</button>
+			<span class="sr-only">Save Options</span>
+			</button>
+		</div>
+	</div>
+
+	<!-- <div class="hidden-sm hidden-md hidden-lg" style="position:fixed;bottom:5px;right:5px;" dropdown>
+	<button type="button" class="btn btn-sm btn-success" ng-click="save()">Save</button>
+</div> -->
+
+</div>

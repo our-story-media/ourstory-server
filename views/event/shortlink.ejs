@@ -1,0 +1,55 @@
+<script type="text/javascript">
+    
+        (function(b,r,a,n,c,h,_,s,d,k){if(!b[n]||!b[n]._q){for(;s<_.length;)c(h,_[s++]);d=r.createElement(a);d.async=1;d.src="https://cdn.branch.io/branch-latest.min.js";k=r.getElementsByTagName(a)[0];k.parentNode.insertBefore(d,k);b[n]=h}})(window,document,"script","branch",function(b,r){b[r]=function(){b._q.push([r,arguments])}},{_q:[],_v:1},"addListener applyCode autoAppIndex banner closeBanner closeJourney creditHistory credits data deepview deepviewCta first getCode init link logout redeem referrals removeListener sendSMS setBranchViewData setIdentity track validateCode trackCommerceEvent".split(" "), 0);
+    
+        branch.init('<%- sails.config.BRANCHKEY %>', function(err, data) {
+            // callback to handle err or data
+            branch.link({
+                data: {
+                    eventid: '<%- publicevent.id %>',
+                    '$always_deeplink':true,
+                    '$desktop_url': '<%-sails.config.master_url%>/s/<%-publicevent.offlinecode%>',
+                }
+            }, function(err, link) {
+                // console.log(err, link);
+                $('#joinshootlink').attr('href',link);
+                $('#joinshootlink').show();
+            });
+        });
+    </script>
+
+<div class="text-center row">
+    <div class="col-xs-12">
+        <% if (publicevent.closed) { %>
+        <div class="alert alert-warning">This shoot is now closed.</div>
+        <% } %>
+        <% if (publicevent.iconbackground) { %>
+        <img style="width:100%;" src="<%- publicevent.iconbackground %>" />
+        <% } %>
+
+        <% if (publicevent.icon) { %>
+        <img style="border-radius:50px;width:100px;height:100px;margin-top:-50px;margin-bottom:-30px;" src="<%- publicevent.icon %>" />
+        <% } %>
+    </div>
+</div>
+
+<div class="row">
+    <% if (publicevent.user) { %>
+    <div class="col-xs-6 text-left"><img style="border-radius:12px;width:24px;height:24px;" src="<%- publicevent.user.profile.photos[0].value %>" /> <%- publicevent.user.profile.displayName %></div>
+    <% } %>
+    <div class="col-xs-6 text-right"><%-publicevent.usercount%> <i class="fa fa-user"></i> <%-publicevent.mediacount%> <i class="fa fa-video-camera"></i></div>
+</div>
+<div class="row">
+    <div class="col-xs-12 text-center">
+<h1><%- publicevent.name %></h1>
+<strong><%- publicevent.datetext %></strong>
+<br><br>
+<p class="text-muted"><%- publicevent.eventtype.description %></p>
+<br>
+
+
+<hr>
+<a class="btn btn-primary" href="" id="joinshootlink" style="display:none">Start Filming Now</a>
+</div>
+</div>
+</div>

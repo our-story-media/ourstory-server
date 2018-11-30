@@ -1,0 +1,250 @@
+<div ng-controller="Live" ng-cloak>
+
+  <div class="progress" style="height:2px;width:auto;position:absolute;top:38px;">
+    <div class="indeterminate"></div>
+  </div>
+
+  <div class="modal fade" data-show="true" id="playAll" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="margin:auto auto;margin-top:10%;width:46%;">
+      <div class="modal-content" style="text-align:center;height:100%;width:100%;">
+        <div class="modal-body" id="videomodal" style="padding:0;">
+          <videogular vg-player-ready="onPlayerReady($API)" vg-native-controls="true">
+            <vg-media vg-src="sources">
+            </vg-media>
+          </videogular>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <h2><button class="btn btn-link" ng-click="showControls()"><i  class="fa" ng-class="controlshow ? 'fa-chevron-down' : 'fa-chevron-right'" ></i></button> Controls</h2> -->
+  <div class="alert alert-info" style="margin-top:2em;">Your shoot should take care of itself, however you can monitor and tweak what's happening here:</div>
+  <% if (!sails.config.LOCALONLY) { %>
+  <div class="well">
+    <!-- <div class="col-xs-12"> -->
+    
+      <div class="row" style="margin-bottom:5px;">
+        <form action="/shoot/sendmessage/<%- event.id %>?apikey=<%- apikey %>" method="post">
+          <p class="col-md-6" data-delay="300" data-toggle="tooltip" title="This message gets send to anyone who has contributed using the mobile app to this shoot.">Send a push notification to participants at your shoot.
+            <i style="color:silver" class="fa fa-question-circle"></i>
+          </p>
+          <div class="col-sm-6">
+            <div class="input-group col-sm-12">
+              <input placeholder="text to send" type="text" name="message" class="col-sm-2 form-control" required min="10" />
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-warning">Send</button>
+              </span>
+            </div>
+            <!-- /input-group -->
+          </div>
+        </form>
+      </div>
+     
+
+    <div class="clearfix"></div>
+  </div>
+  <% } %>
+
+  <div class="allmedia">
+
+    <div class="well col-md-3 filterbox" style="position:relative;">
+
+      <h1 style="margin-top:-10px;padding-bottom:10px;">
+        <strong>Filter Videos</strong>
+      </h1>
+
+          <label class="mycheckbox">
+              <input type="checkbox" ng-model="hasvideo" />
+              <span class="checkmark"></span>
+              <span class="content">
+                  <i class="fa fa-check"></i>
+              Has Video &nbsp;
+              </span>
+            </label>
+
+            <label class="mycheckbox">
+                <input type="checkbox" ng-model="isdeleted" />
+                <span class="checkmark"></span>
+                <span class="content">
+                    <i class="fa fa-check"></i>
+                Deleted &nbsp;
+                </span>
+              </label>
+
+      <br>
+
+      <h1>Contributors</h1>
+      <div>
+        <label class="mycheckbox" ng-repeat="contributor in contributors">
+          <input checklist-model="contributorfilter" checklist-value="contributor.profile.displayName" type="checkbox" autocomplete="off">
+          <span class="checkmark"></span>
+          <span class="content">
+          <img ng-src="{{contributor.profile.photo}}" /> {{contributor.profile.displayName}} &nbsp;
+          </span>
+        </label>
+
+      </div>
+      <h1>Themes</h1>
+      <div>
+          <label class="mycheckbox" ng-repeat="role in roles">
+          <input checklist-model="rolefilter" checklist-value="role"
+            type="checkbox" autocomplete="off">
+            <span class="checkmark"></span>
+            <span class="content">
+              <i class="fa fa-check"></i>
+            {{role}} &nbsp;
+            </span>
+            </label>
+      </div>
+      <br>
+      <h1>Tags</h1>
+      <div>
+          <label class="mycheckbox" ng-repeat="tag in tagsmeta">
+              <input checklist-model="topicfilter" checklist-value="tag"
+                type="checkbox" autocomplete="off">
+                <span class="checkmark"></span>
+                <span class="content">
+                  <i class="fa fa-check"></i>
+                {{tag}} &nbsp;
+                </span>
+                </label>
+      </div>
+
+      <h1>Phase</h1>
+      <div>
+          <label class="mycheckbox" ng-repeat="phase in phases">
+              <input checklist-model="phasefilter" checklist-value="phase" type="checkbox">
+          <span class="checkmark"></span>
+          <span class="content">
+            <i class="fa fa-check"></i>
+          {{phase}} &nbsp;
+          </span>
+        </label>
+      </div>
+      <br>
+
+      <h1>Shot</h1>
+      <div>
+      <label class="mycheckboxshots" ng-repeat="c in takenshots">
+        <input checklist-model="shotfilter" checklist-value="c.id" type="checkbox" autocomplete="off">
+        <span class="checkmark"></span>
+        <span class="content">
+          <i class="fa fa-check"></i>
+        <img class="realimg" ng-src="/data/icons/{{c.icon}}" />
+      </label>
+    </div>
+
+      <br>
+      <h1>Length ({{slider.minValue}}s - {{slider.maxValue}}s)</h1>
+      <rzslider rz-slider-model="slider.minValue"
+      rz-slider-high="slider.maxValue"
+      rz-slider-options="slider.options"></rzslider>
+
+
+      <!-- <rzslider class="custom-slider" rz-slider-model="lengthfilter"
+          rz-slider-high="90"
+          rz-slider-options="slider.options"></rzslider> -->
+      <!-- <br> -->
+      <!-- <h1>Time Shot</h1>
+      <div class="row">
+        <div class="col-xs-6">
+          <datetimepicker style="display:inline-block" ng-model="timefilterfrom"
+            show-meridian="ismeridian">From</timepicker>
+        </div>
+        -
+        <div class="col-xs-6">
+          <datetimepicker ng-click="log('filtertime',{from:timefilterfrom,to:timefilterto});" style="display:inline-block" ng-model="timefilterto"
+            show-meridian="ismeridian">To</timepicker>
+        </div>
+      </div> -->
+    </div>
+
+
+    <tabset class="col-md-9">
+      <tab heading="All Clips ({{filteredmedia.length}} of {{media.length}})" active="tabs.tab0">
+        <div style="display:block;text-align:center;">
+          <dir-pagination-controls></dir-pagination-controls>
+        </div>
+
+        <div class="alert alert-danger" ng-show="candelete">
+          You are in delete mode - clicking
+          <i style="color:red;" class="fa fa-trash-o"></i> will permanently remove all media associated with the video!
+        </div>
+        <div ng-show="filteredmedia.length == 0" class="text-center">
+          <img src="/images/packing.svg" style="height:200px;" />
+          <br>
+          <span class="text-muted">No videos created yet</span>
+        </div>
+
+        <div class="clearfix">
+          <div class="col-md-3 col-sm-4 col-xs-6" style="padding-left:0;padding-right:0;" dir-paginate="m in filteredmedia = (media | hasVideoFilter:hasvideo | deletedFilter:isdeleted | rangeFilter:slider | timeFilter:{from:timefilterfrom, to:timefilterto} | topicFilter:topicfilter | checkFilter:{scope:this,name:'user.profile.displayName', value:contributorfilter} | checkFilter:{scope:this,name:'meta.shot_ex.id', value:shotfilter} | areaFilter:{circle:circlefilter,filterbylocation:filterbylocation} | checkFilter:{scope:this,name:'meta.phase_ex.name', value:phasefilter} | checkFilter:{scope:this,name:'meta.role_ex.name', value:rolefilter} | filter:mapfilter | orderBy:'-createdAt') | itemsPerPage: 40">
+            <div style="padding:2px;position:relative;">
+              <div style="background:#f8f8f8;">
+              <a style="padding-bottom:56.25%;overflow:hidden;width:100%;display:block;position:relative;"
+                ng-href="{{(m.path)?'#':''}}" ng-click="(m.path)?playThis(m):null" data-toggle="lightbox">
+
+                <img style="width:100%;position: absolute;top:0;left:0;" ng-src="{{m.thumb}}" />
+                <div style="position: absolute;width:100%;margin-top:2em;" class="text-center" ng-show="m.deleted">
+                  <i class="fa fa-trash fa-2x"></i>
+                  <br>{{m.deletedAt | date:'ha d MMM yy'}}</div>
+                
+                <!-- <a ng-show="m.path" href="{{m.originalpath}}" style="position:absolute;right:10px;top:5px;">
+                  <i class="fa fa-download"></i>
+                </a> -->
+              </a>
+              <!-- {{m.meta.static_meta}} -->
+              <!-- {{m.meta.static_meta['-topics']}} -->
+
+              <!-- <div style="position:absolute;left:4px; top:4px;">
+                <button ng-show="candelete && !m.deleted" class="btn btn-link" style="color:red;text-decoration:none;" ng-click="removeclip(m,$event)">
+                  <i style="color:red;" class="fa fa-trash-o"></i>
+                </button>
+              </div> -->
+              <div style="padding:0.7em;">
+                  <p class="text-left" style="margin:0">{{m.createdAt | date:'ha d MMM yy'}} <span class="pull-right text-muted">{{m.meta.static_meta.clip_length | seconds | number:1}}s</span></p>
+                  <p class="text-left truncate_s" style="margin:0">
+                      <img style="width:16px;height:auto;border-radius: 50%;" ng-src="{{m.user.profile.photo}}" /> {{m.user.profile.displayName}}
+                  </p>
+              </div>
+              <div ng-show="m.path || !m.deleted" class="btn-group" style="position:absolute;top:0;right:0;">
+                  <button type="button" class="btn btn-lg btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <!-- Actions <span class="caret"></span> -->
+                      <i class="fa fa-ellipsis-v"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-right">
+                      <li ng-show="m.path"><a ng-href="{{m.originalpath}}">
+                          Download
+                      </a></li>
+                    <li ng-show="!m.deleted"><a href="#" ng-click="removeclip(m,$event)">Delete</a></li>
+                  </ul>
+                </div>
+          </div>
+            </div>
+          </div>
+          </div>
+        <!-- </div> -->
+      </tab>
+<% if (!sails.config.LOCALONLY) { %>
+        <tab heading="Map View" active="tabs.tab1" select="fixMap()">
+          <button tooltip="re-center map" ng-click="fit();log('fit');" class="btn btn-link">
+            <i class="fa fa-dot-circle-o fa-2x"></i>
+          </button>
+          <label>
+            <input ng-click="log('filterbylocation',{filterbylocation:filterbylocation});" type="checkbox" ng-model="filterbylocation"
+            /> Filter by location</label>
+          <ui-gmap-google-map zoom='map.zoom' center='map.center' bounds="map.bounds" events="map.events">
+            <ui-gmap-marker ng-repeat="m in media track by $index" idKey='m.id' click="setMapFilter(m.id);log('mappin',{media:m.id});"
+              coords='{latitude:m.meta.static_meta.gps_lat,longitude:m.meta.static_meta.gps_lng}'>
+            </ui-gmap-marker>
+            <ui-gmap-circle ng-repeat="c in circles track by c.id" center="c.center" stroke="c.stroke" fill="c.fill" radius="c.radius"
+              visible="c.visible" geodesic="c.geodesic" editable="c.editable" draggable="c.draggable" clickable="c.clickable"
+              control="c.control" events="c.events"></ui-gmap-circle>
+          </ui-gmap-google-map>
+        </tab>
+  <% } %>
+
+    </tabset>
+  </div>
+  <div class="clearfix"></div>
+</div>
+<!-- end of scope -->

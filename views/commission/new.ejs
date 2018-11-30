@@ -1,0 +1,265 @@
+<style>
+  .carousel .item {
+    background: none;
+  }
+
+  .searchable {
+    overflow: auto;
+    overflow-x: hidden;
+    height: 400px;
+    padding-top:2em;
+  }
+
+  .infobox {
+    margin-right: 10px;
+    float: right;
+    display: block;
+    margin-top: 3px;
+    text-align: right;
+  }
+
+  .gobtn {
+    width: 100%;
+    height: 84px;
+    /* padding-top: 30px; */
+  }
+
+  .summary img
+  {
+    overflow: hidden;
+    width: 150px;
+    height: 150px;
+    border-radius: 100px;
+  }
+
+  .shotimg
+  {
+    width:80px;
+  }
+
+  .circle
+  {
+    overflow: hidden;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+  }
+
+  
+  .circlex {
+    overflow: hidden;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+  }
+
+  @media (max-width:785px) {
+    .searchable {
+      overflow-y: hidden;
+      overflow-x: hidden;
+      height: auto;
+    }
+
+    .gobtn {
+      width: 100%;
+      height: 84px;
+
+    }
+
+    .sp {
+      display: none;
+    }
+
+    .infobox {
+      margin-right: 0;
+      float: right;
+      display: inline-block;
+      margin-top: 0;
+      text-align: right;
+    }
+
+    .carousel .item {
+      height: inherit;
+    }
+  }
+</style>
+
+<div ng-controller="newshoot" ng-cloak="">
+
+  <form class="form-horizontal" role="form" method="post" action="/event/addevent?apikey=<%- apikey %>">
+    <input type="hidden" name="eventtype" value="-1" id="evtyp" />
+    <div id="carousel-example-generic" data-interval="false" class="carousel slide" style="margin-bottom:0;" data-ride="carousel">
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner" role="listbox">
+
+        <div class="item active">
+            <h1>Shoots start with a template
+                <br>
+                <small>These adjustable guides help you inform contributors what to capture</small>
+              </h1>
+          <div class="col-md-8 col-md-offset-2">
+            <!-- <div class="well"> -->
+            <div class="search">
+              <input ng-model="search.$" id="filter" type="text" class="form-control input-lg" placeholder="Search Templates...">
+            </div>
+            <div class="searchable" id="searchlist">
+
+                <div ng-click="chooseTemplate(template)" ng-repeat="template in templates | filter:search" class="media" style="cursor:pointer;">
+                    <div class="media-left">
+                      <!-- <a href="#"> -->
+                        <div class="media-object circle" style="background-image:url(/backgrounds/{{template.codename}}.jpg);background-size: cover;background-position: center center"></div>
+                      <!-- </a> -->
+                    </div>
+                    <div class="media-body">
+                      <h4 class="media-heading">{{template.name}}</h4>
+                      <span class="text-muted">{{template.description}}</span>
+                    </div>
+                  </div>
+            </div>
+
+
+          </div>
+        </div>
+        <!-- SECOND PAGE -->
+        <div class="item">
+          <div class="col-md-8 col-md-offset-2">
+              <h1>{{chosenTemplate.name}} </h1>
+              <div class="row" style="margin-bottom:2em;">
+                  <div class="col-xs-2" style="min-width: 90px;">
+                      <div class="circlex" style="background-image:url(/backgrounds/{{chosenTemplate.codename}}.jpg);background-size: cover;background-position: center center"></div>
+                  </div>
+                  <div class="col-xs-10">
+                    
+                    <div style="overflow:hidden;max-height:91px; ">
+                      <img ng-repeat="shot in chosenTemplate.shot_types   " src="/data/icons/{{shot.icon}}" class="shotimg" />
+                    </div>
+                  </div>
+                </div>
+
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Shoot Name</label>
+              <div class="col-sm-10">
+                <input type="text" name="name" class="form-control input-lg" id="inputEmail3" placeholder="name" required="required" pattern=".{5,}"
+                  title="Name more than 5 characters long" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="inputEmail2" class="col-sm-2 control-label">Contribution starts</label>
+              <div class="col-sm-4">
+                <!-- <div class="input-group input-group-lg col-xs-12" id="dp3"> -->
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                  <input name="starts" style="margin:0" class="input-lg form-control datepicker" style="background:white;" size="16" type="text"
+                    data-date-format="dd-mm-yyyy" readonly required="required" />
+                  <!--  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span> -->
+                </div>
+
+              </div>
+              <div class="col-sm-3">
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    <i class="fa fa-clock-o"></i>
+                  </span>
+                  <input name="starts_time" style="margin:0;" class="input-lg form-control" size="5" type="text" value="8pm" placeholder="hh(am|pm)"
+                    required="required" pattern="\d{1,2}([apAP][mM]){1}" />
+                </div>
+
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label for="inputEmail4" class="col-sm-2 control-label">Contribution stops</label>
+              <div class="col-sm-4">
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                  <input name="ends" style="margin:0;" class="input-lg form-control datepicker" size="16" style="background:white;" type="text"
+                    data-date-format="dd-mm-yyyy" readonly required="required">
+                </div>
+              </div>
+              <!-- <div class="input-group" > -->
+              <div class="col-sm-3">
+                <div class="input-group">
+
+                  <span class="input-group-addon">
+                    <i class="fa fa-clock-o"></i>
+                  </span>
+                  <input name="ends_time" style="margin:0;" class="input-lg col-sm-2 form-control" size="5" type="text" placeholder="hh(am|pm)"
+                    value="11pm" required="required" pattern="\d{1,2}([apAP][mM]){1}">
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12 col-sm-offset-2">
+                <label>
+                  <input type="checkbox" name="agree" required="required" /> I agree to the
+                  <a target="_blank" href="/terms">Terms and Conditions</a> of using Our Story.</label>
+              </div>
+            </div>
+            <div class="row">&nbsp;</div>
+
+
+            <div class="row hidden-xs">
+              <a href="#carousel-example-generic" class="btn btn-link btn-lg" role="button" onclick="$('#carousel-example-generic').carousel(0);">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back
+              </a>
+
+              <div class="pull-right">
+                <!-- <button type="submit" class="btn btn-info btn-lg " name="adjust" value="1">Adjust this Template First
+                  <i class="fa fa-cog"></i>
+                </button> -->
+                <!-- <a class="btn btn-info btn-lg" href="/commissioning/create/" id="adjust"> Adjust this Template First <i class="fa fa-cog"></i></a> -->
+
+                <button type="submit" class="btn btn-success btn-lg " style="padding-right:25px;">Start this Shoot
+                  <i class="fa fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="row visible-xs-block">
+              <a href="#carousel-example-generic" class="btn btn-link btn-lg" role="button" onclick="$('#carousel-example-generic').carousel(0);">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back
+              </a>
+
+              <div class="row">
+                <button type="submit" class="btn btn-info btn-lg col-xs-6" name="adjust" value="1">Adjust
+                  <i class="fa fa-cog"></i>
+                </button>
+                <!-- <a class="btn btn-info btn-lg" href="/commissioning/create/" id="adjust"> Adjust this Template First <i class="fa fa-cog"></i></a> -->
+
+                <button type="submit" class="btn btn-success btn-lg col-xs-6">Start
+                  <i class="fa fa-chevron-right"></i>
+                </button>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+
+    </div>
+    <div class="clearfix"></div>
+  </form>
+</div>
+
+<div class="clearfix"></div>
+
+
+<!-- <script id="shots-template" type="text/x-handlebars-template">
+  <div class="text-center">
+{{#each this}}
+   <img src="/data/icons/{{icon}}" style="width:120px;" class="panel panel-default" />
+{{/each}}
+<div class="clearfix"></div>
+</div>
+</script> -->
