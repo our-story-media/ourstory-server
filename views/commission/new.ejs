@@ -93,22 +93,19 @@
       <div class="carousel-inner" role="listbox">
 
         <div class="item active">
-            <h1>Shoots start with a template
+            <h1><%- __('Shoots start with a template') %>
                 <br>
-                <small>These adjustable guides help you inform contributors what to capture</small>
+                <small><%- __('These adjustable guides help you inform contributors what to capture') %></small>
               </h1>
           <div class="col-md-8 col-md-offset-2">
-            <!-- <div class="well"> -->
             <div class="search">
-              <input ng-model="search.$" id="filter" type="text" class="form-control input-lg" placeholder="Search Templates...">
+              <input ng-model="search.$" id="filter" type="text" class="form-control input-lg" placeholder="<%- __('Search Templates...') %>">
             </div>
             <div class="searchable" id="searchlist">
 
                 <div ng-click="chooseTemplate(template)" ng-repeat="template in templates | filter:search" class="media" style="cursor:pointer;">
                     <div class="media-left">
-                      <!-- <a href="#"> -->
                         <div class="media-object circle" style="background-image:url(/backgrounds/{{template.codename}}.jpg);background-size: cover;background-position: center center"></div>
-                      <!-- </a> -->
                     </div>
                     <div class="media-body">
                       <h4 class="media-heading">{{template.name}}</h4>
@@ -137,7 +134,7 @@
                 </div>
 
             <div class="form-group">
-              <label for="inputEmail3" class="col-sm-2 control-label">Shoot Name</label>
+              <label for="inputEmail3" class="col-sm-2 control-label"><%- __('Shoot Name') %></label>
               <div class="col-sm-10">
                 <input type="text" name="name" class="form-control input-lg" id="inputEmail3" placeholder="name" required="required" pattern=".{5,}"
                   title="Name more than 5 characters long" />
@@ -145,16 +142,14 @@
             </div>
 
             <div class="form-group">
-              <label for="inputEmail2" class="col-sm-2 control-label">Contribution starts</label>
+              <label for="inputEmail2" class="col-sm-2 control-label"><%- __('Contribution starts') %></label>
               <div class="col-sm-4">
-                <!-- <div class="input-group input-group-lg col-xs-12" id="dp3"> -->
                 <div class="input-group">
                   <span class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                   </span>
                   <input name="starts" style="margin:0" class="input-lg form-control datepicker" style="background:white;" size="16" type="text"
                     data-date-format="dd-mm-yyyy" readonly required="required" />
-                  <!--  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span> -->
                 </div>
 
               </div>
@@ -172,7 +167,7 @@
 
 
             <div class="form-group">
-              <label for="inputEmail4" class="col-sm-2 control-label">Contribution stops</label>
+              <label for="inputEmail4" class="col-sm-2 control-label"><%- __('Contribution stops') %></label>
               <div class="col-sm-4">
                 <div class="input-group">
                   <span class="input-group-addon">
@@ -182,7 +177,6 @@
                     data-date-format="dd-mm-yyyy" readonly required="required">
                 </div>
               </div>
-              <!-- <div class="input-group" > -->
               <div class="col-sm-3">
                 <div class="input-group">
 
@@ -199,8 +193,7 @@
             <div class="row">
               <div class="col-xs-12 col-sm-offset-2">
                 <label>
-                  <input type="checkbox" name="agree" required="required" /> I agree to the
-                  <a target="_blank" href="/terms">Terms and Conditions</a> of using Our Story.</label>
+                  <input type="checkbox" name="agree" required="required" /> <%- __('I agree to the <a target="_blank" href="/terms">Terms and Conditions</a> of using Our Story.') %></label>
               </div>
             </div>
             <div class="row">&nbsp;</div>
@@ -208,16 +201,12 @@
 
             <div class="row hidden-xs">
               <a href="#carousel-example-generic" class="btn btn-link btn-lg" role="button" onclick="$('#carousel-example-generic').carousel(0);">
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <%- __('Back') %>
               </a>
 
               <div class="pull-right">
-                <!-- <button type="submit" class="btn btn-info btn-lg " name="adjust" value="1">Adjust this Template First
-                  <i class="fa fa-cog"></i>
-                </button> -->
-                <!-- <a class="btn btn-info btn-lg" href="/commissioning/create/" id="adjust"> Adjust this Template First <i class="fa fa-cog"></i></a> -->
 
-                <button type="submit" class="btn btn-success btn-lg " style="padding-right:25px;">Start this Shoot
+                <button type="submit" class="btn btn-success btn-lg " style="padding-right:25px;"><%- __('Start this Shoot') %>
                   <i class="fa fa-chevron-right"></i>
                 </button>
               </div>
@@ -225,16 +214,14 @@
 
             <div class="row visible-xs-block">
               <a href="#carousel-example-generic" class="btn btn-link btn-lg" role="button" onclick="$('#carousel-example-generic').carousel(0);">
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <%- __('Back') %>
               </a>
 
               <div class="row">
-                <button type="submit" class="btn btn-info btn-lg col-xs-6" name="adjust" value="1">Adjust
+                <button type="submit" class="btn btn-info btn-lg col-xs-6" name="adjust" value="1"><%- __('Adjust') %>
                   <i class="fa fa-cog"></i>
                 </button>
-                <!-- <a class="btn btn-info btn-lg" href="/commissioning/create/" id="adjust"> Adjust this Template First <i class="fa fa-cog"></i></a> -->
-
-                <button type="submit" class="btn btn-success btn-lg col-xs-6">Start
+                <button type="submit" class="btn btn-success btn-lg col-xs-6"><%- __('Start') %>
                   <i class="fa fa-chevron-right"></i>
                 </button>
               </div>
@@ -245,7 +232,6 @@
         </div>
       </div>
 
-      <!-- Controls -->
 
     </div>
     <div class="clearfix"></div>
@@ -253,13 +239,3 @@
 </div>
 
 <div class="clearfix"></div>
-
-
-<!-- <script id="shots-template" type="text/x-handlebars-template">
-  <div class="text-center">
-{{#each this}}
-   <img src="/data/icons/{{icon}}" style="width:120px;" class="panel panel-default" />
-{{/each}}
-<div class="clearfix"></div>
-</div>
-</script> -->

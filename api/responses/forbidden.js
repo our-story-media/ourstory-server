@@ -31,7 +31,7 @@ module.exports = function forbidden (data, options) {
   res.locals.event = false;
   res.locals.flash = false;
     res.locals.action='error';
-      res.locals.rtl = false;
+      res.locals.rtl = 'ltr';
   res.locals.notonthisserver = false;
 
   // Log error to console

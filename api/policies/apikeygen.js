@@ -21,7 +21,7 @@ module.exports = function (req, res, ok) {
 		req.session.locale = req.session.overridelocale;
 	
 	req.setLocale(req.session.locale);
-	//console.log("set locale "+req.session.locale);
+	// console.log("set locale "+req.session.locale);
 	
 	
 	

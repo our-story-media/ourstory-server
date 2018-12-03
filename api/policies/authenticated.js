@@ -22,7 +22,7 @@ module.exports = function (req, res, ok) {
     req.session.api = false;
 		req.session.ismobile = true;
     req.session.isios = true;
-    res.locals.rtl = false;
+    // res.locals.rtl = false;
 		User.findOrCreate({
       localadmin:true
     },
@@ -31,7 +31,7 @@ module.exports = function (req, res, ok) {
       consent: new Date(),
       nolimit:1,
       profile: {
-        displayName: 'Director',
+        displayName: sails.__('Director'),
         provider: 'local',
         photos: [
           {

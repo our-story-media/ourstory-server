@@ -35,109 +35,109 @@ module.exports = {
 		});
 	},
 	
-	signup:function(req,res)
-	{
-		return res.view();
-	},
+	// signup:function(req,res)
+	// {
+	// 	return res.view();
+	// },
 	
-	newkey:function(req,res)
-	{
-		User.findOne(req.session.passport.user.id).exec(function(err,u)
-		{
-			var apiobj = u.apikey;
+	// newkey:function(req,res)
+	// {
+	// 	User.findOne(req.session.passport.user.id).exec(function(err,u)
+	// 	{
+	// 		var apiobj = u.apikey;
 			
-			if (apiobj.apiaccess == 'live')
-			{
-				apiobj.apikey = uuid.v4();
-			}
+	// 		if (apiobj.apiaccess == 'live')
+	// 		{
+	// 			apiobj.apikey = uuid.v4();
+	// 		}
 
-			apiobj.apitype = 'redirect';
+	// 		apiobj.apitype = 'redirect';
 			
-			u.apikey = apiobj;
+	// 		u.apikey = apiobj;
 
-			u.save(function(done)
-			{
-				return res.json({msg:'ok'});
-			});
-		});
-	},
+	// 		u.save(function(done)
+	// 		{
+	// 			return res.json({msg:'ok'});
+	// 		});
+	// 	});
+	// },
 
-	servertoken:function(req,res)
-	{
-		User.findOne(req.session.passport.user.id).exec(function(err,u)
-		{
-			var apiobj = u.apikey;
+	// servertoken:function(req,res)
+	// {
+	// 	User.findOne(req.session.passport.user.id).exec(function(err,u)
+	// 	{
+	// 		var apiobj = u.apikey;
 			
-			if (apiobj.apiaccess == 'live')
-			{
-				apiobj.servertoken = uuid.v4();
-			}
+	// 		if (apiobj.apiaccess == 'live')
+	// 		{
+	// 			apiobj.servertoken = uuid.v4();
+	// 		}
 			
-			u.apikey = apiobj;
+	// 		u.apikey = apiobj;
 
-			u.save(function(done)
-			{
-				return res.json({msg:'ok'});
-			});
-		});
-	},
+	// 		u.save(function(done)
+	// 		{
+	// 			return res.json({msg:'ok'});
+	// 		});
+	// 	});
+	// },
 	
-	updateapi:function(req,res)
-	{
-		User.findOne(req.session.passport.user.id).exec(function(err,u)
-		{
-			u.apikey.apitype = req.param('apitype');
-			u.apikey.callbackfunction = req.param('callbackfunction');
-			u.apikey.redirecturl = req.param('redirecturl');
+	// updateapi:function(req,res)
+	// {
+	// 	User.findOne(req.session.passport.user.id).exec(function(err,u)
+	// 	{
+	// 		u.apikey.apitype = req.param('apitype');
+	// 		u.apikey.callbackfunction = req.param('callbackfunction');
+	// 		u.apikey.redirecturl = req.param('redirecturl');
 
-			u.save(function(done)
-			{
-				return res.json({msg:'ok'});
-			});
-		});
-	},
+	// 		u.save(function(done)
+	// 		{
+	// 			return res.json({msg:'ok'});
+	// 		});
+	// 	});
+	// },
 
-	revokeapi:function(req,res)
-	{
-		User.findOne(req.params.id).exec(function(err,user)
-		{
-			user.apikey.apiaccess = 'locked';
-			user.save(function(err,done){
-				return res.redirect('/event/admin');
-			});
-		});
-	},
+	// revokeapi:function(req,res)
+	// {
+	// 	User.findOne(req.params.id).exec(function(err,user)
+	// 	{
+	// 		user.apikey.apiaccess = 'locked';
+	// 		user.save(function(err,done){
+	// 			return res.redirect('/event/admin');
+	// 		});
+	// 	});
+	// },
 
-	unrevokeapi:function(req,res)
-	{
-		User.findOne(req.params.id).exec(function(err,user)
-		{
-			user.apikey.apiaccess = 'live';
-			user.save(function(err,done){
-				return res.redirect('/event/admin');
-			});
-		});
-	},
+	// unrevokeapi:function(req,res)
+	// {
+	// 	User.findOne(req.params.id).exec(function(err,user)
+	// 	{
+	// 		user.apikey.apiaccess = 'live';
+	// 		user.save(function(err,done){
+	// 			return res.redirect('/event/admin');
+	// 		});
+	// 	});
+	// },
 
-	activate:function(req,res)
-	{
-		User.findOne(req.session.passport.user.id).exec(function(err,u)
-		{
-			//var apiobj = u.apikey || {apiaccess : 'live'};
-			//console.log(u);
-			if (typeof(u.apikey)=='undefined')
-			{
-				u.apikey = {};
-				req.session.passport.user.apikey = {apiaccess: 'live'};
-				u.apikey.apikey = uuid.v4();
-				u.apikey.apiaccess = 'live';
-				u.apikey.apitype = 'redirect';
-			}
+	// activate:function(req,res)
+	// {
+	// 	User.findOne(req.session.passport.user.id).exec(function(err,u)
+	// 	{
+	// 		//var apiobj = u.apikey || {apiaccess : 'live'};
+	// 		//console.log(u);
+	// 		if (typeof(u.apikey)=='undefined')
+	// 		{
+	// 			u.apikey = {};
+	// 			req.session.passport.user.apikey = {apiaccess: 'live'};
+	// 			u.apikey.apikey = uuid.v4();
+	// 			u.apikey.apiaccess = 'live';
+	// 			u.apikey.apitype = 'redirect';
+	// 		}
 
-			u.save(function(done)
-			{
-				return res.json({msg:'ok'});
-			});
-		});
-	}
+	// 		u.save(function(done)
+	// 		{
+	// 			return res.json({msg:'ok'});
+	// 		});
+	// 	});
+	// }
 };

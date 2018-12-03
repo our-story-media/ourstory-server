@@ -76,6 +76,53 @@
 	}
 </style>
 
+<!-- <div class="clearfix"></div>
+<div class="page-header">
+  <h1><%- __('Theme Selection Image') %></h1>
+  <p class="text-center"><%- __('Add an image that represents the themes relevant to your shoot') %></p>
+</div>
+
+<div class="form-horizontal col-sm-8 col-sm-offset-2">
+  <form action="/event/map/<%- event.id %>?apikey=<%-apikey %>" method="post" enctype="multipart/form-data">
+	<div class="input-group">
+	  <span class="input-group-btn">
+		<span class="btn btn-primary btn-file">
+		  <%- __('Browse&hellip;') %>
+		  <input type="file" name="map" required>
+		</span>
+	  </span>
+	  <input type="text" class="form-control" readonly>
+	  <span class="input-group-btn">
+		<button type="submit" class="btn btn-primary"><%- __('Upload') %></button>
+	  </span>
+
+	</div>
+	<% if (event.eventtype.roleimg !== true && event.eventtype.roleimg != "") { %>
+	<div>
+	  <a href="/event/clearroleimg/<%- event.id %>?apikey=<%- apikey%>" class="btn btn-link" data-toggle="tooltip"
+		title="remove camera image">
+		<i class="fa fa-times"></i> <%- __('Remove Image') %>
+	  </a>
+	  <span>Drag each <i class="label label-primary" style="cursor:move;">Theme</i> over the part of the image that
+		represents it to help the contributor decide what to capture</span>
+	</div>
+	<% } %>
+  </form>
+  <div class="panel" id="map" style="position:relative;">
+	<% if (event.eventtype.roleimg === true || event.eventtype.roleimg == "" || typeof event.eventtype.roleimg == 'undefined') { %>
+	<img id="roleimg" src="holder.js/100px300?text=png, jpg" style="opacity:0.6;" />
+	<% } else { %>
+	<img id="roleimg" src="<%- event.eventtype.roleimg %>?cachbust=<%- Date.now() %>" style="width:100%;opacity:0.6;" />
+	<% } %>
+	<% _.each(event.eventtype.roles,function(r) { %>
+	<i class="draggable label label-primary" data-role="<%- r.id %>" data-x="<%- (r.position)?r.position[0]:0 %>"
+	  data-y="<%- (r.position)?r.position[1]:0 %>" style="cursor:move;">
+	  <%- r.name %>
+	</i>
+	<% }); %>
+  </div>
+</div> -->
+
 <div ng-app="commissionApp" ng-controller="commission" ng-cloak style="position:relative">
 	<div style="position:absolute;width:100%;height:100%;z-index:100;background:rgba(255,255,255,0.6);" class="text-center"
 	 ng-show="loading">
@@ -107,7 +154,7 @@
 	</div>
 
 	<div class="row">
-		<div class="col-sm-6">
+		<div class="col-xs-12">
 			<div class="list-group" style="border-radius: 6px;" id="phases">
 				<div class="list-group-item active" tooltip-popup-delay="300" tooltip="Can be used to organise time periods in your shoot, e.g. day or night.">Phases
 					<i style="color:silver" class="fa fa-question-circle"></i>
@@ -117,14 +164,10 @@
 						<i class="fa fa-plus fa-2x"></i>
 					</button>
 				</div>
-				<!-- <div class="list-group-item text-muted" style="padding:5px;min-height:50px;"> -->
 
-				<!-- <small>Users of this template will still be able to add their own phases (but without set themes).</small> -->
-				<!-- </div> -->
 
 				<div class="limitheight" ui-sortable="{ 'ui-floating': true, 'axis': 'y' }" ng-model="event.phases">
 
-					<!-- {{eventinfo.currentphase}} -->
 					<div class="list-group-item" style="border-radius: 0" ng-repeat="phase in event.phases | filter:phasefilter track by $index"
 					 ng-class="{'selected':(selection.currentphase==phase)}">
 
@@ -141,11 +184,6 @@
 							 tooltip-placement="right" ng-click="changemetaphase($index)"><span ng-show="eventinfo.currentphase==$index"
 								 class="badge badge-success">CURRENT</span>{{phase.name}}</h4>
 
-							<!-- <button ng-show="">MAKE CURRENT</button> -->
-
-							<!-- <button class="btn btn-link" style="margin:-4px;" ng-click="changemetaphase($index)"> -->
-							<!-- <i class="fa fa-check"></i> -->
-							<!-- </button> -->
 
 						</div>
 
@@ -166,9 +204,7 @@
 				</div>
 			</div>
 		</div>
-		<div <% if (sails.config.LIVEMODE) { %>class="col-sm-4"
-			<% } else { %>class="col-sm-6"
-			<% } %>>
+		<div class="col-sm-6">
 			<div class="list-group" id="roles" style="border-radius: 6px;">
 
 				<div href="#" class="list-group-item active" tooltip-popup-delay="300" tooltip="Can be used to help participants categorise the videos they contribute">Themes
@@ -224,6 +260,9 @@
 				</div>
 			</div>
 		</div>
+		<dvi class="col-sm-6">
+				<img id="roleimg" src="<%- event.eventtype.roleimg %>?cachbust=<%- Date.now() %>" style="width:100%;opacity:0.6;" />
+		</dvi>
 
 		<!-- </div> -->
 

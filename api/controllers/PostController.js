@@ -231,7 +231,7 @@ module.exports = {
           Media.find({'event_id':eventid}).sort('createdAt').exec(function(err,data)
           {
             //for each media, go through and fill in ids:
-            _ = require('lodash');
+            // _ = require('lodash');
             _.each(data,function(m)
             {
               //role, shot coverage class

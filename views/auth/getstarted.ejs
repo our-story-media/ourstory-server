@@ -1,13 +1,12 @@
 <div style="margin-top:3em;" class="row container">    
     <div class="col-md-5">
         
-        <h1>Support Community Stories</h1>
+        <h1><%- __('Support Community Stories') %></h1>
         <p class="lead text-success">
-            <i class="fa fa-check"></i> Login here if you want to support community story making by <mark>creating and managing</mark>
-            Shoots.
+            <i class="fa fa-check"></i> <%- __('Login here if you want to support community story making by <mark>creating and managing</mark> Shoots.') %>
         </p>
         <p class="lead text-danger">
-            <i class="fa fa-times"></i> You cannot <mark>contribute</mark> videos to the community Shoots here. To do that please use the <%- sails.config.APPNAME %> app from the App Store.
+            <i class="fa fa-times"></i> <%- __('You cannot <mark>contribute</mark> videos to the community Shoots here. To do that please use the %s app from the App Store.', sails.config.APPNAME) %>
         </p>
     </div>
     <div class="col-md-7 text-center">
@@ -17,7 +16,7 @@
             <br>
             <br>
 
-            <span class="text-muted">So you can come back later, please verify your identity</span>
+            <span class="text-muted"><%- __('So you can come back later, please verify your identity') %></span>
             <br><br>
             <a class="inline-block" href="/auth/google">
                 <img style="height:60px" src="/images/google.png" />

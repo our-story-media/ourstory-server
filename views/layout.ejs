@@ -103,7 +103,8 @@
   <meta name="twitter:image" content="<%- publicevent.iconbackground %>">
   <meta property="author" content="<%- publicevent.user.profile.displayName %>">
   <% } else { %>
-  <title>Our Story
+  <title>
+    <%- __('Our Story') %>
     <%- (sails.config.beta)?'BETA':'' %>
 
     <%- (event && event.name)?' - ' +event.name:'' %>
@@ -183,6 +184,7 @@ It produces high quality, content rich footage with no expense">
   <link rel="stylesheet" href="/styles/carousel.css">
   <link rel="stylesheet" href="/styles/datepicker.css">
   <link rel="stylesheet" href="/styles/ekko-lightbox.min.css">
+  <link rel="stylesheet" href="/styles/flags.css">
   <link rel="stylesheet" href="/styles/font-awesome.css">
   <link rel="stylesheet" href="/styles/importer.css">
   <link rel="stylesheet" href="/styles/jasny-bootstrap.min.css">
@@ -263,102 +265,124 @@ It produces high quality, content rich footage with no expense">
       <% if (user) { %>
       <div class="col-xs-3 col-sm-3 col-xs-push-2 col-sm-push-6 text-right col-xs-6" style="padding-right: 0;min-width:84px;"
         ng-controller="myprofile">
-        <img style="border-radius:15px;width:30px;height:30px;margin-right:2px;" src="<%= user.profile.photos[0].value %>" />
-        <a href="#" class="super hidden-xs hidden-sm" data-toggle="modal" data-target="#nameModal">
-          <%= user.profile.displayName %>
-        </a>
-        <% if (!sails.config.LOCALONLY) { %>
-        <a href="/auth/logout">
-          <i style=" vertical-align: middle;margin-left:2px;" class="fa fa-2x fa-sign-out"></i>
-        </a>
-        <% } %>
+        <span style="padding-right:0.2em;">
+          <img style="border-radius:15px;width:30px;height:30px;margin-right:2px;" src="<%= user.profile.photos[0].value %>" />
+          <a href="#" class="super hidden-xs hidden-sm" data-toggle="modal" data-target="#nameModal">
+            <%= user.profile.displayName %>
+          </a>
+          <% if (!sails.config.LOCALONLY) { %>
+          <a href="/auth/logout">
+            <i style=" vertical-align: middle;margin-left:2px;" class="fa fa-2x fa-sign-out"></i>
+          </a>
+          <% } %>
+          &middot;
+
+          <div class="dropdown pull-right" style="padding-top: 2px">
+            <a id="dLabel" data-target="#" class="flag flag-<%- req.getLocale() %>" href="#" data-toggle="dropdown"
+              role="button" aria-haspopup="true" aria-expanded="false">
+
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="dLabel">
+              <% _.each(_.without(sails.config.i18n.locales,req.getLocale()),function(l){ %>
+              <li style='margin-bottom:4px;'>
+
+                <a href='/auth/locale/<%- l %>'><span style='vertical-align:middle' class='flag flag-<%- l %>' /></span>
+        <%- __(l) %></a>
+        </li>
+        <% }) %>
+        </ul>
       </div>
-      <% } %>
-
-
-      <div class="mainmenunew col-sm-6 col-xs-12 text-center col-sm-pull-3 hidden-xs">
-        <% if (user) { %>
-        <a href="/dashboard">My Shoots</a>
-        <a href="/stories">My Stories</a>
-        <% } %>
-      </div>
-      <!-- <div class="clearfix visible-xs-block col-xs-12" style="height:1px;margin-bottom:20px;background:#efefef;"></div> -->
-
+      </span>
     </div>
-    <% if (user && _.contains(sails.config.admin_email,user.profile.emails[0].value)) { %>
+    <% } %>
 
-    <div class="row" ng-controller="adminlists">
-      <div class="bg-success clearfix" style="padding-top:1em;padding-bottom: 1em;margin-left:15px;margin-right:15px;">
+    <div class="mainmenunew col-sm-6 col-xs-12 text-center col-sm-pull-3 hidden-xs">
+      <% if (user) { %>
+      <a href="/dashboard">
+        <%- __('My Shoots') %></a>
+      <a href="/stories">
+        <%- __('My Stories') %></a>
+      <% } %>
+    </div>
+    <!-- <div class="clearfix visible-xs-block col-xs-12" style="height:1px;margin-bottom:20px;background:#efefef;"></div> -->
+
+  </div>
+  <% if (user && _.contains(sails.config.admin_email,user.profile.emails[0].value)) { %>
+
+  <div class="row" ng-controller="adminlists">
+    <div class="bg-success clearfix" style="padding-top:1em;padding-bottom: 1em;margin-left:15px;margin-right:15px;">
       <div class="col-xs-12 col-sm-8">
 
-          <a class="btn btn-primary pull-left" href="/event/admin">
-            <i class="fa fa fa-cogs"></i>
-            <%- __('Administration') %>
-          </a>
+        <a class="btn btn-primary pull-left" href="/event/admin">
+          <i class="fa fa fa-cogs"></i>
+          <%- __('Administration') %>
+        </a>
 
-          <!-- <div > -->
-              <div class="form-inline pull-right" style="display:inline-block;margin-top:.5em">
-                  <div class="form-check">
-                    <input ng-model="settings.processedits" ng-checked="settings.processedits=='true'" ng-change="updateSetting()" type="checkbox"
-                      class="form-check-input">
-                    <label class="form-check-label" for="exampleCheck1">Process Edits</label>
-                  </div>
-              </div>
-              
-              <span class="text-small text-warning pull-right" style="margin-top:.5em;margin-right:1em;">{{edits['current-jobs-ready']}} jobs pending </span>
-            
-            
-          <!-- </div> -->
+        <!-- <div > -->
+        <div class="form-inline pull-right" style="display:inline-block;margin-top:.5em">
+          <div class="form-check">
+            <input ng-model="settings.processedits" ng-checked="settings.processedits=='true'" ng-change="updateSetting()"
+              type="checkbox" class="form-check-input">
+            <label class="form-check-label" for="exampleCheck1">
+              <%- __('Process Edits') %></label>
+          </div>
         </div>
+
+        <span class="text-small text-warning pull-right" style="margin-top:.5em;margin-right:1em;">{{edits['current-jobs-ready']}}
+          <%- __('jobs pending') %> </span>
+
+
+        <!-- </div> -->
+      </div>
       <div class="col-sm-4 text-right">
-        <span  class="form-inline">
-          <!-- <span class="text-muted text-small">Version <span class="text-info"><%- sails.config.git_version.branch %> branch</span> from <span class="text-info"><%- moment(sails.config.git_version.date).calendar() %></span> <em><%- sails.config.git_version.message %></em></span>  -->
+        <span class="form-inline">
           <input type="text" ng-model="shootsearch" typeahead-on-select="searchEvent($item, $model, $label)" style="display:inline-block;"
-            typeahead-loading="loadingShoots" placeholder="search shoots" typeahead="n.name for n in getShoot($viewValue) | filter:$viewValue | limitTo:8"
+            typeahead-loading="loadingShoots" placeholder="<%- __('search shoots') %>" typeahead="n.name for n in getShoot($viewValue) | filter:$viewValue | limitTo:8"
             class="form-control input">
           <i ng-show="loadingShoots" class="fa fa-spin fa-spinner"></i>
         </span>
 
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- </div> -->
+  <% } %>
+  <!--</div>-->
+  <div class="clear:both"></div>
+  <% if (user && typeof(viewonly)=='undefined') { %>
+  <div class="text-center hidden-xs" ng-controller="titleController" style="margin-bottom: 10px;border-bottom-left-radius: 20px;overflow: hidden;border-bottom-right-radius: 20px;">
+    <% if(event.name != "") { %>
+    <div style="background:url(/images/event_back.png);background-size:cover;height:160px;position:relative;">
+
+      <div style="background:url(<%- sails.config.master_url + '/event/backgroundurl/' + event.id %>?cachebust=<%- Date.now() %>);background-size:cover;background-position:center;width:100%;height:100%;top:0;left:0;position:absolute;"></div>
+      <div style="position:absolute;width: 100%;height: 100%;background-color: rgba(0,0,0,0.5)"></div>
+
+      <h1 class="thetitle" style="clear:both;position:absolute;top:40px;width: 100%;">
+        <div ng-hide="editingtitle" style="display:inline;color:white">
+          <% if (typeof(pagetitle)!='undefined'){ %>
+          <%- pagetitle %>
+          <% }%>
         </div>
-
-      </div>
-
-      </div>
-
-    <!-- </div> -->
-    <% } %>
-    <!--</div>-->
-    <div class="clear:both"></div>
-    <% if (user && typeof(viewonly)=='undefined') { %>
-    <div class="text-center hidden-xs" ng-controller="titleController" style="margin-bottom: 10px;border-bottom-left-radius: 20px;overflow: hidden;border-bottom-right-radius: 20px;">
-      <% if(event.name != "") { %>
-      <div style="background:url(/images/event_back.png);background-size:cover;height:160px;position:relative;">
-
-        <div style="background:url(<%- sails.config.master_url + '/event/backgroundurl/' + event.id %>?cachebust=<%- Date.now() %>);background-size:cover;background-position:center;width:100%;height:100%;top:0;left:0;position:absolute;"></div>
-        <div style="position:absolute;width: 100%;height: 100%;background-color: rgba(0,0,0,0.5)"></div>
-
-        <h1 class="thetitle" style="clear:both;position:absolute;top:40px;width: 100%;">
-          <div ng-hide="editingtitle" style="display:inline;color:white">
-            <% if (typeof(pagetitle)!='undefined'){ %>
-            <%- pagetitle %>
-            <% }%>
-          </div>
-          <span style="color:white" ng-hide="editingtitle">
-            <%= event.name %>
-          </span>
-          <input id="titleedit" ng-keydown="titlechanged($event)" ng-show="editingtitle" class="form-control" style="top:60px;background:transparent;border-top:none;border-left:none;border-right:none;border-bottom:1px solid white;height:40px;line-height: 1.1;font-family:Open Sans,Helvetica Neue,Segoe UI,Segoe WP,sans-serif;font-size:30px;color:white;padding:0px;text-align:center;"
-            type="text" value="<%= event.name %>" />
-          <a ng-hide="editingtitle" style="color:white;font-size:10pt;padding-bottom:10px;vertical-align:middle" href="#"
-            ng-click="edittitle();">
-            <sup>
-              <i data-toggle="tooltip" title="Change Shoot Title" class="glyphicon glyphicon-pencil"></i>
-            </sup>
-          </a>
-        </h1>
-      </div>
-      <% } %>
+        <span style="color:white" ng-hide="editingtitle">
+          <%= event.name %>
+        </span>
+        <input id="titleedit" ng-keydown="titlechanged($event)" ng-show="editingtitle" class="form-control" style="top:60px;background:transparent;border-top:none;border-left:none;border-right:none;border-bottom:1px solid white;height:40px;line-height: 1.1;font-family:Open Sans,Helvetica Neue,Segoe UI,Segoe WP,sans-serif;font-size:30px;color:white;padding:0px;text-align:center;"
+          type="text" value="<%= event.name %>" />
+        <a ng-hide="editingtitle" style="color:white;font-size:10pt;padding-bottom:10px;vertical-align:middle" href="#"
+          ng-click="edittitle();">
+          <sup>
+            <i data-toggle="tooltip" title="Change Shoot Title" class="glyphicon glyphicon-pencil"></i>
+          </sup>
+        </a>
+      </h1>
     </div>
     <% } %>
+  </div>
+  <% } %>
   </div>
 
 
@@ -367,7 +391,9 @@ It produces high quality, content rich footage with no expense">
     <div class="row text-center" style="margin: 0 auto;">
       <% if (page=='event') { %>
       <!-- <a href="/"><i class="fa fa-chevron-left"></i></a> -->
-      <span class="lead title">Settings</span>
+      <span class="lead title">
+        <%- __('Settings') %>
+      </span>
       <a href="/commission/<%- event.id %>" class="pull-right"><i class="fa fa-2x fa-chevron-right"></i></a>
       <div class="row dots">
         <span class="dot active"></span>
@@ -380,7 +406,8 @@ It produces high quality, content rich footage with no expense">
 
       <% if (page=='commission') { %>
       <a href="/event/view/<%- event.id %>" class="pull-left"><i class="fa fa-2x fa-chevron-left"></i></a>
-      <span class="lead">Template</span>
+      <span class="lead">
+        <%- __('Template') %></span>
       <a href="/shoot/<%- event.id %>" class="pull-right"><i class="fa fa-2x fa-chevron-right"></i></a>
       <div class="row dots">
         <span class="dot"></span>
@@ -393,7 +420,8 @@ It produces high quality, content rich footage with no expense">
 
       <% if (page=='shoot') { %>
       <a href="/commission/<%- event.id %>" class="pull-left"><i class="fa fa-2x fa-chevron-left"></i></a>
-      <span class="lead">Videos</span>
+      <span class="lead">
+        <%- __('Videos') %></span>
       <a href="/watch/edits/<%- event.id %>" class="pull-right"><i class="fa fa-2x fa-chevron-right"></i></a>
       <div class="row dots">
         <span class="dot"></span>
@@ -406,7 +434,8 @@ It produces high quality, content rich footage with no expense">
 
       <% if (page=='watch') { %>
       <a href="/shoot/<%- event.id %>" class="pull-left"><i class="fa fa-2x fa-chevron-left"></i></a>
-      <span class="lead">Stories</span>
+      <span class="lead">
+        <%- __('Stories') %></span>
       <a href="/post/<%- event.id %>" class="pull-right"><i class="fa fa-2x fa-chevron-right"></i></a>
       <div class="row dots">
         <span class="dot"></span>
@@ -419,7 +448,9 @@ It produces high quality, content rich footage with no expense">
 
       <% if (page=='post') { %>
       <a href="/watch/edits/<%- event.id %>" class="pull-left"><i class="fa fa-2x fa-chevron-left"></i></a>
-      <span class="lead">Export</span>
+      <span class="lead">
+        <%- __('Export') %>
+      </span>
       <div class="row dots">
         <span class="dot"></span>
         <span class="dot"></span>
@@ -435,23 +466,33 @@ It produces high quality, content rich footage with no expense">
       <!-- <div class="visible-xs-block col-xs-1">&nbsp;</div> -->
       <a data-toggle="tooltip" data-delay="500" title="prepare for your shoot" class="col-sm-offset-1 col-xs-2 mainmenu text-muted <% if (page=='event') { %>active<%}%>"
         href="/event/view/<%- event.id %>">
-        <span>Settings</span>
+        <span>
+          <%- __('Settings') %>
+        </span>
       </a>
       <a data-toggle="tooltip" data-delay="500" title="decide what to shoot" class="col-xs-2 mainmenu text-muted <% if (page=='commission') { %>active<%}%>"
         href="/commission/<%- event.id %>">
-        <span>Template</span>
+        <span>
+          <%- __('Template') %>
+        </span>
       </a>
       <a data-toggle="tooltip" data-delay="500" title="real-time view of your footage" class="col-xs-2 mainmenu text-muted <% if (page=='shoot') { %>active<%}%>"
         href="/shoot/<%- event.id %>">
-        <span>Videos</span>
+        <span>
+          <%- __('Videos') %>
+        </span>
       </a>
       <a data-toggle="tooltip" data-delay="500" title="view all community stories" class="col-xs-2 mainmenu text-muted <% if (page=='watch') { %>active<%}%>"
         href="/watch/edits/<%- event.id %>">
-        <span>Stories</span>
+        <span>
+          <%- __('Stories') %>
+        </span>
       </a>
       <a data-toggle="tooltip" data-delay="500" title="download your videos for offline editing" class="col-xs-2 mainmenu text-muted <% if (page=='post') { %>active<%}%>"
         href="/post/<%- event.id %>">
-        <span>Export</span>
+        <span>
+          <%- __('Export') %>
+        </span>
       </a>
     </div>
   </div>
@@ -460,7 +501,8 @@ It produces high quality, content rich footage with no expense">
   <div class="container" style="padding-top:10px;">
     <% if (event.name) { %>
     <a href="bootlegger://connect/?eventid=<%- event.id %>" class="visible-xs-block btn btn-lg btn-success" style="margin-bottom:20px;margin-top:20px;">
-      <i class="fa fa-mobile"></i> Start Contributing Now
+      <i class="fa fa-mobile"></i>
+      <%- __('Start Contributing Now') %>
     </a>
     <%}%>
     <% if(flash && flash.msg) { %>
@@ -502,25 +544,10 @@ It produces high quality, content rich footage with no expense">
     <% }} %>
 
     <div class="row">
-
-
-
       <div class="col-md-12">
-
-        <% if (notonthisserver) { %>
-        <div class="jumbotron">
-          <h1>Out for Lunch!</h1>
-          <p>
-            <div class="">This event is not hosted on this server, try connecting to the correct server (you
-              should have been redirected)</div>
-          </p>
-        </div>
-
-        <% } else { %>
         <div id="mainbody">
           <%- body %>
         </div>
-        <%}%>
       </div>
     </div>
   </div>
@@ -528,16 +555,19 @@ It produces high quality, content rich footage with no expense">
   <div class="container">
     <!-- Site footer -->
     <div class="footer text-muted" style="min-height:100%;text-align:center;">
-      <!--<a href="#lang" data-toggle="popover" data-placement="top" data-html="true" data-content="<ul class='locale-selector'><% _.each(_.without(sails.config.i18n.locales,req.getLocale()),function(l){ %><li> <a href='/auth/locale/<%- l %>'><%- __(l) %> <div style='display:inline-block;float:right;' class='flag flag-<%- l %>' /></div> </a> </li><% }) %></ul>" data-title="<%- __('Select Language') %>">
-          <div style="display:inline-block;float:left;" class="flag flag-<%- req.getLocale() %>" /></div>
-        </a>-->
+
       <!-- <% if(!sails.config.LOCALONLY) { %> -->
-      <a class="text-muted" href="/privacy">Privacy</a> &middot;
-      <a class="text-muted" href="/terms">Terms</a> &middot;
-      <a class="text-muted" href="https://guide.ourstory.video">Our Guide</a> &middot;
-      <a class="text-muted" href="https://platform.ourstory.video">Platform</a> &middot;
+      <a class="text-muted" href="/privacy">
+        <%- __('Privacy') %></a> &middot;
+      <a class="text-muted" href="/terms">
+        <%- __('Terms') %></a> &middot;
+      <a class="text-muted" href="https://guide.ourstory.video">
+        <%- __('Our Guide') %></a> &middot;
+      <a class="text-muted" href="https://platform.ourstory.video">
+        <%- __('Platform') %></a> &middot;
       <!-- <a class="text-muted" href="/getapp">Download App</a> &middot; -->
-      <span>&copy; Our Story
+      <span>&copy;
+        <%- __('Our Story') %>
         <%- new Date().getFullYear() %>
       </span>
       <!-- <% }%> -->
@@ -550,6 +580,12 @@ It produces high quality, content rich footage with no expense">
     var masteruserid = "<%- user.id %>";
   </script>
   <% } %>
+
+  <script>
+    $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
+  </script>
 
 </body>
 

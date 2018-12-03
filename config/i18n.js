@@ -10,9 +10,8 @@
  */
 
 module.exports.i18n = {
-  // Which locales are supported?
   defaultLocale:'en',
-  locales: ['en','in','id'],
-  updateFiles:false,
+  locales: ['en','in','es','fr','ar'],
+  updateFiles:true,
   cookie: 'bootlegger_lang'
 };

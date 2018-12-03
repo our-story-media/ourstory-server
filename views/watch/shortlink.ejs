@@ -87,9 +87,9 @@
         </video>
         <% } else { %>
         <% if (edit.failed) { %>
-          <div style="width:30%;font-size:30pt;color:#444;margin:auto auto; margin-top:20%;font-family:sans-serif;color:orange;"><i class="fa fa-alert"></i>There was a problem editing this video!</div>
+          <div style="width:30%;font-size:30pt;color:#444;margin:auto auto; margin-top:20%;font-family:sans-serif;color:orange;"><i class="fa fa-alert"></i><%- __('There was a problem editing this video!') %></div>
          <% } else {%>
-        <div style="width:30%;font-size:30pt;color:#444;margin:auto auto; margin-top:20%;font-family:sans-serif;text-align:center;"><i class="fa fa-spin fa-gear"></i><br> This video is still being edited...</div>
+        <div style="width:30%;font-size:30pt;color:#444;margin:auto auto; margin-top:20%;font-family:sans-serif;text-align:center;"><i class="fa fa-spin fa-gear"></i><br> <%- __('This video is still being edited...') %></div>
         <% }} %>
         <h1 style="color:white;text-align:center;"><%- edit.title %><br><small><%- edit.description %></small></h1>
         <script>
@@ -98,7 +98,7 @@
     </body>
     <% } else { %>
     <body style="height:100%;width:100%;overflow:hidden;background:#1f1f1f">
-        <h1 style="color:white;text-align:center;"> Micro-Edits from this shoot cannot be shared, sorry.</h1>
+        <h1 style="color:white;text-align:center;"> <%- __('Stories from this shoot cannot be shared, sorry.') %></h1>
     </body>
     <% } %>
 </html>

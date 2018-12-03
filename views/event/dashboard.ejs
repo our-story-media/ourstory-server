@@ -8,12 +8,11 @@
   </div>
 
   <div ng-hide="events.length==0 && !loading" class="page-header">
-    <h1>My Shoots</h1>
+    <h1><%- __('My Shoots') %></h1>
   </div>
 
   <div ng-show="events.length==0 && !loading" class="text-center">
-    <h1>Welcome to
-      <img src="/images/logo_web.svg" />
+    <h1><%- __('Welcome to') %> <img src="/images/logo_web.svg" />
     </h1>
 
     <% if (!sails.config.LOCALONLY) { %>
@@ -21,7 +20,7 @@
       <div class="alert-info alert text-left col-md-8 col-md-offset-2 lead" style="margin-top:2em;">
           <div class="pull-left" style="line-height: 60px">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        Looking for how to contribute?
+        <%- __('Looking for how to contribute?') %>
       </div>
         <div class="pull-right">
         <a href='https://play.google.com/store/apps/details?id=uk.ac.ncl.di.bootlegger&hl=en&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'
@@ -39,14 +38,14 @@
 
       <% } %>
         <a href="/commission/new" class="btn btn-lg btn-success">
-          <i class="fa fa-plus"></i> Start a Shoot Now</a>
+          <i class="fa fa-plus"></i> <%- __('Start a Shoot Now') %></a>
   </div>
 
   <div ng-if="events.length > 0" class="row">
     <div class="my-animation col-xs-12 col-sm-6 col-md-4">
       <div style="min-height:270px;background:#fbfbfb" class="text-center">
         <a href="/commission/new" class="btn" style="width:100%;height:270px;padding-top:120px;">
-          <i class="fa fa-plus"></i> Start a Shoot Now</a>
+          <i class="fa fa-plus"></i> <%- __('Start a Shoot Now') %></a>
       </div>
     </div>
     <div ng-repeat="event in events" class="my-animation col-xs-12 col-sm-6 col-md-4">
@@ -63,7 +62,6 @@
               <div ng-show="event.icon" style="background:white;position:absolute;bottom:-25px;overflow:hidden;border-radius:25px;width:50px;height:50px;display:inline-block;margin-left:-25px;color:white;">
                 <img ng-src="{{event.icon}}" style="width:50px;height:50px;display:inline-block;" />
               </div>
-              <!-- <a class="btn btn-link" style="position:absolute;right:10px;top:10px;" href="/event/view/{{event.id}}"><i class="fa fa-cog fa-2x" style="color:white;"></i></a> -->
 
               <% if (!sails.config.LOCALONLY) { %>
                 <span ng-if="event.joincode" style="position:absolute;right:16px;bottom:10px;">
@@ -85,17 +83,14 @@
           </div>
           <div>
             <h2 style="min-height:2.2em" class="truncate">{{event.name}}</h2>
-            <!-- <p><strong>{{formatDate(event.starts) | date:'d MMM yy'}}</strong> to <strong>{{formatDate(event.ends) | date:'d MMM yy'}}</strong></p> -->
-            <!-- <p style="margin-top:10px;text-overflow: ellipsis;word-wrap: break-word;overflow: hidden;max-height: 3.2em;line-height: 1.6em;min-height:4.2em;padding:1em;">{{event.description}}</p> -->
 
           </div>
           <div class="text-center" style="position:absolute;bottom:3em;width:92%;">
-            <a href="/event/view/{{event.id}}">Settings</a> &middot;
-            <a href="/commission/{{event.id}}">Template</a> &middot;
-            <a href="/shoot/{{event.id}}">Videos</a> &middot;
-            <!-- <a class="btn btn-link" href="/watch/view/{{event.id}}">Editing</a> -->
-            <a href="/watch/edits/{{event.id}}">Stories</a> &middot;
-            <a href="/post/{{event.id}}">Export</a>
+            <a href="/event/view/{{event.id}}"><%- __('Settings') %></a> &middot;
+            <a href="/commission/{{event.id}}"><%- __('Template') %></a> &middot;
+            <a href="/shoot/{{event.id}}"><%- __('Videos') %></a> &middot;
+            <a href="/watch/edits/{{event.id}}"><%- __('Stories') %></a> &middot;
+            <a href="/post/{{event.id}}"><%- __('Export') %></a>
           </div>
         </div>
       </div>

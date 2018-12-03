@@ -1,0 +1,23 @@
+{
+	"LOGIN": "Masuk",
+	"MYNAME": "Siapa namamu?",
+	"CONTINUE": "LANJUTKAN",
+	"YOURNAME": "namamu",
+	"LONGER_NAME": "Harap masukkan nama yang lebih panjang",
+	"FIRSTNAME": "Nama Depan",
+	"LASTNAME": "Nama Keluarga",
+	"GLOBAL_RELEASE": "Sebelum memotret video Anda: <ul class = 'browser-default'> <li> Pastikan orang yang Anda rekam telah menandatangani formulir persetujuan. </ Li> <li> Setuju bahwa setiap video yang Anda rekam dapat dilihat oleh komunitas Anda . </ Li> </ ul> <br> Jika Anda SETUJU, tekan LANJUTKAN.",
+	"Edit Name": "Edit Name",
+	"Change the name that will be used on credits for shoots you participate in.": "Change the name that will be used on credits for shoots you participate in.",
+	"en": "en",
+	"in": "in",
+	"Select Language": "Select Language",
+	"Administration": "Administration",
+	"es": "es",
+	"fr": "fr",
+	"ar": "ar",
+	"My Shoots": "My Shoots",
+	"My Stories": "My Stories",
+	"Process Edits": "Process Edits",
+	"jobs pending": "jobs pending"
+}

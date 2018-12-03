@@ -39,57 +39,27 @@
   </div>
 
 <div class="page-header">
-    <h1>Administration</h1>
+    <h1><%- __('Administration') %></h1>
 </div>
 
 <div class="alert alert-info">
-	User and Shoots across all deployments are shown here. To administer a specific Shoot, visit the <a href="/">Dashboard</a>.		
+	<%- __('User and Shoots across all deployments are shown here. To administer a specific Shoot, visit the <a href="/">Dashboard</a>.	') %>	
 </div>
 
 <tabset>
-	<!-- <tab select="showedits()" heading="Edits">
-		<div class="list-group">
-				<a class="list-group-item" href="#"><input type="text" placeholder="search..." ng-model="searchedits.$" class="form-control input-lg" /></a>
-				  	<div dir-paginate="edit in edits | filter:searchedits | itemsPerPage:20" pagination-id="edits" class="list-group-item">
-						  <div class="label label-danger pull-right" ng-show="edit.failed">FAILED</div>
-							<div class="label label-success pull-right" ng-show="edit.path">COMPLETE</div>
-							<div class="label label-warning pull-right" ng-show="edit.progress < 99 && !edit.path && !edit.failed">PENDING</div>
-							<div class="text-danger" ng-show="edit.failreason">{{edit.failreason}}</div>
-							<div><strong>{{edit.title}} | {{edit.code}}</strong></div>
-							<div><em>{{edit.description}}</em></div>
-							<div class="text-muted"> Created at {{edit.createdAt | date}}</div>
-							<div class="text-primary">{{edit.user.profile.displayName}}</div>
-							<a href="/v/{{edit.shortlink}}" ng-show="edit.path">View Complete</a>
-							<div>
-								<span class="pull-left">{{edit.media.length}} videos</span>								
-								<img style="float:left;" ng-repeat="m in edit.media" ng-src="/media/thumbnail/{{m.id}}?apikey=<%- apikey%>&s=50" />
-							</div>
-							
-							<div class="clearfix"></div>
-							<div>
-								<progressbar max="100" ng-show="edit.progress && edit.progress<99" value="edit.progress"><span style="color:white; white-space:nowrap;">{{edit.progress}}
-								%</span></progressbar>
-								</div>
-							<a ng-click="restart(edit.id)" ng-show="!edit.path" class="btn btn-sm btn-danger pull-right">Restart</a>
-					<div class="clearfix"></div>
-				</div>
-                <dir-pagination-controls pagination-id="edits"></dir-pagination-controls>
-			</div>
-	</tab> -->
 	
     <tab select="showshoots()" heading="Shoots">
-			<span class="text-muted">Order By:</span>
-			<a href="" ng-click="ordere('name')">Name</a><span class="sortorder" ng-show="predicatee === 'name'" ng-class="{reverse:reversee}"></span> |
-			<a href="" ng-click="ordere('createdAt')">Joined</a><span class="sortorder" ng-show="predicatee === 'createdAt'" ng-class="{reverse:reversee}"></span> |
-			<a href="" ng-click="ordere('lasttouched')">Last Touched</a><span class="sortorder" ng-show="predicatee === 'lasttouched'" ng-class="{reverse:reversee}"></span> |
-			<a href="" ng-click="ordere('totalmedia')">Total Media</a><span class="sortorder" ng-show="predicatee === 'totalmedia'" ng-class="{reverse:reversee}"></span> |
-			<a href="" ng-click="ordere('participants')">Participants</a><span class="sortorder" ng-show="predicatee === 'participants'" ng-class="{reverse:reversee}"></span> |
-			<a href="" ng-click="ordere('totalfilesize')">Filesize</a><span class="sortorder" ng-show="predicatee === 'totalfilesize'" ng-class="{reverse:reversee}"></span>
+			<span class="text-muted"><%- __('Order By:') %></span>
+			<a href="" ng-click="ordere('name')"><%- __('Name') %></a><span class="sortorder" ng-show="predicatee === 'name'" ng-class="{reverse:reversee}"></span> |
+			<a href="" ng-click="ordere('createdAt')"><%- __('Joined') %></a><span class="sortorder" ng-show="predicatee === 'createdAt'" ng-class="{reverse:reversee}"></span> |
+			<a href="" ng-click="ordere('lasttouched')"><%- __('Last Touched') %></a><span class="sortorder" ng-show="predicatee === 'lasttouched'" ng-class="{reverse:reversee}"></span> |
+			<a href="" ng-click="ordere('totalmedia')"><%- __('Total Media') %></a><span class="sortorder" ng-show="predicatee === 'totalmedia'" ng-class="{reverse:reversee}"></span> |
+			<a href="" ng-click="ordere('participants')"><%- __('Participants') %></a><span class="sortorder" ng-show="predicatee === 'participants'" ng-class="{reverse:reversee}"></span> |
+			<a href="" ng-click="ordere('totalfilesize')"><%- __('Filesize') %></a><span class="sortorder" ng-show="predicatee === 'totalfilesize'" ng-class="{reverse:reversee}"></span>
 
 			<div class="list-group">
-				<a class="list-group-item" href="#"><input type="text" placeholder="search..." ng-model="search.$" class="form-control input-lg" /></a>
+				<a class="list-group-item" href="#"><input type="text" placeholder="<%- __('search...') %>" ng-model="search.$" class="form-control input-lg" /></a>
 				<div ng-repeat="(server,events) in events">
-						<!-- <div  class="list-group-item text-muted">On {{server}}</div> -->
 				  	<div dir-paginate="event in events | filter:search | orderBy:predicatee:reversee | itemsPerPage:20" pagination-id="shoots" class="list-group-item">
 							<div class="row">
 									<div class="col-xs-12 col-sm-10">
@@ -105,9 +75,7 @@
 											<i class="fa fa-users" tooltip="owners"></i> <a href="#" ng-click="search.$=user.profile.displayName" ng-repeat="user in event.users track by $index">{{user.profile.displayName}}, </a><br>
 									</div>
 					    		<div class="col-xs-12 col-sm-2">
-										<a ng-href="/event/kill/{{event.id}}?apikey=<%-apikey%>" onclick="return confirm('Really Kill Event?')" class="btn btn-link btn-sm btn-danger pull-right">Kill Event</a>
-										<!-- <a ng-href="/media/transcode/{{event.id}}?apikey=<%-apikey%>" class="btn btn-sm btn-default btn-link">Transcode</a> -->
-										<!-- <a ng-href="/log/view/{{event.id}}?apikey=<%-apikey%>" class="btn btn-sm btn-default btn-link">Logs</a> -->
+										<a ng-href="/event/kill/{{event.id}}?apikey=<%-apikey%>" onclick="return confirm('<%- __('Really Kill Event?') %>')" class="btn btn-link btn-sm btn-danger pull-right"><%- __('Kill Event') %></a>
 								</div>
 								</div>
 					</div>
@@ -117,35 +85,35 @@
 
 		</tab>
 		<tab select="showusers()" heading="Users">
-			<span class="text-muted">Order By:</span>
-			<a href="" ng-click="order('profile.name.familyName')">Name</a><span class="sortorder" ng-show="predicate === 'profile.name.familyName'" ng-class="{reverse:reverse}"></span> |
-			<a href="" ng-click="order('createdAt')">Joined</a><span class="sortorder" ng-show="predicate === 'createdAt'" ng-class="{reverse:reverse}"></span> |
-			<a href="" ng-click="order('owned')">Owned</a><span class="sortorder" ng-show="predicate === 'owned'" ng-class="{reverse:reverse}"></span> |
-			<a href="" ng-click="order('participatedin')">Participated In</a><span class="sortorder" ng-show="predicate === 'participatedin'" ng-class="{reverse:reverse}"></span> |
-			<a href="" ng-click="order('created')">Produced</a><span class="sortorder" ng-show="predicate === 'created'" ng-class="{reverse:reverse}"></span> |
-			<a href="" ng-click="order('edits')">Edits</a><span class="sortorder" ng-show="predicate === 'edits'" ng-class="{reverse:reverse}"></span>
+			<span class="text-muted"><%- __('Order By:') %></span>
+			<a href="" ng-click="order('profile.name.familyName')"><%- __('Name') %></a><span class="sortorder" ng-show="predicate === 'profile.name.familyName'" ng-class="{reverse:reverse}"></span> |
+			<a href="" ng-click="order('createdAt')"><%- __('Joined') %></a><span class="sortorder" ng-show="predicate === 'createdAt'" ng-class="{reverse:reverse}"></span> |
+			<a href="" ng-click="order('owned')"><%- __('Owned') %></a><span class="sortorder" ng-show="predicate === 'owned'" ng-class="{reverse:reverse}"></span> |
+			<a href="" ng-click="order('participatedin')"><%- __('Participated In') %></a><span class="sortorder" ng-show="predicate === 'participatedin'" ng-class="{reverse:reverse}"></span> |
+			<a href="" ng-click="order('created')"><%- __('Produced') %></a><span class="sortorder" ng-show="predicate === 'created'" ng-class="{reverse:reverse}"></span> |
+			<a href="" ng-click="order('edits')"><%- __('Edits') %></a><span class="sortorder" ng-show="predicate === 'edits'" ng-class="{reverse:reverse}"></span>
 
 			<div class="list-group">
-				<a class="list-group-item" href="#"><input type="text" placeholder="search..." ng-model="search_users" class="form-control input-lg" /></a>
+				<a class="list-group-item" href="#"><input type="text" placeholder="<%- __('search...') %>" ng-model="search_users" class="form-control input-lg" /></a>
 				<div dir-paginate="user in users | filter:search_users | orderBy:predicate:reverse | itemsPerPage:20" pagination-id="users"  class="list-group-item">
 					<div class="row">
 					<div class="col-xs-12 col-sm-8">
 						<h4 class="list-group-item-heading">
 							<img style="width:26px;height:auto;border-radius: 50%;" ng-src="{{user.profile.photos[0].value}}" /> <strong>{{user.profile.displayName}}</strong> <em>{{user.profile.emails[0].value}}</em>
 						</h4>
-						<i class="fa fa-clock-o" tooltip="user joined"></i> {{user.createdAt | date:'short'}} 
-						<i class="fa fa-users" tooltip="shoots owned"></i> {{user.owned}} 
-						<i class="fa fa-user" tooltip="shoots participated in"></i> {{user.participatedin}}
-						<i class="fa fa-video-camera" tooltip="videos captured"></i> {{user.created}}
-						<i class="fa fa-film" tooltip="stories made"></i> {{user.edits}}
+						<i class="fa fa-clock-o" tooltip="<%- __('user joined') %>"></i> {{user.createdAt | date:'short'}} 
+						<i class="fa fa-users" tooltip="<%- __('shoots owned') %>"></i> {{user.owned}} 
+						<i class="fa fa-user" tooltip="<%- __('shoots participated in') %>"></i> {{user.participatedin}}
+						<i class="fa fa-video-camera" tooltip="<%- __('videos captured') %>"></i> {{user.created}}
+						<i class="fa fa-film" tooltip="<%- __('stories made') %>"></i> {{user.edits}}
 						<span ng-show="user.apiaccess"> api {{user.apiaccess}},</span>
 					</div>
 					<div class="col-xs-12 col-sm-4">
-					<a ng-show="!user.deleted" href="/event/removeuser/{{user.id}}?apikey=<%-apikey%>" onclick="return confirm('Really Remove User?')"  class="btn btn-link btn-danger btn-sm pull-right">Remove</a>
+					<a ng-show="!user.deleted" href="/event/removeuser/{{user.id}}?apikey=<%-apikey%>" onclick="return confirm('<%- __('Really Remove User?') %>')"  class="btn btn-link btn-danger btn-sm pull-right"><%- __('Remove') %></a>
 					&nbsp
-					<a ng-show="!user.nolimit" href="/event/removelimit/{{user.id}}?apikey=<%-apikey%>" class="btn btn-primary btn-sm  btn-link pull-right">Remove Limit</a>
+					<a ng-show="!user.nolimit" href="/event/removelimit/{{user.id}}?apikey=<%-apikey%>" class="btn btn-primary btn-sm  btn-link pull-right"><%- __('Remove Limit') %></a>
 					&nbsp
-					<a ng-show="user.nolimit" href="/event/restorelimit/{{user.id}}?apikey=<%-apikey%>" class="btn btn-primary btn-sm  btn-link pull-right">Restore Limit</a>
+					<a ng-show="user.nolimit" href="/event/restorelimit/{{user.id}}?apikey=<%-apikey%>" class="btn btn-primary btn-sm  btn-link pull-right"><%- __('Restore Limit') %></a>
 				</div>
 			</div>
 				</div>
@@ -154,59 +122,6 @@
 
 		</tab>
 		<div class="clearfix"></div>
-
-		<!-- <tab heading="Settings"> -->
-<!-- <br><br> -->
-<!-- <p>View Our Story System Wide Logs</p> -->
-			<!-- <a href="/log/all/" class="btn btn-warning btn-lg"><i class="fa fa-database"></i> Master Server Log</a> -->
-			<!-- <hr> -->
-			<!-- <form action="/post/broadcast" method="post">
-					<p>Sends a push notification with a full-screen image to all registered users of Our Story.</p>
-				<div class="input-group">
-
-			<input placeholder="url of image" type="text" name="advert" class=" col-sm-2 form-control" />
-			<span class="input-group-btn">
-			<button type="submit" class="btn btn-warning">Broadcast Message to All Users</button>
-			</span>
-			</div>
-			</form> -->
-			<!-- <hr> -->
-			<!-- <div class="panel panel-default">
-				<div class="panel-heading">
-					Add Shot
-				</div>
-				<div class="panel-body"> -->
-			  <!-- <form action="/commission/addshot/?apikey=<%- apikey %>" method="post" enctype="multipart/form-data">
-					<div class="row">
-						<div class="col-sm-8">
-			<input type="text" class="form-control input-lg" name="name" required placeholder="Shot Title"/>
-			<input type="text" name="description" class="form-control input-lg" required placeholder="Shot Description"/>
-
-</div>
-<div class="col-sm-4">
-			  <div class="fileinput fileinput-new" data-provides="fileinput">
-			    <div class="fileinput-new thumbnail" style="width: 200px; height: 113px;float:left;" >
-			      <img data-src="holder.js/100%x100%" alt="...">
-			    </div>
-			    <div class="fileinput-preview fileinput-exists thumbnail" style="width: 200px; height: 113px;overflow:hidden;float:left;">
-
-			    </div>
-			    <div style="float:right;width:10px;">
-			      <span class="btn btn-link btn-file"><span class="fileinput-new"><i class="fa fa-folder-open"></i></span><span class="fileinput-exists"><i class="fa fa-folder-open"></i></span><input type="file" name="image"></span>
-
-			      <a href="#" class="btn btn-link fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i></a>
-			    </div>
-				</div>
-			</div>
-				<div class="clearfix"></div>
-				<input type="submit" value="Add Shot" class="btn btn-lg btn-primary pull-right"/>
-				</div>
-
-			</form> -->
-			<!-- </div> -->
-			<!-- </div> -->
-
-		<!-- </tab> -->
 </tabset>
 </div>
 <div class="clearfix"></div>

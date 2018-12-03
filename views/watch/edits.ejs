@@ -54,7 +54,7 @@
     <div class="text-center" style="margin-top:2em;">
         <p class="text-muted" ng-show="edits.length==0">
             <img src="/images/packing.svg" style="width:200px;" />
-            <br> Nobody has made any stories yet...</p>
+            <br> <%- __('Nobody has made any stories yet...') %></p>
         <div ng-repeat="group in groups | orderBy:'toString()'">
             <div>
                 <h1>{{group}}</h1>
@@ -70,10 +70,10 @@
                                     max="100" value="edit.progress" type="info" ng-show="(edit.progress && !edit.failed && !edit.path)"></progressbar>
 
                                 <span class="label label-success" ng-show="!edit.failed && edit.path && edit.progress>98"
-                                    style="position:absolute;top:4px;left:4px;">COMPLETE</span>
+                                    style="position:absolute;top:4px;left:4px;"><%- __('COMPLETE') %></span>
                                 <span class="label label-warning" ng-show="!edit.failed && !edit.path && edit.progress>0"
-                                    style="position:absolute;top:4px;left:4px;">PROCESSING</span>
-                                <span class="label" ng-show="!edit.path && !edit.progress" style="position:absolute;top:4px;left:4px;">DRAFT</span>
+                                    style="position:absolute;top:4px;left:4px;"><%- __('PROCESSING') %></span>
+                                <span class="label" ng-show="!edit.path && !edit.progress" style="position:absolute;top:4px;left:4px;"><%- __('DRAFT') %></span>
 
 
 
@@ -81,9 +81,6 @@
                                     <div ng-show="edit.failed && edit.failreason" class="bg-danger" style="padding: 5px;">{{edit.failreason}}</div>
                                     <i class="fa fa-exclamation-triangle fa-3x" style="color:silver;padding-top:20%;"></i>
                                 </span>
-                                <!-- <span style="position:absolute;top:0;left:0px;width:100%;height:100%;" ng-show="!edit.path && !edit.failed">
-                                <i class="fa fa-clock-o fa-3x" style="color:silver;padding-top:20%;"></i>
-                            </span> -->
 
                                 <div ng-if="edit.path && !edit.failed" style="position:absolute;left:5px;top:5px;"
                                     class="addthis_toolbox" addthis:url="<%- sails.config.master_url %>/v/{{edit.code}}"
@@ -95,16 +92,11 @@
                                     <a class="addthis_button_compact"></a>
                                     <a class="addthis_counter addthis_bubble_style"></a>
                                 </div>
-                                <!-- <div style="position:absolute;top:4px;right:4px;" ng-if="edit.path && !edit.failed">
-                                <a ng-href="{{ '/watch/getvideofull/' + edit.id + '?apikey=<%- apikey %>'}}">
-                                    <i class="fa fa-download"></i>
-                                </a>
-                            </div> -->
+
                             </a>
 
                             <div style="padding-left:1em;padding-right:1em;padding-bottom:0.5em;padding-top:1em;">
                                 <h3 style="margin:0;height:1.4em;text-overflow: ellipsis;white-space: nowrap;overflow:hidden;text-align: left;">{{edit.title}}</h3>
-                                <!-- <p class="text-left">{{edit.createdAt | date:'ha d MMM yy'}}</p> -->
                                 <p class="text-left">
                                     <img style="width:24px;height:auto;border-radius: 50%;" ng-src="{{edit.user.photo}}" />
                                     {{edit.user.name}}
@@ -119,33 +111,25 @@
                                 <div class="btn-group" style="position:absolute;right:4px;top:0;">
                                     <button type="button" class="btn btn-lg btn-link dropdown-toggle" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
-                                        <!-- Actions <span class="caret"></span> -->
                                         <i class="fa fa-ellipsis-v"></i>
-                                        <!-- <i class="fa fa-ellipsis-v"></i> -->
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li ng-if="edit.path && !edit.failed"><a ng-href="{{ '/watch/getvideofull/' + edit.id + '?apikey=<%- apikey %>'}}">
                                                 Download
                                             </a></li>
-                                        <li><a ng-href="/api/watch/clone/{{edit.id}}?apikey=<%- apikey %>">Duplicate</a></li>
+                                        <li><a ng-href="/api/watch/clone/{{edit.id}}?apikey=<%- apikey %>"><%- __('Duplicate') %></a></li>
                                         <% if (sails.config.LOCALONLY) { %>
-                                        <li><a ng-href="/api/watch/changeownership/{{edit.id}}/{{group}}?apikey=<%- apikey %>">Update
-                                                to Latest User of this Name</a></li>
+                                        <li><a ng-href="/api/watch/changeownership/{{edit.id}}/{{group}}?apikey=<%- apikey %>"><%- __('Update to Latest User of this Name') %></a></li>
                                         <% } %>
                                         <!-- <li> -->
                                         <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="#" class="reassign"><span class="pull-left">Re-assign to </span><span class="fa fa-caret-right pull-right"></span>
+                                            <a tabindex="-1" href="#" class="reassign"><span class="pull-left"><%- __('Re-assign to') %> </span><span class="fa fa-caret-right pull-right"></span>
                                             <div class="clearfix"></div>
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li ng-repeat="u in groups"><a ng-href="/api/watch/changeownership/{{edit.id}}/{{u}}?apikey=<%- apikey %>">{{u}}</a></li>
                                             </ul>
                                         </li>
-
-                                        <!-- </li> -->
-                                        <!-- <li ng-if="!edit.path || edit.failed" ><a ng-href="/api/watch/restartedit/{{edit.id}}?apikey=<%- apikey %>">Restart Processing</a></li> -->
-                                        <!-- <li role="separator" class="divider"></li> -->
-                                        <!-- <li><a href="#">Separated link</a></li> -->
                                     </ul>
                                 </div>
                             </div>

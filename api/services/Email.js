@@ -3,11 +3,6 @@
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
-// EmailService.js - in api/services
-
-// var nodemailer = require('nodemailer');
-// var directTransport = require('nodemailer-direct-transport');
-// var transporter = nodemailer.createTransport(directTransport());
 var sendgrid;
 if (!sails.config.LOCALONLY) {
     sendgrid = require('@sendgrid/mail');
@@ -70,12 +65,13 @@ exports.newUser = function (user) {
     if (user.profile.emails[0].value) {
         var options = {
             to: user.profile.emails[0].value,
-            name: user.profile.displayName,
-            subject: 'Welcome to Our Story',
-            content: "Welcome to Our Story. We are here to help you contribute to great video stories.",
-            btnurl: sails.config.master_url,
-            btntext: "Get Started Now"
+            name: user.profile.displayName
         };
+
+        options.subject= sails.__('Welcome to Our Story)');
+            options.content= sails.__("Welcome to Our Story. We are here to help you contribute to great video stories.");
+            options.btnurl= sails.config.master_url;
+            options.btntext= sails.__("Get Started Now");
         exports.sendEmail(options);
     }
 };
@@ -84,11 +80,11 @@ exports.joinInvite = function (email, eventid, newcode) {
     Event.findOne(eventid).exec(function (err, ev) {
         var options = {
             to: email,
-            name: 'Friend!',
-            subject: 'Invite to Contribute',
-            content: 'You have been invited to contribute to the Our Story project ' + ev.name + ".",
+            name: sails.__('Friend!'),
+            subject: sails.__('Invite to Contribute'),
+            content: sails.__('You have been invited to contribute to the Our Story project %s.', + ev.name ),
             btnurl: sails.config.master_url + "/join/" + newcode,
-            btntext: "Login to Contribute"
+            btntext: sails.__("Login to Contribute")
         }
         exports.sendEmail(options);
     });
