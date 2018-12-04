@@ -259,7 +259,7 @@
 		<div class="col-sm-6">
 			<div style="text-align:right;height:226px;opacity:0.6;text-align:center;background: url(/images/smartphone.svg);background-position:center;background-size: cover;background-repeat: no-repeat;overflow: hidden;position:relative;padding-top:2%;">
 				<% if (event.eventtype.roleimg === true || event.eventtype.roleimg == "" || typeof event.eventtype.roleimg == 'undefined') { %>
-				<img src="holder.js/100px300?text=png, jpg" style="opacity:0.6;" />
+				<!-- <img src="holder.js/100px300?text=png, jpg" style="opacity:0.6;" /> -->
 				<% } else { %>
 				<div style="background-image:url(/event/roleimg/<%- event.id %>?cachbust=<%- Date.now() %>);background-size:contain;width:100%;height:100%;background-position:center;background-repeat:no-repeat;"></div>
 				<% } %>
