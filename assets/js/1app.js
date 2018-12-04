@@ -25,7 +25,8 @@ var bootleggerApp = angular.module('bootleggerApp', [
   'uiGmapgoogle-maps',
   'ui.slider',
   'ngDragDrop',
-  'rzModule'
+  'rzModule',
+  'angularTokenfield'
 ]);
 
 bootleggerApp.service('$bootleggerSails', ['$sails', function ($sails) {

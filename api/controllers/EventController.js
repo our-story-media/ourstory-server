@@ -324,7 +324,7 @@ module.exports = {
 				});
 
 
-				
+
 				if (thecode.email)
 					Email.joinInvite(thecode.email, req.param('id'), newcode);
 				ev.save(function (err) {
@@ -1240,27 +1240,28 @@ module.exports = {
 
 	},
 
-	updaterole: function (req, res) {
-		// console.log(req.params.all());
-		try {
-			Event.findOne(req.param('id')).exec(function (err, m) {
-				//console.log(m);
-				//console.log(m.eventtype.roles[parseInt(req.param('role'))]);
-				//console.log(m.eventtype.roles[parseInt(req.param('role'))]);
-				var role = _.find(m.eventtype.roles, { id: parseInt(req.param('role')) });
-				role.position = [req.param('x'), req.param('y')];
-				// m.eventtype.roles[parseInt(req.param('role'))].position = [req.param('x'), req.param('y')];
-				// console.log(m.eventtype.roles[parseInt(req.param('role'))]);
-				m.save(function () {
-					res.json({ msg: 'done' });
-				});
-			});
-		}
-		catch (e) {
-			console.log(e);
-		}
-	},
+	// updaterole: function (req, res) {
+	// 	// console.log(req.params.all());
+	// 	try {
+	// 		Event.findOne(req.param('id')).exec(function (err, m) {
+	// 			//console.log(m);
+	// 			//console.log(m.eventtype.roles[parseInt(req.param('role'))]);
+	// 			//console.log(m.eventtype.roles[parseInt(req.param('role'))]);
+	// 			var role = _.find(m.eventtype.roles, { id: parseInt(req.param('role')) });
+	// 			role.position = [req.param('x'), req.param('y')];
+	// 			// m.eventtype.roles[parseInt(req.param('role'))].position = [req.param('x'), req.param('y')];
+	// 			// console.log(m.eventtype.roles[parseInt(req.param('role'))]);
+	// 			m.save(function () {
+	// 				res.json({ msg: 'done' });
+	// 			});
+	// 		});
+	// 	}
+	// 	catch (e) {
+	// 		console.log(e);
+	// 	}
+	// },
 
+	// upload role img:
 	map: function (req, res) {
 
 		var knox = require('knox-s3');
@@ -1271,54 +1272,51 @@ module.exports = {
 			bucket: sails.config.S3_BUCKET
 		}
 
-		//console.log(req.method);
-		if (req.method == "POST" && req.file('map') != undefined) {
+		if (req.file('map') != undefined) {
 
 			req.file('map').upload(function (err, tt) {
 				if (err) {
 					req.session.flash = { msg: err };
-					return res.redirect('/event/view/' + req.param('id'));
+					return res.redirect('/commission/' + req.param('id'));
 				}
 
 				if (tt.length != 1) {
 					req.session.flash = { msg: 'No file given' };
-					return res.redirect('/event/view/' + req.param('id'));
+					return res.redirect('/commission/' + req.param('id'));
 				}
 				var uuid = require('uuid');
 				var fakeid = uuid.v1();
 				var filename = fakeid + tt[0].filename.replace(' ', '');
 				var tmp = '.tmp/uploads/' + tt[0].fd;
 
-				//fs.copySync(tmp,tmpdir + filename);
-
-				//console.log('ready with file');
-
+				//generate role map:
 
 				if (sails.config.LOCALONLY) {
 
 					fs.copySync(tmp, path.join(__dirname, '..', '..', 'upload', filename));
-					// console.log(path.normalize(path.join('..','upload',filename)));
 
 					//save file:
 					Event.findOne(req.param('id')).exec(function (err, m) {
 
 						if (!err && m != undefined) {
-							m.eventtype.roleimg = filename;
 
-							//reset all role positions randomly:
-							for (let cam in m.eventtype.roles)
-							{
-								m.eventtype.roles[cam].position = [Math.random(),Math.random()];
-							}
+							let r = _.findIndex(m.eventtype.roles, {id: parseInt(req.param('role'))});
+							// console.log(r);
+							
+							m.eventtype.roles[r].image = filename;
 
-							m.save(function (err) {
-								req.session.flash = { msg: "Upload Complete" };
-								res.redirect('/event/view/' + req.param('id'));
+							Utility.generateRoleMap(m, function (newevent) {
+								// console.log(newevent);
+								
+								newevent.save(function (err) {
+									req.session.flash = { msg: "Upload Complete" };
+									res.redirect('/commission/' + req.param('id'));
+								});
 							});
 						}
 						else {
 							req.session.flash = { msg: "Error Uploading Image" };
-							res.redirect('/event/view/' + req.param('id'));
+							res.redirect('/commission/' + req.param('id'));
 						}
 					});
 				}
@@ -1327,32 +1325,32 @@ module.exports = {
 					client.putFile(tmp, 'upload/' + filename,
 						function (err, result) {
 							//done uploading
-							//console.log('done uploading');
-							if (err)
-								console.log("s3 upload error: " + err);
-
-							// fs.unlink(tmp, function (err) {
-							// 	//console.log(err);
-							// });
+							if (err) {
+								req.session.flash = { msg: "Error Uploading Image" };
+								res.redirect('/commission/' + req.param('id'));
+							}
 
 							Event.findOne(req.param('id')).exec(function (err, m) {
 
-								if (!err && m != undefined) {
-									m.eventtype.roleimg = filename;
-									//reset all role positions randomly:
-									for (let cam in m.eventtype.roles)
-									{
-										m.eventtype.roles[cam].position = [Math.random(),Math.random()];
-									}
-									m.save(function (err) {
-										req.session.flash = { msg: "Upload Complete" };
-										res.redirect('/event/view/' + req.param('id'));
-									});
-								}
-								else {
-									req.session.flash = { msg: "Error Uploading Image" };
-									res.redirect('/event/view/' + req.param('id'));
-								}
+								//STEP 2: regenerate the event role img:
+								m.eventtype.roles[req.param('role')].image = filename;
+								Utility.generateRoleMap(m, function (newevent) {
+									client.putFile(`.tmp/uploads/{newevent.id}_roleimg.png`, 'upload/' + newevent.eventtype.roleimg,
+										function (err, result) {	
+
+											if (!err && m != undefined) {
+
+												newevent.save(function (err) {
+													req.session.flash = { msg: "Upload Complete" };
+													res.redirect('/commission/' + req.param('id'));
+												});
+											}
+											else {
+												req.session.flash = { msg: "Error Uploading Image" };
+												res.redirect('/commission/' + req.param('id'));
+											}
+										});
+								});
 							});
 						});
 				}
@@ -1374,7 +1372,7 @@ module.exports = {
 
 				req.file('image').upload(function (err, tt) {
 
-					
+
 
 					if (err || tt.length == 0)
 						return res.status(500).json({
@@ -1449,27 +1447,6 @@ module.exports = {
 										});
 									});
 							}
-
-							// client.putFile(tmp + "_small.png", `upload/${req.param('id')}/${filename}.png`,
-							// 	function (err) {
-							// 		//done uploading
-
-
-							// 		// console.log('done uploading');
-							// 		if (err)
-							// 			return res.status(500).json({ msg: "Error Uploading Image" });
-
-							// 		// console.log("s3 upload error: "+err);
-
-							// 		Event.findOne(req.param('id')).exec(function (err, m) {
-							// 			if (Utility.errorOrMissing(err, m, req, res)) {
-							// 				m.iconbackground = `${req.param('id')}/${filename}.png`;
-							// 				m.save(function (err) {
-							// 					Utility.saveSuccess(err, m, req, res);
-							// 				});
-							// 			}
-							// 		});
-							// 	});
 						});
 				});
 
@@ -1491,7 +1468,7 @@ module.exports = {
 	},
 
 
-	
+
 	clearbackground: function (req, res) {
 		Event.findOne(req.param('id')).exec(function (err, m) {
 
@@ -1514,21 +1491,28 @@ module.exports = {
 		Event.findOne(req.param('id')).exec(function (err, m) {
 
 			if (!err && m != undefined) {
-				m.eventtype.roleimg = false;
-				m.save(function (err) {
-					console.log(err);
-					req.session.flash = { msg: "Theme Image removed!" };
-					res.redirect('/event/view/' + req.param('id'));
+				// m.eventtype.roleimg = false;
+				let r = _.findIndex(m.eventtype.roles, {id: parseInt(req.param('role'))});
+				m.eventtype.roles[r].image = null;
+
+				Utility.generateRoleMap(m, function (newevent) {
+
+					newevent.save(function (err) {
+						console.log(err);
+						req.session.flash = { msg: "Theme Image removed!" };
+						res.redirect('/commission/' + req.param('id'));
+					});
 				});
+				
 			}
 			else {
-				req.session.flash = { msg: "Error Removing Background" };
-				res.redirect('/event/view/' + req.param('id'));
+				req.session.flash = { msg: "Error Removing Image" };
+				res.redirect('/commission/' + req.param('id'));
 			}
 		});
 	},
 
-	
+
 	featured: function (req, res) {
 		Event.findFeaturedByBuildVariant(req, function (err, shoots) {
 			var users_ids = _.flatten(_.pluck(shoots, 'ownedby'));
@@ -1536,7 +1520,7 @@ module.exports = {
 				_.each(shoots, function (e) {
 					var mm = _.find(users, { id: e.ownedby[0] });
 					// console.log(mm);
-					
+
 					e.icon = (e.icon && e.icon != '') ? sails.config.master_url + '/event/backgroundurl/' + e.id : '';
 					e.iconbackground = sails.config.master_url + '/event/backgroundurl/' + e.id;
 					delete e.eventtype;
@@ -1579,58 +1563,58 @@ module.exports = {
 						.png()
 						.toFile(tmp + "_small.png", function (err) {
 
-								if (err) {
-									req.session.flash = { msg: "Error Uploading Image" };
-									return res.redirect('/event/view/' + req.param('id'));
-								}
+							if (err) {
+								req.session.flash = { msg: "Error Uploading Image" };
+								return res.redirect('/event/view/' + req.param('id'));
+							}
 
-								if (sails.config.LOCALONLY) {
+							if (sails.config.LOCALONLY) {
 
-									fs.copySync(tmp, path.join(__dirname, '..', '..', 'upload', filename));
-									Event.findOne(req.param('id')).exec(function (err, m) {
+								fs.copySync(tmp, path.join(__dirname, '..', '..', 'upload', filename));
+								Event.findOne(req.param('id')).exec(function (err, m) {
 
-										if (!err && m != undefined) {
-											m.icon = filename + ".png";
-											m.save(function (err) {
-												req.session.flash = { msg: "Upload Complete" };
-												res.redirect('/event/view/' + req.param('id'));
-											});
-										}
-										else {
-											req.session.flash = { msg: "Error Uploading Image" };
+									if (!err && m != undefined) {
+										m.icon = filename + ".png";
+										m.save(function (err) {
+											req.session.flash = { msg: "Upload Complete" };
 											res.redirect('/event/view/' + req.param('id'));
-										}
-									});
-								}
-								else {
-
-									var knox = require('knox-s3');
-									var client = knox.createClient(knox_params);
-									client.putFile(tmp + "_small.png", 'upload/' + filename + ".png", { 'x-amz-acl': 'public-read' },
-										function (err, result) {
-											//done uploading
-											//console.log('done uploading');
-											if (err)
-												console.log("s3 upload error: " + err);
-
-											Event.findOne(req.param('id')).exec(function (err, m) {
-
-												if (!err && m != undefined) {
-													m.icon = filename + ".png";
-													m.save(function (err) {
-														req.session.flash = { msg: "Upload Complete" };
-														res.redirect('/event/view/' + req.param('id'));
-													});
-												}
-												else {
-													req.session.flash = { msg: "Error Uploading Image" };
-													res.redirect('/event/view/' + req.param('id'));
-												}
-											});
 										});
-								}
-							});
-						// });
+									}
+									else {
+										req.session.flash = { msg: "Error Uploading Image" };
+										res.redirect('/event/view/' + req.param('id'));
+									}
+								});
+							}
+							else {
+
+								var knox = require('knox-s3');
+								var client = knox.createClient(knox_params);
+								client.putFile(tmp + "_small.png", 'upload/' + filename + ".png", { 'x-amz-acl': 'public-read' },
+									function (err, result) {
+										//done uploading
+										//console.log('done uploading');
+										if (err)
+											console.log("s3 upload error: " + err);
+
+										Event.findOne(req.param('id')).exec(function (err, m) {
+
+											if (!err && m != undefined) {
+												m.icon = filename + ".png";
+												m.save(function (err) {
+													req.session.flash = { msg: "Upload Complete" };
+													res.redirect('/event/view/' + req.param('id'));
+												});
+											}
+											else {
+												req.session.flash = { msg: "Error Uploading Image" };
+												res.redirect('/event/view/' + req.param('id'));
+											}
+										});
+									});
+							}
+						});
+					// });
 					// });
 				}
 				catch (e) {
@@ -1731,11 +1715,26 @@ module.exports = {
 	roleimg: function (req, res) {
 
 		var id = req.param('id');
+		// console.log(id);
+
 		Event.findOne(id, function (err, m) {
 
+			if (!m)
+				return res.notFound()
+
 			if (sails.config.LOCALONLY) {
-				// console.log(m.eventtype.roleimg);
-				fs.readFile(path.normalize(__dirname + '/../../upload/' + m.eventtype.roleimg), function (err, data) {
+
+				let img = '';
+				if (req.param('role'))
+				{
+					let r = _.findIndex(m.eventtype.roles,{id:parseInt(req.param('role'))});
+					if (r!=-1)
+						img = m.eventtype.roles[r].image;
+				}
+				else
+					img = m.eventtype.roleimg;
+
+				fs.readFile(path.normalize(__dirname + '/../../upload/' + img), function (err, data) {
 					return res.send(data);
 				});
 			}
@@ -1745,39 +1744,56 @@ module.exports = {
 					privateKeyPath: sails.config.CLOUDFRONT_KEYFILE,
 					expireTime: moment().add(1, 'day')
 				}
-				var signedUrl = cloudfront.getSignedUrl(sails.config.S3_CLOUD_URL + m.eventtype.roleimg, options);
-				//console.log(signedUrl);
-				res.setHeader('Cache-Control', 'public, max-age=2592000'); // one year
-				res.setHeader("Expires", new Date(Date.now() + 2592000000).toUTCString());
-				return res.redirect(signedUrl);
-			}
-		});
-	},
+				// console.log(m);
 
-	iconurl: function (req, res) {
 
-		var id = req.param('id');
-		Event.findOne(id, function (err, m) {
-			if (sails.config.LOCALONLY) {
-				// console.log(m.eventtype.roleimg);
-				fs.readFile(path.normalize(__dirname + '/../../upload/' + m.icon), function (err, data) {
-					return res.send(data);
-				});
-			}
-			else {
-				var options = {
-					keypairId: sails.config.CLOUDFRONT_KEY,
-					privateKeyPath: sails.config.CLOUDFRONT_KEYFILE,
-					expireTime: moment().add(1, 'day')
+				let img = '';
+				try {
+					if (req.param('role'))
+					{
+						let r = _.find(m.eventtype.roles,{id: parseInt(req.param('role'))});
+						img = sails.config.S3_CLOUD_URL + r.image;
+					}
+					else
+						img = sails.config.S3_CLOUD_URL + m.eventtype.roleimg;
+				} catch (error) {
+					return res.notFound()
 				}
-				var signedUrl = cloudfront.getSignedUrl(sails.config.S3_CLOUD_URL + m.icon, options);
+
+
+				var signedUrl = cloudfront.getSignedUrl(img, options);
+				//console.log(signedUrl);
 				res.setHeader('Cache-Control', 'public, max-age=2592000'); // one year
 				res.setHeader("Expires", new Date(Date.now() + 2592000000).toUTCString());
-				//console.log(signedUrl);
 				return res.redirect(signedUrl);
 			}
 		});
 	},
+
+	// iconurl: function (req, res) {
+
+	// 	var id = req.param('id');
+	// 	Event.findOne(id, function (err, m) {
+	// 		if (sails.config.LOCALONLY) {
+	// 			// console.log(m.eventtype.roleimg);
+	// 			fs.readFile(path.normalize(__dirname + '/../../upload/' + m.icon), function (err, data) {
+	// 				return res.send(data);
+	// 			});
+	// 		}
+	// 		else {
+	// 			var options = {
+	// 				keypairId: sails.config.CLOUDFRONT_KEY,
+	// 				privateKeyPath: sails.config.CLOUDFRONT_KEYFILE,
+	// 				expireTime: moment().add(1, 'day')
+	// 			}
+	// 			var signedUrl = cloudfront.getSignedUrl(sails.config.S3_CLOUD_URL + m.icon, options);
+	// 			res.setHeader('Cache-Control', 'public, max-age=2592000'); // one year
+	// 			res.setHeader("Expires", new Date(Date.now() + 2592000000).toUTCString());
+	// 			//console.log(signedUrl);
+	// 			return res.redirect(signedUrl);
+	// 		}
+	// 	});
+	// },
 
 	/**
 	 * @api {post} /api/shoot/create Create New Shoot

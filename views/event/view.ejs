@@ -21,7 +21,7 @@
       <h3 style="margin:0">
         <%- __('Not Quite Ready!') %>
         <small style="display:block;">
-          <%- __('Make sure to add a Theme Selection Image...') %></small>
+          <%- __('Make sure to add a Theme Selection Image') %> <a href="/commission/<%- event.id %>"><%- __('Here') %></a></small>
       </h3>
     </div>
   </div>
@@ -238,12 +238,13 @@
   </div>
   <% } %>
 
+  <% if (!sails.config.LOCALONLY) { %>
   <div class="clearfix"></div>
   <div class="page-header">
     <h1><%- __('Rights &amp; Releases') %></h1>
   </div>
 
-  <% if (!sails.config.LOCALONLY) { %>
+  
   <div class="col-sm-8 col-sm-offset-2" style="margin-top:2em;">
     <label class="control-label" data-delay="300" data-toggle="tooltip" title="<%- __('Terms and Conditions that contributors will need to agree to before taking part in the shoot') %>">
       <%- __('Participant Release') %>
@@ -370,11 +371,6 @@
     </div>
 
   </div>
-  <% } else { %>
-  <div class="alert alert-info" style="margin-top:2em;">
-    <%- __('Privacy policies and rights releases are administered in person using Our Story Titan') %>
-  </div>
-  <%}%>
   <div class="clearfix"></div>
   <div class="row col-sm-8 col-sm-offset-2">
     <div class="alert text-right " ng-class="{'alert-warning':dirty}">
@@ -385,9 +381,9 @@
 
         <span class="text-muted" ng-hide="dirty">
 
-          <small><i class="fa fa-clock-o"></i> last saved at {{event.updatedAt | date:'dd/MM HH:mm:ss'}}</small>
+          <small><i class="fa fa-clock-o"></i> <%- __('last saved at') %> {{event.updatedAt | date:'dd/MM HH:mm:ss'}}</small>
         </span>
-        <i ng-show="loading" class="fa fa-spinner fa-spin"></i>
+        <i ng-show="loading"><img src="/images/loading.gif" /></i>
 
         <div ng-show="dirty" class="btn-group" dropdown>
           <button type="button" class="btn btn-sm btn-success" ng-click="updaterelease()"><%- __('Save') %></button>
@@ -397,6 +393,14 @@
       <div class="clearfix"></div>
     </div>
   </div>
+  <% } else { %>
+    <div class="row ">
+  <div class="alert alert-info col-sm-8 col-sm-offset-2" style="margin-top:2em;">
+    <%- __('Privacy policies and rights releases are administered in person using Our Story Titan') %>
+  </div>
+</div>
+  <%}%>
+  
 
   <div class="clearfix"></div>
 

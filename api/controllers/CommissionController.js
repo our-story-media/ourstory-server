@@ -138,41 +138,41 @@ module.exports = {
 		});
 	},
 
-	savetoreuse: function (req, res) {
-		var input = req.param('eventtype');
-		input.user_id = req.session.passport.user.id;
-		delete input.id;
-		delete input.createdAt;
-		delete input.updatedAt;
-		EventTemplate.create(input).exec(function () {
-			res.json({ msg: 'ok' });
-		});
-	},
+	// savetoreuse: function (req, res) {
+	// 	var input = req.param('eventtype');
+	// 	input.user_id = req.session.passport.user.id;
+	// 	delete input.id;
+	// 	delete input.createdAt;
+	// 	delete input.updatedAt;
+	// 	EventTemplate.create(input).exec(function () {
+	// 		res.json({ msg: 'ok' });
+	// 	});
+	// },
 
-	savetocommunity: function (req, res) {
-		var input = req.param('eventtype');
-		delete input.id;
-		input.user_id = req.session.passport.user.id;
-		input.community = true;
-		delete input.createdAt;
-		delete input.updatedAt;
-		//input.user_id = req.session.passport.user.id;
-		EventTemplate.create(input).exec(function () {
-			res.json({ msg: 'ok' });
-		});
-	},
+	// savetocommunity: function (req, res) {
+	// 	var input = req.param('eventtype');
+	// 	delete input.id;
+	// 	input.user_id = req.session.passport.user.id;
+	// 	input.community = true;
+	// 	delete input.createdAt;
+	// 	delete input.updatedAt;
+	// 	//input.user_id = req.session.passport.user.id;
+	// 	EventTemplate.create(input).exec(function () {
+	// 		res.json({ msg: 'ok' });
+	// 	});
+	// },
 
-	savetooriginal: function (req, res) {
-		var input = req.param('eventtype');
-		delete input.id;
-		delete input.createdAt;
-		delete input.updatedAt;
-		input.original = true;
-		//input.user_id = req.session.passport.user.id;
-		EventTemplate.create(input).exec(function () {
-			res.json({ msg: 'ok' });
-		});
-	},
+	// savetooriginal: function (req, res) {
+	// 	var input = req.param('eventtype');
+	// 	delete input.id;
+	// 	delete input.createdAt;
+	// 	delete input.updatedAt;
+	// 	input.original = true;
+	// 	//input.user_id = req.session.passport.user.id;
+	// 	EventTemplate.create(input).exec(function () {
+	// 		res.json({ msg: 'ok' });
+	// 	});
+	// },
 
 	/**
 	 * @api {post} /api/commission/update/:id Update Template
@@ -189,7 +189,7 @@ module.exports = {
 		//console.log(req.param(.)eventtype);
 		Event.findOne(req.params.id).exec(function (err, e) {
 			if (e == null || !req.param('eventtype'))
-				return res.json({ msg: 'no shoot or eventtype specified' }, 500);
+				return res.status(500).json({ msg: 'no shoot or eventtype specified' });
 
 			//also merge the changes with the main template in use (the properties at the top level)
 			var new_eventtype = req.param('eventtype');
@@ -209,11 +209,16 @@ module.exports = {
 			new_coverage = tmp;
 
 			new_eventtype.coverage_classes = new_coverage;
+			e.eventtype.roles = new_eventtype.roles;
 
-			Event.update({ id: req.params.id }, { eventtype: new_eventtype, shoot_modules: new_shoot_modules, post_modules: new_post_modules, phases: new_phases, coverage_classes: new_coverage }).exec(function (err, done) {
-				sails.eventmanager.addevent(req.params.id);
-				sails.eventmanager.updateevent(req.params.id);
-				res.json({ msg: 'ok' });
+			Utility.generateRoleMap(e, function (e) {
+				Event
+				.update({ id: req.params.id }, { eventtype: new_eventtype, shoot_modules: new_shoot_modules, post_modules: new_post_modules, phases: new_phases, coverage_classes: new_coverage })
+				.exec(function (err, done) {
+					sails.eventmanager.addevent(req.params.id);
+					sails.eventmanager.updateevent(req.params.id);
+					res.json({ msg: 'ok' });
+				});
 			});
 		});
 	},
@@ -512,17 +517,6 @@ module.exports = {
 				});//end code generate
 			});
 		});//end get details...
-	},
-
-	allmodules: function (req, res) {
-		var result = {};
-		result.shoot_modules = _.map(sails.eventmanager.event_modules, function (m) {
-			return { name: m.name, codename: m.codename, description: m.description };
-		});
-		result.post_modules = _.map(sails.eventmanager.post_modules, function (m) {
-			return { name: m.name, codename: m.codename, description: m.description };
-		});
-		return res.json(result);
 	},
 
 

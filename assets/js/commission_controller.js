@@ -1,227 +1,220 @@
 'use strict';
 
 function getProperty(obj, prop) {
-    var parts = prop.split('.'),
-        last = parts.pop(),
-        l = parts.length,
-        i = 1,
-        current = parts[0];
+  var parts = prop.split('.'),
+    last = parts.pop(),
+    l = parts.length,
+    i = 1,
+    current = parts[0];
 
-    while((obj = obj[current]) && i < l) {
-        current = parts[i];
-        i++;
-    }
+  while ((obj = obj[current]) && i < l) {
+    current = parts[i];
+    i++;
+  }
 
-    if(obj) {
-        return obj[last];
-    }
+  if (obj) {
+    return obj[last];
+  }
 }
 
-bootleggerApp.filter('shotvalue', function() {
-  return function(input) {
-    var matches = input.match(/%%(.*?)%%?/g);
-    angular.forEach(matches, function(value, key) {
-      input = input.replace(value,'<span class="badge badge-success">'+value.replace(/%%/g,'')+'</span>')
-    });
-    return input;
+bootleggerApp.filter('shotvalue', function () {
+  return function (input) {
+    if (input) {
+      var matches = input.match(/%%(.*?)%%?/g);
+      angular.forEach(matches, function (value, key) {
+        input = input.replace(value, '<span class="badge badge-success">' + value.replace(/%%/g, '') + '</span>')
+      });
+
+      return input;
+    }
+    else
+      return "";
+
   };
 });
 
-bootleggerApp.filter('filterObject', function() {
-    return function(items, search) {
-        var filtered = {};
+bootleggerApp.filter('filterObject', function () {
+  return function (items, search) {
+    var filtered = {};
 
-        angular.forEach(items, function(item, key) {
-            if (item.name.toLowerCase().indexOf(search) != -1) {
-                filtered[key] = item;
-            }
-        });
+    angular.forEach(items, function (item, key) {
+      if (item.name.toLowerCase().indexOf(search) != -1) {
+        filtered[key] = item;
+      }
+    });
 
-        return filtered;
-    };
+    return filtered;
+  };
 });
 
 
-bootleggerApp.controller('commission',['$scope','$bootleggerSails','$timeout','$sce','usSpinnerService','$interval','$filter','$rootScope', function ($scope,socket,$timeout,$sce,usSpinnerService,$interval,$filter,$rootScope) {
+
+bootleggerApp.controller('commission', ['$scope', '$bootleggerSails', '$timeout', '$sce', 'usSpinnerService', '$interval', '$filter', '$rootScope', function ($scope, socket, $timeout, $sce, usSpinnerService, $interval, $filter, $rootScope) {
 
   $scope.showmsg = false;
 
-  $scope.$watch("event", function(newValue, oldValue) {
-    if (newValue!=null && oldValue!=null)
+  $scope.$watch("event", function (newValue, oldValue) {
+    if (newValue != null && oldValue != null)
       $scope.showmsg = true;
-  },true);
+  }, true);
 
   $scope.loading = true;
   $scope.event = null;
-  $scope.rolefilter="";
-  $scope.coveragefilter="";
+  $scope.rolefilter = "";
+  $scope.coveragefilter = "";
   $scope.phasefilter = "";
 
-  $scope.selection = {currentphase: null, currentrole:null};
+  $scope.selection = { currentphase: null, currentrole: null };
   $scope.tabs = {
-    tab1:true,
-    tab2:false
+    tab1: true,
+    tab2: false
   };
 
   $(function () {
     $('[data-toggle="tooltip"]').tooltip()
   })
 
-  if (window.location.hash && parseInt(window.location.hash.substring(1)) < 3)
-  {
-    $scope.tabs['tab'+window.location.hash.substring(1)] = true;
+  if (window.location.hash && parseInt(window.location.hash.substring(1)) < 3) {
+    $scope.tabs['tab' + window.location.hash.substring(1)] = true;
   }
 
-  $scope.changemetaphase = function(phaseid) {
-    socket.post('/api/shoot/changephase/'+mastereventid, { phase: phaseid })
-    .then(function (response) {
-      location.reload();
-    });
+  $scope.selectRoleClick = function (role) {
+    if ($scope.selection.currentrole != role) {
+      $scope.selection.currentrole = role;
+      $scope.selection.currentcoverage = null;
+      $scope.selection.currentphase = null;
+    }
+    else {
+      $scope.selection.currentrole = null;
+    }
   }
 
-  $scope.resetshootmodules = function(codename)
-  {
-    if (codename=='autodirector')
+  $scope.changemetaphase = function (phaseid) {
+    socket.post('/api/shoot/changephase/' + mastereventid, { phase: phaseid })
+      .then(function (response) {
+        location.reload();
+      });
+  }
+
+  $scope.resetshootmodules = function (codename) {
+    if (codename == 'autodirector')
       $scope.event.offline = false;
-    
-    angular.forEach($scope.event.shoot_modules,function(v,k)
-    {
-      if (codename!=k)
+
+    angular.forEach($scope.event.shoot_modules, function (v, k) {
+      if (codename != k)
         $scope.event.shoot_modules[k] = '0';
     });
-    
+
     var alloff = 0;
-    angular.forEach($scope.event.shoot_modules,function(v,k)
-    {
-        alloff += ($scope.event.shoot_modules[k] != '0')?1:0;
+    angular.forEach($scope.event.shoot_modules, function (v, k) {
+      alloff += ($scope.event.shoot_modules[k] != '0') ? 1 : 0;
     });
-    if (alloff==0)
-      $scope.event.shoot_modules[_.first(_.without(_.keys($scope.event.shoot_modules),codename))] = "1";
-      
+    if (alloff == 0)
+      $scope.event.shoot_modules[_.first(_.without(_.keys($scope.event.shoot_modules), codename))] = "1";
+
   }
 
-  $scope.addrole = function()
-  {
-    var index = (parseInt(_.max(_.pluck($scope.event.roles,'id'))) + 1) || 0;
-    $scope.event.roles.unshift({id:index,name:'New Role',description:'',shot_ids:[],editing:true});
+  $scope.addrole = function () {
+    var index = (parseInt(_.max(_.pluck($scope.event.roles, 'id'))) + 1) || 0;
+    $scope.event.roles.unshift({ id: index, name: 'New Role', description: '', shot_ids: [], editing: true });
   }
 
-  $scope.stopEditing = function(obj)
-  {
+  $scope.stopEditing = function (obj) {
     delete obj.editing;
   }
 
 
-  $scope.addphase = function()
-  {
+  $scope.addphase = function () {
     if (!$scope.event.phases)
       $scope.event.phases = [];
 
-    var index = parseInt(_.max(_.pluck($scope.event.phases,'id'))) + 1;
-     $scope.event.phases.unshift({id:index,name:'New Phase',description:'',roles:[],editing:true});
+    var index = parseInt(_.max(_.pluck($scope.event.phases, 'id'))) + 1;
+    $scope.event.phases.unshift({ id: index, name: 'New Phase', description: '', roles: [], editing: true });
   }
 
-  $scope.addcoverage = function()
-  {
+  $scope.addcoverage = function () {
     var index = parseInt(_.max(_.keys($scope.event.coverage_classes))) + 1;
-    $scope.event.coverage_classes[index] = {name:'New Subject',items:[],editing:true};
+    $scope.event.coverage_classes[index] = { name: 'New Subject', items: [], editing: true };
   }
 
-  $scope.updatetab = function(tab)
-  {
-    history.pushState(null, null, '#'+tab);
+  $scope.updatetab = function (tab) {
+    history.pushState(null, null, '#' + tab);
   }
 
-  $scope.addtocoverage = function(m,event)
-  {
-    if ($scope.selection.currentcoverage!=null)
-    {
+  $scope.addtocoverage = function (m, event) {
+    if ($scope.selection.currentcoverage != null) {
       m.coverage_class = parseInt($scope.selection.currentcoverage);
     }
-    if(event){
+    if (event) {
       event.stopPropagation();
       event.preventDefault();
     }
   }
 
-  $scope.takefromcoverage = function(m,event)
-  {
-    if ($scope.selection.currentcoverage!=null)
-    {
+  $scope.takefromcoverage = function (m, event) {
+    if ($scope.selection.currentcoverage != null) {
       delete m.coverage_class;
     }
-    if(event){
+    if (event) {
       event.stopPropagation();
       event.preventDefault();
     }
   }
 
-  $scope.addtophase = function(role,event)
-  {
-    if ($scope.selection.currentphase)
-    {
-      if ($scope.selection.currentphase.roles==null)
+  $scope.addtophase = function (role, event) {
+    if ($scope.selection.currentphase) {
+      if ($scope.selection.currentphase.roles == null)
         $scope.selection.currentphase.roles = new Array();
       $scope.selection.currentphase.roles.push(role);
     }
-    if(event){
+    if (event) {
       event.stopPropagation();
       event.preventDefault();
     }
   }
 
-  $scope.takefromphase = function(role,event)
-  {
-    if ($scope.selection.currentphase)
-    {
-      if ($scope.selection.currentphase.roles==null)
+  $scope.takefromphase = function (role, event) {
+    if ($scope.selection.currentphase) {
+      if ($scope.selection.currentphase.roles == null)
         $scope.selection.currentphase.roles = new Array();
       $scope.selection.currentphase.roles = _.pull($scope.selection.currentphase.roles, role);
     }
-    if(event){
+    if (event) {
       event.stopPropagation();
       event.preventDefault();
     }
   }
 
-  $scope.addtorole = function(shot)
-  {
-    if ($scope.selection.currentrole)
-    {
+  $scope.addtorole = function (shot) {
+    if ($scope.selection.currentrole) {
       $scope.selection.currentrole.shot_ids.push(shot);
     }
   }
 
-  $scope.takefromrole = function(shot)
-  {
-    if ($scope.selection.currentrole)
-    {
+  $scope.takefromrole = function (shot) {
+    if ($scope.selection.currentrole) {
       $scope.selection.currentrole.shot_ids = _.pull($scope.selection.currentrole.shot_ids, shot);
     }
   }
 
-  $scope.totalShots = function(role)
-  {
+  $scope.totalShots = function (role) {
     var count = 0;
-    _.each(role.shot_ids,function(i){
+    _.each(role.shot_ids, function (i) {
       //for each shot -- count number asked for:
-      var shot = _.find($scope.event.shot_types,{id:i});
+      var shot = _.find($scope.event.shot_types, { id: i });
       count += shot.wanted;
     });
     return count;
   }
 
-  $scope.totalMins = function()
-  {
+  $scope.totalMins = function () {
     //max_length * wanted for each shot in a role
     if (!$scope.event)
       return 0;
     var total = 0;
-    _.each($scope.event.roles,function(r)
-    {
-      _.each(r.shot_ids, function(s)
-      {
-        var ss = _.find($scope.event.shot_types,{id:s});
+    _.each($scope.event.roles, function (r) {
+      _.each(r.shot_ids, function (s) {
+        var ss = _.find($scope.event.shot_types, { id: s });
         if (ss)
           total += parseInt(ss.wanted ? ss.wanted : 0) * parseInt(ss.max_length);
       });
@@ -229,26 +222,21 @@ bootleggerApp.controller('commission',['$scope','$bootleggerSails','$timeout','$
     return total / 60;
   }
 
-  $scope.totalPer5=function()
-  {
-    return $scope.minsPerPerson()*0.3*5;
+  $scope.totalPer5 = function () {
+    return $scope.minsPerPerson() * 0.3 * 5;
   }
 
-  $scope.totalShotsPer5=function()
-  {
-    return $scope.totalShots()*0.3*5;
+  $scope.totalShotsPer5 = function () {
+    return $scope.totalShots() * 0.3 * 5;
   }
 
-  $scope.totalShots = function()
-  {
+  $scope.totalShots = function () {
     if (!$scope.event)
       return 0;
     var total = 0;
-    _.each($scope.event.roles,function(r)
-    {
-      _.each(r.shot_ids, function(s)
-      {
-        var ss = _.find($scope.event.shot_types,{id:s});
+    _.each($scope.event.roles, function (r) {
+      _.each(r.shot_ids, function (s) {
+        var ss = _.find($scope.event.shot_types, { id: s });
         if (ss)
           total += parseInt(ss.wanted ? ss.wanted : 0);
       });
@@ -256,145 +244,120 @@ bootleggerApp.controller('commission',['$scope','$bootleggerSails','$timeout','$
     return total;
   }
 
-  $scope.avgClipLength = function()
-  {
+  $scope.avgClipLength = function () {
     if (!$scope.event)
       return 0;
     var total = 0;
-    _.each($scope.event.shot_types,function(s)
-    {
+    _.each($scope.event.shot_types, function (s) {
       total += parseInt(s.max_length);
     });
     return total / $scope.event.shot_types.length;
   }
 
-  $scope.minsPerPerson = function()
-  {
-    if ($scope.event==null)
+  $scope.minsPerPerson = function () {
+    if ($scope.event == null)
       return 0;
     return $scope.totalMins() / $scope.event.roles.length;
   }
 
-  $scope.shotsforcoverage = function(c)
-  {
-    if ($scope.event==null)
+  $scope.shotsforcoverage = function (c) {
+    if ($scope.event == null)
       return 0;
     var count = 0;
-    _.each($scope.event.shot_types,function(s)
-    {
+    _.each($scope.event.shot_types, function (s) {
       if (s.coverage_class == c)
         count++;
     });
     return count;
   }
 
-  $scope.picCount = function(role)
-  {
+  $scope.picCount = function (role) {
     if (!$scope.event)
       return 0;
 
-     var count = 0;
-    if (role==null)
-    {
+    var count = 0;
+    if (role == null) {
 
-      _.each($scope.event.shot_types,function(s)
-      {
-        if (s.shot_type=='PHOTO')
+      _.each($scope.event.shot_types, function (s) {
+        if (s.shot_type == 'PHOTO')
           count++;
       });
-      return (count / $scope.event.shot_types.length) *100;
+      return (count / $scope.event.shot_types.length) * 100;
     }
-    else
-    {
-      _.each($scope.event.shot_types,function(s)
-      {
-        if (s.shot_type=='PHOTO' && _.contains(_.find($scope.event.roles,{id:role}).shot_ids,s.id))
+    else {
+      _.each($scope.event.shot_types, function (s) {
+        if (s.shot_type == 'PHOTO' && _.contains(_.find($scope.event.roles, { id: role }).shot_ids, s.id))
           count++;
       });
       //console.log(count +" shots in role from main list, shots in role from role "+$scope.event.roles[role].shot_ids.length);
       //console.log((count / $scope.event.roles[role].shot_ids.length) *100 + " photo");
-      return (count / _.find($scope.event.roles,{id:role}).shot_ids.length) *100;
+      return (count / _.find($scope.event.roles, { id: role }).shot_ids.length) * 100;
     }
   }
 
-  $scope.vidCount = function(role)
-  {
+  $scope.vidCount = function (role) {
     if (!$scope.event)
       return 100;
 
     var count = 0;
-    if (role==null)
-    {
+    if (role == null) {
 
-      _.each($scope.event.shot_types,function(s)
-      {
-        if (s.shot_type=='VIDEO' || !s.shot_type)
+      _.each($scope.event.shot_types, function (s) {
+        if (s.shot_type == 'VIDEO' || !s.shot_type)
           count++;
       });
-      return (count / $scope.event.shot_types.length) *100;
+      return (count / $scope.event.shot_types.length) * 100;
     }
-    else
-    {
-      _.each($scope.event.shot_types,function(s)
-      {
+    else {
+      _.each($scope.event.shot_types, function (s) {
 
-        if ((s.shot_type=='VIDEO' || s.shot_type==undefined) && _.contains(_.find($scope.event.roles,{id:role}).shot_ids,s.id))
-        {
+        if ((s.shot_type == 'VIDEO' || s.shot_type == undefined) && _.contains(_.find($scope.event.roles, { id: role }).shot_ids, s.id)) {
           //console.log(s.shot_type);
           count++;
         }
       });
       //console.log((count / $scope.event.roles[role].shot_ids.length) *100 + " video");
       //console.log(count +" shots in role from main list, shots in role from role "+$scope.event.roles[role].shot_ids.length);
-      return (count / _.find($scope.event.roles,{id:role}).shot_ids.length) *100;
+      return (count / _.find($scope.event.roles, { id: role }).shot_ids.length) * 100;
     }
   }
 
-  $scope.audCount = function(role)
-  {
+  $scope.audCount = function (role) {
     if (!$scope.event)
       return 0;
     var count = 0;
-    if (role==null)
-    {
+    if (role == null) {
 
-      _.each($scope.event.shot_types,function(s)
-      {
-        if (s.shot_type=='AUDIO')
+      _.each($scope.event.shot_types, function (s) {
+        if (s.shot_type == 'AUDIO')
           count++;
       });
-      return (count / $scope.event.shot_types.length) *100;
+      return (count / $scope.event.shot_types.length) * 100;
     }
-    else
-    {
-      _.each($scope.event.shot_types,function(s)
-      {
-        if (s.shot_type=='AUDIO' && _.contains(_.find($scope.event.roles,{id:role}).shot_ids,s.id))
+    else {
+      _.each($scope.event.shot_types, function (s) {
+        if (s.shot_type == 'AUDIO' && _.contains(_.find($scope.event.roles, { id: role }).shot_ids, s.id))
           count++;
       });
       //console.log((count / $scope.event.roles[role].shot_ids.length) *100 + " audio");
       //console.log(count +" shots in role from main list, shots in role from role "+$scope.event.roles[role].shot_ids.length);
-      return (count / _.find($scope.event.roles,{id:role}).shot_ids.length) *100;
+      return (count / _.find($scope.event.roles, { id: role }).shot_ids.length) * 100;
     }
 
   }
 
-  $scope.removeRole = function(role)
-  {
-    _.remove($scope.event.roles,function(r){
+  $scope.removeRole = function (role) {
+    _.remove($scope.event.roles, function (r) {
       return r.id == role;
     });
   }
 
-  $scope.removePhase = function(phase)
-  {
-    $scope.event.phases.splice(phase,1);
+  $scope.removePhase = function (phase) {
+    $scope.event.phases.splice(phase, 1);
   }
 
-  $scope.removeCoverage = function(c)
-  {
-    _.each($scope.event.shot_types,function(s)
-    {
+  $scope.removeCoverage = function (c) {
+    _.each($scope.event.shot_types, function (s) {
       if (s.coverage_class == c)
         delete s.coverage_class;
     });
@@ -402,56 +365,49 @@ bootleggerApp.controller('commission',['$scope','$bootleggerSails','$timeout','$
   }
 
 
-  $scope.inCoverage = function(m)
-  {
-    if ($scope.selection.currentcoverage!=null)
+  $scope.inCoverage = function (m) {
+    if ($scope.selection.currentcoverage != null)
       return m.coverage_class == parseInt($scope.selection.currentcoverage);
     else
       return false;
   }
 
-  $scope.inRole = function(m)
-  {
+  $scope.inRole = function (m) {
     if ($scope.selection.currentrole)
-      return _.contains($scope.selection.currentrole.shot_ids,m.id);
+      return _.contains($scope.selection.currentrole.shot_ids, m.id);
     else
       return false;
   }
 
-  $scope.inPhase = function(r)
-  {
+  $scope.inPhase = function (r) {
     if ($scope.selection.currentphase)
-      return _.contains($scope.selection.currentphase.roles,r.id);
+      return _.contains($scope.selection.currentphase.roles, r.id);
     else
       return false;
   }
 
-  $scope.addshot = function(m)
-  {
+  $scope.addshot = function (m) {
     var newone = angular.copy(m);
     newone.footage = 0;
     newone.max_length = 90;
-    var maxnum = {id:-1};
-    if ($scope.event.shot_types.length>0)
+    var maxnum = { id: -1 };
+    if ($scope.event.shot_types.length > 0)
       maxnum = _.max($scope.event.shot_types, 'id');
-    newone.id = maxnum.id+1;
+    newone.id = maxnum.id + 1;
     $scope.event.shot_types.push(newone);
     $('#allshotsdialog').modal('hide');
     $scope.reconcile();
   }
 
-  $scope.remove=function(m)
-  {
+  $scope.remove = function (m) {
     //only allow removal if there are no shots been used:
-    if (m.footage == 0)
-    {
+    if (m.footage == 0) {
       $scope.event.shot_types.splice($scope.event.shot_types.indexOf(m), 1);
       $scope.reconcile();
     }
   }
 
-  $scope.clone=function(shot)
-  {
+  $scope.clone = function (shot) {
     var newone = angular.copy(shot);
 
     var maxnum = -1;
@@ -461,74 +417,83 @@ bootleggerApp.controller('commission',['$scope','$bootleggerSails','$timeout','$
     //     maxnum = $scope.event.shot_types[i].id;
     // }
     maxnum = _.max($scope.event.shot_types, 'id');
-    newone.id = maxnum.id+1;
+    newone.id = maxnum.id + 1;
     newone.footage = 0;
     $scope.event.shot_types.push(newone);
   }
 
-  $scope.showallshots = function()
-  {
+  $scope.showallshots = function () {
     $('#allshotsdialog').modal('show');
   }
 
-  $scope.updatecodename = function()
-  {
-    $scope.event.codename=$filter('inflector')($scope.event.name,'underscore');
+  $scope.currentroleupload =
+
+    $scope.uploadrole = function (role) {
+      $scope.currentroleindex = role.id;
+      $scope.currentroleupload = role;
+      $('#uploadroleimage').modal('show');
+    }
+
+  $scope.updatecodename = function () {
+    $scope.event.codename = $filter('inflector')($scope.event.name, 'underscore');
   }
 
-  $scope.reconcile = function()
-  {
+  $scope.reconcile = function () {
     //reconcile shots and ids
 
     var mapping = {};
 
-    _.each($scope.event.shot_types,function(s,index){
+    _.each($scope.event.shot_types, function (s, index) {
       //s.tmpid = 'x'+s.id;
-      mapping[''+s.id] = index;
+      mapping['' + s.id] = index;
       s.id = index;
     });
 
-    _.each($scope.event.roles,function(role){
-        //replace shot_ids with tmps
-        var tmparr = [];
-        _.each(role.shot_ids,function(r){
-          if (typeof mapping[r] != 'undefined')
-            tmparr.push(mapping[r]);
-        });
-        role.shot_ids = tmparr;
+    _.each($scope.event.roles, function (role) {
+      //replace shot_ids with tmps
+      var tmparr = [];
+      _.each(role.shot_ids, function (r) {
+        if (typeof mapping[r] != 'undefined')
+          tmparr.push(mapping[r]);
+      });
+      role.shot_ids = tmparr;
     });
-       //console.log($scope.event.shot_types);
-       //$scope.$apply();
-       
-       //fix role img:
-       
-       if ($scope.event.hasroleimg==false)
-         delete $scope.event.roleimg;
+    //console.log($scope.event.shot_types);
+    //$scope.$apply();
+
+    //fix role img:
+
+    if ($scope.event.hasroleimg == false)
+      delete $scope.event.roleimg;
   }
 
+  $scope.ifRoleImages = function () {
+    if ($scope.event) {
+      return $scope.event.roles.every(function (e) {
+        return e.image;
+      });
+    }
+    else
+      return false;
+  }
 
-  $scope.save = function()
-  {
+  $scope.save = function () {
     $scope.reconcile();
-    _.each($scope.event.roles,function(r)
-    {
+    _.each($scope.event.roles, function (r) {
       delete r.editing;
     });
-    
-    console.log($scope.event.phases);
-    
-    _.each($scope.event.phases,function(r)
-    {
-      console.log(r);
+
+    //console.log($scope.event.phases);
+
+    _.each($scope.event.phases, function (r) {
+      //console.log(r);
       delete r.editing;
     });
-    
-    _.each($scope.event.coverage_classes,function(r)
-    {
+
+    _.each($scope.event.coverage_classes, function (r) {
       delete r.editing;
     });
-    _.each($scope.event.shot_types,function(r)
-    {
+    _.each($scope.event.shot_types, function (r) {
       delete r.editing;
     });
 
@@ -537,124 +502,124 @@ bootleggerApp.controller('commission',['$scope','$bootleggerSails','$timeout','$
     if ($scope.event.roleimg === false)
       delete $scope.event.roleimg;
 
-    socket.post('/commission/update/'+mastereventid,{eventtype:$scope.event})
-      .then(function(resp){
+    socket.post('/api/commission/update/' + mastereventid, { eventtype: $scope.event })
+      .then(function (resp) {
         $scope.success = true;
         $scope.showmsg = false;
         $scope.eventinfo.updatedAt = new Date();
-         setTimeout(function(){
+        setTimeout(function () {
           delete $scope.success;
-        },2000);
+        }, 2000);
       });
   }
 
-  $scope.savetoreuse = function()
-  {
-    $scope.reconcile();
-    _.each($scope.event.roles,function(r)
-    {
-      delete r.editing;
-    });
-    _.each($scope.event.phases,function(r)
-    {
-      delete r.editing;
-    });
-    _.each($scope.event.coverage_classes,function(r)
-    {
-      delete r.editing;
-    });
-    _.each($scope.event.shot_types,function(r)
-    {
-      delete r.editing;
-    });
+  // $scope.savetoreuse = function()
+  // {
+  //   $scope.reconcile();
+  //   _.each($scope.event.roles,function(r)
+  //   {
+  //     delete r.editing;
+  //   });
+  //   _.each($scope.event.phases,function(r)
+  //   {
+  //     delete r.editing;
+  //   });
+  //   _.each($scope.event.coverage_classes,function(r)
+  //   {
+  //     delete r.editing;
+  //   });
+  //   _.each($scope.event.shot_types,function(r)
+  //   {
+  //     delete r.editing;
+  //   });
 
-      // $scope.event.shotrelease = $('#editor').cleanHtml();
+  //     // $scope.event.shotrelease = $('#editor').cleanHtml();
 
-      if ($scope.event.roleimg === false)
-        delete $scope.event.roleimg;
+  //     if ($scope.event.roleimg === false)
+  //       delete $scope.event.roleimg;
 
-    socket.post('/commission/savetoreuse/'+mastereventid,{eventtype:$scope.event})
-      .then(function(resp){
-        $scope.success = true;
-        $scope.showmsg = false;
-        $scope.lastsavedat = new Date();
-         setTimeout(function(){
-          delete $scope.success;
-        },2000);
-      });
-  }
+  //   socket.post('/commission/savetoreuse/'+mastereventid,{eventtype:$scope.event})
+  //     .then(function(resp){
+  //       $scope.success = true;
+  //       $scope.showmsg = false;
+  //       $scope.lastsavedat = new Date();
+  //        setTimeout(function(){
+  //         delete $scope.success;
+  //       },2000);
+  //     });
+  // }
 
-  $scope.savetocommunity = function()
-  {
-    $scope.reconcile();
-    _.each($scope.event.roles,function(r)
-    {
-      delete r.editing;
-    });
-    _.each($scope.event.phases,function(r)
-    {
-      delete r.editing;
-    });
-    _.each($scope.event.coverage_classes,function(r)
-    {
-      delete r.editing;
-    });
-    _.each($scope.event.shot_types,function(r)
-    {
-      delete r.editing;
-    });
+  // $scope.savetocommunity = function()
+  // {
+  //   $scope.reconcile();
+  //   _.each($scope.event.roles,function(r)
+  //   {
+  //     delete r.editing;
+  //   });
+  //   _.each($scope.event.phases,function(r)
+  //   {
+  //     delete r.editing;
+  //   });
+  //   _.each($scope.event.coverage_classes,function(r)
+  //   {
+  //     delete r.editing;
+  //   });
+  //   _.each($scope.event.shot_types,function(r)
+  //   {
+  //     delete r.editing;
+  //   });
 
-    // $scope.event.shotrelease = $('#editor').cleanHtml();
+  //   // $scope.event.shotrelease = $('#editor').cleanHtml();
 
-    if ($scope.event.roleimg === false)
-      delete $scope.event.roleimg;
+  //   if ($scope.event.roleimg === false)
+  //     delete $scope.event.roleimg;
 
-    socket.post('/commission/savetocommunity/'+mastereventid,{eventtype:$scope.event})
-      .then(function(resp){
-        $scope.success = true;
-        $scope.showmsg = false;
-        $scope.lastsavedat = new Date();
-         setTimeout(function(){
-          delete $scope.success;
-        },2000);
-      });
-  }
+  //   socket.post('/commission/savetocommunity/'+mastereventid,{eventtype:$scope.event})
+  //     .then(function(resp){
+  //       $scope.success = true;
+  //       $scope.showmsg = false;
+  //       $scope.lastsavedat = new Date();
+  //        setTimeout(function(){
+  //         delete $scope.success;
+  //       },2000);
+  //     });
+  // }
 
-  $scope.savetooriginal = function()
-  {
-    $scope.reconcile();
-    _.each($scope.event.roles,function(r)
-    {
-      delete r.editing;
-    });
-    _.each($scope.event.phases,function(r)
-    {
-      delete r.editing;
-    });
-    _.each($scope.event.coverage_classes,function(r)
-    {
-      delete r.editing;
-    });
-    _.each($scope.event.shot_types,function(r)
-    {
-      delete r.editing;
-    });
+  // $scope.savetooriginal = function()
+  // {
+  //   $scope.reconcile();
+  //   _.each($scope.event.roles,function(r)
+  //   {
+  //     delete r.editing;
+  //   });
+  //   _.each($scope.event.phases,function(r)
+  //   {
+  //     delete r.editing;
+  //   });
+  //   _.each($scope.event.coverage_classes,function(r)
+  //   {
+  //     delete r.editing;
+  //   });
+  //   _.each($scope.event.shot_types,function(r)
+  //   {
+  //     delete r.editing;
+  //   });
 
-    // $scope.event.shotrelease = $('#editor').cleanHtml();
+  //   // $scope.event.shotrelease = $('#editor').cleanHtml();
 
-    if ($scope.event.roleimg === false)
-      delete $scope.event.roleimg;
+  //   if ($scope.event.roleimg === false)
+  //     delete $scope.event.roleimg;
 
-    socket.post('/commission/savetooriginal/'+mastereventid,{eventtype:$scope.event})
-      .then(function(resp){
-        $scope.success = true;
-        $scope.showmsg = false;
-        $scope.lastsavedat = new Date();
-         setTimeout(function(){
-          delete $scope.success;
-        },2000);
-      });
-  }
+  //   socket.post('/commission/savetooriginal/'+mastereventid,{eventtype:$scope.event})
+  //     .then(function(resp){
+  //       $scope.success = true;
+  //       $scope.showmsg = false;
+  //       $scope.lastsavedat = new Date();
+  //        setTimeout(function(){
+  //         delete $scope.success;
+  //       },2000);
+  //     });
+  // }
 
   //  socket.connect().then(function(sock){
   //   console.log('connected',sock)
@@ -664,45 +629,45 @@ bootleggerApp.controller('commission',['$scope','$bootleggerSails','$timeout','$
   //     console.log('connection update',not)
   // });
 
-var showmsgcount = 0;
+  var showmsgcount = 0;
 
   (function () {
 
-    
+
     //usSpinnerService.spin('spinner-1');
     // $timeout(function(){
     //     $('#editor').wysiwyg();
     //     $('#editor').bind("DOMSubtreeModified",function(){
     //       if (showmsgcount > 0)
     //         showmsg = true;
-            
+
     //       showmsgcount++;
     //     });
     // },0);
 
     // Using .success() and .error()
-    socket.get('/commission/templateinfo/'+mastereventid)
-      .then(function(resp){
-         $scope.event = resp.data.eventtype;
-         //now also update the temporary template information with the changes made on the live event:
-         $scope.eventinfo = resp.data;
+    socket.get('/api/commission/templateinfo/' + mastereventid)
+      .then(function (resp) {
+        $scope.event = resp.data.eventtype;
+        //now also update the temporary template information with the changes made on the live event:
+        $scope.eventinfo = resp.data;
 
-         $scope.event.coverage_classes = resp.data.coverage_classes;
-         $scope.event.phases = resp.data.phases;
-         _.each($scope.event.phases,function(p)
-         {
-          if (p.roles && typeof p.roles == 'string')
-          {
+        $scope.event.coverage_classes = resp.data.coverage_classes;
+        $scope.event.phases = resp.data.phases;
+        _.each($scope.event.phases, function (p) {
+          if (p.roles && typeof p.roles == 'string') {
             p.roles = p.roles.split(',').map(Number);
           }
-         });
+        });
 
-         _.each($scope.event.roles,function(r)
-         {
-           r.shot_ids = _.without(r.shot_ids,null);
-         });
-         $scope.loading = false;
-      });
+        _.each($scope.event.roles, function (r) {
+          r.shot_ids = _.without(r.shot_ids, null);
+        });
+        $scope.loading = false;
+      }).catch(function (res) {
+        console.log(res);
+
+      })
 
     // socket.get('/commission/allmodules')
     // .then(function(resp){
@@ -711,9 +676,9 @@ var showmsgcount = 0;
     //   });
 
     socket.get('/api/commission/allshots/')
-      .then(function(resp){
+      .then(function (resp) {
         // console.log(resp);
-         $scope.allshots = resp.data;
+        $scope.allshots = resp.data;
       });
   })();
 

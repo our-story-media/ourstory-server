@@ -38,7 +38,7 @@ bootleggerApp.controller('dashboard',['$scope','$bootleggerSails','$timeout','$s
       addthis.init();
 
   (function () {
-    socket.get('/event/myeventsowned/')
+    socket.get('/api/event/myeventsowned/')
       .then(function(resp){
           var events = [];
           _.each(resp.data,function(e)
