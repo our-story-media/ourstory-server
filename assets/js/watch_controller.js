@@ -126,53 +126,14 @@ bootleggerApp.controller('edits', ['$scope', '$http', '$sce', '$localStorage', '
     return dateOut.toDate();
   };
 
-  // $scope.latestUser = function(user)
-  // {
-    //from all users - which ones match:
-
-    // var users = _.filter($scope.edits, function (e) {
-    //   return e.user.name == user;
-    // });
-
-    // console.log(users);
-    
-    // var sorted = _.sortBy(users,'updatedAt');
-
-    // console.log(sorted);
-
-    // return _.first(sorted).user_id;
-  // };
-
   (function () {
-    //usSpinnerService.spin('spinner-1');
-
-
-    //  addthis.init();
-
-    //  socket.on('135,function(resp){
-    //      //update the progress...
-    //      console.log("edit update");
-    //      for (var i=0;i<$scope.edits.length;i++)
-    //      {
-    //           if ($scope.edits[i].id == resp.data.edit.id)
-    //           {
-    //               $scope.edits[i] = resp.data.edit;
-    //           }   
-    //      }
-    //  });
-
     
     
-
     $scope.getClipLength = function (point) {
       // if (media.inpoint) {
         var lena = point.split(':');
         var time = (parseInt(lena[0]) * 3600) + (parseInt(lena[1]) * 60) + (parseFloat(lena[2]));
         return time * 1000;
-      // }
-      // else {
-        // return 100;
-      // }
     };
 
     $scope.medialength = function (media) {
@@ -188,14 +149,20 @@ bootleggerApp.controller('edits', ['$scope', '$http', '$sce', '$localStorage', '
       return msToTimeS(total);
     }
 
+    socket.get('/event/contributors/'+mastereventid)
+    .then(function (resp) {
+      
+      $scope.groups = _.uniq(_.map(resp.data, function (e) {
+        return e.profile.displayName;
+      }));
+    });
+
     // Using .success() and .error()
     socket.get('/watch/alledits/' + mastereventid)
       .then(function (resp) {
         $scope.edits = resp.data;
 
-        $scope.groups = _.uniq(_.map($scope.edits, function (e) {
-          return e.user.name;
-        }));
+       
 
         socket.post('/watch/editupdates', { edits: _.pluck($scope.edits, 'id') }).then(function (resp) {
 

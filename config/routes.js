@@ -32,6 +32,7 @@ module.exports.routes = {
     'get /event/roleimg/:id/:role?':'EventController.roleimg',
     'post /event/clearbackground/:id':'EventController.clearbackground',
     'get /event/clearroleimg/:id/:role':'EventController.clearroleimg',
+    'get /event/contributors/:id':'EventController.contributors',
 
 
     /*

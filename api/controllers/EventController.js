@@ -124,6 +124,16 @@ module.exports = {
 		});
 	},
 
+	contributors: async function(req,res){
+		let media = await Media.find({event_id:req.param('id')});
+		let us = _.unique(_.pluck(media,'created_by'));
+		let users = await User.find({id:us},{fields: {
+			'profile.displayName': 1,
+		  }});
+
+		return res.json(users);
+	},
+
 	removeuser: function (req, res) {
 		//find user
 		User.findOne(req.params.id).exec(function (err, user) {

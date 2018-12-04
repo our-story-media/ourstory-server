@@ -84,7 +84,8 @@ module.exports.policies = {
       'removelimit':['superadmin','flash','apiauth'],
       'iconurl':true,
       'backgroundurl':true,
-      'roleimg':true
+      'roleimg':true,
+      'contributors':['authenticated','isowner','apiauth']
     },
 
     'watch':

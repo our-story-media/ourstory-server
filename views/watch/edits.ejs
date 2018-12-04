@@ -50,7 +50,7 @@
     <div class="progress" style="position:fixed;top:0;width:100%;left:0;height:2px;margin:0;" ng-show="loading">
         <div class="indeterminate"></div>
     </div>
-
+{{users}}
     <div class="text-center" style="margin-top:2em;">
         <p class="text-muted" ng-show="edits.length==0">
             <img src="/images/packing.svg" style="width:200px;" />
@@ -82,17 +82,6 @@
                                     <i class="fa fa-exclamation-triangle fa-3x" style="color:silver;padding-top:20%;"></i>
                                 </span>
 
-                                <div ng-if="edit.path && !edit.failed" style="position:absolute;left:5px;top:5px;"
-                                    class="addthis_toolbox" addthis:url="<%- sails.config.master_url %>/v/{{edit.code}}"
-                                    addthis:title="{{edit.title}}">
-                                    <a class="addthis_button_preferred_1"></a>
-                                    <a class="addthis_button_preferred_2"></a>
-                                    <a class="addthis_button_preferred_3"></a>
-                                    <a class="addthis_button_preferred_4"></a>
-                                    <a class="addthis_button_compact"></a>
-                                    <a class="addthis_counter addthis_bubble_style"></a>
-                                </div>
-
                             </a>
 
                             <div style="padding-left:1em;padding-right:1em;padding-bottom:0.5em;padding-top:1em;">
@@ -105,8 +94,7 @@
                                     {{edit.media.length}} <i class="fa fa-film"></i> {{medialength(edit.media)}} <i
                                         class="fa fa-arrows-h"></i>
                                 </p>
-                                <p class="pull-left"><i class="fa fa-clock-o"></i> {{edit.updatedAt | date:'d/M/yy h:mm
-                                    a'}}</p>
+                                <p class="pull-left"><i class="fa fa-clock-o"></i> {{edit.updatedAt | date:'d/M/yy h:mm a'}}</p>
                                 <div class="clearfix"></div>
                                 <div class="btn-group" style="position:absolute;right:4px;top:0;">
                                     <button type="button" class="btn btn-lg btn-link dropdown-toggle" data-toggle="dropdown"
@@ -115,7 +103,7 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li ng-if="edit.path && !edit.failed"><a ng-href="{{ '/watch/getvideofull/' + edit.id + '?apikey=<%- apikey %>'}}">
-                                                Download
+                                                <%- __('Download') %>
                                             </a></li>
                                         <li><a ng-href="/api/watch/clone/{{edit.id}}?apikey=<%- apikey %>"><%- __('Duplicate') %></a></li>
                                         <% if (sails.config.LOCALONLY) { %>
