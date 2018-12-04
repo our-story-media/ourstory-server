@@ -146,7 +146,7 @@ module.exports = {
   },
 
   beforeUpdate: function (valuesToSet, proceed) {
-      delete valuesToSet.apikey;
+	  valuesToSet.apikey = null;
       return proceed();
   },
 
