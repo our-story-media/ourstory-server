@@ -209,5 +209,13 @@
 	"Make sure to add a image for each Theme": "Make sure to add a image for each Theme",
 	"Update Theme Image": "Update Theme Image",
 	"Missing Videos": "Missing Videos",
-	"Upload New": "Upload New"
+	"Upload New": "Upload New",
+	"SUGGESTED SHOTS": "SUGGESTED SHOTS",
+	"Requires a video release": "Requires a video release",
+	"Temporarily hide from contributors": "Temporarily hide from contributors",
+	"Make a copy": "Make a copy",
+	"Edit": "Edit",
+	"taken": "taken",
+	"shots of": "shots of",
+	"wanted": "wanted"
 }

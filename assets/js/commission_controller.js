@@ -22,7 +22,7 @@ bootleggerApp.filter('shotvalue', function () {
     if (input) {
       var matches = input.match(/%%(.*?)%%?/g);
       angular.forEach(matches, function (value, key) {
-        input = input.replace(value, '<span class="badge badge-success">' + value.replace(/%%/g, '') + '</span>')
+        input = input.replace(value, 'them')
       });
 
       return input;

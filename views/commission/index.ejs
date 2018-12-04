@@ -74,6 +74,25 @@
 		/*box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.63);*/
 		border-bottom: 1px solid #efefef;
 	}
+
+	.truncate_heading {
+  width: 80%;
+  height:1.3em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  margin-right: 1em;
+}
+
+.truncate_desc {
+  height: 3em;
+  /* white-space: ; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 1em;
+  margin-bottom: 4px;
+}
 </style>
 
 
@@ -84,15 +103,15 @@
 	</div>
 
 	<div class="hidden-xs row" ng-hide="ifRoleImages()" style="margin-top:2em;">
-			<div class="alert alert-warning col-sm-8 col-sm-offset-2">
-			  <i class="fa fa-info fa-3x" style="float:left;margin-right:10px;"></i>
-			  <h3 style="margin:0">
+		<div class="alert alert-warning col-sm-8 col-sm-offset-2">
+			<i class="fa fa-info fa-3x" style="float:left;margin-right:10px;"></i>
+			<h3 style="margin:0">
 				<%- __('Not Quite Ready!') %>
 				<small style="display:block;">
-				  <%- __('Make sure to add a image for each Theme') %></small>
-			  </h3>
-			</div>
-		  </div>
+					<%- __('Make sure to add a image for each Theme') %></small>
+			</h3>
+		</div>
+	</div>
 
 	<div class="alert text-center" ng-class="{'alert-warning':showmsg}">
 		<span ng-show="showmsg" class="text-danger">
@@ -101,11 +120,13 @@
 		</span>
 		<span ng-hide="showmsg" class="text-muted">
 			<small>
-					<i class="fa fa-clock-o"></i> <%- __('last saved at') %> {{eventinfo.updatedAt | date:'dd/MM HH:mm:ss'}}</small>
+				<i class="fa fa-clock-o"></i>
+				<%- __('last saved at') %> {{eventinfo.updatedAt | date:'dd/MM HH:mm:ss'}}</small>
 		</span>
 
-		<span ng-show="success">
-			&nbsp;<%- __('Shoot Information Updated!') %>
+		<span ng-show="success" class="text-success">
+			&nbsp;
+			<%- __('Shoot Information Updated!') %>
 			<!-- <a href="/"><%- __('Back to Dashboard') %></a> -->
 		</span>
 
@@ -201,9 +222,10 @@
 								<i class="fa fa-image"></i>
 							</button> -->
 
-							<div style="position:absolute;left:0;top:0;height:100%;width:4em;background-size: cover;background-repeat: no-repeat;background-color: silver" ng-click="uploadrole(role)"
-							 ng-style="{'background-image':'url(/event/roleimg/'+eventinfo.id+'/'+role.id+')'}" class="float:left">
-							 <i class="fa fa-upload" style="margin-top:15px;margin-left:20px;color:white;"></i>
+							<div style="position:absolute;left:0;top:0;height:100%;width:4em;background-size: cover;background-repeat: no-repeat;background-color: silver"
+							 ng-click="uploadrole(role)" ng-style="{'background-image':'url(/event/roleimg/'+eventinfo.id+'/'+role.id+')'}"
+							 class="float:left">
+								<i class="fa fa-upload" style="margin-top:15px;margin-left:20px;color:white;"></i>
 							</div>
 
 							<span class="badge badge-boot pull-right">{{role.shot_ids.length}}</span>
@@ -243,15 +265,22 @@
 				<% } %>
 			</div>
 		</div>
+	</div>
 
-		<div class="clearfix"></div>
+	<div class="clearfix"></div>
 
+	<div class="strike" style="opacity: 0.5">
+		<span>
+			<%- __('SUGGESTED SHOTS') %></span>
+	</div>
+	<br>
+	<div class="row">
 		<div class="col-sm-6" ng-repeat="m in event.shot_types track by m.id" style="background:white;margin-bottom:10px;"
 		 ng-class="{'shothidden':m.hidden}">
 
-			<div class="media row">
+			<div class="media">
+				<div class="col-md-4" style="padding:0;position: relative;">
 
-				<div class="col-md-4" style="padding:0;">
 					<img style="width:100%" class="media-object" ng-src="/data/icons/{{m.icon}}" />
 
 					<i class="fa fa-check fa-5x" style="position:absolute;width:100%;height:100%;text-align:center;left:0;top:0;color:green"
@@ -266,25 +295,27 @@
 					<i class="fa fa-check fa-5x" style="position:absolute;width:100%;height:100%;text-align:center;left:0;top:0;color:silver;"
 					 ng-click="addtocoverage(m,$event)" ng-show="!inCoverage(m) && selection.currentcoverage!=null"></i>
 
-					<button class="btn btn-link" tooltip="Requires a video release" tooltip-append-to-body="true" ng-click="m.release=!m.release">
+					<button style="position: absolute;bottom:0;left:0;" class="btn btn-link" tooltip="<%- __('Requires a video release') %>"
+					 tooltip-append-to-body="true" ng-click="m.release=!m.release">
 						<i class="fa" ng-class="{'fa-lock':m.release, 'fa-unlock-alt':m.release==undefined || m.release==false}" ng-model="m.release"></i>
 					</button>
-
-					<span class="label label-success" style="position:absolute;top:0px;left:0px;" ng-show="m.footage>0">{{m.footage}}
-						taken</span>
+					
+					<span class="label label-success" style="border-bottom-right-radius: 3px;position:absolute;left:0;top:0;" ng-show="m.footage>0">{{m.footage}} <%- __('taken') %></span>
 				</div>
 				<div class="col-md-8">
 					<div style="float:right;width:15%;text-align: right;">
-						<button class="btn btn-link" ng-click="m.hidden=!m.hidden">
+						<button class="btn btn-link" tooltip-append-to-body="true" tooltip="<%- __('Temporarily hide from contributors') %>"
+						 ng-click="m.hidden=!m.hidden">
 							<i class="fa" ng-class="{'fa-eye-slash':m.hidden, 'fa-eye':m.hidden==undefined || m.hidden==false}" ng-model="m.hidden"></i>
 						</button>
-						<button class="btn btn-link" ng-click="clone(m)">
+						<button tooltip-append-to-body="true" tooltip="<%- __('Make a copy') %>" class="btn btn-link" ng-click="clone(m)">
 							<i class="fa fa-files-o"></i>
 						</button>
-						<button class="btn btn-link" ng-show="m.footage == 0" ng-click="remove(m)">
+						<button tooltip-append-to-body="true" tooltip="<%- __('Remove') %>" class="btn btn-link" ng-show="m.footage == 0"
+						 ng-click="remove(m)">
 							<i class="fa fa-times"></i>
 						</button>
-						<button class="btn btn-link" ng-click="m.editing=!m.editing">
+						<button tooltip-append-to-body="true" tooltip="<%- __('Edit') %>" class="btn btn-link" ng-click="m.editing=!m.editing">
 							<i class="fa" ng-class="{'fa-edit':!m.editing,'fa-save':m.editing}"></i>
 						</button>
 					</div>
@@ -312,9 +343,10 @@
 					</div>
 
 
-					<h4 class="media-heading" ng-hide="m.editing">{{m.name}}</h4>
-					<p ng-hide="m.editing" ng-bind-html="m.description | shotvalue"></p>
-					<span class="text-muted" ng-hide="m.editing">{{m.wanted}} shots of {{m.max_length}}s wanted</span>
+					<h4 class="media-heading truncate_heading" ng-hide="m.editing">{{m.name}}</h4>
+					<p ng-hide="m.editing" ng-bind-html="m.description | shotvalue" class="truncate_desc"></p>
+					<span class="text-muted" ng-hide="m.editing">{{m.wanted}} <%- __('shots of') %> {{m.max_length}}s <%- __('wanted') %> </span>
+					<div>&nbsp;</div>
 				</div>
 
 			</div>
@@ -334,131 +366,132 @@
 			</div>
 		</div>
 	</div>
-	<!-- </div> -->
 
+<div class="modal fade" data-show="true" id="allshotsdialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+ aria-hidden="true">
+	<div class="modal-dialog modal-lg" style="margin:auto auto;margin-top:5%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					<%- __('Add From the Shot Archive') %>
 
-	<div class="modal fade" data-show="true" id="allshotsdialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-	 aria-hidden="true">
-		<div class="modal-dialog modal-lg" style="margin:auto auto;margin-top:5%;">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title" id="myModalLabel">
-						<%- __('Add From the Shot Archive') %>
+				</h4>
+			</div>
+			<div class="modal-body">
 
-					</h4>
-				</div>
-				<div class="modal-body">
+				<tabset>
 
-					<tabset>
-
-						<tab heading="Archive">
-							<input type="text" ng-model="allshotsfilter" class="form-control" placeholder="enter search term" />
-							<br>
-							<div class="list-group" id="allshots" style="overflow-y:scroll;overflow-x: hidden;max-height:400px;">
-								<div class="row">
-									<div ng-repeat="m in allshots | filter:allshotsfilter" class="col-xs-6 col-sm-4 col-md-3 " style="position:relative;cursor:pointer;padding:1px;"
-									 ng-click="addshot(m)">
-										<img style="width:100%;" class="media-object" ng-src="/data/icons/{{m.icon}}" />
-									</div>
+					<tab heading="Archive">
+						<input type="text" ng-model="allshotsfilter" class="form-control" placeholder="enter search term" />
+						<br>
+						<div class="list-group" id="allshots" style="overflow-y:scroll;overflow-x: hidden;max-height:400px;">
+							<div class="row">
+								<div ng-repeat="m in allshots | filter:allshotsfilter" class="col-xs-6 col-sm-4 col-md-3 " style="position:relative;cursor:pointer;padding:1px;"
+								 ng-click="addshot(m)">
+									<img style="width:100%;" class="media-object" ng-src="/data/icons/{{m.icon}}" />
 								</div>
 							</div>
-						</tab>
-						<tab heading="Add New">
-							<form class="form-inline"  action="/api/commission/addshot/<%- event.id %>?apikey=<%- apikey %>" method="post" enctype="multipart/form-data">
-								<div class="form-group">
-									<div class="input-group">
-										<label class="input-group-btn">
-											<span class="btn btn-primary">
-												<%- __('Browse&hellip;') %> <input type="file" name="image" style="display: none;">
-											</span>
-										</label>
-										<input type="text" class="form-control" readonly>
-									</div>
-									<input type="submit" value="<%- __('Add Shot') %>" class="btn btn-primary" />
+						</div>
+					</tab>
+					<tab heading="Add New">
+						<form class="form-inline" action="/api/commission/addshot/<%- event.id %>?apikey=<%- apikey %>" method="post"
+						 enctype="multipart/form-data">
+							<div class="form-group">
+								<div class="input-group">
+									<label class="input-group-btn">
+										<span class="btn btn-primary">
+											<%- __('Browse&hellip;') %> <input type="file" name="image" style="display: none;">
+										</span>
+									</label>
+									<input type="text" class="form-control" readonly>
 								</div>
-							</form>
-						</tab>
-						<div class="clearfix"></div>
-					</tabset>
+								<input type="submit" value="<%- __('Add Shot') %>" class="btn btn-primary" />
+							</div>
+						</form>
+					</tab>
+					<div class="clearfix"></div>
+				</tabset>
 
 
-				</div>
 			</div>
 		</div>
 	</div>
+</div>
 
-	<div class="modal fade" data-show="true" id="uploadroleimage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-	 aria-hidden="true">
-		<div class="modal-dialog" style="margin:auto auto;margin-top:5%;">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title" id="myModalLabel">
-						<%- __('Update Theme Image') %>
-					</h4>
-				</div>
-				<div class="modal-body text-center">
-					<span ng-show="currentroleupload.image">
+<div class="modal fade" data-show="true" id="uploadroleimage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+ aria-hidden="true">
+	<div class="modal-dialog" style="margin:auto auto;margin-top:5%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					<%- __('Update Theme Image') %>
+				</h4>
+			</div>
+			<div class="modal-body text-center">
+				<span ng-show="currentroleupload.image">
 					<img ng-src="{{'/event/roleimg/'+eventinfo.id+'/'+currentroleupload.id}}" />
-<br>
+					<br>
 					<a class="btn btn-link" ng-href="/event/clearroleimg/{{eventinfo.id}}/{{currentroleupload.id}}?apikey=<%-apikey%>">
 						<%- __('Remove Image') %>
 					</a>
-<br>
-<br>
+					<br>
+					<br>
 					<div class="strike">
-							<span>
-								<%- __('OR') %></span>
-						</div>
-<br>
-</span>
-					<form class="form-inline" action="{{'/event/map/<%- event.id %>/'+currentroleindex+'?apikey=<%- apikey %>'}}"
-					 method="post" enctype="multipart/form-data">
-					 <p><strong><%- __('Upload New') %></strong></p>
-						<div class="form-group">
+						<span>
+							<%- __('OR') %></span>
+					</div>
+					<br>
+				</span>
+				<form class="form-inline" action="{{'/event/map/<%- event.id %>/'+currentroleindex+'?apikey=<%- apikey %>'}}"
+				 method="post" enctype="multipart/form-data">
+					<p><strong>
+							<%- __('Upload New') %></strong></p>
+					<div class="form-group">
 
-							<div class="input-group">
-								<label class="input-group-btn">
-									<span class="btn btn-primary">
-										<%- __('Browse&hellip;') %> <input type="file" name="map" style="display: none;">
-									</span>
-								</label>
-								<input type="text" class="form-control" readonly>
-							</div>
-
-							<input type="submit" value="<%- __('Upload') %>" class="btn btn-primary" />
+						<div class="input-group">
+							<label class="input-group-btn">
+								<span class="btn btn-primary">
+									<%- __('Browse&hellip;') %> <input type="file" name="map" style="display: none;">
+								</span>
+							</label>
+							<input type="text" class="form-control" readonly>
 						</div>
-						<div class="clearfix"></div>
-					</form>
-				</div>
+
+						<input type="submit" value="<%- __('Upload') %>" class="btn btn-primary" />
+					</div>
+					<div class="clearfix"></div>
+				</form>
 			</div>
 		</div>
 	</div>
+</div>
 
 
-	<div class="alert text-center" ng-class="{'alert-warning':showmsg}">
-		<span ng-show="showmsg" class="text-danger">
-			<small>
-				<%- __('Changes not saved') %></small>
-		</span>
+<div class="alert text-center" ng-class="{'alert-warning':showmsg}">
+	<span ng-show="showmsg" class="text-danger">
+		<small>
+			<%- __('Changes not saved') %></small>
+	</span>
 
-		<span ng-hide="showmsg" class="text-muted">
-			<small>
-					<i class="fa fa-clock-o"></i> <%- __('last saved at') %> {{eventinfo.updatedAt | date:'dd/MM HH:mm:ss'}}</small>
-		</span>
+	<span ng-hide="showmsg" class="text-muted">
+		<small>
+			<i class="fa fa-clock-o"></i>
+			<%- __('last saved at') %> {{eventinfo.updatedAt | date:'dd/MM HH:mm:ss'}}</small>
+	</span>
 
-		<i ng-show="loading"><img src="/images/loading.gif" /></i>
+	<i ng-show="loading"><img src="/images/loading.gif" /></i>
 
-		<span ng-show="showmsg" >
-			<button type="button" class="btn btn-sm btn-success" ng-click="save()">
-				<%- __('Save') %></button>
-			</span>
-	</div>
+	<span ng-show="showmsg">
+		<button type="button" class="btn btn-sm btn-success" ng-click="save()">
+			<%- __('Save') %></button>
+	</span>
+</div>
 </div>
 
 <script>

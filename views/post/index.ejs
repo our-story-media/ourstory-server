@@ -4,12 +4,13 @@
 		<div class="indeterminate"></div>
 	</div>
 	<% if (sails.config.LOCALONLY) { %>
-	<div class="alert alert-info">
+		<br><br>
+	<div class="alert alert-info col-sm-8 col-sm-offset-2">
 		<%- __('Completed Stories can be downloaded using the <i class="fa fa-ellipsis-v text-primary"></i> button on the <a href="/watch/edits/%s">Stories</a> page.<br>To view all original videos captured, visit the folder on your computer where Our Story Titan is installed.',event.id) %>
 	</div>
 	<% } %>
 
-	<div>
+	<div class="col-sm-8 col-sm-offset-2">
 		<div class="row">
 			<div class="col-xs-3">
 				<div style="text-align:center;">

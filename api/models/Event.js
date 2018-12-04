@@ -145,6 +145,11 @@ module.exports = {
     
   },
 
+  beforeUpdate: function (valuesToSet, proceed) {
+      delete valuesToSet.apikey;
+      return proceed();
+  },
+
   afterCreate:function(newlyInsertedRecord, cb)
   {
   	Log.logModel('Event',newlyInsertedRecord.id);

@@ -16,5 +16,12 @@
 	"Videos": "Videos",
 	"Stories": "Stories",
 	"Export": "Export",
-	"Start Contributing Now": "Start Contributing Now"
+	"Start Contributing Now": "Start Contributing Now",
+	"Completed Stories can be downloaded using the <i class=\"fa fa-ellipsis-v text-primary\"></i> button on the <a href=\"/watch/edits/%s\">Stories</a> page.<br>To view all original videos captured, visit the folder on your computer where Our Story Titan is installed.": "Completed Stories can be downloaded using the <i class=\"fa fa-ellipsis-v text-primary\"></i> button on the <a href=\"/watch/edits/%s\">Stories</a> page.<br>To view all original videos captured, visit the folder on your computer where Our Story Titan is installed.",
+	"clips available": "clips available",
+	"not uploaded": "not uploaded",
+	"contributors": "contributors",
+	"Missing Videos": "Missing Videos",
+	"Nobody!": "Nobody!",
+	"search shoots": "search shoots"
 }
