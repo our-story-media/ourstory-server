@@ -311,7 +311,7 @@ module.exports = {
 		Edits.findOne(id, function (err, m) {
 			//FOR LOCAL
 			if (sails.config.LOCALONLY) {
-				return res.redirect(sails.config.FAKES3URL_TRANSCODE + m.shortlink + ".mp4");
+				return res.redirect(`${sails.config.FAKES3URL_TRANSCODE}/edits/${m.shortlink}.mp4`);
 			}
 			else {
 				var options = {
@@ -320,7 +320,7 @@ module.exports = {
 					expireTime: moment().add(1, 'day')
 				}
 
-				var signedUrl = cloudfront.getSignedUrl(sails.config.S3_TRANSCODE_URL + m.shortlink + ".mp4", options);
+				var signedUrl = cloudfront.getSignedUrl(`${sails.config.S3_TRANSCODE_URL}/edits/${m.shortlink}.mp4`, options);
 				//console.log(signedUrl);
 				return res.redirect(signedUrl);
 			}
@@ -342,7 +342,7 @@ module.exports = {
 		Edits.findOne(id, function (err, m) {
 			//LOCAL ONLY
 			if (sails.config.LOCALONLY) {
-				return res.redirect(sails.config.FAKES3URL + m.shortlink + ".mp4");
+				return res.redirect(`${sails.config.FAKES3URL}/edits/${m.shortlink}.mp4`);
 			}
 			else {
 				var options = {
@@ -351,7 +351,7 @@ module.exports = {
 					expireTime: moment().add(1, 'day')
 				}
 
-				var signedUrl = cloudfront.getSignedUrl(sails.config.S3_CLOUD_URL + m.shortlink + ".mp4", options);
+				var signedUrl = cloudfront.getSignedUrl(`${sails.config.S3_CLOUD_URL}/edits/${m.shortlink}.mp4`, options);
 				//console.log(signedUrl);
 				return res.redirect(signedUrl);
 			}
@@ -442,24 +442,6 @@ module.exports = {
 		}
 		else
 			return res.status('500');
-		// Edits.genlink(function (newlink) {
-		//console.log(newlink);
-		// original.title = 'Copy of ' + original.title;
-		// original.code = newlink;
-		// original.shortlink = newlink;
-		// original.progress = 0;
-		// original.createdAt = new Date();
-		// original.updatedAt = new Date();
-		// original.fail = false;
-		// original.path = null;
-		// original.progress = null;
-		// delete original.id;
-
-		//return new edit and shortcode
-		// Edits.create(original).exec(function (err, edit) {
-		// return res.redirect('/watch/edits/'+original.media[0].event_id);
-		// });
-		// });
 	},
 
 	/**

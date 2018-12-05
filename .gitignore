@@ -12,6 +12,7 @@ local.old.js
 
 .vscode
 ssl
+.env
 
 ########################
 # node.js / npm

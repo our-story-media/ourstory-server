@@ -34,7 +34,7 @@ module.exports = {
       //get all the files:
       for (let role of event.eventtype.roles) {
 
-        if (role.image) {          
+        if (role.image) {
           let ff = path.join(__dirname, '..', '..', 'upload', role.image);
           let sub = await sharp(ff).resize(200).toBuffer();
 
