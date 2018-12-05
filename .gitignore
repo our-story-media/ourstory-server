@@ -13,7 +13,7 @@ local.old.js
 .vscode
 ssl
 .env
-
+.sailsrc
 ########################
 # node.js / npm
 ########################

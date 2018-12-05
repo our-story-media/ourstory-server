@@ -52,5 +52,7 @@
 	"search shoots": "search shoots",
 	"Welcome to": "Welcome to",
 	"Looking for how to contribute?": "Looking for how to contribute?",
-	"Start a Shoot Now": "Start a Shoot Now"
+	"Start a Shoot Now": "Start a Shoot Now",
+	"Read the Guide": "Read the Guide",
+	"to get started": "to get started"
 }

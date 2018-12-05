@@ -79,7 +79,7 @@
           <img ng-src="{{contributor.profile.photo}}" /> {{contributor.profile.displayName}} &nbsp;
           </span>
         </label>
-
+        <div class="text-muted text-center" ng-hide="contributors.length>0"><%- __('no contributors yet') %><br><br></div>
       </div>
       <h1><%- __('Themes') %></h1>
       <div>
@@ -92,6 +92,7 @@
             {{role}} &nbsp;
             </span>
             </label>
+            <div class="text-muted text-center" ng-hide="roles.length>0"><%- __('no themes used') %><br><br></div>
       </div>
       <br>
       <h1><%- __('Tags') %></h1>
@@ -105,6 +106,7 @@
                 {{tag}} &nbsp;
                 </span>
                 </label>
+                <div class="text-muted text-center" ng-hide="tagsmeta.length>0"><%- __('no tags used') %><br><br></div>
       </div>
 
       <h1><%- __('Phase') %></h1>
@@ -117,6 +119,7 @@
           {{phase}} &nbsp;
           </span>
         </label>
+        <div class="text-muted text-center" ng-hide="phases.length>0"><%- __('no phases used') %><br><br></div>
       </div>
       <br>
 
@@ -129,6 +132,7 @@
           <i class="fa fa-check"></i>
         <img class="realimg" ng-src="/data/icons/{{c.icon}}" />
       </label>
+      <div class="text-muted text-center" ng-hide="takenshots.length>0"><%- __('no shots used') %><br><br></div>
     </div>
 
       <br>

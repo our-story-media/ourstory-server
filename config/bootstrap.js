@@ -90,10 +90,13 @@ module.exports.bootstrap = function (cb) {
 			{
 				multi: true
 			}, function (err) {
-				console.log(err);
+				// console.log(err);
 				Log.info('bootstrap', 'Unset Extra User Data');
 			});
 	});
+
+	if (sails.config.LOCALONLY)
+		Log.info('bootstrap', `Loading LOCAL_MODE`);
 
     /**
      * FIRST INSTALL SCRIPTS
@@ -280,48 +283,48 @@ module.exports.bootstrap = function (cb) {
 			}
 		));
 
-		passport.use(new FacebookStrategy({
-			clientID: sails.config.FACEBOOK_APP_ID,
-			clientSecret: sails.config.FACEBOOK_APP_SECRET,
-			callbackURL: sails.config.master_url + '/auth/facebook_return',
-			profileFields: ['id', 'name', 'picture.type(small)', 'emails', 'displayName']
-		},
-			function (token, tokensecret, profile, done) {
-				//console.log(profile);
-				Log.info('facebook', 'Login', { user_id: profile.id });
-				// profile._json.picture = 'http://graph.facebook.com/' + profile.id + '/picture';
+		// passport.use(new FacebookStrategy({
+		// 	clientID: sails.config.FACEBOOK_APP_ID,
+		// 	clientSecret: sails.config.FACEBOOK_APP_SECRET,
+		// 	callbackURL: sails.config.master_url + '/auth/facebook_return',
+		// 	profileFields: ['id', 'name', 'picture.type(small)', 'emails', 'displayName']
+		// },
+		// 	function (token, tokensecret, profile, done) {
+		// 		//console.log(profile);
+		// 		Log.info('facebook', 'Login', { user_id: profile.id });
+		// 		// profile._json.picture = 'http://graph.facebook.com/' + profile.id + '/picture';
 
 				
-				if (profile.emails) {
+		// 		if (profile.emails) {
 
-					var sn_profile = {
-						"id": profile.id,
-						"displayName": profile.displayName,
-						"provider": profile.provider,
-						"photos": [
-							{
-								"value": profile.photos[0].value
-							}
-						],
-						"emails": [
-							{
-								"value": profile.emails[0].value
-							}
-						]
-					};
+		// 			var sn_profile = {
+		// 				"id": profile.id,
+		// 				"displayName": profile.displayName,
+		// 				"provider": profile.provider,
+		// 				"photos": [
+		// 					{
+		// 						"value": profile.photos[0].value
+		// 					}
+		// 				],
+		// 				"emails": [
+		// 					{
+		// 						"value": profile.emails[0].value
+		// 					}
+		// 				]
+		// 			};
 
-					User.findOrCreate({ uid: String(profile.id) }, { uid: String(profile.id), profile: sn_profile }, function (err, user) {
-						user.profile.photos = sn_profile.photos;
-						user.save(function(err){
-							return done(err, user);
-						});
-					});
-				}
-				else {
-					return done(null, false, { message: 'Please allow Bootlegger access to your email address!' });
-				}
-			}
-		));
+		// 			User.findOrCreate({ uid: String(profile.id) }, { uid: String(profile.id), profile: sn_profile }, function (err, user) {
+		// 				user.profile.photos = sn_profile.photos;
+		// 				user.save(function(err){
+		// 					return done(err, user);
+		// 				});
+		// 			});
+		// 		}
+		// 		else {
+		// 			return done(null, false, { message: 'Please allow Bootlegger access to your email address!' });
+		// 		}
+		// 	}
+		// ));
 	}
 
 	passport.serializeUser(function (user, done) {
@@ -332,37 +335,39 @@ module.exports.bootstrap = function (cb) {
 		done(null, user);
 	});
 
-	if (!sails.config.git_version) {
-		sails.log.verbose('No GIT repo installed here');
-		sails.config.git_version = {
-			branch: 'production',
-			date: '?',
-			time: '?',
-			message: '?'
-		};
-	}
+	// if (!sails.config.git_version) {
+	// 	sails.log.verbose('No GIT repo installed here');
+	// 	sails.config.git_version = {
+	// 		branch: 'production',
+	// 		date: '?',
+	// 		time: '?',
+	// 		message: '?'
+	// 	};
+	// }
+
+	// cb();
 
 	// sails.localmode = false;
-	if (sails.config.LOCALONLY) {
+	// if (sails.config.LOCALONLY) {
 		//startup the event manager:
-		sails.hostname = sails.config.hostname + ':' + sails.config.port;
-		sails.multiserveronline = false;
-		sails.eventmanager = require('./eventmanager.js');
-		sails.eventmanager.init(sails, function () {
-			cb();
-		});
-	}
-	else {
-		//not local -- tell the central server to reload events:
-		// Log.info('bootstrap', "Signing on with Multi-Control Server");
-		sails.hostname = sails.config.hostname + ':' + sails.config.port;
-		Log.info('bootstrap', "Current Hostname is " + sails.hostname);
-		sails.multiserveronline = false;
-			//startup the event manager:
-		sails.eventmanager = require('./eventmanager.js');
-		sails.eventmanager.init(sails, function () {
-			cb();
-		});
-		// });
-	}
+	sails.hostname = sails.config.hostname + ':' + sails.config.port;
+	sails.multiserveronline = false;
+	sails.eventmanager = require('./eventmanager.js');
+	sails.eventmanager.init(sails, function () {
+		cb();
+	});
+	// }
+	// else {
+	// 	//not local -- tell the central server to reload events:
+	// 	// Log.info('bootstrap', "Signing on with Multi-Control Server");
+	// 	sails.hostname = sails.config.hostname + ':' + sails.config.port;
+	// 	Log.info('bootstrap', "Current Hostname is " + sails.hostname);
+	// 	sails.multiserveronline = false;
+	// 		//startup the event manager:
+	// 	sails.eventmanager = require('./eventmanager.js');
+	// 	sails.eventmanager.init(sails, function () {
+	// 		cb();
+	// 	});
+	// 	// });
+	// }
 };

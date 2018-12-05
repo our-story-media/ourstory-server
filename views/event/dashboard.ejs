@@ -16,25 +16,14 @@
     </h1>
 
     <% if (!sails.config.LOCALONLY) { %>
-  <!-- <div class="row"> -->
-      <div class="alert-info alert text-left col-md-8 col-md-offset-2 lead" style="margin-top:2em;">
-          <div class="pull-left" style="line-height: 60px">
+      <div class=" text-center col-md-8 col-md-offset-2 lead" style="margin-top:2em;">
+          <div style="line-height: 60px">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        <%- __('Looking for how to contribute?') %>
+            <a href="https://guide.ourstory.video"><%- __('Read the Guide') %></a> <%- __('to get started') %>
       </div>
-        <div class="pull-right">
-        <a href='https://play.google.com/store/apps/details?id=uk.ac.ncl.di.bootlegger&hl=en&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'
-          style="display:inline-block;">
-          <img style="height:60px;vertical-align:inherit" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'
-          />
-        </a>
        
-        <!-- <a href="https://itunes.apple.com/gb/app/bootlegger/id1053074626?mt=8" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-lrg.svg) no-repeat;padding:10px;width:135px;height:60px;background-size:contain;background-position:center;"
-          style="display:inline-block;"></a> -->
-        </div>
       <div class="clearfix"></div>
       </div>
-    <!-- </div> -->
 
       <% } %>
         <a href="/commission/new" class="btn btn-lg btn-success">

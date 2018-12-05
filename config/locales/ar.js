@@ -54,5 +54,7 @@
 	"Looking for how to contribute?": "Looking for how to contribute?",
 	"Start a Shoot Now": "Start a Shoot Now",
 	"My Published Stories": "My Published Stories",
-	"You have not published any stories yet...": "You have not published any stories yet..."
+	"You have not published any stories yet...": "You have not published any stories yet...",
+	"Read the Guide": "Read the Guide",
+	"to get started": "to get started"
 }

@@ -4,9 +4,6 @@
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <link href='/styles/opensans.css' rel='stylesheet' type='text/css'>
-        <!-- <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'> -->
-        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
-        <!-- <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#async=1&pubid=ra-550c037118e0ae97"></script> -->
         <style>
         body
         {
@@ -66,7 +63,7 @@
         <meta name="twitter:player:stream:content_type" content="video/mp4">
         <meta property="author" content="<%- edit.user.profile.displayName %>">
         <% } else { %>
-        <title>This video cannot be shared</title>
+        <title><%- __('This video cannot be shared') %></title>
         <% } %>
         
     </head>
@@ -92,9 +89,6 @@
         <div style="width:30%;font-size:30pt;color:#444;margin:auto auto; margin-top:20%;font-family:sans-serif;text-align:center;"><i class="fa fa-spin fa-gear"></i><br> <%- __('This video is still being edited...') %></div>
         <% }} %>
         <h1 style="color:white;text-align:center;"><%- edit.title %><br><small><%- edit.description %></small></h1>
-        <script>
-        addthis.toolbox('.addthis_toolbox');
-        </script>
     </body>
     <% } else { %>
     <body style="height:100%;width:100%;overflow:hidden;background:#1f1f1f">
