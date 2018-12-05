@@ -8,7 +8,8 @@ ssl
 cast
 development notes
 server_config
-docker
+docker/build
+docker/local
 upload
 assets/landing/node_modules
 assets/landing/app

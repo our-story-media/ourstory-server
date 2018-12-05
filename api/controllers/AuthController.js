@@ -15,7 +15,7 @@ const passport = require('passport');
 // const uploaddir = "/upload/";
 // const path = require('path');
 const usercount = 0;
-const VERSION_STRING = 12;
+const VERSION_STRING = 13;
 // const moment = require('moment');
 const urlencode = require('urlencode');
 

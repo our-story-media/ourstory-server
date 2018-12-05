@@ -196,7 +196,7 @@ module.exports = {
 							//remove the local file:
 							try
 							{
-								fs.deleteSync(path.join(__dirname,'..','..',"upload",pp));
+								fs.deleteSync(path.join(__dirname,'..','..',"upload",m.event_id,pp));
 							}
 							catch (e)
 							{
@@ -218,7 +218,7 @@ module.exports = {
 								Delete: { /* required */
 									Objects: [ /* required */
 										{
-											Key: "upload/" + pp,
+											Key: `upload/${m.event_id}/${pp}`,
 										},
 										/* more items */
 									],
@@ -239,7 +239,7 @@ module.exports = {
 								Delete: { /* required */
 									Objects: [ /* required */
 										{
-											Key: "upload/" + thumb,
+											Key: `upload/${m.event_id}/${thumb}`,
 										},
 										/* more items */
 									],
@@ -259,7 +259,7 @@ module.exports = {
 								Delete: { /* required */
 									Objects: [ /* required */
 										{
-											Key: "upload/" + pp,
+											Key: `upload/${m.event_id}/${pp}`,
 										},
 										/* more items */
 									],
@@ -380,7 +380,7 @@ module.exports = {
 							//InputKeyPrefix: '/upload',
 							OutputKeyPrefix: 'upload/',
 							Input: {
-								Key: 'upload/' + filename,
+								Key: `upload/${m.event_id}/${filename}`,
 								FrameRate: 'auto',
 								Resolution: 'auto',
 								AspectRatio: 'auto',
@@ -388,7 +388,7 @@ module.exports = {
 								Container: 'auto'
 							},
 							Output: {
-								Key: 'preview_' + m.path,
+								Key: `${m.event_id}/preview_${m.path}`,
 								//ThumbnailPattern: 'thumbs-{count}',
 								PresetId: sails.config.PREVIEW_PRESET, // specifies the output video format
 								Rotate: 'auto'
@@ -427,7 +427,7 @@ module.exports = {
 		Media.findOne(id, function (err, m) {
 			if (m.meta.static_meta.media_type == 'VIDEO' || !m.meta.static_meta.media_type) {
 				if (sails.config.LOCALONLY) {
-					return res.redirect(sails.config.FAKES3URL_TRANSCODE + 'preview_' + m.path);
+					return res.redirect(`${sails.config.FAKES3URL_TRANSCODE}/${m.event_id}/preview_${m.path}`);
 				}
 				else {
 					var options = {
@@ -435,7 +435,7 @@ module.exports = {
 						privateKeyPath: sails.config.CLOUDFRONT_KEYFILE,
 						expireTime: moment().add(1, 'day')
 					}
-					var signedUrl = cloudfront.getSignedUrl(sails.config.S3_TRANSCODE_URL + 'preview_' + m.path, options);
+					var signedUrl = cloudfront.getSignedUrl(`${sails.config.S3_TRANSCODE_URL}/${m.event_id}/preview_${m.path}`, options);
 					//console.log(signedUrl);
 					return res.redirect(signedUrl);
 				}
@@ -450,7 +450,7 @@ module.exports = {
 						privateKeyPath: sails.config.CLOUDFRONT_KEYFILE,
 						expireTime: moment().add(1, 'day')
 					}
-					var signedUrl = cloudfront.getSignedUrl(sails.config.S3_CLOUD_URL + m.path, options);
+					var signedUrl = cloudfront.getSignedUrl(`${sails.config.S3_CLOUD_URL}/${m.event_id}/${m.path}`, options);
 					//console.log(signedUrl);
 					return res.redirect(signedUrl);
 				}
@@ -477,7 +477,7 @@ module.exports = {
 
 			if (sails.config.LOCALONLY) {
 				// console.log(sails.config.FAKES3URL + '/' + m.path);
-				return res.redirect(sails.config.FAKES3URL + m.path);
+				return res.redirect(`${sails.config.FAKES3URL}${m.event_id}/${m.path}`);
 			}
 			else {
 				var options = {
@@ -485,7 +485,7 @@ module.exports = {
 					privateKeyPath: sails.config.CLOUDFRONT_KEYFILE,
 					expireTime: moment().add(1, 'day')
 				}
-				var signedUrl = cloudfront.getSignedUrl(sails.config.S3_CLOUD_URL + m.path, options);
+				var signedUrl = cloudfront.getSignedUrl(`${sails.config.S3_CLOUD_URL}/${m.event_id}/${m.path}`, options);
 				//console.log(signedUrl);
 				return res.redirect(signedUrl);
 			}
@@ -508,7 +508,7 @@ module.exports = {
 		Media.findOne(id, function (err, m) {
 
 			if (sails.config.LOCALONLY) {
-				return res.redirect(sails.config.FAKES3URL_TRANSCODE + m.path + '_homog.mp4');
+				return res.redirect(`${sails.config.FAKES3URL_TRANSCODE}/${m.event_id}/${m.path}_homog.mp4`);
 			}
 			else {
 				var options = {
@@ -524,7 +524,7 @@ module.exports = {
 				}
 
 				if (m.path) {
-					var signedUrl = cloudfront.getSignedUrl(sails.config.S3_TRANSCODE_URL + m.path + '_homog.mp4', options);
+					var signedUrl = cloudfront.getSignedUrl(`${sails.config.S3_TRANSCODE_URL}/${m.event_id}/${m.path}_homog.mp4`, options);
 					//console.log(signedUrl);
 					return res.redirect(signedUrl);
 				}
@@ -614,7 +614,7 @@ module.exports = {
 				else {
 					if (sails.config.LOCALONLY) {
 						try {
-							var localfile = path.join(__dirname,'..','..',"upload",media.thumb);
+							var localfile = path.join(__dirname,'..','..',"upload",media.event_id,media.thumb);
 							// console.log(localfile);
 							
 							try {
@@ -645,7 +645,7 @@ module.exports = {
 							localFile: tmp,
 							s3Params: {
 								Bucket: sails.config.S3_BUCKET,
-								Key: "upload/" + media.thumb
+								Key: `upload/${media.event_id}/${media.thumb}`
 							},
 						};
 						var downloader = s3.downloadFile(params);
@@ -746,32 +746,32 @@ module.exports = {
 	 *
 	 * @apiSuccess {String} signed_request Url that you can use to PUT file to.
 	 */
-	uploadsignthumb: function (req, res) {
-		if (!req.param('filename'))
-			return res.json({ msg: 'No filename given' }, 500);
+	// uploadsignthumb: function (req, res) {
+	// 	if (!req.param('filename'))
+	// 		return res.json({ msg: 'No filename given' }, 500);
 
-		var filename = req.param('filename');
+	// 	var filename = req.param('filename');
 
-		//console.log(sails.config);
-		//console.log(filename);
-		//AWS.config.loadFromPath('./awscreds.json');
-		if (sails.config.LOCALONLY) {
-			res.json({
-				signed_request: sails.config.FAKES3URL + filename
-			})
-		}
-		else {
-			AWS.config.update({ accessKeyId: sails.config.AWS_ACCESS_KEY_ID, secretAccessKey: sails.config.AWS_SECRET_ACCESS_KEY });
-			var s3 = new AWS.S3({ computeChecksums: true }); // this is the default setting
-			var params = { Bucket: sails.config.S3_BUCKET, Key: 'upload/' + filename };
-			var url = s3.getSignedUrl('putObject', params);
-			//console.log("The URL is", url);
-			var credentials = {
-				signed_request: url
-			};
-			res.json(credentials);
-		}
-	},
+	// 	//console.log(sails.config);
+	// 	//console.log(filename);
+	// 	//AWS.config.loadFromPath('./awscreds.json');
+	// 	if (sails.config.LOCALONLY) {
+	// 		res.json({
+	// 			signed_request: sails.config.FAKES3URL + filename
+	// 		})
+	// 	}
+	// 	else {
+	// 		AWS.config.update({ accessKeyId: sails.config.AWS_ACCESS_KEY_ID, secretAccessKey: sails.config.AWS_SECRET_ACCESS_KEY });
+	// 		var s3 = new AWS.S3({ computeChecksums: true }); // this is the default setting
+	// 		var params = { Bucket: sails.config.S3_BUCKET, Key: 'upload/' + filename };
+	// 		var url = s3.getSignedUrl('putObject', params);
+	// 		//console.log("The URL is", url);
+	// 		var credentials = {
+	// 			signed_request: url
+	// 		};
+	// 		res.json(credentials);
+	// 	}
+	// },
 
 	/**
 	 * @api {post} /api/media/signupload/ Get Upload Url
@@ -785,14 +785,15 @@ module.exports = {
 	 * @apiSuccess {String} signed_request Url that you can use to PUT file to.
 	 */
 	uploadsign: function (req, res) {
-		if (!req.param('filename'))
+		if (!req.param('filename') || !req.param('eventid'))
 			return res.json({ msg: 'No filename given' }, 500);
 
 		var filename = req.param('filename');
+		var eventid = req.param('eventid');
 
 		if (sails.config.LOCALONLY) {
 			res.json({
-				signed_request: sails.config.FAKES3URL + filename
+				signed_request: `${sails.config.FAKES3URL}${eventid}/${filename}`
 			})
 		}
 		else {
@@ -801,7 +802,7 @@ module.exports = {
 			//AWS.config.loadFromPath('./awscreds.json');
 			AWS.config.update({ accessKeyId: sails.config.AWS_ACCESS_KEY_ID, secretAccessKey: sails.config.AWS_SECRET_ACCESS_KEY });
 			var s3 = new AWS.S3({ computeChecksums: true }); // this is the default setting
-			var params = { Bucket: sails.config.S3_BUCKET, Key: 'upload/' + filename, ContentType: "video/mp4" };
+			var params = { Bucket: sails.config.S3_BUCKET, Key: `upload/${eventid}/${filename}`};
 			var url = s3.getSignedUrl('putObject', params);
 			//console.log("The URL is", url);
 			var credentials = {

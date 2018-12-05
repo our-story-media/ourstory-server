@@ -1,0 +1,12 @@
+FROM nginx:alpine
+
+LABEL maintainer="Tom Bartindale <tom.bartindale@ncl.ac.uk>"
+
+# enable for local build of the server
+# COPY server.conf /etc/nginx/conf.d/default.conf
+
+RUN mkdir /templates
+COPY docker/bootlegger.conf /etc/nginx/vhost.d/default
+COPY docker/nginx.tmpl /templates/nginx.tmpl
+COPY fallback/500.html /usr/share/nginx/html/index.html
+VOLUME /templates
