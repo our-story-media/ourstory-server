@@ -217,5 +217,9 @@
 	"Edit": "Edit",
 	"taken": "taken",
 	"shots of": "shots of",
-	"wanted": "wanted"
+	"wanted": "wanted",
+	"no contributors yet": "no contributors yet",
+	"Footage can be shared publically": "Footage can be shared publically",
+	"Footage can be shared Publically": "Footage can be shared Publically",
+	"Footage can be Shared Publically": "Footage can be Shared Publically"
 }

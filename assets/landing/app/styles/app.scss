@@ -139,3 +139,32 @@
     margin-top:-20px;
     line-height: 100px;
 }
+
+#lingumania_langswitcher
+{
+    position: absolute !important;
+    top: 1.2em !important;
+    right: 30% !important;
+}
+
+.lingumania_poweredby
+{
+    display: none !important;
+}
+
+a#lingumania_currentlanglink
+{
+    width: 100px !important;
+    padding-right: 2em !important;
+}
+
+#lingumania_langswitcher:hover a
+{
+    width: 100px !important;
+    padding-right: 2em !important;
+}
+
+a#lingumania_currentlanglink
+{
+    background:  url('/landing/dropdown.png') right 5px no-repeat !important;
+}

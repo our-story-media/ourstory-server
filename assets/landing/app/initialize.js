@@ -93,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function () {
     },
   })
 
-
   var currentdata;
 
   $.get('/landing/edition.json').then(function(data){
@@ -127,4 +126,10 @@ document.addEventListener('DOMContentLoaded', function () {
       $('#mins').html(Math.round(currentdata.mins / 60));
     }, 5000);
   });
+
+  var urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('lang') == 'ar')
+  {
+    document.body.style.direction = "rtl";
+  }
 });

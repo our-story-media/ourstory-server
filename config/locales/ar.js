@@ -49,5 +49,10 @@
 	"Platform": "Platform",
 	"Completed Stories can be downloaded using the <i class=\"fa fa-ellipsis-v text-primary\"></i> button on the <a href=\"/watch/edits/%s\">Stories</a> page.<br>To view all original videos captured, visit the folder on your computer where Our Story Titan is installed.": "Completed Stories can be downloaded using the <i class=\"fa fa-ellipsis-v text-primary\"></i> button on the <a href=\"/watch/edits/%s\">Stories</a> page.<br>To view all original videos captured, visit the folder on your computer where Our Story Titan is installed.",
 	"Missing Videos": "Missing Videos",
-	"search shoots": "search shoots"
+	"search shoots": "search shoots",
+	"Welcome to": "Welcome to",
+	"Looking for how to contribute?": "Looking for how to contribute?",
+	"Start a Shoot Now": "Start a Shoot Now",
+	"My Published Stories": "My Published Stories",
+	"You have not published any stories yet...": "You have not published any stories yet..."
 }

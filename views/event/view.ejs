@@ -191,7 +191,7 @@
             <% } else { %>
             <i class="fa fa-times"></i>
             <% } %>
-            <%- __('Footage can be Shared on Social Media') %>
+            <%- __('Footage can be Shared Publically') %>
             <i style="color:silver" class="fa fa-question-circle"></i>
           </label>
 
@@ -383,12 +383,11 @@
 
           <small><i class="fa fa-clock-o"></i> <%- __('last saved at') %> {{event.updatedAt | date:'dd/MM HH:mm:ss'}}</small>
         </span>
-        <i ng-show="loading"><img src="/images/loading.gif" /></i>
+        <i ng-show="loading"><img style="width:16px;" src="/images/loading.gif" /></i>
 
-        <div ng-show="dirty" class="btn-group" dropdown>
+        <!-- <span ng-show="dirty"> -->
           <button type="button" class="btn btn-sm btn-success" ng-click="updaterelease()"><%- __('Save') %></button>
-          <span class="sr-only"><%- __('Save Options') %></span>
-        </div>
+        <!-- </div> -->
       </div>
       <div class="clearfix"></div>
     </div>
@@ -438,14 +437,9 @@
     </li>
 
     <li class="list-group-item" ng-show="codes.length==0">
-      <span class="text-mute"><%- __('no codes sent') %></span>
+      <span class="text-mute"><%- __('no contributors yet') %></span>
     </li>
 
-    <div class="list-group-item">
-      <label class="col-sm-3 control-label" for="number"><%- __('Contact Info.') %></label>
-      <input type="email" id="email" class="form-control" style="display:inline-block;width:30%" placeholder="dave@ourstory.video" />
-      <button class="btn" ng-click="addcode();" style="display:inline-block;"><%- __('Add') %></button>
-    </div>
   </ul>
 
 
