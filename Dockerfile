@@ -33,7 +33,6 @@ RUN grunt buildProd
 
 # actual bits that need mapping are .tmp, www and uploads
 VOLUME /usr/src/app/www
-VOLUME /usr/src/app/doc
 VOLUME /usr/src/app/fallback
 VOLUME /usr/src/app/data
 

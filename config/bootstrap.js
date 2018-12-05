@@ -143,7 +143,7 @@ module.exports.bootstrap = function (cb) {
 							},
 						});
 						var params = {
-							localDir: '../assets/backgrounds/',
+							localDir: __dirname + '/../assets/backgrounds/',
 							s3Params: {
 								Bucket: sails.config.S3_BUCKET,
 								Prefix: "upload/backgrounds/",
