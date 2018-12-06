@@ -20,9 +20,10 @@ const VERSION_STRING = 13;
 const urlencode = require('urlencode');
 
 const landingPage = fs.readFileSync(__dirname + '/../../assets/landing/public/index.html').toString();
+const rtlDetect = require('rtl-detect');
 
 module.exports = {
-	getstarted: function(req,res){
+	getstarted: function (req, res) {
 		//if logged in, redirect to dashboard:
 		if (req.session.profile && req.session.profile.user)
 			return res.redirect('/dashboard');
@@ -84,8 +85,8 @@ module.exports = {
 
 		let stories = await Edits.count();
 
-		let data = await Media.find({}, { fields: { 'created_by': 1, 'event_id': 1, 'meta.static_meta.clip_length': 1 } ,sort:'created_by'}).sort('created_by');
-// console.log(data);
+		let data = await Media.find({}, { fields: { 'created_by': 1, 'event_id': 1, 'meta.static_meta.clip_length': 1 }, sort: 'created_by' }).sort('created_by');
+		// console.log(data);
 		var medialength = data.length;
 		var ucount = _.unique(_.pluck(data, 'created_by')).length;
 		var evcount = _.unique(_.pluck(data, 'event_id')).length;
@@ -106,7 +107,7 @@ module.exports = {
 		}, 0);
 		//var evcount = _.unique(_.pluck(data,'event_id')).length;
 
-		return res.json({ users: ucount, events: evcount, media: medialength, mins: mins,stories });
+		return res.json({ users: ucount, events: evcount, media: medialength, mins: mins, stories });
 		//live right now...
 
 		//total media...
@@ -178,8 +179,7 @@ module.exports = {
 		}
 		else {
 			//console.log("resetting login");
-			if (sails.config.LOCALONLY)
-			{
+			if (sails.config.LOCALONLY) {
 				return res.redirect('/dashboard');
 			}
 
@@ -207,14 +207,14 @@ module.exports = {
 
 					// 	ups.reverse();
 
-						//console.log(req.device);
-						//console.log(req.device.is_mobile);
+					//console.log(req.device);
+					//console.log(req.device.is_mobile);
 
-						//if (req.device.type == 'phone')
-						//	return res.view({upcoming:_.take(ups,3),_layoutFile: '../login_mobile.ejs'});
-						//	else
-						return res.send(landingPage);
-						// return res.view({ upcoming: _.take(ups, 3), _layoutFile: '../login.ejs' });
+					//if (req.device.type == 'phone')
+					//	return res.view({upcoming:_.take(ups,3),_layoutFile: '../login_mobile.ejs'});
+					//	else
+					return res.send(landingPage);
+					// return res.view({ upcoming: _.take(ups, 3), _layoutFile: '../login.ejs' });
 					// });
 				}
 				else {
@@ -327,14 +327,27 @@ module.exports = {
 	},
 
 	local: function (req, res, next) {
+		if (req.getLocale() != req.session.locale) {
+			req.session.locale = req.getLocale();
+			// console.log(req.getLocale());
+		}
+		if (req.session.overridelocale)
+			req.session.locale = req.session.overridelocale;
+
+		req.setLocale(req.session.locale);
+		if (rtlDetect.isRtlLang(req.session.locale)) {
+			res.locals.rtl = 'rtl';
+		}
+		else {
+			res.locals.rtl = 'ltr';
+		}
 		return res.view('auth/locallogin.ejs', { _layoutFile: '../blank' });
 	},
 
 	process_local: function (req, res, next) {
 
-		if(_.size(req.param('firstName')) < 3)
-		{
-			req.session.flash = { msg: 'Please type a longer name' };		
+		if (_.size(req.param('firstName')) < 3) {
+			req.session.flash = { msg: 'Please type a longer name' };
 			return res.redirect('/auth/local');
 		}
 
@@ -355,7 +368,7 @@ module.exports = {
 						value: null
 					}
 				],
-				
+
 			},
 			consent: new Date()
 		}, function (err, user) {
@@ -397,7 +410,7 @@ module.exports = {
 	},
 
 	joincode: function (req, res) {
-		
+
 		if (!req.body.code)
 			return res.status(500).json({
 				msg: 'Invalid code'
@@ -416,8 +429,7 @@ module.exports = {
 					event.codes = new Array();
 
 				//valid code but not logged in:
-				if (!(req.session && req.session.passport && req.session.passport.user))
-				{
+				if (!(req.session && req.session.passport && req.session.passport.user)) {
 					return res.status(200).json({
 						msg: 'Valid code but need to login'
 					});
@@ -505,21 +517,19 @@ module.exports = {
 		}
 	},
 
-	consent:function(req,res){
+	consent: function (req, res) {
 		return res.view();
 	},
 
-	acceptconsent:function(req,res)
-	{
+	acceptconsent: function (req, res) {
 		var now = new Date();
-		User.update({id:req.session.passport.user.id},{consent:now}).exec(function(err){
+		User.update({ id: req.session.passport.user.id }, { consent: now }).exec(function (err) {
 			req.session.passport.user.consent = now;
 			if (!req.session.ismobile) {
 				res.redirect('/dashboard');
 			}
-			else
-			{
-				res.redirect('/auth/sessionkey');				
+			else {
+				res.redirect('/auth/sessionkey');
 			}
 		});
 	}

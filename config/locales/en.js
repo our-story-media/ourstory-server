@@ -248,5 +248,20 @@
 	"Contributors Can View Anyones Footage": "Contributors Can View Anyones Footage",
 	"Your shoot should take care of itself!": "Your shoot should take care of itself!",
 	"However you can monitor and tweak what`s happening here:": "However you can monitor and tweak what`s happening here:",
-	"Makes a document with thumbnails of each shot and its metadata": "Makes a document with thumbnails of each shot and its metadata"
+	"Makes a document with thumbnails of each shot and its metadata": "Makes a document with thumbnails of each shot and its metadata",
+	"LOGIN": "LOGIN",
+	"GLOBAL_RELEASE": "GLOBAL_RELEASE",
+	"FINDOUTMORE": "FINDOUTMORE",
+	"I understand and want to continue": "I understand and want to continue",
+	"CONTINUE": "CONTINUE",
+	"MYNAME": "MYNAME",
+	"FIRSTNAME": "FIRSTNAME",
+	"LONGER_NAME": "LONGER_NAME",
+	"BACK": "BACK",
+	"Find Out More": "Find Out More",
+	"My Name": "My Name",
+	"Your Name": "Your Name",
+	"Please enter a longer name": "Please enter a longer name",
+	"Tell us Your Name": "Tell us Your Name",
+	"Returning to the Our Story application...": "Returning to the Our Story application..."
 }

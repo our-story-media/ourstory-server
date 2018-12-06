@@ -1,9 +1,10 @@
-<html>
+<!DOCTYPE html>
+<html lang="<%- req.getLocale() %>" dir="<%- rtl %>">
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <%= __('LOGIN') %>
+        <%= __('Tell us Your Name') %>
     </title>
     <!--SCRIPTS-->
     <script src="/js/dependencies/0socket.io.js"></script>
@@ -85,23 +86,23 @@
         <p>&nbsp;</p>
 
         <%- __('GLOBAL_RELEASE') %>
-            <a href="/privacy">
-                <%- __('FINDOUTMORE') %>
+        <br>
+            <a class="pull-right" href="/privacy">
+                <%- __('Find Out More') %>
             </a>
             <br>
             <br>
             <div class="checkbox">
                 <label for="consent">
                     <input type="checkbox" id="consent" name="consent" value="consent" />
-                    <strong>I understand and want to continue</strong>
+                    <strong><%- __('I understand and want to continue') %></strong>
                 </label>
             </div>
             <div class="row">
                 <div class="col-xs-12 text-right">
                     
                     <button class="btn btn-primary" onclick="if ($('#consent').prop('checked')) {$('#entrybox').show();$('#privacy').hide();}">
-                        <%= __('CONTINUE') %>
-                            <i class="fa fa-chevron-right"></i>
+                        <%= __('CONTINUE') %> <i class="fa fa-chevron-right"></i>
                     </button>
                 </div>
             </div>
@@ -109,13 +110,13 @@
 
     <div class="container" id="entrybox" style="display:none">
         <div class="text-center">
-            <h4>
-                <%= __('MYNAME') %>
-            </h4>
+            <h3>
+                <%= __('My Name') %>
+            </h3>
             <br>
-            <form action="/auth/locallogin" method="post">
+            <form action="/auth/locallogin" method="post" onsubmit="$('#entrybox').hide();$('#directing').show();">
                 <div class="form-group">
-                    <input class="form-control input-lg" pattern=".{3,}" placeholder="<%= __('FIRSTNAME') %>" required id="first_name" title="<%= __('LONGER_NAME') %>"
+                    <input class="form-control input-lg" pattern=".{3,}" placeholder="<%= __('Your Name') %>" required id="first_name" title="<%= __('Please enter a longer name') %>"
                         type="text" class="validate" name="firstName" />
                         <br>
                     <div class="pull-left">
@@ -134,6 +135,11 @@
             </form>
         </div>
     </div>
+    <div id="directing" style="display: none;margin:2em;text-align: center;margin-top:20%;">
+        <img src="/images/loading.gif" />
+        <p><%- __('Returning to the Our Story application...') %></p>
+    </div>
+    
 </body>
 
 
