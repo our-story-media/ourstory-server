@@ -124,7 +124,7 @@ module.exports.routes = {
 
     'post /api/shoot/changephase/:id?': [{ controller: 'EventController', action: 'changephase' }, { policy: 'apiauth' }, { policy: 'isowner' }, { policy: 'apply_cors' }],
     'post /api/shoot/create': [{ controller: 'EventController', action: 'addevent' }, { policy: 'apiauth' }, { policy: 'eventlimit' }, { policy: 'apply_cors' }],
-    'post /api/commission/createinstantshoot': [{ controller: 'CommissionController', action: 'createinstantshoot' }, { policy: 'apiauth' }, { policy: 'eventlimit' }, { policy: 'apply_cors' }],
+    // 'post /api/commission/createinstantshoot': [{ controller: 'CommissionController', action: 'createinstantshoot' }, { policy: 'apiauth' }, { policy: 'eventlimit' }, { policy: 'apply_cors' }],
     'get /api/shoot/updates/:id?': [{ controller: 'EventController', action: 'updates' }, { policy: 'apiauth' }, { policy: 'isowner' }, { policy: 'apply_cors' }],
     //connect to event
 

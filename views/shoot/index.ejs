@@ -17,22 +17,32 @@
     </div>
   </div>
 
-  <div class="alert alert-info" style="margin-top:2em;"><%- __('Your shoot should take care of itself, however you can monitor and tweak what`s happening here:') %></div>
+  <div class="hidden-xs row" style="margin-top:2em;">
+		<div class="alert alert-success col-sm-8 col-sm-offset-2">
+      <i class="fa fa-info fa-3x" style="float:left;margin-right:10px;"></i>
+			<h3 style="margin:0">
+				<%- __('Your shoot should take care of itself!') %>
+				<small style="display:block;">
+            <%- __('However you can monitor and tweak what`s happening here:') %></small>
+			</h3>
+		</div>
+	</div>
+
   <% if (!sails.config.LOCALONLY) { %>
-  <div class="well">
+    <div class="row" style="margin-bottom:5px;">
+  <div class="well col-sm-8 col-sm-offset-2 text-center">
     
-      <div class="row" style="margin-bottom:5px;">
         <form action="/shoot/sendmessage/<%- event.id %>?apikey=<%- apikey %>" method="post">
-          <p class="col-md-6" data-delay="300" data-toggle="tooltip" title="<%- __('This message gets send to anyone who has contributed using the mobile app to this shoot.') %>"><%- __('Send a push notification to participants at your shoot.') %>
+          <p data-delay="300" data-toggle="tooltip" title="<%- __('This message gets send to anyone who has contributed using the mobile app to this shoot.') %>"><%- __('Send a push notification to participants at your shoot.') %>
             <i style="color:silver" class="fa fa-question-circle"></i>
           </p>
-          <div class="col-sm-6">
-            <div class="input-group col-sm-12">
+          <!-- <div > -->
+            <div class="input-group col-sm-6" style="margin:0 auto">
               <input placeholder="<%- __('text to send') %>" type="text" name="message" class="col-sm-2 form-control" required min="10" />
               <span class="input-group-btn">
                 <button type="submit" class="btn btn-warning"><%- __('Send') %></button>
               </span>
-            </div>
+            <!-- </div> -->
           </div>
         </form>
       </div>

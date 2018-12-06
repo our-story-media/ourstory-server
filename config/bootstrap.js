@@ -61,7 +61,7 @@ module.exports.bootstrap = function (cb) {
 	Log.info('bootstrap', "Connected to MongoDB on " + sails.config.connections.mongodb.host);
 
 	//sails.winston.remove(sails.winston.transports.Console);
-	Log.info('bootstrap', 'started', { local: sails.config.LOCALONLY });
+	// Log.info('bootstrap', 'started', { local: sails.config.LOCALONLY });
 
 	// insert default settings:
 	Settings.findOne({name:'processedits'}).exec(function(err,data){
@@ -92,6 +92,21 @@ module.exports.bootstrap = function (cb) {
 			}, function (err) {
 				// console.log(err);
 				Log.info('bootstrap', 'Unset Extra User Data');
+			});
+	});
+
+	Event.native(function (err, collection) {
+		collection.update({},
+			{
+				"$unset": {
+					"apikey": true
+				}
+			},
+			{
+				multi: true
+			}, function (err) {
+				// console.log(err);
+				Log.info('bootstrap', 'Unset Event API Key');
 			});
 	});
 

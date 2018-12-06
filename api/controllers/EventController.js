@@ -1909,6 +1909,12 @@ module.exports = {
 					if (myev.joincode || sails.config.LOCALONLY)
 						neevent.joincode = joincode;
 
+					// Default permissions settings
+					neevent.public = false;
+					neevent.publicview = true;
+					neevent.publicshare = false;
+					neevent.publicedit = false;
+
 					Event.create(neevent, function (err, event) {
 
 						//event.ownedby = [];
@@ -1916,7 +1922,7 @@ module.exports = {
 						// 	event.ownedby = new Array();
 						//event.ownedby.push(req.session.passport.user.id);
 						//event.save(function(){
-						console.log(err);
+						// console.log(err);
 						if (err) {
 							//console.log("error adding event");
 							req.session.flash = { err: err.ValidationError };
@@ -1952,11 +1958,11 @@ module.exports = {
 
 									if (sails.localmode || sails.hostname == whichserver || err) {
 										//get which host is supposed to run this event:
-										console.log("adding event to director")
+										// console.log("adding event to director")
 										sails.eventmanager.addevent(event.id);
 									}
 
-									console.log("whichserver: " + whichserver);
+									// console.log("whichserver: " + whichserver);
 
 									event.server = whichserver;
 									event.save(function (err) {

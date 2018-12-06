@@ -89,18 +89,20 @@
 
 	<% if (!sails.config.LOCALONLY) { %>
 
-	<div class="alert alert-info col-sm-12" style="position: relative;margin-top:2em;">
+	<div class="alert alert-info col-sm-8 col-sm-offset-2 text-center" style="position: relative;margin-top:2em;">
 		<!-- Split button -->
-		<div class="pull-left" style="padding:1% 0">
+		
+		<p style="margin-bottom: 1em;">
 			<%- __('View and Download the Meta-Data associated with this shoot') %>
-		</div>
-		<div class="btn-group pull-right">
-			<a type="button" href="/post/document/<%-event.id %>?apikey=<%-apikey %>" class=" btn btn-primary btn-lg"
-			 tooltip-popup-delay="300" tooltip="Makes a document with thumbnails of each shot and its metadata">
+			
+		</p>
+		<div class="btn-group">
+			<a type="button" href="/post/document/<%-event.id %>?apikey=<%-apikey %>" class=" btn btn-primary"
+			 tooltip-popup-delay="300" tooltip-append-to-body="true" tooltip="<%- __('Makes a document with thumbnails of each shot and its metadata') %>">
 				<i class="glyphicon glyphicon-th-list"></i>
 				<%- __('View Shot List') %></a>
 
-			<button type="button" class="btn btn-primary dropdown-toggle btn-lg" data-toggle="dropdown" aria-expanded="false">
+			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 				<span class="caret"></span>
 				<span class="sr-only">Toggle Dropdown</span>
 			</button>
@@ -310,7 +312,7 @@
 
 
 				</div>
-				<div style="margin: -15px;margin-bottom:-25px;background: #eee; clear: both; padding-left: 6px;padding-right:6px;">
+				<div class="alert alert-info">
 					<p>
 						<%- __('You do not need to stay on this page. We will send an email to <span class="text-muted">%s</span> when the copy is finished.',user.profile.emails[0].value) %>
 					</p>

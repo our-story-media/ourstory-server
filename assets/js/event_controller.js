@@ -51,26 +51,26 @@ bootleggerApp.controller('event', ['$scope', '$bootleggerSails', '$timeout', '$s
       switch ($scope.permissions.value)
       {
         case 0:
-          $scope.event.public = false;
           $scope.event.publicview = false;
+          $scope.event.public = false;
           $scope.event.publicshare = false;
           $scope.event.publicedit = false;
         break;
         case 1:
-          $scope.event.public = false;
           $scope.event.publicview = true;
+          $scope.event.public = false;
           $scope.event.publicshare = false;
           $scope.event.publicedit = false;
           break;
         case 2:
-          $scope.event.public = true;
           $scope.event.publicview = true;
+          $scope.event.public = true;
           $scope.event.publicshare = false;
           $scope.event.publicedit = false;
           break;
         case 3:
-          $scope.event.public = true;
           $scope.event.publicview = true;
+          $scope.event.public = true;
           $scope.event.publicshare = true;
           $scope.event.publicedit = true;
       }
@@ -131,13 +131,13 @@ bootleggerApp.controller('event', ['$scope', '$bootleggerSails', '$timeout', '$s
       socket.get('/commission/templateinfo/'+mastereventid)
       .then(function(resp){
          $scope.event = resp.data;
-        if ($scope.event.public == false && $scope.event.publicview == false && $scope.event.publicshare == false  && $scope.event.publicedit == false)
+        if ($scope.event.public == false && $scope.event.publicview == true && $scope.event.publicshare == false  && $scope.event.publicedit == false)
           $scope.permissions.value = 0;
 
-          if ($scope.event.public == false && $scope.event.publicview == true && $scope.event.publicshare == false  && $scope.event.publicedit == false)
+          if ($scope.event.public == true && $scope.event.publicview == true && $scope.event.publicshare == false  && $scope.event.publicedit == false)
           $scope.permissions.value = 1;
 
-          if ($scope.event.public == true && $scope.event.publicview == true && $scope.event.publicshare == false  && $scope.event.publicedit == false)
+          if ($scope.event.public == true && $scope.event.publicview == true && $scope.event.publicshare == false  && $scope.event.publicedit == true)
           $scope.permissions.value = 2;
 
           if ($scope.event.public == true && $scope.event.publicview == true && $scope.event.publicshare == true  && $scope.event.publicedit == true)

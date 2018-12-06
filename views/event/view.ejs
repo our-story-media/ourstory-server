@@ -91,7 +91,7 @@
     <div class="row">
       <% if (!sails.config.LOCALONLY) { %>
       <form action="/event/background/<%- event.id %>?apikey=<%- apikey%>" method="post" enctype="multipart/form-data">
-        <label class="col-sm-4 control-label" data-delay="300" data-toggle="tooltip" title="Loads a background that contributors will see when they log into the mobile app">
+        <label class="col-sm-4 control-label" data-delay="300" toolip="Loads a background that contributors will see when they log into the mobile app">
           <%- __('Background Image for Shoot') %>
           <i style="color:silver" class="fa fa-question-circle"></i>
         </label>
@@ -115,8 +115,8 @@
                 </span>
                 <input type="file" accept="image/png, image/jpeg" name="image" required />
               </span>
-              <a href="/event/clearbackground/<%- event.id %>?apikey=<%- apikey%>" class="btn btn-link" data-toggle="tooltip"
-                title="<%- __('remove background') %>">
+              <a href="/event/clearbackground/<%- event.id %>?apikey=<%- apikey%>" class="btn btn-link" 
+                tooltip="<%- __('remove background') %>">
                 <i class="fa fa-times"></i>
               </a>
             </div>
@@ -154,7 +154,7 @@
     <div class="col-sm-8 col-sm-offset-2">
       <div class="row">
         <div class="col-sm-8 col-sm-offset-3 text-muted">
-          <label data-delay="300" data-toggle="tooltip" title="<%- __('If enabled, anyone who <strong>contributes</strong> to your shoot can view and their stories, and everyone eles`s videos. If disabled, contributors can only playback their own video.') %>"
+          <label data-delay="300" tooltip="<%- __('If enabled, anyone who contributes to your shoot can view and their stories, and everyone eles`s videos. If disabled, contributors can only playback their own video.') %>"
             data-html="true">
             <i ng-show="event.publicview" class="fa fa-check"></i>
             <i ng-hide="event.publicview" class="fa fa-times"></i>
@@ -162,7 +162,7 @@
             <i style="color:silver" class="fa fa-question-circle"></i>
           </label>
           <br>
-          <label data-delay="300" data-toggle="tooltip" title="<%- __('Turning this on enables anyone using the Our Story app to contribute to your shoot. Turning it off allows only invited contributors to take part.') %>">
+          <label data-delay="300" tooltip="<%- __('Turning this on enables anyone using the Our Story app to contribute to your shoot. Turning it off allows only invited contributors to take part.') %>">
             <i ng-show="event.public" class="fa fa-check"></i>
             <i ng-hide="event.public" class="fa fa-times"></i>
             <%- __('Anyone Can Contribute') %>
@@ -171,7 +171,7 @@
 
           <br>
 
-          <label data-delay="300" data-toggle="tooltip" title="<%- __('If enabled, anyone (even those who have not contributed to the shoot) who have logged in to Our Story can edit the content in the shoot.') %>"
+          <label data-delay="300" tooltip="<%- __('If enabled, anyone (even those who have not contributed to the shoot) who have logged in to Our Story can edit the content in the shoot.') %>"
             data-html="true">
             <i ng-show="event.publicedit" class="fa fa-check"></i>
             <i ng-hide="event.publicedit" class="fa fa-times"></i>
@@ -183,7 +183,7 @@
 
 
           <br>
-          <label data-delay="300" data-toggle="tooltip" title="<%- __('If enabled, contributors can share their stories on social media, allowing them the to post videos as links.') %>"
+          <label data-delay="300" tooltip="<%- __('If enabled, contributors can share their stories on social media, allowing them the to post videos as links.') %>"
             data-html="true">
             <% if (!sails.config.LOCALONLY) { %>
             <i ng-show="event.publicshare" class="fa fa-check"></i>
@@ -209,7 +209,7 @@
               <strong><%- __('Totally Private') %></strong>
             </div>
             <div class="col-xs-3 text-center">
-              <strong><%- __('Invite Only (or code), Public Editing') %></strong>
+              <strong><%- __('Contribute using code, Public Editing') %></strong>
             </div>
             <div class="col-xs-3 text-center">
               <strong><%- __('Public Contribute, Private Editing') %></strong>
@@ -246,7 +246,7 @@
 
   
   <div class="col-sm-8 col-sm-offset-2" style="margin-top:2em;">
-    <label class="control-label" data-delay="300" data-toggle="tooltip" title="<%- __('Terms and Conditions that contributors will need to agree to before taking part in the shoot') %>">
+    <label class="control-label" data-delay="300" tooltip="<%- __('Terms and Conditions that contributors will need to agree to before taking part in the shoot') %>">
       <%- __('Participant Release') %>
       <i style="color:silver" class="fa fa-question-circle"></i>
     </label>
@@ -417,7 +417,7 @@
 
   <div class="clearfix"></div>
   <ul id="eventcodes" class="list-group loading publicbox col-md-8 col-sm-offset-2" ng-show="!event.public">
-    <a class="list-group-item active" href="#" data-delay="300" data-toggle="tooltip" title="<%- __('Invites contributors to the production team via the mobile app') %>">
+    <a class="list-group-item active" href="#" data-delay="300" tooltip="<%- __('Invites contributors to the production team via the mobile app') %>">
       <%- __('Participant Invites') %>
       <i style="color:silver" class="fa fa-question-circle"></i>
     </a>
@@ -448,7 +448,7 @@
 
   <div class="list-group loading col-md-8 col-sm-offset-2" id="eventadmins">
 
-    <a class="list-group-item active" href="#" data-delay="300" data-toggle="tooltip" title="<%- __('Adds users who can edit the shoot settings via the website') %>">
+    <a class="list-group-item active" href="#" data-delay="300" tooltip="<%- __('Adds users who can edit the shoot settings via the website') %>">
       <%- __('Shoot Administrators') %>
       <i style="color:silver" class="fa fa-question-circle"></i>
     </a>

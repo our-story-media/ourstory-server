@@ -2,9 +2,6 @@
     {
         "name": "Travelog",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "travelog",
         "description": "A documentary arranged around a journey. This template lets you organise shots by location and shooting day and identify subjects and a presenter if necessary.",
@@ -407,9 +404,6 @@
     {
         "name": "Day in the Life",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "day_in_the_life",
         "description": "A documentary arranged around a single period of time. This template lets you organise shots by location and time of day and identify subjects.",
@@ -726,9 +720,6 @@
     {
         "name": "Biographical",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "biographical",
         "description": "A documentary about a person or people. This template lets you organise shots by location and shooting day and identify subjects and presenters.",
@@ -1078,9 +1069,6 @@
     {
         "name": "Wildlife",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "wildlife",
         "description": "A documentary focussing on animal life. This template lets you organise shots by location, shooting day and species.",
@@ -1269,9 +1257,6 @@
     {
         "name": "Historical",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "historical",
         "description": "A documentary about a person or people. This template lets you organise shots by location and shooting day and identify subjects.",
@@ -1637,9 +1622,6 @@
     {
         "name": "Geographical",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "geographical",
         "description": "A documentary about a specific area or areas. This template lets you organise shots by location and shooting day and identify subjects.",
@@ -2071,9 +2053,6 @@
     {
         "name": "Technology",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "technology",
         "description": "A documentary focussing mainly on artefacts or devices. This template lets you organise shots by location and shooting day and identify subjects and artefacts.",
@@ -2327,9 +2306,6 @@
     {
         "name": "Arts",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "arts",
         "description": "A documentary focussing mainly on artefacts or performances. This template lets you organise shots by location and shooting day and identify subjects and artefacts.",
@@ -2710,9 +2686,6 @@
     {
         "name": "Motoring",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "motoring",
         "description": "A documentary focussing mainly on vehicles. This template lets you organise shots by location and shooting day and identify subjects and vehicles.",
@@ -3001,9 +2974,6 @@
     {
         "name": "Live Motorsport",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "live_motorsport",
         "description": "A documentary about a single motorsport event. This template lets you organise shots by location and time period and identify drivers and vehicles.",
@@ -3327,9 +3297,6 @@
     {
         "name": "Live Running Sports",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "live_running_sports",
         "description": "A documentary about a single endurance running event. This template lets you organise shots by location and time period and identify runners.",
@@ -3618,9 +3585,6 @@
     {
         "name": "Ball Sports",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "ball_sports",
         "description": "A documentary about a single ball game event. This template lets you organise shots by camera position and time period and identify players.",
@@ -3832,9 +3796,6 @@
     {
         "name": "Recorded Music Performance",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "recorded_music_performance",
         "description": "A documentary arranged around a single period of time. This template lets you organise shots by location and time of day and identify subjects.",
@@ -3991,9 +3952,6 @@
     {
         "name": "Live Music Performance",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "live_music_performance",
         "description": "A music event arranged around a single show. This template lets you organise shots by location and time of day and identify subjects.",
@@ -4228,9 +4186,6 @@
     {
         "name": "News Programme",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "news_programme",
         "description": "A film in which studio presenters introduce stories shot elsewhere. This template lets you identify subjects, presenters, locations and stories",
@@ -4427,9 +4382,6 @@
     {
         "name": "News Report",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "news_report",
         "description": "A film in which a presenter introduces an event or story. This template lets you identify subjects, presenters, locations and stories",
@@ -4575,9 +4527,6 @@
     {
         "name": "Instructions",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "instructions",
         "description": "A film in which a process is described step by step.",
@@ -4758,9 +4707,6 @@
     {
         "name": "Loudest Whisper",
         "version": 1,
-        "offline": true,
-        "public": true,
-        "publicview": true,
         "original": true,
         "codename": "loudest_whisper",
         "description": "A template for coverage of The Loudest Whisper Event",

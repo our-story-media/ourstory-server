@@ -242,5 +242,11 @@
 	"no tags used": "no tags used",
 	"no phases used": "no phases used",
 	"no themes used": "no themes used",
-	"no shots used": "no shots used"
+	"no shots used": "no shots used",
+	"If enabled, anyone who contributes to your shoot can view and their stories, and everyone eles`s videos. If disabled, contributors can only playback their own video.": "If enabled, anyone who contributes to your shoot can view and their stories, and everyone eles`s videos. If disabled, contributors can only playback their own video.",
+	"Contribute using code, Public Editing": "Contribute using code, Public Editing",
+	"Contributors Can View Anyones Footage": "Contributors Can View Anyones Footage",
+	"Your shoot should take care of itself!": "Your shoot should take care of itself!",
+	"However you can monitor and tweak what`s happening here:": "However you can monitor and tweak what`s happening here:",
+	"Makes a document with thumbnails of each shot and its metadata": "Makes a document with thumbnails of each shot and its metadata"
 }

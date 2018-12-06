@@ -383,141 +383,141 @@ module.exports = {
 		});
 	},
 
-	createinstantshoot: function (req, res) {
-		//template.id
-		// newshoot.name = name;
-		// newshoot.ispublic = publicshoot;
+	// createinstantshoot: function (req, res) {
+	// 	//template.id
+	// 	// newshoot.name = name;
+	// 	// newshoot.ispublic = publicshoot;
 
-		//do save
-		EventTemplate.findOne(req.body.eventtype.id).exec(function (err, myev) {
-			if (err || !myev)
-				return res.json({ msg: 'no template found' }, 500);
+	// 	//do save
+	// 	EventTemplate.findOne(req.body.eventtype.id).exec(function (err, myev) {
+	// 		if (err || !myev)
+	// 			return res.json({ msg: 'no template found' }, 500);
 
-			var coverage_classes = myev.coverage_classes;
-			//console.log(coverage_classes);
-			_.each(coverage_classes, function (c) {
-				c.items = [];
-			});
+	// 		var coverage_classes = myev.coverage_classes;
+	// 		//console.log(coverage_classes);
+	// 		_.each(coverage_classes, function (c) {
+	// 			c.items = [];
+	// 		});
 
-			//fix for non array based coverage class
-			var i = 0;
-			var tmp = {};
-			_.each(coverage_classes, function (e, f) {
-				tmp[i.toString()] = e;
-				i++;
-			});
-			coverage_classes = tmp;
+	// 		//fix for non array based coverage class
+	// 		var i = 0;
+	// 		var tmp = {};
+	// 		_.each(coverage_classes, function (e, f) {
+	// 			tmp[i.toString()] = e;
+	// 			i++;
+	// 		});
+	// 		coverage_classes = tmp;
 
-			//add in missing modules:
-			if (!myev.post_modules) {
-				myev.post_modules = {};
-				_.each(_.pluck(sails.eventmanager.post_modules, 'codename'), function (m) {
-					myev.post_modules[m] = 0;
-				});
-			}
+	// 		//add in missing modules:
+	// 		if (!myev.post_modules) {
+	// 			myev.post_modules = {};
+	// 			_.each(_.pluck(sails.eventmanager.post_modules, 'codename'), function (m) {
+	// 				myev.post_modules[m] = 0;
+	// 			});
+	// 		}
 
-			if (!myev.shoot_modules) {
-				myev.shoot_modules = {};
-				_.each(_.pluck(sails.eventmanager.event_modules, 'codename'), function (m) {
-					myev.shoot_modules[m] = 0;
-				});
+	// 		if (!myev.shoot_modules) {
+	// 			myev.shoot_modules = {};
+	// 			_.each(_.pluck(sails.eventmanager.event_modules, 'codename'), function (m) {
+	// 				myev.shoot_modules[m] = 0;
+	// 			});
 
-				//var lastone = _.last(_.pluck(sails.eventmanager.event_modules,'codename'));
-				myev.shoot_modules['marathondirector'] = "1";
-			}
+	// 			//var lastone = _.last(_.pluck(sails.eventmanager.event_modules,'codename'));
+	// 			myev.shoot_modules['marathondirector'] = "1";
+	// 		}
 
-			if (!myev.ruleset) {
-				myev.ruleset = [{ direction_engine: 'manual', name: 'manual', pre_time: 0 }];
-			}
+	// 		if (!myev.ruleset) {
+	// 			myev.ruleset = [{ direction_engine: 'manual', name: 'manual', pre_time: 0 }];
+	// 		}
 
-			var meta_modules = myev.meta_modules;
-			var post_modules = myev.post_modules;
-			var shoot_modules = myev.shoot_modules;
-			var phases = myev.phases;
+	// 		var meta_modules = myev.meta_modules;
+	// 		var post_modules = myev.post_modules;
+	// 		var shoot_modules = myev.shoot_modules;
+	// 		var phases = myev.phases;
 
-			// 'offlinecode' is actually used as the shortlink for sharing...
-			Event.getnewcode(function (code) {
-				//joincode used for single drop code for any contributor to register.
-				Event.getnewcode(function (joincode) {
+	// 		// 'offlinecode' is actually used as the shortlink for sharing...
+	// 		Event.getnewcode(function (code) {
+	// 			//joincode used for single drop code for any contributor to register.
+	// 			Event.getnewcode(function (joincode) {
 
-					var whichserver = sails.config.hostname + ':' + sails.config.port;
+	// 				var whichserver = sails.config.hostname + ':' + sails.config.port;
 
-					var neevent = _.extend(req.params.all(), {
-						publicshare: 0,
-						public: req.body.ispublic,
-						publicview: 1,
-						publicedit: 1,
-						eventtype: myev,
-						ownedby: [req.session.passport.user.id],
-						meta_modules: meta_modules,
-						post_modules: post_modules,
-						shoot_modules: shoot_modules,
-						coverage_classes: coverage_classes,
-						offlinecode: code,
-						codes: [],
-						phases: phases
-					});
-					delete neevent.id;
-					neevent.created_by = req.session.passport.user.id;
-					var regex = /(<([^>]+)>)/ig;
-					var newval = neevent.name.replace(regex, "");
-					neevent.name = newval;
-					neevent.public = req.body.ispublic;
-					neevent.joincode = joincode;
-					neevent.name = req.body.name;
+	// 				var neevent = _.extend(req.params.all(), {
+	// 					publicshare: 0,
+	// 					public: req.body.ispublic,
+	// 					publicview: 1,
+	// 					publicedit: 1,
+	// 					eventtype: myev,
+	// 					ownedby: [req.session.passport.user.id],
+	// 					meta_modules: meta_modules,
+	// 					post_modules: post_modules,
+	// 					shoot_modules: shoot_modules,
+	// 					coverage_classes: coverage_classes,
+	// 					offlinecode: code,
+	// 					codes: [],
+	// 					phases: phases
+	// 				});
+	// 				delete neevent.id;
+	// 				neevent.created_by = req.session.passport.user.id;
+	// 				var regex = /(<([^>]+)>)/ig;
+	// 				var newval = neevent.name.replace(regex, "");
+	// 				neevent.name = newval;
+	// 				neevent.public = req.body.ispublic;
+	// 				neevent.joincode = joincode;
+	// 				neevent.name = req.body.name;
 
-					//starts and ends dates
+	// 				//starts and ends dates
 
-					neevent.starts = moment().format('DD-MM-YYYY');
-					neevent.starts_time = '1am';
-					neevent.ends = moment().add(7, 'days').format('DD-MM-YYYY');
-					neevent.ends_time = '1am';
+	// 				neevent.starts = moment().format('DD-MM-YYYY');
+	// 				neevent.starts_time = '1am';
+	// 				neevent.ends = moment().add(7, 'days').format('DD-MM-YYYY');
+	// 				neevent.ends_time = '1am';
 
-					Event.create(neevent, function (err, event) {
+	// 				Event.create(neevent, function (err, event) {
 
-						console.log(err);
-						if (err) {
-							return res.status(500).json({ msg: err });
-						}
-						else {
-							//console.log("requesting server address");
-							var reqs = require('request');
+	// 					console.log(err);
+	// 					if (err) {
+	// 						return res.status(500).json({ msg: err });
+	// 					}
+	// 					else {
+	// 						//console.log("requesting server address");
+	// 						var reqs = require('request');
 
-							process.nextTick(function () {
-								//console.log("tick");
-								reqs(sails.config.multiserver + '/newevent/?id=' + event.id, function (err, ress, body) {
-									if (!err) {
-										//console.log("got " + body);
-										whichserver = JSON.parse(body).server;
-									}
+	// 						process.nextTick(function () {
+	// 							//console.log("tick");
+	// 							reqs(sails.config.multiserver + '/newevent/?id=' + event.id, function (err, ress, body) {
+	// 								if (!err) {
+	// 									//console.log("got " + body);
+	// 									whichserver = JSON.parse(body).server;
+	// 								}
 
-									if (sails.localmode || sails.hostname == whichserver || err) {
-										//get which host is supposed to run this event:
-										console.log("adding event to director")
-										sails.eventmanager.addevent(event.id);
-									}
+	// 								if (sails.localmode || sails.hostname == whichserver || err) {
+	// 									//get which host is supposed to run this event:
+	// 									console.log("adding event to director")
+	// 									sails.eventmanager.addevent(event.id);
+	// 								}
 
-									console.log("whichserver: " + whichserver);
+	// 								console.log("whichserver: " + whichserver);
 
-									event.server = whichserver;
-									event.save(function (err) {
-										if (err) {
-											return res.status(500).json({ msg: err });
-										}
+	// 								event.server = whichserver;
+	// 								event.save(function (err) {
+	// 									if (err) {
+	// 										return res.status(500).json({ msg: err });
+	// 									}
 
-										return res.json({
-											id: event.id,
-											joincode: event.joincode
-										});
-									});
-								});//end request for server
-							});//tick
-						}//end if err
-					});//end event create
-				});//end code generate
-			});
-		});//end get details...
-	},
+	// 									return res.json({
+	// 										id: event.id,
+	// 										joincode: event.joincode
+	// 									});
+	// 								});
+	// 							});//end request for server
+	// 						});//tick
+	// 					}//end if err
+	// 				});//end event create
+	// 			});//end code generate
+	// 		});
+	// 	});//end get details...
+	// },
 
 
 	/**
