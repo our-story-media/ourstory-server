@@ -9,4 +9,5 @@ RUN mkdir /templates
 COPY docker/bootlegger.conf /etc/nginx/vhost.d/default
 COPY docker/nginx.tmpl /templates/nginx.tmpl
 COPY fallback/500.html /usr/share/nginx/html/index.html
+COPY fallback/loading.gif /usr/share/nginx/html/loading.gif
 VOLUME /templates

@@ -200,21 +200,20 @@
         </div>
       </div>
 
-
-      <div class="row" style="margin-top:2em;">
+      <div class="row" style="margin-top:2em;" >
         <div class="col-sm-12">
 
           <div class="row">
-            <div class="col-xs-3 text-center">
+            <div class="col-xs-3 text-center" style="float:left !important;">
               <strong><%- __('Totally Private') %></strong>
             </div>
-            <div class="col-xs-3 text-center">
+            <div class="col-xs-3 text-center" style="float:left !important;">
               <strong><%- __('Contribute using code, Public Editing') %></strong>
             </div>
-            <div class="col-xs-3 text-center">
+            <div class="col-xs-3 text-center" style="float:left !important;">
               <strong><%- __('Public Contribute, Private Editing') %></strong>
             </div>
-            <div class="col-xs-3 text-center">
+            <div class="col-xs-3 text-center" style="float:left !important;">
               <strong><%- __('Totally Public') %></strong>
             </div>
           </div>
@@ -243,7 +242,6 @@
   <div class="page-header">
     <h1><%- __('Rights &amp; Releases') %></h1>
   </div>
-
   
   <div class="col-sm-8 col-sm-offset-2" style="margin-top:2em;">
     <label class="control-label" data-delay="300" tooltip="<%- __('Terms and Conditions that contributors will need to agree to before taking part in the shoot') %>">
@@ -304,7 +302,7 @@
 
 
     <br><br>
-    <div>
+    <!-- <div > -->
       <%- __('<label tooltip-popup-delay="300" tooltip="A document that can be shown to people in shot by participants using the Our Story app. Each shot can be configured to require this release or not') %>">
         <%- __('Per-Shot Confirmation') %>
         <i style="color:silver" class="fa fa-question-circle"></i>
@@ -368,7 +366,7 @@
       <div id="editor" class="form-control">
         <%- event.shotrelease %>
       </div>
-    </div>
+    <!-- </div> -->
 
   </div>
   <div class="clearfix"></div>
@@ -416,7 +414,7 @@
 
 
   <div class="clearfix"></div>
-  <ul id="eventcodes" class="list-group loading publicbox col-md-8 col-sm-offset-2" ng-show="!event.public">
+  <ul id="eventcodes" class="list-group loading publicbox  col-md-8 col-sm-offset-2" ng-show="!event.public">
     <a class="list-group-item active" href="#" data-delay="300" tooltip="<%- __('Invites contributors to the production team via the mobile app') %>">
       <%- __('Participant Invites') %>
       <i style="color:silver" class="fa fa-question-circle"></i>
@@ -431,7 +429,7 @@
         <i class="fa fa-minus"></i>
       </button>
 
-      <button ng-hide="code.uid" style="padding:3px;" ng-click="resendcode(code.code)" class="btn btn-link pull-right">
+      <button ng-hide="code.uid" style="padding:3px;" ng-click="resendcode(code.code)" clas  s="btn btn-link pull-right">
         <i class="fa fa-refresh"></i>
       </button>
     </li>

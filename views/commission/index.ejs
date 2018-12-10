@@ -150,7 +150,7 @@
 					<i style="color:silver" class="fa fa-question-circle"></i>
 
 
-					<button ng-click="addphase()" class="btn btn-link pull-right" style="padding:0;color:white;display:inline-block;margin:-2px;">
+					<button ng-click="addphase()" class="btn btn-link pull-right flip" style="padding:0;color:white;display:inline-block;margin:-2px;">
 						<i class="fa fa-plus fa-2x"></i>
 					</button>
 				</div>
@@ -162,14 +162,14 @@
 
 						<div ng-hide="phase.editing">
 
-							<button class="btn btn-link pull-right" style="margin:-4px;" ng-click="selection.currentphase=phase;selection.currentrole=null;selection.currentcoverage=null;">
+							<button class="btn btn-link pull-right flip" style="margin:-4px;" ng-click="selection.currentphase=phase;selection.currentrole=null;selection.currentcoverage=null;">
 								<i class="fa fa-code-fork"></i>
 							</button>
-							<button class="btn btn-link pull-right" style="margin:-4px;" ng-click="phase.editing=true">
+							<button class="btn btn-link pull-right flip" style="margin:-4px;" ng-click="phase.editing=true">
 								<i class="fa fa-edit"></i>
 							</button>
 							<span class="badge badge-boot pull-right">{{phase.roles.length}}</span>
-							<h4 class="list-group-item-heading" style="display:inline-block;" tooltip="Click to make current Phase"
+							<h4 class="list-group-item-heading" style="display:inline-block;" tooltip-append-to-body="true" tooltip="Click to make current Phase"
 							 tooltip-placement="right" ng-click="changemetaphase($index)"><span ng-show="eventinfo.currentphase==$index"
 								 class="badge badge-success">
 									<%- __('CURRENT') %></span> &nbsp; {{phase.name}}</h4>
@@ -178,14 +178,14 @@
 
 						<div ng-show="phase.editing" class="clearfix">
 							<div style="float:right;width:15%;">
-								<button class="btn btn-link pull-right" ng-click="removePhase($index)">
+								<button class="btn btn-link pull-right flip" ng-click="removePhase($index)">
 									<i class="fa fa-times"></i>
 								</button>
-								<button class="btn btn-link pull-right" ng-click="stopEditing(phase)">
+								<button class="btn btn-link pull-right flip" ng-click="stopEditing(phase)">
 									<i class="fa fa-save"></i>
 								</button>
 							</div>
-							<div class="pull-left" style="width:85%">
+							<div class="pull-left flip" style="width:85%">
 								<input type="text" class="form-control" ng-model="phase.name" placeholder="name" />
 							</div>
 						</div>
@@ -201,12 +201,12 @@
 			<div class="list-group" id="roles" style="border-radius: 6px;">
 
 				<div href="#" class="list-group-item active" tooltip-popup-delay="300" tooltip="<%- __('Can be used to help participants categorise the videos they contribute') %>">
-					<%- __('Themes') %>
-					<i style="color:silver" class="fa fa-question-circle"></i>
-
-					<button ng-click="addrole()" class="btn btn-link pull-right" style="padding:0;margin:-2px;color:white;">
+					<button ng-click="addrole()" class="btn btn-link pull-right flip" style="padding:0;margin:-2px;color:white;">
 						<i class="fa fa-plus fa-2x"></i>
 					</button>
+					
+					<%- __('Themes') %>
+					<i style="color:silver" class="fa fa-question-circle"></i>
 				</div>
 
 				<div class="limitheight" ui-sortable="{ 'ui-floating': true, 'axis': 'y' }" ng-model="event.roles">
@@ -225,11 +225,11 @@
 							<div style="position:absolute;left:0;top:0;height:100%;width:4em;background-size: cover;background-repeat: no-repeat;background-color: silver"
 							 ng-click="uploadrole(role)" ng-style="{'background-image':'url(/event/roleimg/'+eventinfo.id+'/'+role.id+')'}"
 							 class="float:left">
-								<i class="fa fa-upload" style="margin-top:15px;margin-left:20px;color:white;"></i>
+								<i class="fa fa-upload" style="width:100%;text-align:center;color:white;padding-top:1em;"></i>
 							</div>
 
 							<span class="badge badge-boot pull-right">{{role.shot_ids.length}}</span>
-							<h4 class="list-group-item-heading" style="margin-left:2.5em;">
+							<h4 class="list-group-item-heading" style="margin-left:2.8em;">
 								<i class="fa fa-check" ng-click="takefromphase(role.id,$event)" ng-show="inPhase(role) && selection.currentphase!=null"
 								 style="color:green;"></i>
 								<i class="fa fa-check" ng-click="addtophase(role.id,$event)" ng-show="!inPhase(role) && selection.currentphase!=null"

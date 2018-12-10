@@ -157,7 +157,7 @@ a.list-group-item.active
       background:url(/images/logo_web.svg) no-repeat left 2px;
       background-size: auto 28px;
       height:36px;
-      width:150px;
+      width:135px;
       display: inline-block !important;
     }
 
@@ -518,6 +518,18 @@ h1
   width:96%;
   left:52%;
 }
+
+
+[dir=rtl] .progressmenu a:after {
+  background:#E6E6E6;
+  height:4px;
+  position:absolute;
+  content:'';
+  bottom:-3px;
+  width:96%;
+  right:52%;
+}
+
 
 .progressmenu a.active:before {
   background:#e53935;

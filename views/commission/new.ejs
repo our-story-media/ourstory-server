@@ -88,7 +88,7 @@
 
   <form class="form-horizontal" role="form" method="post" action="/event/addevent?apikey=<%- apikey %>">
     <input type="hidden" name="eventtype" value="-1" id="evtyp" />
-    <div id="carousel-example-generic" data-interval="false" class="carousel slide" style="margin-bottom:0;" data-ride="carousel">
+    <div id="carousel" data-interval="false" class="carousel slide" style="margin-bottom:0;" data-ride="carousel">
       <!-- Wrapper for slides -->
       <div class="carousel-inner" role="listbox">
 
@@ -200,21 +200,21 @@
 
 
             <div class="row hidden-xs">
-              <a href="#carousel-example-generic" class="btn btn-link btn-lg" role="button" onclick="$('#carousel-example-generic').carousel(0);">
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <%- __('Back') %>
+              <a href="#carousel" class="btn btn-link btn-lg" role="button" onclick="$('#carousel').carousel(0);">
+                <span class="fa fa-chevron-start" aria-hidden="true"></span> <%- __('Back') %>
               </a>
 
               <div class="pull-right">
 
                 <button type="submit" class="btn btn-success btn-lg " style="padding-right:25px;"><%- __('Start this Shoot') %>
-                  <i class="fa fa-chevron-right"></i>
+                  <i class="fa fa-chevron-end"></i>
                 </button>
               </div>
             </div>
 
             <div class="row visible-xs-block">
-              <a href="#carousel-example-generic" class="btn btn-link btn-lg" role="button" onclick="$('#carousel-example-generic').carousel(0);">
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <%- __('Back') %>
+              <a href="#carousel" class="btn btn-link btn-lg" role="button" onclick="$('#carousel').carousel(0);">
+                <span class="fa fa-chevron-start" aria-hidden="true"></span> <%- __('Back') %>
               </a>
 
               <div class="row">
@@ -222,7 +222,7 @@
                   <i class="fa fa-cog"></i>
                 </button>
                 <button type="submit" class="btn btn-success btn-lg col-xs-6"><%- __('Start') %>
-                  <i class="fa fa-chevron-right"></i>
+                  <i class="fa fa-chevron-end"></i>
                 </button>
               </div>
               <div class="clearfix"></div>

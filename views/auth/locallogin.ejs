@@ -63,12 +63,11 @@
     <script src="/js/watch_controller.js"></script>
     <!--SCRIPTS END-->
     <!--STYLES-->
-    <link rel="stylesheet" href="/styles/bootstrap-rtl.css">
     <link rel="stylesheet" href="/styles/bootstrap-tokenfield.css">
     <link rel="stylesheet" href="/styles/carousel.css">
     <link rel="stylesheet" href="/styles/datepicker.css">
     <link rel="stylesheet" href="/styles/ekko-lightbox.min.css">
-    <link rel="stylesheet" href="/styles/flags.css">
+    <link rel="stylesheet" href="/styles/fa-rtl.css">
     <link rel="stylesheet" href="/styles/font-awesome.css">
     <link rel="stylesheet" href="/styles/importer.css">
     <link rel="stylesheet" href="/styles/jasny-bootstrap.min.css">
@@ -79,6 +78,9 @@
     <link rel="stylesheet" href="/styles/videogular.css">
     <link rel="stylesheet" href="/styles/x_app.css">
     <!--STYLES END-->
+    <% if (rtl=='rtl') { %>
+    <link rel="stylesheet" href="/bootstrap-rtl.min.css">
+    <% } %>
 </head>
 
 <body>
@@ -88,7 +90,7 @@
 
         <%- __('GLOBAL_RELEASE') %>
         <br>
-            <a class="pull-right" href="/privacy">
+            <a class="pull-right flip" href="/privacy">
                 <%- __('Find Out More') %>
             </a>
             <br>
@@ -102,8 +104,8 @@
             <div class="row">
                 <div class="col-xs-12 text-right">
                     
-                    <button class="btn btn-primary" onclick="if ($('#consent').prop('checked')) {$('#entrybox').show();$('#privacy').hide();}">
-                        <%= __('CONTINUE') %> <i class="fa fa-chevron-right"></i>
+                    <button class="btn btn-primary pull-right flip" onclick="if ($('#consent').prop('checked')) {$('#entrybox').show();$('#privacy').hide();}">
+                        <%= __('CONTINUE') %> <i class="fa fa-chevron-end"></i>
                     </button>
                 </div>
             </div>
@@ -120,16 +122,16 @@
                     <input class="form-control input-lg" pattern=".{3,}" placeholder="<%= __('Your Name') %>" required id="first_name" title="<%= __('Please enter a longer name') %>"
                         type="text" class="validate" name="firstName" />
                         <br>
-                    <div class="pull-left">
+                    <div class="pull-left flip">
                         <button class="btn" onclick="$('#entrybox').hide();$('#privacy').show();">
-                            <i class="fa fa-chevron-left"></i>
+                            <i class="fa fa-chevron-start"></i>
                             <%= __('BACK') %>
                         </button>
                     </div>
-                    <div class="pull-right">
+                    <div class="pull-right flip">
                         <button class="btn btn-primary" type="submit" name="action">
                             <%= __('CONTINUE') %>
-                                <i class="fa fa-chevron-right"></i>
+                                <i class="fa fa-chevron-end"></i>
                         </button>
                     </div>
                 </div>

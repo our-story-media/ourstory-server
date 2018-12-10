@@ -164,5 +164,7 @@
 	"Privacy": "Privacy",
 	"Terms": "Terms",
 	"Our Guide": "Our Guide",
-	"Platform": "Platform"
+	"Platform": "Platform",
+	"Read the Guide": "Read the Guide",
+	"to get started": "to get started"
 }

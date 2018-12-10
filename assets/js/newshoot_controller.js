@@ -4,7 +4,7 @@ bootleggerApp.controller('newshoot', ['$scope', '$bootleggerSails', '$timeout', 
 
   $scope.chooseTemplate = function (chosen) {
     $scope.chosenTemplate = chosen;
-    $('#carousel-example-generic').carousel(1);
+    $('#carousel').carousel(1);
     $('#evtyp').val(chosen.id);
     $('#adjust').attr('href', '/commissioning/create/' + chosen.id);
   }

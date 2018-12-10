@@ -263,5 +263,6 @@
 	"Your Name": "Your Name",
 	"Please enter a longer name": "Please enter a longer name",
 	"Tell us Your Name": "Tell us Your Name",
-	"Returning to the Our Story application...": "Returning to the Our Story application..."
+	"Returning to the Our Story application...": "Returning to the Our Story application...",
+	"en": "en"
 }
