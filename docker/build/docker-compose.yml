@@ -61,13 +61,12 @@ services:
   web:
     restart: always
     build: ../..
-    # image: openlab.ncl.ac.uk:4567/bootlegging/server-app:latest
     image: bootlegger/server-app:ourstory
     depends_on: 
       - redis
       - mongo
       - beanstalk
-    command: nodemon --watch api app.js
+    command: nodemon --watch api app.js -- --verbose
     expose:
       - 1337
     volumes:

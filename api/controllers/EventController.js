@@ -18,6 +18,7 @@ let sharp = require('sharp');
 const _ = require('lodash');
 const moment = require('moment');
 const cloudfront = require('aws-cloudfront-sign');
+const default_tags = require(path.normalize(__dirname + '/../../assets/alltags.json'));
 
 function phonenumber(inputtxt) {
 	var phoneno = /^\+?([0-9]{6,})$/;
@@ -1906,14 +1907,18 @@ module.exports = {
 					neevent.name = newval;
 
 					//if template has joincode, generate one for this shoot
-					if (myev.joincode || sails.config.LOCALONLY)
-						neevent.joincode = joincode;
+					// if (myev.joincode || sails.config.LOCALONLY)
+					neevent.joincode = joincode;
 
 					// Default permissions settings
 					neevent.public = false;
-					neevent.publicview = true;
+					neevent.publicview = false;
 					neevent.publicshare = false;
 					neevent.publicedit = false;
+
+					//load default tags:
+
+					neevent.topics = default_tags;
 
 					Event.create(neevent, function (err, event) {
 

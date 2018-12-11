@@ -144,6 +144,77 @@
 
   </div>
 
+
+  <div class="clearfix"></div>
+  <div class="page-header">
+    <h1><%- __('Tags') %>
+    </h1>
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+<div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th width="1"></th>
+              <th ng-repeat="lang in topiclangs track by $index"><input style="min-width: 8em;" ng-disabled="lang.name=='en'" type="text" class="form-control input-sm" ng-model="lang.name" ng-change="langchange($index)" /></th>
+              <th width="1"><button ng-click="addlang()" class="btn btn-link"><i class="fa fa-plus"></i></button></th>          
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="tag in event.topics">
+              <td>
+                <div ng-style="{'background-color':tag.color}" class="badge">
+                  <button class="btn btn-link" style="color:white;" colorpicker colorpicker-close-on-select ng-model="tag.color"><i class="fa fa-tint"></i></button>
+                </div>
+              </td>
+              <td ng-repeat="lang in topiclangs">
+                <input type="text" class="form-control input-sm" style="min-width: 8em;" ng-model="tag.values[lang.name]"/>
+              </td>
+              <td>
+                  <div class="text-center">
+                  
+                      <button ng-click="rmtopic(tag.id)" class="btn btn-link"><i class="fa fa-minus"></i></button></td>
+                    </div>
+              </td>
+            </tr>
+            <tr>
+              <!-- <td></td> -->
+              <td>
+                <div class="text-center">
+                  
+                  <button ng-click="addtopic()" class="btn btn-link"><i class="fa fa-plus"></i></button></td>
+                </div>
+              <td ng-repeat="lang in topiclangs"></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="row col-md-8 col-md-offset-2">
+      <div class="alert text-right " ng-class="{'alert-warning':topicsdirty}">
+        <div class="col-sm-offset-2">
+          <span ng-show="topicsdirty" class="text-danger">
+            <small><%- __('Changes not saved') %></small>
+          </span>
+  
+          <span class="text-muted" ng-hide="topicsdirty">
+  
+            <small><i class="fa fa-clock-o"></i> <%- __('last saved at') %> {{event.updatedAt | date:'dd/MM HH:mm:ss'}}</small>
+          </span>
+          <i ng-show="loading"><img style="width:16px;" src="/images/loading.gif" /></i>
+  
+          <!-- <span ng-show="dirty"> -->
+            <button type="button" class="btn btn-sm btn-success" ng-click="updatetopics()"><%- __('Save') %></button>
+          <!-- </div> -->
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+
+
   <div class="clearfix"></div>
   <div class="page-header">
     <h1><%- __('Privacy &amp; Access') %>
@@ -414,7 +485,7 @@
   </div>
 
 
-  <div class="clearfix"></div>
+  <!-- <div class="clearfix"></div>
   <div class="row">
       <div class="col-md-8 col-md-offset-2">
   <ul id="eventcodes" class="list-group loading publicbox  " ng-show="!event.public">
@@ -443,7 +514,7 @@
 
   </ul>
       </div>
-  </div>
+  </div> -->
 
 
 

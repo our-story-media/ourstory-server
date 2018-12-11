@@ -1,0 +1,16 @@
+[
+    {
+        "id":0,
+        "color":"#ff00ff",
+        "values": {
+            "en":"Introduction"
+        }
+    },
+    {
+        "id":1,
+        "color":"#00ffff",
+        "values": {
+            "en":"Recommendation"
+        }
+    }
+]

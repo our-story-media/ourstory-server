@@ -194,5 +194,6 @@
 	"Returning to the Our Story application...": "Returning to the Our Story application...",
 	"Server Error": "Server Error",
 	"Something`s not right here.": "Something`s not right here.",
-	"The page you were trying to reach has had problems. We have been notified and are working to fix this problem.": "The page you were trying to reach has had problems. We have been notified and are working to fix this problem."
+	"The page you were trying to reach has had problems. We have been notified and are working to fix this problem.": "The page you were trying to reach has had problems. We have been notified and are working to fix this problem.",
+	"jobs in queue": "jobs in queue"
 }

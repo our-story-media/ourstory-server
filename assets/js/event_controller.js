@@ -1,6 +1,6 @@
 bootleggerApp.controller('event', ['$scope', '$bootleggerSails', '$timeout', '$sce', 'usSpinnerService', '$interval', '$filter', '$rootScope', '$http', function ($scope, socket, $timeout, $sce, usSpinnerService, $interval, $filter, $rootScope, $http) {
   $scope.permissions = {
-    value : 3,
+    value : 0,
     options:{
       floor:0,
       ceil:3,
@@ -144,6 +144,11 @@ bootleggerApp.controller('event', ['$scope', '$bootleggerSails', '$timeout', '$s
           $scope.permissions.value = 3;
 
           $scope.loading = false;
+
+          
+          $scope.topiclangs = $scope.getlangs();
+
+
           
           $timeout(function() { initializing = false; });
       });
@@ -152,6 +157,7 @@ bootleggerApp.controller('event', ['$scope', '$bootleggerSails', '$timeout', '$s
 
     $scope.showmsg = false;
     $scope.loading = true;
+    $scope.topicsdirty = false;
 
 
       // $(".make-switch").bootstrapSwitch();
@@ -165,8 +171,95 @@ bootleggerApp.controller('event', ['$scope', '$bootleggerSails', '$timeout', '$s
         $(this).datepicker('hide');
         $scope.updateend(ev.date);
       });
+      
+      var initializingx = true
+    $scope.$watch('event.topics',function(newv, oldv){
+      if (initializingx) {
+        $timeout(function() { initializingx = false; });
+      } else {
+        // do whatever you were going to do
+        if (oldv)
+          $scope.topicsdirty = true;
+      }
+    },true);
 
-       
+    $scope.updatetopics = function() {
+      var data = JSON.parse(angular.toJson($scope.event.topics))
+      $scope.loading = true;
+      socket.post('/api/event/edit/'+mastereventid, { 
+        topics: data
+      }).then(function (response) {
+        $scope.loading = false;
+        $scope.topicsdirty = false;
+        $scope.event.updatedAt = new Date();
+      }).catch(function(err){
+        console.log(err);
+        
+      });
+    }
+
+    $scope.rmtopic = function(id){
+
+      _.remove($scope.event.topics, {
+        id: id
+      });
+    }
+
+    $scope.addtopic = function()
+    {
+      var newid = _.max(_.map($scope.event.topics,'id'))+1;
+      if (!isFinite(newid))
+        newid = 1;
+      var newtopic = {
+        id:newid,
+        color:'#000000',
+        values:{}
+      };
+
+      _.each($scope.topiclangs,function(t){
+        newtopic.values[t.name] = "";
+      });
+
+      $scope.event.topics.push(newtopic);
+    }
+    
+
+    $scope.addlang = function(){      
+      if (!_.includes($scope.topiclangs,{name:'new'})){
+        _.each($scope.event.topics,function(topic){
+          topic.values['new'] = "";
+        });
+
+        $scope.topiclangs.push({name:'new'});
+      }
+    }
+
+    $scope.langchange = function(index)
+    {
+      // console.log(old);
+      // console.log($scope.topiclangs);
+      $timeout(function() { 
+        _.each($scope.event.topics,function(topic){
+
+          var keyatindex = _.keys(topic.values)[index];
+          var tmp = topic.values[keyatindex];
+          delete topic.values[keyatindex];
+          topic.values[$scope.topiclangs[index].name] = tmp;
+        });
+      });
+    }
+
+    $scope.getlangs = function()
+    {
+      // var items = _.pick($scope.event.topics,'values');
+      var keys = _.map($scope.event.topics, function(i){
+        return _.keys(i.values);
+      });
+      
+      return _.map(_.uniq(_.flatten(keys)),function(v){
+        return {name:v};
+      });
+    }
     
     $scope.startupdate = function() {
       // $('.updated i').show();
@@ -178,6 +271,7 @@ bootleggerApp.controller('event', ['$scope', '$bootleggerSails', '$timeout', '$s
       $scope.showmsg = false;
       $scope.dirty = false;
       $scope.event.updatedAt = new Date();
+      // $scope.dirtytopics = false;
     }
 
     $scope.addcode = function() {

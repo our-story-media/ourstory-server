@@ -264,5 +264,7 @@
 	"Please enter a longer name": "Please enter a longer name",
 	"Tell us Your Name": "Tell us Your Name",
 	"Returning to the Our Story application...": "Returning to the Our Story application...",
-	"en": "en"
+	"en": "en",
+	"jobs in queue": "jobs in queue",
+	"Contribute using code, Only access own video": "Contribute using code, Only access own video"
 }

@@ -26,7 +26,8 @@ var bootleggerApp = angular.module('bootleggerApp', [
   'ui.slider',
   'ngDragDrop',
   'rzModule',
-  'angularTokenfield'
+  'angularTokenfield',
+  'colorpicker.module'
 ]);
 
 bootleggerApp.service('$bootleggerSails', ['$sails', function ($sails) {
