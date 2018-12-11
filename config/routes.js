@@ -165,6 +165,5 @@ module.exports.routes = {
     'post /api/event/remcode':'EventController.remcode',
     'get /api/settings':'WatchController.getsettings',
     'post /api/settings/update/:name/:value':'WatchController.setting',
-
-
+    'get /api/event/clone/:id':'EventController.clone'
 };

@@ -85,7 +85,8 @@ module.exports.policies = {
       'iconurl':true,
       'backgroundurl':true,
       'roleimg':true,
-      'contributors':['authenticated','isowner','apiauth']
+      'contributors':['authenticated','isowner','apiauth'],
+      'clone':['authenticated','isowner']
     },
 
     'watch':
