@@ -1376,14 +1376,9 @@ module.exports = {
 
 		try {
 
-
-			//console.log(req.method);
-			// console.log(req.file('image'));
 			if (req.file('image') != undefined) {
 
 				req.file('image').upload(function (err, tt) {
-
-
 
 					if (err || tt.length == 0)
 						return res.status(500).json({
@@ -1396,7 +1391,6 @@ module.exports = {
 					var filename = fakeid + tt[0].filename.replace(' ', '');
 					var tmp = '.tmp/uploads/' + tt[0].fd;
 					// var client = knox.createClient(knox_params);
-
 
 					sharp(tmp)
 						.resize(600, 250)
@@ -1432,12 +1426,9 @@ module.exports = {
 									bucket: sails.config.S3_BUCKET
 								}
 								var client = knox.createClient(knox_params);
-								// console.log(tmp + "_small.png");
 								client.putFile(tmp + "_small.png", 'upload/' + filename + ".png",
 									function (err, result) {
 										//done uploading
-
-										// console.log('done uploading');
 										if (err)
 											console.log("s3 upload error: " + err);
 

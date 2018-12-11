@@ -267,5 +267,6 @@
 	"en": "en",
 	"jobs in queue": "jobs in queue",
 	"Contribute using code, Only access own video": "Contribute using code, Only access own video",
-	"no tags specified": "no tags specified"
+	"no tags specified": "no tags specified",
+	" Please be aware that in this mode, you are responsible for participants agreement to be captured, and obtaining their permission to share data.": " Please be aware that in this mode, you are responsible for participants agreement to be captured, and obtaining their permission to share data."
 }

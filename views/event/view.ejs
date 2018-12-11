@@ -220,9 +220,14 @@
     <h1><%- __('Privacy &amp; Access') %>
     </h1>
   </div>
-  <div class="form-horizontal ">
+
+
+  <div class="form-horizontal">
 
     <div class="col-sm-8 col-sm-offset-2">
+        <div class="alert alert-warning" ng-show="!event.public">
+           <%- __(' Please be aware that in this mode, you are responsible for participants agreement to be captured, and obtaining their permission to share data.') %>
+            </div>
       <div class="row">
         <div class="col-sm-8 col-sm-offset-3 text-muted">
           <label data-delay="300" tooltip="<%- __('If enabled, anyone who contributes to your shoot can view and their stories, and everyone eles`s videos. If disabled, contributors can only playback their own video.') %>"
