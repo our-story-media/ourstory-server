@@ -266,5 +266,6 @@
 	"Returning to the Our Story application...": "Returning to the Our Story application...",
 	"en": "en",
 	"jobs in queue": "jobs in queue",
-	"Contribute using code, Only access own video": "Contribute using code, Only access own video"
+	"Contribute using code, Only access own video": "Contribute using code, Only access own video",
+	"no tags specified": "no tags specified"
 }

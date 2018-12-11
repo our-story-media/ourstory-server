@@ -562,12 +562,14 @@ $scope.updateFilters = function()
     return m.meta.meta;
   }));
 
-  $scope.tagsmeta = _.unique(_.compact(_.flatten(_.map($scope.media,function(m){
-    if (m.meta && m.meta.static_meta && m.meta.static_meta['-topics'])
-      return m.meta.static_meta['-topics'].split(',');
-    else
-      return null;
-  }))));
+  // $scope.tagsmeta = 
+
+  // $scope.tagsmeta = _.unique(_.compact(_.flatten(_.map($scope.media,function(m){
+  //   if (m.meta && m.meta.static_meta && m.meta.static_meta['-topics'])
+  //     return m.meta.static_meta['-topics'].split(',');
+  //   else
+  //     return null;
+  // }))));
 };
 
 var stopTime = -1;
@@ -890,7 +892,6 @@ $scope.fit = function()
       socket.get('/commission/templateinfo/'+mastereventid)
             .then(function(resp){
                $scope.event = resp.data;
-               
                $scope.importtimeline();
             });
 

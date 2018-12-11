@@ -107,16 +107,16 @@
       <br>
       <h1><%- __('Tags') %></h1>
       <div>
-          <label class="mycheckbox" ng-repeat="tag in tagsmeta">
-              <input checklist-model="topicfilter" checklist-value="tag"
+          <label class="mycheckbox" ng-repeat="tag in event.topics">
+              <input checklist-model="topicfilter" checklist-value="tag.id"
                 type="checkbox" autocomplete="off">
                 <span class="checkmark"></span>
                 <span class="content">
                   <i class="fa fa-check"></i>
-                {{tag}} &nbsp;
+                {{tag.values['<%- req.getLocale() %>']}} &nbsp;
                 </span>
                 </label>
-                <div class="text-muted text-center" ng-hide="tagsmeta.length>0"><%- __('no tags used') %><br><br></div>
+                <div class="text-muted text-center" ng-hide="event.topics.length>0"><%- __('no tags specified') %><br><br></div>
       </div>
 
       <h1><%- __('Phase') %></h1>
