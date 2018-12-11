@@ -148,6 +148,11 @@ bootleggerApp.controller('event', ['$scope', '$bootleggerSails', '$timeout', '$s
           
           $scope.topiclangs = $scope.getlangs();
 
+          if ($scope.topiclangs.length == 0)
+            $scope.topiclangs.push({name:'en'});
+
+          if (typeof($scope.event.topics) == 'undefined')
+            $scope.event.topics = [];
 
           
           $timeout(function() { initializing = false; });
@@ -236,22 +241,12 @@ bootleggerApp.controller('event', ['$scope', '$bootleggerSails', '$timeout', '$s
 
     $scope.langchange = function(oldcode, code)
     {
-      // console.log(oldcode);
-      // console.log(code);
-      // console.log(old);
-      // console.log($scope.topiclangs);
-      // $timeout(function() { 
-        // console.log(code);
-
         _.each($scope.event.topics,function(topic){
 
-          // var keyatindex = _.keys(topic.values)[index];
-          
           var tmp = topic.values[oldcode];
           delete topic.values[oldcode];
           topic.values[code] = tmp;
         });
-      // });
     }
 
     $scope.getlangs = function()

@@ -159,14 +159,13 @@
               <th ng-repeat="lang in topiclangs track by $index">
                 <select ng-model="lang.name" style="min-width: 8em;" ng-disabled="lang.name=='en'" class="form-control input-sm" ng-change="langchange('{{lang.name}}', lang.name)">
                   <option ng-selected="loc.code==lang.name" ng-repeat="loc in locales" value="{{loc.code}}">{{loc.code}} - {{loc.name}}</option>
-                </select>
-                <!-- <input style="min-width: 8em;" ng-disabled="lang.name=='en'" type="text" class="form-control input-sm" ng-model="lang.name" ng-change="langchange($index)" /> -->
-              
+                </select>              
               </th>
               <th width="1"><button ng-click="addlang()" class="btn btn-link"><i class="fa fa-plus"></i></button></th>          
             </tr>
           </thead>
           <tbody>
+            <tr ng-show="event.topics.length==0"><td colspan="3">n<%- __('no topics created yet') %></td></tr>
             <tr ng-repeat="tag in event.topics">
               <td>
                 <div ng-style="{'background-color':tag.color}" class="badge">

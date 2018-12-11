@@ -269,5 +269,11 @@
 	"Contribute using code, Only access own video": "Contribute using code, Only access own video",
 	"no tags specified": "no tags specified",
 	" Please be aware that in this mode, you are responsible for participants agreement to be captured, and obtaining their permission to share data.": " Please be aware that in this mode, you are responsible for participants agreement to be captured, and obtaining their permission to share data.",
-	"Send a notification to participants at your shoot.": "Send a notification to participants at your shoot."
+	"Send a notification to participants at your shoot.": "Send a notification to participants at your shoot.",
+	"no topics created yet": "no topics created yet",
+	"prepare for your shoot": "prepare for your shoot",
+	"decide what to shoot": "decide what to shoot",
+	"real-time view of your footage": "real-time view of your footage",
+	"view all community stories": "view all community stories",
+	"download your videos for offline editing": "download your videos for offline editing"
 }
