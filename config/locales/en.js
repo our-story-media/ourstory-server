@@ -250,14 +250,13 @@
 	"However you can monitor and tweak what`s happening here:": "However you can monitor and tweak what`s happening here:",
 	"Makes a document with thumbnails of each shot and its metadata": "Makes a document with thumbnails of each shot and its metadata",
 	"LOGIN": "LOGIN",
-	"GLOBAL_RELEASE": "GLOBAL_RELEASE",
-	"FINDOUTMORE": "FINDOUTMORE",
+	"GLOBAL_RELEASE": "Privacy is important to us. <ul class='browser-default'><li>We will look after your data securely and anonymise it when using it for academic research.</li><li>You can request that your data be removed at any time by contacting us.</li></ul><p class='flow-text'>Before recording videos: </p><ul class='browser-default'><li>Make sure the person you are recording has agreed to be recorded.</li><li>Agree that any video you record can be seen by your community.</li></ul>",
+	"FINDOUTMORE": "Click to find out more",
 	"I understand and want to continue": "I understand and want to continue",
-	"CONTINUE": "CONTINUE",
-	"MYNAME": "MYNAME",
-	"FIRSTNAME": "FIRSTNAME",
-	"LONGER_NAME": "LONGER_NAME",
-	"BACK": "BACK",
+	"CONTINUE": "Continue",
+	"MYNAME": "My Name",
+	"LONGER_NAME": "Please enter a longer name",
+	"BACK": "Back",
 	"Find Out More": "Find Out More",
 	"My Name": "My Name",
 	"Your Name": "Your Name",
@@ -275,5 +274,6 @@
 	"decide what to shoot": "decide what to shoot",
 	"real-time view of your footage": "real-time view of your footage",
 	"view all community stories": "view all community stories",
-	"download your videos for offline editing": "download your videos for offline editing"
+	"download your videos for offline editing": "download your videos for offline editing",
+	"You cannot <mark>contribute</mark> videos to the community Shoots here. To do that please use the Our Story app from the App Store.": "You cannot <mark>contribute</mark> videos to the community Shoots here. To do that please use the Our Story app from the App Store."
 }

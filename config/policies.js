@@ -85,8 +85,7 @@ module.exports.policies = {
       'iconurl':true,
       'backgroundurl':true,
       'roleimg':true,
-      'contributors':['authenticated','isowner','apiauth'],
-      'clone':['authenticated','isowner']
+      'contributors':['authenticated','isowner','apiauth']
     },
 
     'watch':
@@ -130,7 +129,8 @@ module.exports.policies = {
         'new':['flash','authenticated','apikeygen','eventlimit'],
         'index':['flash','authenticated','hasevents','isowner','apikeygen'],
         'savetooriginal':['flash','authenticated','superadmin','apiauth'],
-        'addshot':['authenticated','superadmin','apiauth']
+        'addshot':['authenticated','superadmin','apiauth'],
+        'clone':['authenticated','isowner','apiauth','eventlimit']
     },
 
     'post':

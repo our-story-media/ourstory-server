@@ -52,6 +52,7 @@
     "passport-local": "~1.0.0",
     "redis": "~2.8.0",
     "request": "~2.65.0",
+    "request-promise-native": "1.0.5",
     "s3": "~4.4.0",
     "sails": "~0.12.14",
     "sails-mongo": "~0.11.4",

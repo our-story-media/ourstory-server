@@ -66,7 +66,7 @@ services:
       - redis
       - mongo
       - beanstalk
-    command: nodemon --watch api app.js -- --verbose
+    command: nodemon --watch api app.js # -- --verbose
     expose:
       - 1337
     volumes:

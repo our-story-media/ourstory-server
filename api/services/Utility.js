@@ -6,16 +6,22 @@
 /**
 * Module dependencies
 */
-var util = require('util'),
+const util = require('util'),
   _ = require('lodash');
-let sharp = require('sharp');
-let path = require('path')
+const sharp = require('sharp');
+const path = require('path');
+const moment = require('moment');
+const cloudfront = require('aws-cloudfront-sign');
+const fs = require('fs');
+const uuid = require('uuid');
+
+const request = require('request');
 
 module.exports = {
 
   generateRoleMap: async function (event, callback) {
 
-    event.eventtype.roleimg = `${event.id}_roleimg.png`;
+    event.eventtype.roleimg = `${uuid.v1()}${event.id}_roleimg.png`;
 
     let img = sharp({
       create: {
@@ -34,24 +40,50 @@ module.exports = {
       //get all the files:
       for (let role of event.eventtype.roles) {
 
+        x = 20 + ((index % 2) * 300);
+        y = (index * (600 / event.eventtype.roles.length));
+        event.eventtype.roles[index].position = [x/600.0,y/600.0];
+        index++;
+
         if (role.image) {
+
           let ff = path.join(__dirname, '..', '..', 'upload', role.image);
+          if (!sails.config.LOCALONLY)
+          {
+            var options = {
+              keypairId: sails.config.CLOUDFRONT_KEY,
+              privateKeyPath: sails.config.CLOUDFRONT_KEYFILE,
+              expireTime: moment().add(1, 'day')
+            }
+            var signedUrl = cloudfront.getSignedUrl(`${sails.config.S3_CLOUD_URL}/${role.image}`, options);
+            
+            await new Promise(function(resolve,reject){
+
+              
+              let stream = request(signedUrl).pipe(fs.createWriteStream(ff));
+              stream.on('finish', function () { resolve(); });
+              // console.log(resp);
+              
+              // fs.writeFileSync(ff,resp);
+            });
+            // fs.createWriteStream(ff));
+          }
+          console.log(ff);
+          
           let sub = await sharp(ff).resize(200).toBuffer();
 
-          x = 20 + ((index % 2) * 300);
-          y = (index * (600 / event.eventtype.roles.length));
+          
 
           let tmpimg = await img.overlayWith(sub, { top: y, left: x }).png().toBuffer()
           img = sharp(tmpimg);
-          event.eventtype.roles[index].position = [x/600.0,y/600.0];
-          index++;
         }
+        
       }
     } catch (error) {
       console.log(error);
     }
 
-    img.png().toFile(path.join(__dirname, '..', '..', 'upload', event.id+'_roleimg.png'), function (err) {
+    img.png().toFile(path.join(__dirname, '..', '..', 'upload', event.eventtype.roleimg), function (err) {
       console.log(err);
       
       callback(event);

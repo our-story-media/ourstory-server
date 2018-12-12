@@ -19,6 +19,14 @@ const _ = require('lodash');
 const moment = require('moment');
 const cloudfront = require('aws-cloudfront-sign');
 const default_tags = require(path.normalize(__dirname + '/../../assets/alltags.json'));
+const knox = require('knox-s3');
+//upload map file for an event role:
+const knox_params = {
+	key: sails.config.AWS_ACCESS_KEY_ID,
+	secret: sails.config.AWS_SECRET_ACCESS_KEY,
+	bucket: sails.config.S3_BUCKET
+}
+const client = knox.createClient(knox_params);
 
 function phonenumber(inputtxt) {
 	var phoneno = /^\+?([0-9]{6,})$/;
@@ -125,12 +133,14 @@ module.exports = {
 		});
 	},
 
-	contributors: async function(req,res){
-		let media = await Media.find({event_id:req.param('id')});
-		let us = _.unique(_.pluck(media,'created_by'));
-		let users = await User.find({id:us},{fields: {
-			'profile.displayName': 1,
-		  }});
+	contributors: async function (req, res) {
+		let media = await Media.find({ event_id: req.param('id') });
+		let us = _.unique(_.pluck(media, 'created_by'));
+		let users = await User.find({ id: us }, {
+			fields: {
+				'profile.displayName': 1,
+			}
+		});
 
 		return res.json(users);
 	},
@@ -1275,13 +1285,13 @@ module.exports = {
 	// upload role img:
 	map: function (req, res) {
 
-		var knox = require('knox-s3');
-		//upload map file for an event role:
-		var knox_params = {
-			key: sails.config.AWS_ACCESS_KEY_ID,
-			secret: sails.config.AWS_SECRET_ACCESS_KEY,
-			bucket: sails.config.S3_BUCKET
-		}
+		// var knox = require('knox-s3');
+		// //upload map file for an event role:
+		// var knox_params = {
+		// 	key: sails.config.AWS_ACCESS_KEY_ID,
+		// 	secret: sails.config.AWS_SECRET_ACCESS_KEY,
+		// 	bucket: sails.config.S3_BUCKET
+		// }
 
 		if (req.file('map') != undefined) {
 
@@ -1311,14 +1321,10 @@ module.exports = {
 
 						if (!err && m != undefined) {
 
-							let r = _.findIndex(m.eventtype.roles, {id: parseInt(req.param('role'))});
-							// console.log(r);
-							
+							let r = _.findIndex(m.eventtype.roles, { id: parseInt(req.param('role')) });
 							m.eventtype.roles[r].image = filename;
 
 							Utility.generateRoleMap(m, function (newevent) {
-								// console.log(newevent);
-								
 								newevent.save(function (err) {
 									req.session.flash = { msg: "Upload Complete" };
 									res.redirect('/commission/' + req.param('id'));
@@ -1332,7 +1338,7 @@ module.exports = {
 					});
 				}
 				else {
-					var client = knox.createClient(knox_params);
+					// var client = knox.createClient(knox_params);
 					client.putFile(tmp, 'upload/' + filename,
 						function (err, result) {
 							//done uploading
@@ -1344,10 +1350,14 @@ module.exports = {
 							Event.findOne(req.param('id')).exec(function (err, m) {
 
 								//STEP 2: regenerate the event role img:
-								m.eventtype.roles[req.param('role')].image = filename;
+								let r = _.findIndex(m.eventtype.roles, { id: parseInt(req.param('role')) });
+								m.eventtype.roles[r].image = filename;
+
 								Utility.generateRoleMap(m, function (newevent) {
-									client.putFile(`.tmp/uploads/{newevent.id}_roleimg.png`, 'upload/' + newevent.eventtype.roleimg,
-										function (err, result) {	
+
+									//UPLOAD NEW IMAGE TO S3
+									client.putFile(path.join(__dirname, '..', '..', 'upload', newevent.eventtype.roleimg), 'upload/' + newevent.eventtype.roleimg,
+										function (err, result) {
 
 											if (!err && m != undefined) {
 
@@ -1357,6 +1367,8 @@ module.exports = {
 												});
 											}
 											else {
+												console.log(err);
+
 												req.session.flash = { msg: "Error Uploading Image" };
 												res.redirect('/commission/' + req.param('id'));
 											}
@@ -1418,14 +1430,7 @@ module.exports = {
 								});
 							}
 							else {
-								var knox = require('knox-s3');
-								//upload map file for an event role:
-								var knox_params = {
-									key: sails.config.AWS_ACCESS_KEY_ID,
-									secret: sails.config.AWS_SECRET_ACCESS_KEY,
-									bucket: sails.config.S3_BUCKET
-								}
-								var client = knox.createClient(knox_params);
+
 								client.putFile(tmp + "_small.png", 'upload/' + filename + ".png",
 									function (err, result) {
 										//done uploading
@@ -1494,18 +1499,37 @@ module.exports = {
 
 			if (!err && m != undefined) {
 				// m.eventtype.roleimg = false;
-				let r = _.findIndex(m.eventtype.roles, {id: parseInt(req.param('role'))});
+				let r = _.findIndex(m.eventtype.roles, { id: parseInt(req.param('role')) });
 				m.eventtype.roles[r].image = null;
 
 				Utility.generateRoleMap(m, function (newevent) {
-
 					newevent.save(function (err) {
-						console.log(err);
-						req.session.flash = { msg: "Theme Image removed!" };
-						res.redirect('/commission/' + req.param('id'));
+						
+						if (!sails.config.LOCALONLY) {
+
+							client.putFile(path.join(__dirname, '..', '..', 'upload', newevent.eventtype.roleimg), 'upload/' + newevent.eventtype.roleimg,
+								function (err, result) {
+
+									if (!err && m != undefined) {
+										req.session.flash = { msg: "Theme Image removed!" };
+										res.redirect('/commission/' + req.param('id'));
+									}
+									else {
+
+										req.session.flash = { msg: "Error Removing Image" };
+										res.redirect('/commission/' + req.param('id'));
+									}
+								});
+						}
+						else
+						{
+							// console.log(err);
+							req.session.flash = { msg: "Theme Image removed!" };
+							res.redirect('/commission/' + req.param('id'));
+						}
 					});
 				});
-				
+
 			}
 			else {
 				req.session.flash = { msg: "Error Removing Image" };
@@ -1543,11 +1567,11 @@ module.exports = {
 	image: function (req, res) {
 
 		//upload map file for an event role:
-		var knox_params = {
-			key: sails.config.AWS_ACCESS_KEY_ID,
-			secret: sails.config.AWS_SECRET_ACCESS_KEY,
-			bucket: sails.config.S3_BUCKET
-		}
+		// var knox_params = {
+		// 	key: sails.config.AWS_ACCESS_KEY_ID,
+		// 	secret: sails.config.AWS_SECRET_ACCESS_KEY,
+		// 	bucket: sails.config.S3_BUCKET
+		// }
 
 		//console.log(req.method);
 		if (req.method == "POST" && req.file('image') != undefined) {
@@ -1590,8 +1614,8 @@ module.exports = {
 							}
 							else {
 
-								var knox = require('knox-s3');
-								var client = knox.createClient(knox_params);
+								// var knox = require('knox-s3');
+								// var client = knox.createClient(knox_params);
 								client.putFile(tmp + "_small.png", 'upload/' + filename + ".png", { 'x-amz-acl': 'public-read' },
 									function (err, result) {
 										//done uploading
@@ -1690,7 +1714,7 @@ module.exports = {
 						privateKeyPath: sails.config.CLOUDFRONT_KEYFILE,
 						expireTime: moment().add(1, 'day')
 					}
-					var signedUrl = cloudfront.getSignedUrl(sails.config.S3_CLOUD_URL + m.iconbackground, options);
+					var signedUrl = cloudfront.getSignedUrl(sails.config.S3_CLOUD_URL + '/' + m.iconbackground, options);
 					//console.log(signedUrl);
 					res.setHeader('Cache-Control', 'public, max-age=2592000'); // one year
 					res.setHeader("Expires", new Date(Date.now() + 2592000000).toUTCString());
@@ -1727,10 +1751,9 @@ module.exports = {
 			if (sails.config.LOCALONLY) {
 
 				let img = '';
-				if (req.param('role'))
-				{
-					let r = _.findIndex(m.eventtype.roles,{id:parseInt(req.param('role'))});
-					if (r!=-1)
+				if (req.param('role')) {
+					let r = _.findIndex(m.eventtype.roles, { id: parseInt(req.param('role')) });
+					if (r != -1)
 						img = m.eventtype.roles[r].image;
 				}
 				else
@@ -1751,13 +1774,12 @@ module.exports = {
 
 				let img = '';
 				try {
-					if (req.param('role'))
-					{
-						let r = _.find(m.eventtype.roles,{id: parseInt(req.param('role'))});
-						img = sails.config.S3_CLOUD_URL + r.image;
+					if (req.param('role')) {
+						let r = _.find(m.eventtype.roles, { id: parseInt(req.param('role')) });
+						img = sails.config.S3_CLOUD_URL + '/' + r.image;
 					}
 					else
-						img = sails.config.S3_CLOUD_URL + m.eventtype.roleimg;
+						img = sails.config.S3_CLOUD_URL + '/' + m.eventtype.roleimg;
 				} catch (error) {
 					return res.notFound()
 				}

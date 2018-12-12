@@ -7,6 +7,14 @@ const path = require('path');
 const sharp = require('sharp');
 const moment = require('moment');
 // const fs = require('fs-extra');
+const knox = require('knox-s3');
+//upload map file for an event role:
+const knox_params = {
+	key: sails.config.AWS_ACCESS_KEY_ID,
+	secret: sails.config.AWS_SECRET_ACCESS_KEY,
+	bucket: sails.config.S3_BUCKET
+}
+const client = knox.createClient(knox_params);
 
 module.exports = {
 
@@ -211,13 +219,38 @@ module.exports = {
 			new_eventtype.coverage_classes = new_coverage;
 			e.eventtype.roles = new_eventtype.roles;
 
-			Utility.generateRoleMap(e, function (e) {
+			
+
+			Utility.generateRoleMap(e, function (ex) {
+
+				new_eventtype.roleimg = ex.eventtype.roleimg;
 				Event
-				.update({ id: req.params.id }, { eventtype: new_eventtype, shoot_modules: new_shoot_modules, post_modules: new_post_modules, phases: new_phases, coverage_classes: new_coverage })
+				.update({ id: req.params.id }, { eventtype: new_eventtype, shoot_modules: new_shoot_modules, post_modules: new_post_modules, phases: new_phases, coverage_classes: new_coverage  })
 				.exec(function (err, done) {
-					sails.eventmanager.addevent(req.params.id);
-					sails.eventmanager.updateevent(req.params.id);
-					res.json({ msg: 'ok' });
+
+					if (!sails.config.LOCALONLY) {
+
+						client.putFile(path.join(__dirname, '..', '..', 'upload', ex.eventtype.roleimg), 'upload/' + ex.eventtype.roleimg,
+							function (err, result) {
+
+								if (!err) {
+									sails.eventmanager.addevent(req.params.id);
+									sails.eventmanager.updateevent(req.params.id);
+									res.json({ msg: 'ok' });
+								}
+								else {
+									// sails.eventmanager.addevent(req.params.id);
+									// sails.eventmanager.updateevent(req.params.id);
+									res.status(500).json({ msg: 'ok' });
+								}
+							});
+					}
+					else
+					{
+						sails.eventmanager.addevent(req.params.id);
+						ails.eventmanager.updateevent(req.params.id);
+						res.json({ msg: 'ok' });
+					}
 				});
 			});
 		});
@@ -250,6 +283,17 @@ module.exports = {
 		});
 	},
 
+	clone: async function(req,res)
+	{
+		let event = await Event.findOne(req.param('id'));
+
+		event.id = null;
+		event.name = "Copy of " + event.name;
+
+		Event.create(event,function(err){	
+			return res.redirect('/dashboard');
+		})
+	},
 
 	/**
 	 * @api {get} /api/commission/gettemplate/:id Get Template Info
