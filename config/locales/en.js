@@ -275,5 +275,11 @@
 	"real-time view of your footage": "real-time view of your footage",
 	"view all community stories": "view all community stories",
 	"download your videos for offline editing": "download your videos for offline editing",
-	"You cannot <mark>contribute</mark> videos to the community Shoots here. To do that please use the Our Story app from the App Store.": "You cannot <mark>contribute</mark> videos to the community Shoots here. To do that please use the Our Story app from the App Store."
+	"You cannot <mark>contribute</mark> videos to the community Shoots here. To do that please use the Our Story app from the App Store.": "You cannot <mark>contribute</mark> videos to the community Shoots here. To do that please use the Our Story app from the App Store.",
+	"no tags created yet": "no tags created yet",
+	"Color": "Color",
+	"Burn": "Burn",
+	"Color of the tag": "Color of the tag",
+	"Burn onto output video": "Burn onto output video",
+	"Download (with tags)": "Download (with tags)"
 }

@@ -152,6 +152,7 @@ module.exports.routes = {
     'get /api/watch/changeownership/:id/:user': 'WatchController.changeownership',
     'get /api/watch/getvideo/:id?': 'WatchController.getvideo',
     'get /api/watch/getvideofull/:id?': 'WatchController.getvideofull',
+    'get /api/watch/getvideotags/:id?': 'WatchController.getvideotags',
     'get /api/media/mediacount/:id?': 'MediaController.mediacount',
     'get /api/media/mymedia/:id?': 'MediaController.mymedia',
     'get /api/media/directorystructure/:id?': 'MediaController.directorystructure',

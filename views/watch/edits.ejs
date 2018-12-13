@@ -103,6 +103,10 @@
                                         <li ng-if="edit.path && !edit.failed"><a ng-href="{{ '/watch/getvideofull/' + edit.id + '?apikey=<%- apikey %>'}}">
                                                 <%- __('Download') %>
                                             </a></li>
+                                        <li ng-if="edit.path && !edit.failed">
+                                            <a ng-href="{{ '/watch/getvideotags/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                                <%- __('Download (with tags)') %>
+                                        </a></li>
                                         <li><a ng-href="/api/watch/clone/{{edit.id}}?apikey=<%- apikey %>"><%- __('Duplicate') %></a></li>
                                         <% if (sails.config.LOCALONLY) { %>
                                         <li><a ng-href="/api/watch/changeownership/{{edit.id}}/{{group}}?apikey=<%- apikey %>"><%- __('Update to Latest User of this Name') %></a></li>

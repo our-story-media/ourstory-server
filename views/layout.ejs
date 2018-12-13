@@ -462,31 +462,31 @@ It produces high quality, content rich footage with no expense">
   <div class="container hidden-xs">
     <div class="progressmenu row" style="margin: 0 auto;">
       <!-- <div class="visible-xs-block col-xs-1">&nbsp;</div> -->
-      <a tooltip="<%- __('prepare for your shoot') %>" class="col-sm-offset-1 col-xs-2 mainmenu text-muted <% if (page=='event') { %>active<%}%>"
+      <a tooltip-popup-delay="200" tooltip="<%- __('prepare for your shoot') %>" class="col-sm-offset-1 col-xs-2 mainmenu text-muted <% if (page=='event') { %>active<%}%>"
         href="/event/view/<%- event.id %>">
         <span>
           <%- __('Settings') %>
         </span>
       </a>
-      <a tooltip="<%- __('decide what to shoot') %>" class="col-xs-2 mainmenu text-muted <% if (page=='commission') { %>active<%}%>"
+      <a tooltip-popup-delay="200" tooltip="<%- __('decide what to shoot') %>" class="col-xs-2 mainmenu text-muted <% if (page=='commission') { %>active<%}%>"
         href="/commission/<%- event.id %>">
         <span>
           <%- __('Template') %>
         </span>
       </a>
-      <a tooltip="<%- __('real-time view of your footage') %>" class="col-xs-2 mainmenu text-muted <% if (page=='shoot') { %>active<%}%>"
+      <a tooltip-popup-delay="200" tooltip="<%- __('real-time view of your footage') %>" class="col-xs-2 mainmenu text-muted <% if (page=='shoot') { %>active<%}%>"
         href="/shoot/<%- event.id %>">
         <span>
           <%- __('Videos') %>
         </span>
       </a>
-      <a tooltip="<%- __('view all community stories') %>" class="col-xs-2 mainmenu text-muted <% if (page=='watch') { %>active<%}%>"
+      <a tooltip-popup-delay="200" tooltip="<%- __('view all community stories') %>" class="col-xs-2 mainmenu text-muted <% if (page=='watch') { %>active<%}%>"
         href="/watch/edits/<%- event.id %>">
         <span>
           <%- __('Stories') %>
         </span>
       </a>
-      <a tooltip-append-to-body="true" tooltip="<%- __('download your videos for offline editing') %>" class="col-xs-2 mainmenu text-muted <% if (page=='post') { %>active<%}%>"
+      <a tooltip-popup-delay="200" tooltip-append-to-body="true" tooltip="<%- __('download your videos for offline editing') %>" class="col-xs-2 mainmenu text-muted <% if (page=='post') { %>active<%}%>"
         href="/post/<%- event.id %>">
         <span>
           <%- __('Export') %>

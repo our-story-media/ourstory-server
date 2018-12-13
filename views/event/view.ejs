@@ -155,7 +155,8 @@
         <table class="table">
           <thead>
             <tr>
-              <th width="1"></th>
+              <th tooltip-append-to-body="true" tooltip="<%- __('Color of the tag') %>"  width="1"><%- __('Color') %></th>
+              <th class="text-center" tooltip-append-to-body="true" tooltip="<%- __('Burn onto output video') %>"  width="1"><%- __('Burn') %></th>
               <th ng-repeat="lang in topiclangs track by $index">
                 <select ng-model="lang.name" style="min-width: 8em;" ng-disabled="lang.name=='en'" class="form-control input-sm" ng-change="langchange('{{lang.name}}', lang.name)">
                   <option ng-selected="loc.code==lang.name" ng-repeat="loc in locales" value="{{loc.code}}">{{loc.code}} - {{loc.name}}</option>
@@ -165,12 +166,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-show="event.topics.length==0"><td colspan="3">n<%- __('no topics created yet') %></td></tr>
+            <tr ng-show="event.topics.length==0"><td colspan="3">n<%- __('no tags created yet') %></td></tr>
             <tr ng-repeat="tag in event.topics">
               <td>
                 <div ng-style="{'background-color':tag.color}" class="badge">
                   <button class="btn btn-link" style="color:white;" colorpicker colorpicker-close-on-select ng-model="tag.color"><i class="fa fa-tint"></i></button>
                 </div>
+              </td>
+              <td class="text-center">
+                <i class="fa fa-fire fa-2x" style="cursor: pointer;" ng-click="tag.burn=!tag.burn;" ng-style="{opacity:(!tag.burn)?'0.5':1}"></i>
               </td>
               <td ng-repeat="lang in topiclangs">
                 <input type="text" class="form-control input-sm" style="min-width: 8em;" ng-model="tag.values[lang.name]"/>

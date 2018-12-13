@@ -259,7 +259,8 @@ module.exports = {
 					lowres: m.lowres,
 					titletext: m.titletext,
 					audio: m.audio,
-					credits: m.credits
+					credits: m.credits,
+					tags: m.tags
 				};
 				newmedia.push(newm);
 			});
@@ -321,6 +322,27 @@ module.exports = {
 				}
 
 				var signedUrl = cloudfront.getSignedUrl(`${sails.config.S3_TRANSCODE_URL}/edits/${m.shortlink}.mp4`, options);
+				//console.log(signedUrl);
+				return res.redirect(signedUrl);
+			}
+		});
+	},
+
+	getvideotags: function (req, res) {
+		var id = req.param('id');
+		Edits.findOne(id, function (err, m) {
+			//LOCAL ONLY
+			if (sails.config.LOCALONLY) {
+				return res.redirect(`${sails.config.FAKES3URL}/edits/${m.shortlink}_tags.mp4`);
+			}
+			else {
+				var options = {
+					keypairId: sails.config.CLOUDFRONT_KEY,
+					privateKeyPath: sails.config.CLOUDFRONT_KEYFILE,
+					expireTime: moment().add(1, 'day')
+				}
+
+				var signedUrl = cloudfront.getSignedUrl(`${sails.config.S3_CLOUD_URL}/edits/${m.shortlink}_tags.mp4`, options);
 				//console.log(signedUrl);
 				return res.redirect(signedUrl);
 			}
@@ -476,7 +498,8 @@ module.exports = {
 				lowres: m.lowres,
 				titletext: m.titletext,
 				audio: m.audio,
-				credits: m.credits
+				credits: m.credits,
+				tags: m.tags
 			};
 			newmedia.push(newm);
 		});

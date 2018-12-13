@@ -91,7 +91,6 @@ module.exports.policies = {
     'watch':
     {
         'view':['authenticated','viewonly','flash','apikeygen'],
-        //'view':false,
         'shortlink':true,
         'index':['authenticated','isowner','apikeygen','flash'],
         'saveedit':['authenticated','apiauth'],
@@ -102,6 +101,8 @@ module.exports.policies = {
         'editupdates':['authenticated','apiauth'],
         'canceleditupdates':['authenticated','apiauth'],
         'getvideo':['shortlink'],
+        'getvideofull':['authenticated','apiauth','checkmedia_full'],
+        'getvideotags':['authenticated','apiauth','checkmedia_full'],
         'edits':['authenticated','isowner','apikeygen','flash'],
         'alledits':['authenticated','isowner','apiauth'],
         'editprogress':['authenticated','apiauth'],
@@ -109,7 +110,6 @@ module.exports.policies = {
         'changeownership':['authenticated','apiauth'],
         'setting':['superadmin','authenticated','apiauth'],
         'getsettings':['superadmin','authenticated','apiauth']
-        // 'restartedit':['authenticated','apiauth']
     },
 
     'shoot':

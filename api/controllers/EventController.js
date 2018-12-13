@@ -885,10 +885,10 @@ module.exports = {
 								//console.log('creating group');
 								output.push({ group: mm.profile.displayName, icon: mm.profile.photos[0].value, events: [] });
 							}
-							_.find(output, { group: mm.profile.displayName }).events.push({ status: d.status, iconbackground: sails.config.master_url + '/event/backgroundurl/' + d.id, icon: (d.icon && d.icon != '') ? sails.config.master_url + '/event/iconurl/' + d.id : '', name: d.name, id: d.id, starts: d.starts, ends: d.ends, ends_time: d.ends_time, starts_time: d.starts_time, joincode: d.joincode, description: d.eventtype.description, offlinecode: d.offlinecode });
+							_.find(output, { group: mm.profile.displayName }).events.push({ status: d.status, iconbackground: sails.config.master_url + '/event/backgroundurl/' + d.id, icon: (d.icon && d.icon != '') ? sails.config.master_url + '/event/iconurl/' + d.id : '', name: d.name, id: d.id, starts: d.starts, ends: d.ends, ends_time: d.ends_time, starts_time: d.starts_time, joincode: d.joincode, description: d.eventtype.description, offlinecode: d.offlinecode, public: d.public });
 						}
 						else {
-							output.push({ status: d.status, iconbackground: sails.config.master_url + '/event/backgroundurl/' + d.id, icon: (d.icon && d.icon != '') ? sails.config.master_url + '/event/iconurl/' + d.id : '', name: d.name, id: d.id, starts: d.starts, ends: d.ends, joincode: d.joincode, ends_time: d.ends_time, starts_time: d.starts_time, description: d.eventtype.description, offlinecode: d.offlinecode });
+							output.push({ status: d.status, iconbackground: sails.config.master_url + '/event/backgroundurl/' + d.id, icon: (d.icon && d.icon != '') ? sails.config.master_url + '/event/iconurl/' + d.id : '', name: d.name, id: d.id, starts: d.starts, ends: d.ends, joincode: d.joincode, ends_time: d.ends_time, starts_time: d.starts_time, description: d.eventtype.description, offlinecode: d.offlinecode, public: d.public });
 						}
 					});
 					return res.json(output);
@@ -1033,7 +1033,7 @@ module.exports = {
 											starts_time: d.starts_time,
 											description: d.eventtype.description,
 											offline: d.eventtype.offline,
-											offlinecode: d.offlinecode,
+											offlinecode: d.offlinecode
 										});
 									}
 									else {
