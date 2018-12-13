@@ -43,26 +43,26 @@ module.exports = {
 			return res.redirect('/');
 	},
 
-	getapp: function (req, res) {
-		var MobileDetect = require('mobile-detect'),
-			md = new MobileDetect(req.headers['user-agent']);
-		//console.log(md);
-		if (md.is('iOS')) {
-			return res.redirect(sails.config.IOS_STORE_LINK);
-		}
-		if (md.is('AndroidOS')) {
-			return res.redirect(sails.config.PLAY_STORE_LINK);
-		}
+	// getapp: function (req, res) {
+	// 	var MobileDetect = require('mobile-detect'),
+	// 		md = new MobileDetect(req.headers['user-agent']);
+	// 	//console.log(md);
+	// 	if (md.is('iOS')) {
+	// 		return res.redirect(sails.config.IOS_STORE_LINK);
+	// 	}
+	// 	if (md.is('AndroidOS')) {
+	// 		return res.redirect(sails.config.PLAY_STORE_LINK);
+	// 	}
 
-		req.session.flash = { msg: 'Sorry, we don\'t support your mobile device right now...' };
-		return res.redirect('/');
-	},
+	// 	req.session.flash = { msg: 'Sorry, we don\'t support your mobile device right now...' };
+	// 	return res.redirect('/');
+	// },
 
 	changename: function (req, res) {
 		User.findOne(req.session.passport.user.id).exec(function (err, user) {
 			var nn = req.param('name').split(' ');
 			if (nn.length < 1) {
-				req.session.flash = { msg: 'Please enter your full, real name' };
+				req.session.flash = { msg: sails.__('Please enter your full, real name') };
 				return res.redirect('/');
 			}
 
@@ -74,7 +74,7 @@ module.exports = {
 
 			user.save(function (err, u) {
 				//console.log(u);
-				req.session.flash = { msg: 'Your name has been updated!' };
+				req.session.flash = { msg: sails.__('Your name has been updated!') };
 				return res.redirect('/');
 			});
 		});
@@ -347,7 +347,7 @@ module.exports = {
 	process_local: function (req, res, next) {
 
 		if (_.size(req.param('firstName')) < 3) {
-			req.session.flash = { msg: 'Please type a longer name' };
+			req.session.flash = { msg: sails.__('Please type a longer name') };
 			return res.redirect('/auth/local');
 		}
 

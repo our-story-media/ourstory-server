@@ -16,7 +16,7 @@ module.exports.routes = {
     'get /shoot/:id?': 'ShootController.index',
     'get /terms': 'StaticController.terms',
     'get /privacy': 'StaticController.privacy',
-    'get /getapp': 'AuthController.getapp',
+    // 'get /getapp': 'AuthController.getapp',
     'get /join/:id?': 'AuthController.join',
     'post /joincode': 'AuthController.joincode',
     'get /joincomplete': 'AuthController.joincomplete',

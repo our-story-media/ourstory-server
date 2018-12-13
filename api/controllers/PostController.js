@@ -91,7 +91,7 @@ module.exports = {
             }
           });
 
-          req.session.flash = {msg:"Upload reminder sent!"};
+          req.session.flash = {msg:sails.__("Upload reminder sent!")};
           res.redirect('/post/'+req.params.id);
         });
       });
@@ -111,13 +111,13 @@ module.exports = {
             Gcm.sendMessage(u.platform,u.pushcode,"Bootlegger Info","Latest updates from Bootlegger",null,req.param('advert'));
           }
         });
-        req.session.flash = {msg:"Broadcast Message Sent!"};
+        req.session.flash = {msg:sails.__("Broadcast Message Sent!")};
         res.redirect('/event/admin');
       });
     }
     else
     {
-      req.session.flash = {msg:"No Message Given!"};
+      req.session.flash = {msg:sails.__("No Message Given!")};
       res.redirect('/event/admin');
     }
   },

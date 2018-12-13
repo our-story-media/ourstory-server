@@ -54,7 +54,7 @@ module.exports = {
 
 				//console.log(err);
 				if (tt.length == 0) {
-					req.session.flash = 'No image provided';
+					req.session.flash = sails.__('No image provided');
 					return res.redirect('/commission/' + req.param('id'));
 				}
 
@@ -116,7 +116,7 @@ module.exports = {
 								newshot.wanted = 7;
 								newshot.max_length = 20;
 								Shot.create(newshot).exec(function (err, done) {
-									req.session.flash = "New Shot Added";
+									req.session.flash = sails.__("New Shot Added");
 									return res.redirect('/commission/' + req.param('id'));
 								});
 							}); //write file

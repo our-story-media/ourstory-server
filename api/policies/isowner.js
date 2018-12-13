@@ -41,7 +41,7 @@ module.exports = function (req, res, ok) {
           {
             if (e.length > 0)
             {
-              req.session.flash = {msg:'No can do, sorry (you are not the owner of this event).'};
+              req.session.flash = {msg:sails.__('No can do, sorry (you are not the owner of this event).')};
             }
             //console.log("fail perm");
             return res.redirect('/dashboard');

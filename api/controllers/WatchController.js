@@ -615,7 +615,7 @@ module.exports = {
 	shortlink: function (req, res) {
 		//console.log(req.param('shortlink'));
 		if (!req.param('shortlink')) {
-			req.session.flash = { msg: 'Sorry, that\'s not a link we recognise.' };
+			req.session.flash = { msg: sails.__('Sorry, that\'s not a link we recognise.') };
 			console.log("r1");
 			return res.redirect('/dashboard');
 		}
@@ -624,7 +624,7 @@ module.exports = {
 			if (edit) {
 				Event.findOne(edit.media[0].event_id).exec(function (err, ev) {
 					if (!ev) {
-						req.session.flash = { msg: 'Sorry, that\'s not a link we recognise.' };
+						req.session.flash = { msg: sails.__('Sorry, that\'s not a link we recognise.') };
 						console.log("r2");
 						return res.redirect('/dashboard');
 					}
@@ -643,7 +643,7 @@ module.exports = {
 				//return res.redirect(301, sails.config.S3_TRANSCODE_URL + edit.path);
 			}
 			else {
-				req.session.flash = { msg: 'Sorry, that\'s not a link we recognise.' };
+				req.session.flash = { msg: sails.__('Sorry, that\'s not a link we recognise.') };
 				console.log("r3");
 				return res.redirect('/dashboard');
 			}

@@ -76,17 +76,17 @@ module.exports = {
             _.each(users, function (u) {
               if (u.pushcode) //for testing.... && u.profile.emails[0].value == sails.config.admin_email
               {
-                Gcm.sendMessage(u.platform, u.pushcode, "Bootlegger Message", req.param('message'), null);
+                Gcm.sendMessage(u.platform, u.pushcode, sails.__("Our Story Message"), req.param('message'), null);
               }
             });
-            req.session.flash = { msg: "Message Sent!" };
+            req.session.flash = { msg: sails.__("Message Sent!") };
             res.redirect('/shoot/' + req.param('id'));
           });
         });
       });
     }
     else {
-      req.session.flash = { msg: "No Message Given!" };
+      req.session.flash = { msg: sails.__("No Message Given!") };
       res.redirect('/shoot/' + req.param('id'));
     }
   }

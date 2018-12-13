@@ -115,7 +115,7 @@ module.exports = function (req, res, ok) {
         }
         else
         {
-          req.session.flash = {msg:'No can do, sorry.'};
+          req.session.flash = {msg:sails.__('No can do, sorry.')};
           //console.log("not authorized");
           return res.redirect('auth/login');
         }
