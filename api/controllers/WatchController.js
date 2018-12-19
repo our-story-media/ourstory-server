@@ -554,6 +554,7 @@ module.exports = {
 		if (canedit.value == 'true') {
 			Edits.findOne(req.params.id).exec(function (err, edit) {
 				if (edit) {
+					
 					console.log("restarting edit");
 					//console.log(edit);
 					//console.log(edit.media);
@@ -564,7 +565,7 @@ module.exports = {
 						edit.fail = false;
 						edit.path = null;
 						edit.progress = null;
-						edit.save(function (err, edit) {
+						edit.save(function (err) {
 							//fire off to editor:
 							//send back to user:
 							console.log("edit submitted");

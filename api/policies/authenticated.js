@@ -11,7 +11,7 @@ function isValidReferer(req)
 {
   // console.log(req.header('host'));
   // return true;
-  return req.header('host') == 'localhost' || req.header('host') == 'offline.bootlegger.tv' || ((req.header('Referer')!=null) ? req.header('Referer').startsWith('http://localhost') || req.header('Referer').startsWith('https://offline.bootlegger.tv') : false);
+  return req.header('host') == 'localhost' || _.includes(sails.config.master_url,req.header('host')) || req.header('host') == 'offline.bootlegger.tv' || ((req.header('Referer')!=null) ? req.header('Referer').startsWith('http://localhost') || req.header('Referer').startsWith('https://offline.bootlegger.tv') : false);
 }
 
 module.exports = function (req, res, ok) {
@@ -19,6 +19,8 @@ module.exports = function (req, res, ok) {
   //check its from localhost:
   if (sails.config.LOCALONLY && isValidReferer(req))
   {
+    // console.log('IS VALID LOCAL');
+    
     req.session.api = false;
 		req.session.ismobile = true;
     req.session.isios = true;
@@ -53,6 +55,8 @@ module.exports = function (req, res, ok) {
   }
   else
   {
+    // console.log('NOT LOCAL');
+    
     //if the request has a servertoken (i.e. its operating on behalf of another user...)
     if (req.param('servertoken'))
     {

@@ -591,11 +591,16 @@ module.exports = {
 	thumbnail: function (req, res) {
 		//upload map file for an event role:
 		// console.log("thumb");
+		// console.log('test');
+		
 		var mediaid = req.params.id;
 		var size = req.param('s') || 260;
 		//TEST FUNCTION FOR DOING IMAGE THUMBNAILS TO SPEED UP APPs
 		Media.findOne(mediaid).exec(function (err, media) {
 			
+			// console.log('doing thumbnail');
+			
+
 			if (err || !media || !media.thumb) {
 				return res.redirect('/images/notfound.png');
 			}
@@ -605,7 +610,8 @@ module.exports = {
 			var tmp = path.normalize(__dirname + "/../../.tmp/cache/" + size + "_" + media.thumb);
 			fs.access(tmp, fs.R_OK | fs.W_OK, function (err) {
 				if (!err) {
-					// console.log("err");
+					// console.log('sending cached version');
+					
 					res.type('image/jpg');
 					res.setHeader('Cache-Control', 'public, max-age=2592000'); // one year
 					res.setHeader("Expires", new Date(Date.now() + 2592000000).toUTCString());

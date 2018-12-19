@@ -21,12 +21,15 @@ const cloudfront = require('aws-cloudfront-sign');
 const default_tags = require(path.normalize(__dirname + '/../../assets/alltags.json'));
 const knox = require('knox-s3');
 //upload map file for an event role:
-const knox_params = {
-	key: sails.config.AWS_ACCESS_KEY_ID,
-	secret: sails.config.AWS_SECRET_ACCESS_KEY,
-	bucket: sails.config.S3_BUCKET
+if (!sails.config.LOCALONLY)
+{
+	const knox_params = {
+		key: sails.config.AWS_ACCESS_KEY_ID,
+		secret: sails.config.AWS_SECRET_ACCESS_KEY,
+		bucket: sails.config.S3_BUCKET
+	}
+	const client = knox.createClient(knox_params);
 }
-const client = knox.createClient(knox_params);
 
 function phonenumber(inputtxt) {
 	var phoneno = /^\+?([0-9]{6,})$/;

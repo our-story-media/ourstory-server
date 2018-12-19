@@ -281,5 +281,9 @@
 	"Burn": "Burn",
 	"Color of the tag": "Color of the tag",
 	"Burn onto output video": "Burn onto output video",
-	"Download (with tags)": "Download (with tags)"
+	"Download (with tags)": "Download (with tags)",
+	"Computer Says No": "Computer Says No",
+	"Passport Sir?": "Passport Sir?",
+	"Sorry, we dont think you have the right permissions to view this page.": "Sorry, we dont think you have the right permissions to view this page.",
+	"No can do, sorry.": "No can do, sorry."
 }

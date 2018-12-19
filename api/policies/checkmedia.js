@@ -50,9 +50,21 @@ module.exports = function (req, res, ok) {
 		if (sails.config.LOCALONLY && (req.header('host') == 'localhost' || ((req.header('Referer')!=null) ? req.header('Referer').startsWith('http://localhost') || req.header('Referer').startsWith('http://offline.bootlegger.tv') : false)))
 			return ok();
 
+		console.log(id);
+		console.log(user);
+
+		console.log(req.session.passport.user);
+		
+
 		if (!id || !user)
 			return res.forbidden();
 	
+		
+		
+
+		if (req.session.passport && req.session.passport.user.localadmin)
+			return ok();
+
 		if (req.session.passport && req.session.passport.user && _.contains(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
 		{
 			return ok();

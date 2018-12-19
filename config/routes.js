@@ -112,10 +112,10 @@ module.exports.routes = {
     //get all media for event
     'get /api/media/mymedia/:id?': [{ policy: 'apiauth' }, { policy: 'viewonly' }, { policy: 'apply_cors' }, { controller: 'MediaController', action: 'mymedia' }],
     //get thumbnail
-    'get /api/media/thumbnail/:id?': [{ policy: 'checkmedia' }, { policy: 'apply_cors' }, { controller: 'MediaController', action: 'thumbnail' }],
-    'get /api/media/preview/:id?': [{ policy: 'checkmedia' }, { policy: 'apply_cors' }, { controller: 'MediaController', action: 'preview' }],
-    'get /api/media/full/:id?': [{ policy: 'checkmedia_full' }, { policy: 'apply_cors' }, { controller: 'MediaController', action: 'full' }],
-    'get /api/media/homog/:id?': [{ policy: 'checkmedia_full' }, { policy: 'apply_cors' }, { controller: 'MediaController', action: 'homog' }],
+    'get /api/media/thumbnail/:id': [{ policy: 'checkmedia' }, { policy: 'apply_cors' }, { controller: 'MediaController', action: 'thumbnail' }],
+    'get /api/media/preview/:id': [{ policy: 'checkmedia' }, { policy: 'apply_cors' }, { controller: 'MediaController', action: 'preview' }],
+    'get /api/media/full/:id': [{ policy: 'checkmedia_full' }, { policy: 'apply_cors' }, { controller: 'MediaController', action: 'full' }],
+    'get /api/media/homog/:id': [{ policy: 'checkmedia_full' }, { policy: 'apply_cors' }, { controller: 'MediaController', action: 'homog' }],
 
     //get all media for event
     'post /api/post/newedit': { controller: 'WatchController', action: 'newedit', policy: 'apiauth', cors: true },

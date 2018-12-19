@@ -9,12 +9,15 @@ const moment = require('moment');
 // const fs = require('fs-extra');
 const knox = require('knox-s3');
 //upload map file for an event role:
-const knox_params = {
-	key: sails.config.AWS_ACCESS_KEY_ID,
-	secret: sails.config.AWS_SECRET_ACCESS_KEY,
-	bucket: sails.config.S3_BUCKET
+if (!sails.config.LOCALONLY)
+{
+	const knox_params = {
+		key: sails.config.AWS_ACCESS_KEY_ID,
+		secret: sails.config.AWS_SECRET_ACCESS_KEY,
+		bucket: sails.config.S3_BUCKET
+	}
+	const client = knox.createClient(knox_params);
 }
-const client = knox.createClient(knox_params);
 
 module.exports = {
 

@@ -154,10 +154,10 @@ module.exports.policies = {
         'transcode':['superadmin'],
         'availableoutputs':['authenticated','isowner','apiauth'],
         'transcodefile':['authenticated','apiauth'],
-        'thumbnail':['checkmedia'],
-        'preview':['checkmedia'],
-        'full':['checkmedia_full'],
-        'homog':['checkmedia_full']
+        'thumbnail':['authenticated','checkmedia'],
+        'preview':['authenticated','checkmedia'],
+        'full':['authenticated','checkmedia_full'],
+        'homog':['authenticated','checkmedia_full']
     },
 
     // 'log':
