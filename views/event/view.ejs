@@ -166,7 +166,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-show="event.topics.length==0"><td colspan="3">n<%- __('no tags created yet') %></td></tr>
+            <tr ng-show="event.topics.length==0"><td colspan="3"><%- __('no tags created yet') %></td></tr>
             <tr ng-repeat="tag in event.topics">
               <td>
                 <div ng-style="{'background-color':tag.color}" class="badge">
