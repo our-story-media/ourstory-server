@@ -17,7 +17,7 @@ COPY package.json /usr/src/app/
 
 RUN apk add --no-cache --update --repository http://dl-3.alpinelinux.org/alpine/edge/testing \
 	git python gcc g++ make && \
-	npm install --production && \
+	npm install --production --silent && \
 	apk del git gcc g++ make python && \
 	rm -rf /var/cache/apk/*
 # RUN npm install --production
@@ -34,8 +34,8 @@ RUN grunt buildProd
 # actual bits that need mapping are .tmp, www and uploads
 VOLUME /usr/src/app/www
 VOLUME /usr/src/app/data
-
+VOLUME /usr/src/app/assets
 # FOR DEBUGGING:
-VOLUME /usr/src/app/.tmp
+# VOLUME /usr/src/app/.tmp
 
 CMD [ "npm", "start" ]
