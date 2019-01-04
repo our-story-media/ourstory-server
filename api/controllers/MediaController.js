@@ -792,7 +792,7 @@ module.exports = {
 	 */
 	uploadsign: function (req, res) {
 		if (!req.param('filename') || !req.param('eventid'))
-			return res.json({ msg: 'No filename given' }, 500);
+			return res.status(500).json({ msg: 'No filename given' });
 
 		var filename = req.param('filename');
 		var eventid = req.param('eventid');
@@ -803,18 +803,13 @@ module.exports = {
 			})
 		}
 		else {
-			//console.log(sails.config);
-			//console.log(filename);
-			//AWS.config.loadFromPath('./awscreds.json');
 			AWS.config.update({ accessKeyId: sails.config.AWS_ACCESS_KEY_ID, secretAccessKey: sails.config.AWS_SECRET_ACCESS_KEY });
 			var s3 = new AWS.S3({ computeChecksums: true }); // this is the default setting
 			var params = { Bucket: sails.config.S3_BUCKET, Key: `upload/${eventid}/${filename}`};
 			var url = s3.getSignedUrl('putObject', params);
-			//console.log("The URL is", url);
-			var credentials = {
+			res.json({
 				signed_request: url
-			};
-			res.json(credentials);
+			});
 		}
 	},
 

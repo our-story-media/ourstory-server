@@ -104,7 +104,7 @@ module.exports.routes = {
     // 'get /api/media/signuploadthumb/:id/:eventid': { controller: 'MediaController', action: 'uploadsignthumb', policy: 'apiauth', cors: true },
     'post /api/media/uploadthumbcomplete/:id?': { controller: 'MediaController', action: 's3notifythumb', policy: 'apiauth', cors: true },
     //upload media file
-    'get /api/media/signupload/:id/:eventid': { controller: 'MediaController', action: 'uploadsign', policy: 'apiauth', cors: true },
+    'get /api/media/signupload/:eventid': { controller: 'MediaController', action: 'uploadsign', policy: 'apiauth', cors: true },
     'post /api/media/uploadcomplete/:id?': { controller: 'MediaController', action: 's3notify', policy: 'apiauth', cors: true },
     //get all media for event
     'get /api/media/shoot/:id?': [{ policy: 'apiauth' }, { policy: 'viewonly' }, { policy: 'apply_cors' }, { controller: 'MediaController', action: 'nicejson' }],

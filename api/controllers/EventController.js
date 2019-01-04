@@ -58,19 +58,19 @@ module.exports = {
 		res.view();
 	},
 
-	admin_edits: function (req, res) {
-		User.find({}).exec(function (err, users) {
-			Edits.find({}).exec(function (err, alledits) {
-				_.each(alledits, function (e) {
-					e.user = _.find(users, function (u) {
-						return u.id.toString() == e.user_id.toString();
-					});
-					//console.log(e.user)
-				});
-				return res.json({ edits: alledits });
-			});
-		});
-	},
+	// admin_edits: function (req, res) {
+	// 	User.find({}).exec(function (err, users) {
+	// 		Edits.find({}).exec(function (err, alledits) {
+	// 			_.each(alledits, function (e) {
+	// 				e.user = _.find(users, function (u) {
+	// 					return u.id.toString() == e.user_id.toString();
+	// 				});
+	// 				//console.log(e.user)
+	// 			});
+	// 			return res.json({ edits: alledits });
+	// 		});
+	// 	});
+	// },
 
 	admin_events: function (req, res) {
 		User.find({}).exec(function (err, users) {
@@ -827,7 +827,7 @@ module.exports = {
 				e.shotrelease = ev.eventtype.shotrelease ? ev.eventtype.shotrelease : '';
 				e.description = ev.eventtype.description;
 
-				e.icon = (e.icon && e.icon != '') ? sails.config.master_url + '/event/iconurl/' + e.id : '';
+				// e.icon = (e.icon && e.icon != '') ? sails.config.master_url + '/event/iconurl/' + e.id : '';
 				e.iconbackground = sails.config.master_url + '/event/backgroundurl/' + e.id;
 
 				if (e.roleimg == undefined && ev.eventtype.roleimg != undefined)
@@ -853,7 +853,7 @@ module.exports = {
 					e.organisedby = user.profile.displayName;
 
 					delete e.eventtype;
-					return res.json(e, 200);
+					return res.json(e);
 				});
 			}
 			else {
