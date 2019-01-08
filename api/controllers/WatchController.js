@@ -265,8 +265,8 @@ module.exports = {
 				newmedia.push(newm);
 			});
 			tmpedit.media = newmedia;
-			tmpedit.save(function (err, done) {
-				return res.json(done);
+			tmpedit.save(function (err) {
+				return res.json(tmpedit);
 			});
 		});
 	},
