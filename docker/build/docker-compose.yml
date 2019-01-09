@@ -61,7 +61,7 @@ services:
   web:
     restart: always
     build: ../..
-    image: bootlegger/server-app:ourstory
+    image: bootlegger/ourstory-server
     depends_on: 
       - redis
       - mongo
