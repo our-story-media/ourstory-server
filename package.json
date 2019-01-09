@@ -1,7 +1,7 @@
 {
   "name": "bootlegger",
   "private": true,
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Real time production control system for participatory video.",
   "devDependencies": {
     "async-sema": "2.1.4",
