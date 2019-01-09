@@ -734,7 +734,7 @@ module.exports = {
 				e.roles = allroles;
 				e.ispublic = e.public;
 				e.shotrelease = ev.eventtype.shotrelease ? ev.eventtype.shotrelease : '';
-				e.description = e.eventtype.description;
+				e.description = e.description;
 				delete e.codes;
 				delete e.timeline;
 
