@@ -20,6 +20,7 @@ const moment = require('moment');
 const cloudfront = require('aws-cloudfront-sign');
 const default_tags = require(path.normalize(__dirname + '/../../assets/alltags.json'));
 const knox = require('knox-s3');
+const client;
 //upload map file for an event role:
 if (!sails.config.LOCALONLY)
 {
@@ -28,7 +29,7 @@ if (!sails.config.LOCALONLY)
 		secret: sails.config.AWS_SECRET_ACCESS_KEY,
 		bucket: sails.config.S3_BUCKET
 	}
-	const client = knox.createClient(knox_params);
+	client = knox.createClient(knox_params);
 }
 
 function phonenumber(inputtxt) {
