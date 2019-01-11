@@ -260,7 +260,7 @@ module.exports = {
 					titletext: m.titletext,
 					audio: m.audio,
 					credits: m.credits,
-					tags: m.tags
+					tag: m.tag
 				};
 				newmedia.push(newm);
 			});
@@ -499,7 +499,7 @@ module.exports = {
 				titletext: m.titletext,
 				audio: m.audio,
 				credits: m.credits,
-				tags: m.tags
+				tag: m.tag
 			};
 			newmedia.push(newm);
 		});
@@ -520,20 +520,26 @@ module.exports = {
 						edit.progress = 0;
 						edit.shortlink = newlink;
 					}
-					edit.save(async function (err, resp) {
+
+					edit.title = title;
+					edit.media = newmedia;
+					edit.description = description;
+
+					edit.save(async function (err) {
 						//console.log(err);
 						//console.log("processing edit");
 						try {
 							if (canedit.value == 'true') {
 								Editor.edit(edit);
 								edit.shortlink = sails.config.master_url + '/v/' + edit.code;
+								res.json(edit);
 							}
 							else {
 								//cant edit:
 								console.log('Editing Currently Disabled');
 								// res.status(201).json({msg:'Editing Currently Disabled'});
+								res.status(503).json(edit);
 							}
-							res.json({ edit: edit });
 						}
 						catch (e) {
 							res.status(500).json({ msg: e });

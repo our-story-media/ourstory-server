@@ -8,7 +8,7 @@ const sharp = require('sharp');
 const moment = require('moment');
 // const fs = require('fs-extra');
 const knox = require('knox-s3');
-const client;
+let client;
 //upload map file for an event role:
 if (!sails.config.LOCALONLY)
 {

@@ -4,7 +4,7 @@
     <div class="indeterminate"></div>
   </div>
 
-  <div class="hidden-xs row" ng-show="event.eventtype.roleimg" style="margin-top:2em;">
+  <!-- <div class="hidden-xs row" ng-show="event.eventtype.roleimg" style="margin-top:2em;">
     <div class="alert alert-success col-sm-8 col-sm-offset-2">
       <i class="fa fa-check fa-3x" style="float:left;margin-right:10px;"></i>
       <h3 style="margin:0">
@@ -13,15 +13,26 @@
           <%- __('Contributors should download the App to get started...') %></small>
       </h3>
     </div>
-  </div>
+  </div> -->
 
-  <div class="hidden-xs row" ng-show="!event.eventtype.roleimg" style="margin-top:2em;">
+  <div class="row" ng-show="!ifRoleImages()" style="margin-top:2em;">
     <div class="alert alert-warning col-sm-8 col-sm-offset-2">
       <i class="fa fa-info fa-3x" style="float:left;margin-right:10px;"></i>
       <h3 style="margin:0">
         <%- __('Not Quite Ready!') %>
         <small style="display:block;">
           <%- __('Make sure to add a Theme Selection Image') %> <a href="/commission/<%- event.id %>"><%- __('Here') %></a></small>
+      </h3>
+    </div>
+  </div>
+
+  <div class="row" ng-show="event.public && (!event.release || event.release.length==0)" style="margin-top:2em;">
+    <div class="alert alert-warning col-sm-8 col-sm-offset-2">
+      <i class="fa fa-info fa-3x" style="float:left;margin-right:10px;"></i>
+      <h3 style="margin:0">
+        <%- __('Not Quite Ready!') %>
+        <small style="display:block;">
+          <%- __('Make sure to add a Particiant Release as your shoot is public') %></small>
       </h3>
     </div>
   </div>
@@ -326,6 +337,7 @@
   </div>
   <div class="row">
   <div class="col-md-8 col-md-offset-2" style="margin-top:2em;">
+    <div ng-show="event.public">
     <label class="control-label" data-delay="300" tooltip="<%- __('Terms and Conditions that contributors will need to agree to before taking part in the shoot') %>">
       <%- __('Participant Release') %>
       <i style="color:silver" class="fa fa-question-circle"></i>
@@ -381,9 +393,9 @@
     <div id="editor2" class="form-control">
       <%- event.release %>
     </div>
-
-
+    
     <br><br>
+  </div>
     <!-- <div > -->
       <%- __('<label tooltip-popup-delay="300" tooltip="A document that can be shown to people in shot by participants using the Our Story app. Each shot can be configured to require this release or not') %>">
         <%- __('Per-Shot Confirmation') %>

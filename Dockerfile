@@ -29,7 +29,7 @@ COPY . /usr/src/app
 
 EXPOSE 1337
 
-RUN grunt buildProd
+RUN grunt buildProd && mkdir -p /usr/src/app/upload/
 
 # actual bits that need mapping are .tmp, www and uploads
 VOLUME /usr/src/app/www

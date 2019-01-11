@@ -285,5 +285,8 @@
 	"Computer Says No": "Computer Says No",
 	"Passport Sir?": "Passport Sir?",
 	"Sorry, we dont think you have the right permissions to view this page.": "Sorry, we dont think you have the right permissions to view this page.",
-	"No can do, sorry.": "No can do, sorry."
+	"No can do, sorry.": "No can do, sorry.",
+	"Upload Complete": "Upload Complete",
+	"Theme Image removed!": "Theme Image removed!",
+	"Make sure to add a Particiant Release as your shoot is public": "Make sure to add a Particiant Release as your shoot is public"
 }

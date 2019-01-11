@@ -20,7 +20,7 @@ const moment = require('moment');
 const cloudfront = require('aws-cloudfront-sign');
 const default_tags = require(path.normalize(__dirname + '/../../assets/alltags.json'));
 const knox = require('knox-s3');
-const client;
+let client;
 //upload map file for an event role:
 if (!sails.config.LOCALONLY)
 {

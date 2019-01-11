@@ -1,4 +1,15 @@
 bootleggerApp.controller('event', ['$scope', '$bootleggerSails', '$timeout', '$sce', 'usSpinnerService', '$interval', '$filter', '$rootScope', '$http', function ($scope, socket, $timeout, $sce, usSpinnerService, $interval, $filter, $rootScope, $http) {
+
+  $scope.ifRoleImages = function () {
+    if ($scope.event) {
+      return $scope.event.eventtype.roles.every(function (e) {
+        return e.image;
+      });
+    }
+    else
+      return false;
+  }
+
   $scope.permissions = {
     value : 0,
     options:{
