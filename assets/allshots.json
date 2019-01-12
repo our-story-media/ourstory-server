@@ -2853,15 +2853,6 @@
         "description": "A shot of the surrounding environment"
     },
     {
-        "id": 318,
-        "name": "Clown over The shoulder",
-        "max_length": 90,
-        "wanted": 7,
-        "image": "figure_reverse_medium_mid_straight.png",
-        "icon": "figure_reverse_medium_mid_straight.png",
-        "description": "A shot from behind a clown as they run or walk. Frame them from head to waist"
-    },
-    {
         "id": 319,
         "name": "Crowd  medium",
         "max_length": 90,
@@ -2988,15 +2979,6 @@
         "description": "A shot of a motorcycle. Make it fill the frame"
     },
     {
-        "id": 333,
-        "name": "Clown on bike",
-        "max_length": 90,
-        "wanted": 7,
-        "image": "motorcycle_forward_wide_mid_right.png",
-        "icon": "motorcycle_forward_wide_mid_right.png",
-        "description": "A shot of a clown on a motorcycle. Make it fill the frame"
-    },
-    {
         "id": 334,
         "name": "Jeep",
         "max_length": 90,
@@ -3004,15 +2986,6 @@
         "image": "vehicle_forward_wide_mid_straight.png",
         "icon": "vehicle_forward_wide_mid_straight.png",
         "description": "A shot of the jeep. Make it fill the frame"
-    },
-    {
-        "id": 335,
-        "name": "Tip handover",
-        "max_length": 90,
-        "wanted": 7,
-        "image": "dialog_forward_medium_mid_right.png",
-        "icon": "dialog_forward_medium_mid_right.png",
-        "description": "A shot of the tip being handed over. Frame the clown and waiter head to waist"
     },
     {
         "id": 336,

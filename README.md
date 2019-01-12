@@ -1,65 +1,34 @@
+# Our Story Server
+
+Our Story is a system to orchestrate multiple users capturing footage for a film shoot. 
+
+Each user's native mobile application connects to a Our Storyh server, which coordinates their actions according to a pre-defined shoot templates.
+
 # Docker
 
-Use the image at openlab.ncl.ac.uk:4567/bootlegging/server-app
+Use the DockerHub image /bootlegger/ourstory-server
 
-Volume map with your configuration:
+Our Story starts by default into the Local Server (Titan) mode.
 
-- /usr/src/app/config/local.js
-- /usr/src/app/ssl
+To start an online installation, volume map the following:
 
-# Bootlegger Server
-
-Bootlegger is a system to orchestrate multiple users capturing footage for a film shoot either. Multiple direction and commissioning engines are available including real-time shot allocation and individual user feedback on shot quality and their performance. 
-
-Each user's native mobile application connects to a Bootlegger server, which coordinates their actions according to a pre-defined shoot templates.
-
-![](doc_defines/architecture.png "Bootlegger Architecture")
+- .sailsrc:/usr/src/app/.sailsrc (standard rc file overriding default environment variables)
+- firebase.json:/usr/src/app/ssl/firebase.json (for push notifications)
 
 # Development
 
-Use the docker-compose files provided to start a local development environment. This includes a basic redis, mongodb and bootlegger installation.
+Use the `docker/build/docker-compose` file provided to start a local development environment. This includes a basic redis, mongodb and Our Story installation with volume maps to the local development files.
 
-Make sure to copy the `config\local.example` file to `config\local.js` and fill in any missing details before building the docker container.
-
-To get a basic setup for debugging, you only need to fill in either a Google or Facebook oauth client secret, and an admin email address (which is the email of the account you want to login as super-admin). 
-
-Once started with `docker-compose up`, the server will be accesible at [http://localhost:1337](). 
+Once started with `docker-compose up`, the server will be accesible at [http://localhost]().
 
 # Production Deployment
-Runtime Dependencies:
+Runtime External Dependencies:
 
-- Node.js https://nodejs.org/
-- MongoDB https://www.mongodb.org/
-- Redis http://redis.io/
 - Google Developer Account (optional)
 - Facebook Developer Account (optional)
 - Dropbox Developer Account (optional)
-- Beanstalk http://kr.github.io/beanstalkd/
-- Amazon S3 Account
-- Amazon Elastic Transcoder Account
-
-## Setting Up Development
-
-- Copy config/local.example.js to config/local.js and fill in missing information, including your Mongo and Redis, Google and S3 connection details.
-
-## Production Deployment
-
-We advise using `pm2` or similar keep your server running.
-
-To start in production mode (which minifiys and concats all resources), use the `--prod` switch when starting pm2 e.g. `pm2 start app.js -- --prod`
-
-In production mode, you will need to run a reverse proxy in front of the Bootlegger server to serve static assets. An example nginx config file is provided in the repo for this purpose.  
-
-## Starting the Server
-Running bootlegger on your local machine:
-`node app.js`
-
-Running a 'live' server:
-`node app.js --prod`
-
-Pointing your browser at `http://localhost` will give you the website.
-
-When using sails, you will have to close and restart the server after any changes to controller files `CTL+C`. Edits to view files should not require a restart.
+- Amazon S3 Account (for when not running in local mode)
+- Amazon Elastic Transcoder Account (for not local mode)
 
 ## Development Notes
 Bootlegger is built on the SailsJS (http://sailsjs.org/) MVC engine, which is based on expressjs.
@@ -70,8 +39,8 @@ Controller logic is located in `api\controllers\<controller>.js`
 
 ---
 
-![](doc_defines/platform.png)
+![](platform.svg)
 
-Bootlegger is an open source suite of tools developed by [Open Lab](http://openlab.ncl.ac.uk) that enables community commissioning and contribution of video. See [the website]( https://bootlegger.tv/platform) for more information.
+Our Story is an open source suite of tools developed by [Open Lab](http://openlab.ncl.ac.uk) that enables community commissioning and contribution of video. See [the website]( https://guide.ourstory.video) for more information.
 
 *Copyright Newcastle University 2016*
