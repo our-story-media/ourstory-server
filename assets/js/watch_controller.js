@@ -38,16 +38,29 @@ bootleggerApp.controller('list', ['$scope', '$http', '$sce', '$localStorage', '$
 
   $scope.edit = { title: '', description: '' };
 
-  $scope.restartedit = function (id, event) {
-    socket.post('/watch/restartedit/' + id).then(function (resp) {
-      //done
-    });
-
-    if (event) {
-      event.stopPropagation();
-      event.preventDefault();
+  $scope.getMediaThumb = function (media) {
+    //update to find first actual media file:
+    found = false;
+    i = 0;
+    while (!found)
+    {
+      if (media[i].thumb)
+        found = media[i].id;
+      i++;
     }
-  };
+    return found;
+  }
+
+  // $scope.restartedit = function (id, event) {
+  //   socket.post('/watch/restartedit/' + id).then(function (resp) {
+  //     //done
+  //   });
+
+  //   if (event) {
+  //     event.stopPropagation();
+  //     event.preventDefault();
+  //   }
+  // };
 
   $scope.formatDate = function (date) {
     var dateOut = moment(date, 'DD-MM-YYYY');
@@ -86,8 +99,8 @@ bootleggerApp.controller('list', ['$scope', '$http', '$sce', '$localStorage', '$
           // addthis.toolbox('.addthis_toolbox');
         }, 0);
 
-        $scope.shoots = resp.data.shoots;
-        $scope.owned = resp.data.owned;
+        // $scope.shoots = resp.data.shoots;
+        // $scope.owned = resp.data.owned;
         $scope.loading = false;
       });
 
@@ -115,10 +128,16 @@ bootleggerApp.controller('edits', ['$scope', '$http', '$sce', '$localStorage', '
   };
 
   $scope.getMediaThumb = function (media) {
-    if (media[0].thumb)
-      return media[0].id;
-    else
-      return media[1].id;
+    //update to find first actual media file:
+    found = false;
+    i = 0;
+    while (!found)
+    {
+      if (media[i].thumb)
+        found = media[i].id;
+      i++;
+    }
+    return found;
   }
 
   $scope.formatDate = function (date) {

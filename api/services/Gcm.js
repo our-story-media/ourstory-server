@@ -90,7 +90,7 @@ exports.sendMessage = function (platform, deviceid, title, msg, uploadid, advert
 			};
 
 			if (uploadid) {
-				message.data.upload = true;
+				message.data.upload = "true";
 				message.data.eventid = uploadid;
 			}
 
@@ -105,17 +105,10 @@ exports.sendMessage = function (platform, deviceid, title, msg, uploadid, advert
 					console.log("Successfully sent message:", response);
 				})
 				.catch(function (error) {
-					console.log("Error sending message:", error);
+					console.log("Error sending message:");
+					console.log(error);
+					// console.log("Error sending message:", error);
 				});
-
-			// gcm.send(message, function(err, messageId){
-			//     if (err) {
-			// 		console.log(err);
-			//         console.log("Something has gone wrong!");
-			//     } else {
-			//         console.log("Sent with message ID: ", messageId);
-			//     }
-			// });
 		}
 		else if (platform == 'iOS' && deviceid) {
 
