@@ -27,18 +27,8 @@ animation: fa-spin 0.3s infinite linear;
                     <div style="padding:2px;position:relative;">
                         <div style="background:#f8f8f8;">
                             <a style="padding-bottom:56.25%;overflow:hidden;width:100%;display:block;position:relative;" ng-href="{{ (!edit.path && !edit.failed) ? '#' : '/v/'+edit.shortlink }}">
-                                <img style="width:100%;position: absolute;top:0;left:0;" ng-src="<%- sails.config.master_url %>/media/thumbnail/{{getMediaThumb(edit.media)}}"
-                                />
+                                <img style="width:100%;position: absolute;top:0;left:0;" ng-src="<%- sails.config.master_url %>/media/thumbnail/{{getMediaThumb(edit.media)}}"/>
     
-                                <div ng-if="edit.path && !edit.failed" style="position:absolute;left:5px;top:5px;" class="addthis_toolbox" addthis:url="<%- sails.config.master_url %>/v/{{edit.code}}"
-                                    addthis:title="{{edit.title}}">
-                                    <a class="addthis_button_preferred_1"></a>
-                                    <a class="addthis_button_preferred_2"></a>
-                                    <a class="addthis_button_preferred_3"></a>
-                                    <a class="addthis_button_preferred_4"></a>
-                                    <a class="addthis_button_compact"></a>
-                                    <a class="addthis_counter addthis_bubble_style"></a>
-                                </div>
                                 <div style="position:absolute;top:4px;right:4px;" ng-if="edit.path && !edit.failed">
                                     <a ng-href="{{ '/watch/getvideofull/' + edit.id + '?apikey=<%- apikey %>'}}">
                                         <i class="fa fa-download"></i>
