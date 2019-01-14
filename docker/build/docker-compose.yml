@@ -76,7 +76,7 @@ services:
       - "../../assets:/usr/src/app/assets"
       - "../../views:/usr/src/app/views"
       - "../../ssl:/usr/src/app/ssl"
-      - "../../.sailsrc:/usr/src/app/.sailsrc"
+      # - "../../.sailsrc:/usr/src/app/.sailsrc"
     environment:
       - MYIP=localhost
       - VIRTUAL_HOST=localhost
