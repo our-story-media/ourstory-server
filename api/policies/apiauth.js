@@ -53,7 +53,7 @@ module.exports = function (req, res, ok) {
 		//check api-key:
 		if (!req.param('apikey'))
 		{
-			return res.json(403,{msg:'Please provide an API key'});
+			return res.status(401).json({msg:'Please provide an API key'});
 		}
 		else
 		{
@@ -103,7 +103,7 @@ module.exports = function (req, res, ok) {
 				
 				if (!u)
 				{
-					return res.json(401,{msg:'Invalid API key'});
+					return res.status(401).json({msg:'Invalid API key'});
 				}
 
 				//console.log(req.path);
@@ -120,12 +120,12 @@ module.exports = function (req, res, ok) {
 						}
 						else
 						{
-							return res.json(403,{msg:"Invalid server token"});
+							return res.status(403).json({msg:"Invalid server token"});
 						}
 					}
 					else
 					{
-						return res.json(401,{msg:'You need a valid signed in user or server token for the API'});
+						return res.status(403).json({msg:'You need a valid signed in user or server token for the API'});
 					}
 				}
 
@@ -136,11 +136,11 @@ module.exports = function (req, res, ok) {
 				}
 				else if (u.apikey.apiaccess == 'locked')
 				{
-					return res.json(403,{msg:'Your API key has been disabled'});
+					return res.status(403).json({msg:'Your API key has been disabled'});
 				}
 				else if (!u.apikey.apiaccess)
 				{
-					return res.json(401,{msg:'You have not signed up for an API key. Signup at '+sails.config.master_url + '/api/signup'});
+					return res.status(401).json({msg:'You have not signed up for an API key. Signup at '+sails.config.master_url + '/api/signup'});
 				}
 			});
 		}

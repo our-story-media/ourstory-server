@@ -54,7 +54,7 @@ module.exports = {
       });
     }
     else {
-      return res.json({ msg: "No Message Given!" }, 403);
+      return res.status(500).json({ msg: "No Message Given!" });
     }
   },
 

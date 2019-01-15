@@ -146,7 +146,7 @@ module.exports = {
 
 	alledits: function (req, res) {
 		if (!req.params.id)
-			return res.json(403, { msg: 'No edit found' });
+			return res.status(500).json({ msg: 'No edit found' });
 
 		Edits.find({ 'media.0.event_id': req.params.id }).exec(function (err, edits) {
 			var user_ids = _.pluck(edits, 'user_id');
@@ -221,7 +221,7 @@ module.exports = {
 				return res.json(edit);
 			}
 			else {
-				return res.json(403, { msg: 'No edit found' });
+				return res.status(500).json({ msg: 'No edit found' });
 			}
 		});
 	},
@@ -568,6 +568,7 @@ module.exports = {
 
 					//TODO CHANGE THIS BACK
 					if (edit.media && edit.media.length > 0) {
+						edit.failed = false;
 						edit.fail = false;
 						edit.path = null;
 						edit.progress = null;
@@ -581,16 +582,16 @@ module.exports = {
 						});
 					}
 					else {
-						res.json({ msg: 'No clips provided' }, 500);
+						res.status(500).json({ msg: 'No clips provided' });
 					}
 				}
 				else {
-					res.json({ msg: 'Invalid Edit Provided' }, 403);
+					res.status(500).json({ msg: 'Invalid Edit Provided' });
 				}
 			});
 		}
 		else {
-			return res.status(500).json({ msg: 'Editing Currently Disabled' });
+			return res.status(503).json();
 		}
 	},
 
@@ -612,7 +613,7 @@ module.exports = {
 				res.json({ failed: edit.failed, progress: edit.progress, path: edit.path });
 			}
 			else {
-				res.json({ msg: 'Invalid Edit Provided' }, 403);
+				res.status(500).json({ msg: 'Invalid Edit Provided' });
 			}
 		});
 	},

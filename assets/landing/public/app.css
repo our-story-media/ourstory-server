@@ -6752,7 +6752,8 @@ label.panel-block {
   text-align: center;
   font-size: 25pt;
   margin-top: -20px;
-  line-height: 100px; }
+  line-height: 100px;
+  overflow: hidden; }
 
 #lingumania_langswitcher {
   position: absolute !important;

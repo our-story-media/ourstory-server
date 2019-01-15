@@ -219,7 +219,7 @@ module.exports = {
 				}
 				else {
 					//console.log('cannot do that (not mobile)');
-					return res.json({ error: 'Please login' }, 403);
+					return res.status(403).json({ error: 'Please login' });
 				}
 			}
 
@@ -513,7 +513,7 @@ module.exports = {
 			});
 		}
 		else {
-			return res.json({ msg: 'server is running in production mode' }, 403);
+			return res.status(403).json({ msg: 'server is running in production mode' });
 		}
 	},
 

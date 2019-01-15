@@ -50,10 +50,10 @@ module.exports = function (req, res, ok) {
 		if (sails.config.LOCALONLY && (req.header('host') == 'localhost' || ((req.header('Referer')!=null) ? req.header('Referer').startsWith('http://localhost') || req.header('Referer').startsWith('http://offline.bootlegger.tv') : false)))
 			return ok();
 
-		console.log(id);
-		console.log(user);
+		// console.log(id);
+		// console.log(user);
 
-		console.log(req.session.passport.user);
+		// console.log(req.session.passport.user);
 		
 
 		if (!id || !user)
@@ -70,7 +70,7 @@ module.exports = function (req, res, ok) {
 			return ok();
 		}
 
-		console.log(req.session.passport.user.profile.emails[0].value);
+		// console.log(req.session.passport.user.profile.emails[0].value);
 		
 		Media.findOne(id,function(err,media){
 			// console.log(err);

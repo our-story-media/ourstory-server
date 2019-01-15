@@ -108,10 +108,7 @@
                                                 <%- __('Download (with tags)') %>
                                         </a></li>
                                         <li><a ng-href="/api/watch/clone/{{edit.id}}?apikey=<%- apikey %>"><%- __('Duplicate') %></a></li>
-                                        <% if (sails.config.LOCALONLY) { %>
                                         <li><a ng-href="/api/watch/changeownership/{{edit.id}}/{{group}}?apikey=<%- apikey %>"><%- __('Update to Latest User of this Name') %></a></li>
-                                        <% } %>
-                                        <!-- <li> -->
                                         <li class="dropdown-submenu">
                                             <a tabindex="-1" href="#" class="reassign"><span class="pull-left"><%- __('Re-assign to') %> </span><span class="fa fa-caret-right pull-right"></span>
                                             <div class="clearfix"></div>
@@ -126,7 +123,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="text-muted text-center" ng-show="eds.length==0">no stories created yet</div> -->
                 <div class="clearfix"></div>
             </div>
         </div>

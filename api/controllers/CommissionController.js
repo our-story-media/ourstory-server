@@ -407,7 +407,7 @@ module.exports = {
 			if (data)
 				res.json(data);
 			else
-				res.json({ msg: 'Template not found', status: 403 }, 403);
+				res.status(404).json({ msg: 'Template not found', status: 404 });
 		});
 	},
 
