@@ -3040,5 +3040,68 @@
         "image": "blank.png",
         "icon": "blank.png",
         "description": "Blank Frame"
+    },
+    {
+        "id": 342,
+        "name": "School",
+        "max_length": 90,
+        "wanted": 7,
+        "image": "school.png",
+        "icon": "school.png",
+        "description": ""
+    },
+    {
+        "id": 343,
+        "name": "Building",
+        "max_length": 90,
+        "wanted": 7,
+        "image": "building.png",
+        "icon": "building.png",
+        "description": ""
+    },
+    {
+        "id": 344,
+        "name": "Huts",
+        "max_length": 90,
+        "wanted": 7,
+        "image": "huts.png",
+        "icon": "huts.png",
+        "description": ""
+    },
+    {
+        "id": 345,
+        "name": "Man Box",
+        "max_length": 90,
+        "wanted": 7,
+        "image": "man_box.png",
+        "icon": "man_box.png",
+        "description": ""
+    },
+    {
+        "id": 346,
+        "name": "Man Fields",
+        "max_length": 90,
+        "wanted": 7,
+        "image": "man_fields.png",
+        "icon": "man_fields.png",
+        "description": ""
+    },
+    {
+        "id": 347,
+        "name": "Queue",
+        "max_length": 90,
+        "wanted": 7,
+        "image": "queue.png",
+        "icon": "queue.png",
+        "description": ""
+    },
+    {
+        "id": 348,
+        "name": "Sitting",
+        "max_length": 90,
+        "wanted": 7,
+        "image": "sitting.png",
+        "icon": "sitting.png",
+        "description": ""
     }
 ]
