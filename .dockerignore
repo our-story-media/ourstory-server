@@ -11,6 +11,7 @@ docker/local
 upload
 assets/landing/node_modules
 assets/landing/app
+assets/data
 .tmp
 .sailsrc
 .env
