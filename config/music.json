@@ -1,6 +1,71 @@
 {
     "tracks":[
         {
+            "title":"Ukulele",
+            "path":"bensound-ukulele.mp3",
+            "caption":"Music: Ukulele from Bensound.com",
+            "duration":"60"
+        },
+        {
+            "title":"Sunny",
+            "path":"bensound-sunny.mp3",
+            "caption":"Music: Sunny from Bensound.com",
+            "duration":"60"
+        },
+        {
+            "title":"Once Again",
+            "path":"bensound-onceagain.mp3",
+            "caption":"Music: Once Again from Bensound.com",
+            "duration":"60"
+        },
+        {
+            "title":"Jazzy Frenchy",
+            "path":"bensound-jazzyfrenchy.mp3",
+            "caption":"Music: Jazzy Frenchy from Bensound.com",
+            "duration":"60"
+        },
+        {
+            "title":"Hey",
+            "path":"bensound-hey.mp3",
+            "caption":"Music: Hey from Bensound.com",
+            "duration":"60"
+        },
+        {
+            "title":"Happy Rock",
+            "path":"bensound-happyrock.mp3",
+            "caption":"Music: Happy Rock from Bensound.com",
+            "duration":"60"
+        },
+        {
+            "title":"Dub Step",
+            "path":"bensound-dubstep.mp3",
+            "caption":"Music: Dub Step from Bensound.com",
+            "duration":"60"
+        },
+        {
+            "title":"Cute",
+            "path":"bensound-cute.mp3",
+            "caption":"Music: Cute from Bensound.com",
+            "duration":"60"
+        },
+        {
+            "title":"A New Beginning",
+            "path":"bensound-anewbeginning.mp3",
+            "caption":"Music: A New Beginning from Bensound.com",
+            "duration":"60"
+        },
+
+
+
+
+
+        {
+            "title":"Accoustic Breeze",
+            "path":"bensound-accousticbreeze.mp3",
+            "caption":"Music: Accoustic Breeze from Bensound.com",
+            "duration":"60"
+        },
+        {
             "title":"Turning to You",
             "path":"Blue_Dot_Sessions_-_04_-_Turning_to_You.mp3",
             "caption":"Music by Blue Dot Sessions",
