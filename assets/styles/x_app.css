@@ -1326,3 +1326,14 @@ h1 .fa.fa-stack-1x {
 body.modal-open {
   overflow: visible;
 }
+
+.buildversion
+{
+    padding-top:10px;
+}
+
+[dir=rtl] .buildversion
+{
+    right: 156px !important;
+    left: inherit !important;
+}
