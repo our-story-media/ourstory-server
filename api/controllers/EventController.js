@@ -410,25 +410,25 @@ module.exports = {
 		});
 	},
 
-	makedefault: function (req, res) {
-		//console.log(req.param('id'));
-		User.update({
-			id: req.session.passport.user.id
-		},
-			{
-				currentevent: req.param('id')
-			},
-			function (err, users) {
-				if (err) {
-					return res.json(err, 500);
-				} else {
-					req.session.passport.user.currentevent = req.param('id');
-					req.session.passport.user.cv = req.param('id');
-					return res.json({ msg: 'Updated Succesfully' }, 200);
-				}
-			});
-		return res.json({ msg: 'done' }, 200);
-	},
+	// makedefault: function (req, res) {
+	// 	//console.log(req.param('id'));
+	// 	User.update({
+	// 		id: req.session.passport.user.id
+	// 	},
+	// 		{
+	// 			currentevent: req.param('id')
+	// 		},
+	// 		function (err, users) {
+	// 			if (err) {
+	// 				return res.json(err, 500);
+	// 			} else {
+	// 				req.session.passport.user.currentevent = req.param('id');
+	// 				req.session.passport.user.cv = req.param('id');
+	// 				return res.json({ msg: 'Updated Succesfully' }, 200);
+	// 			}
+	// 		});
+	// 	return res.json({ msg: 'done' }, 200);
+	// },
 
 	addcoverage: function (req, res) {
 		var index = req.param('index');
@@ -1844,13 +1844,13 @@ module.exports = {
 		}
 
 		if (!req.param('eventtype')) {
-			return res.json({ msg: 'no template given' }, 500);
+			return res.status(500).json({ msg: 'no template given' });
 		}
 
 		//do save
 		EventTemplate.findOne(req.param('eventtype')).exec(function (err, myev) {
 			if (err || !myev)
-				return res.json({ msg: 'no template found' }, 500);
+				return res.status(500).json({ msg: 'no template found' });
 
 			//console.log(myev);
 			//var myev = tys[req.param('eventtype')];
@@ -1929,9 +1929,9 @@ module.exports = {
 
 					// Default permissions settings
 					neevent.public = false;
-					neevent.publicview = false;
+					neevent.publicview = true;
 					neevent.publicshare = false;
-					neevent.publicedit = false;
+					neevent.publicedit = true;
 
 					//load default tags:
 
