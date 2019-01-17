@@ -63,7 +63,7 @@ module.exports = function(grunt) {
 				endTag: '<!--SCRIPTS END-->',
 				fileTmpl: '<script src="%s"></script>',
 				appRoot: '.tmp/public',
-				relative: true
+				// relative: true
 			},
 			files: {
 				'.tmp/public/**/*.html': ['.tmp/public/min/production.min.js'],
@@ -93,7 +93,7 @@ module.exports = function(grunt) {
 				endTag: '<!--STYLES END-->',
 				fileTmpl: '<link rel="stylesheet" href="%s">',
 				appRoot: '.tmp/public',
-				relative: true
+				// relative: true
 			},
 
 			files: {

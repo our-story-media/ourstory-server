@@ -13,28 +13,20 @@ WORKDIR /usr/src/app
 
 COPY package.json /usr/src/app/
 
-
-
 RUN apk add --no-cache --update --repository http://dl-3.alpinelinux.org/alpine/edge/testing \
 	git python gcc g++ make && \
 	npm install --production --silent && \
 	apk del git gcc g++ make python && \
 	rm -rf /var/cache/apk/*
-# RUN npm install --production
-
-
-# RUN npm i --silent && npm cache clean --force
 
 COPY . /usr/src/app
 
 EXPOSE 1337
 
-RUN grunt buildProd && mkdir -p /usr/src/app/upload/
+RUN grunt buildProd && mkdir -p /usr/src/app/upload/ && rm -R /usr/src/app/assets/music/ && rm /usr/src/app/Gruntfile.js && rm -R /usr/src/app/tasks
 
-# actual bits that need mapping are .tmp, www and uploads
-VOLUME /usr/src/app/www
-VOLUME /usr/src/app/data
-VOLUME /usr/src/app/assets
+VOLUME ["/usr/src/app/www","/usr/src/app/data","/usr/src/app/assets"]
+
 # FOR DEBUGGING:
 # VOLUME /usr/src/app/.tmp
 

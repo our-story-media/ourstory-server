@@ -6,8 +6,6 @@ ssl
 cast
 development notes
 server_config
-docker/build
-docker/local
 upload
 assets/landing/node_modules
 assets/landing/app
@@ -15,3 +13,11 @@ assets/data
 .tmp
 .sailsrc
 .env
+tools
+.eslintrc.json
+platform.svg
+emails
+docker/build
+docker/local
+Dockerfile*
+.DS_Store

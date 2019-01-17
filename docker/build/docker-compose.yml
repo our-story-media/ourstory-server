@@ -18,7 +18,7 @@ services:
       # - "../../certs:/etc/nginx/certs:ro"
       # - "../../conf:/etc/nginx/conf.d"
       - "../server.conf:/etc/nginx/conf.d/default.conf:ro"
-      - "../bootlegger.dev.conf:/etc/nginx/vhost.d/default:ro"
+      # - "../bootlegger.dev.conf:/etc/nginx/vhost.d/default:ro"
       - "/usr/share/nginx/html"
       - "./upload:/usr/src/app/upload"
     volumes_from:
@@ -66,16 +66,16 @@ services:
       - redis
       - mongo
       - beanstalk
-    command: nodemon --watch api app.js # -- --verbose
+    # command: nodemon --watch api app.js # -- --verbose
     expose:
       - 1337
-    volumes:
-      - ../../config:/usr/src/app/config
+    # volumes:
+      # - ../../config:/usr/src/app/config
       # - "./upload:/usr/src/app/upload"
-      - "../../api:/usr/src/app/api"
-      - "../../assets:/usr/src/app/assets"
-      - "../../views:/usr/src/app/views"
-      - "../../ssl:/usr/src/app/ssl"
+      # - "../../api:/usr/src/app/api"
+      # - "../../assets:/usr/src/app/assets"
+      # - "../../views:/usr/src/app/views"
+      # - "../../ssl:/usr/src/app/ssl"
       # - "../../.sailsrc:/usr/src/app/.sailsrc"
     environment:
       - MYIP=localhost
