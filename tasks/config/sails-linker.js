@@ -123,7 +123,7 @@ module.exports = function(grunt) {
 				endTag: '<!--STYLES END-->',
 				fileTmpl: '<link rel="stylesheet" href="%s">',
 				appRoot: '.tmp/public',
-				relative: true
+				// relative: true
 			},
 			files: {
 				'.tmp/public/index.html': ['.tmp/public/min/production.min.css'],
@@ -168,7 +168,7 @@ module.exports = function(grunt) {
 				endTag: '// SCRIPTS END',
 				fileTmpl: 'script(src="%s")',
 				appRoot: '.tmp/public',
-				relative: true
+				// relative: true
 			},
 			files: {
 				'views/**/*.jade': require('../pipeline').jsFilesToInject
@@ -193,7 +193,7 @@ module.exports = function(grunt) {
 				endTag: '// SCRIPTS END',
 				fileTmpl: 'script(src="%s")',
 				appRoot: '.tmp/public',
-				relative: true
+				// relative: true
 			},
 			files: {
 				'views/**/*.jade': ['.tmp/public/min/production.min.js']
@@ -245,7 +245,7 @@ module.exports = function(grunt) {
 				endTag: '// STYLES END',
 				fileTmpl: 'link(rel="stylesheet", href="%s")',
 				appRoot: '.tmp/public',
-				relative: true
+				// relative: true
 			},
 			files: {
 				'views/**/*.jade': ['.tmp/public/min/production.min.css']

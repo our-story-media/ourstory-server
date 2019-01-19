@@ -1,0 +1,2 @@
+FROM bootlegger/nginx:latest
+COPY docker/server.conf /etc/nginx/conf.d/default.conf

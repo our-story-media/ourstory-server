@@ -18,8 +18,8 @@ COPY . /usr/src/app
 
 EXPOSE 1337
 
-RUN grunt buildProd && mkdir -p /usr/src/app/upload/ && rm -R /usr/src/app/assets/music/ && rm /usr/src/app/Gruntfile.js && rm -R /usr/src/app/tasks
+# RUN grunt buildProd && mkdir -p /usr/src/app/upload/
 
-VOLUME ["/usr/src/app/www","/usr/src/app/data","/usr/src/app/assets"]
+VOLUME ["/usr/src/app/www","/usr/src/app/data","/usr/src/app/assets", "/usr/src/app/.tmp"]
 
 CMD [ "npm", "start" ]

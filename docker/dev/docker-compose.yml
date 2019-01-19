@@ -5,16 +5,15 @@ volumes:
   redis-data:
     external: false
 
-services:
-  nginx-local:
+  nginx:
     restart: always
-    image: bootlegger/nginx-local
     build:
       context: ../..
-      dockerfile: Dockerfile.nginx.local
+      dockerfile: Dockerfile.nginx
     ports:
       - "80:80"
     volumes:
+      - "../server.conf:/etc/nginx/conf.d/default.conf:ro"
       - "./upload:/usr/src/app/upload"
     volumes_from:
       - web
@@ -36,11 +35,17 @@ services:
   web:
     restart: always
     image: bootlegger/ourstory-server
+    build: ../..
     depends_on: 
       - redis
       - mongo
       - beanstalk
+    command: nodemon --watch api app.js # -- --verbose
     expose:
       - 1337
     volumes:
+      - ../../config:/usr/src/app/config
       - "./upload:/usr/src/app/upload"
+      - "../../api:/usr/src/app/api"
+      - "../../assets:/usr/src/app/assets"
+      - "../../views:/usr/src/app/views"
