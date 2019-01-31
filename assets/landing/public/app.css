@@ -6672,6 +6672,9 @@ label.panel-block {
 .tag {
   border-radius: 6px; }
 
+.section {
+  overflow: hidden; }
+
 .hero-head {
   border-bottom: 1px solid #888;
   background: #343c3d; }

@@ -5,6 +5,7 @@ volumes:
   redis-data:
     external: false
 
+services:
   nginx:
     restart: always
     build:
@@ -49,3 +50,5 @@ volumes:
       - "../../api:/usr/src/app/api"
       - "../../assets:/usr/src/app/assets"
       - "../../views:/usr/src/app/views"
+      - "../../ssl:/usr/src/app/ssl"
+      - "../../.sailsrc:/usr/src/app/.sailsrc"

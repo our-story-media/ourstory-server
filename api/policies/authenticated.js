@@ -82,6 +82,13 @@ module.exports = function (req, res, ok) {
 
       // console.log(req.session.passport.user);
       // console.log('redirect ' + req.options.action);
+      // console.log(req.session.passport.user);
+      
+      if (req.session.passport.user.profile.provider == 'local')
+      {
+        return res.redirect('/auth/sessionkey');
+      }
+
       if (req.options.action=='acceptconsent' || req.options.action=='consent')
       {
         // console.log("accept or consent");

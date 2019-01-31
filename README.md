@@ -2,7 +2,7 @@
 
 Our Story is a system to orchestrate multiple users capturing footage for a film shoot. 
 
-Each user's native mobile application connects to a Our Storyh server, which coordinates their actions according to a pre-defined shoot templates.
+Each user's native mobile application connects to a Our Story server, which coordinates their actions according to  pre-defined shoot templates.
 
 # Docker
 
@@ -17,11 +17,14 @@ To start an online installation, volume map the following:
 
 # Development
 
-Use the `docker/build/docker-compose` file provided to start a local development environment. This includes a basic redis, mongodb and Our Story installation with volume maps to the local development files.
+Use the `docker/dev/docker-compose` file provided to start a local development environment. This includes a basic redis, mongodb and Our Story installation with volume maps to the local development files.
 
 Once started with `docker-compose up`, the server will be accesible at [http://localhost]().
 
 # Production Deployment
+
+Use the `docker/build/docker-compose` file to build and push your images and then deploy using the instructions above.
+
 Runtime External Dependencies:
 
 - Google Developer Account (optional)

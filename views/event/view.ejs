@@ -16,7 +16,8 @@
   </div> -->
 
   <div class="row" ng-show="!ifRoleImages()" style="margin-top:2em;">
-    <div class="alert alert-warning col-sm-8 col-sm-offset-2">
+    <div class="col-sm-8 col-sm-offset-2">
+    <div class="alert alert-warning ">
       <i class="fa fa-info fa-3x" style="float:left;margin-right:10px;"></i>
       <h3 style="margin:0">
         <%- __('Not Quite Ready!') %>
@@ -25,9 +26,11 @@
       </h3>
     </div>
   </div>
+  </div>
 
   <div class="row" ng-show="event.public && (!event.release || event.release.length==0)" style="margin-top:2em;">
-    <div class="alert alert-warning col-sm-8 col-sm-offset-2">
+    <div class="col-sm-8 col-sm-offset-2">
+    <div class="alert alert-warning">
       <i class="fa fa-info fa-3x" style="float:left;margin-right:10px;"></i>
       <h3 style="margin:0">
         <%- __('Not Quite Ready!') %>
@@ -35,6 +38,7 @@
           <%- __('Make sure to add a Particiant Release as your shoot is public') %></small>
       </h3>
     </div>
+  </div>
   </div>
 
 

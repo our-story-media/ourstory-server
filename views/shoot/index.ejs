@@ -18,7 +18,8 @@
   </div>
 
   <div class="hidden-xs row" style="margin-top:2em;">
-		<div class="alert alert-success col-sm-8 col-sm-offset-2">
+    <div class="col-sm-8 col-sm-offset-2">
+		<div class="alert alert-success">
       <i class="fa fa-info fa-3x" style="float:left;margin-right:10px;"></i>
 			<h3 style="margin:0">
 				<%- __('Your shoot should take care of itself!') %>
@@ -26,11 +27,12 @@
             <%- __('However you can monitor and tweak what`s happening here:') %></small>
 			</h3>
 		</div>
-	</div>
+  </div>
+</div>
 
   <% if (!sails.config.LOCALONLY) { %>
-    <div class="row" style="margin-bottom:5px;">
-  <div class="well col-sm-8 col-sm-offset-2 text-center">
+  <div style="margin-bottom:5px;">
+    <div class="well col-sm-8 col-sm-offset-2 text-center">
     
         <form action="/shoot/sendmessage/<%- event.id %>?apikey=<%- apikey %>" method="post">
           <p data-delay="300" data-toggle="tooltip" title="<%- __('This message gets send to anyone who has contributed using the mobile app to this shoot.') %>"><%- __('Send a notification to participants at your shoot.') %>
