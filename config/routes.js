@@ -43,6 +43,7 @@ module.exports.routes = {
     'get /api/event/myevents': 'EventController.myevents',
     'get /api/event/myeventsowned': 'EventController.myeventsowned',
     'get /api/event/removelimit/:id?': 'EventController.removelimit',
+    'get /api/event/restorelimit/:id?': 'EventController.restorelimit',
     'get /api/event/image/:id?': { uploadLimit: '4mb' },
     'post /api/post/remind': 'PostController.remind',
     'post /api/post/broadcast': 'PostController.broadcast',

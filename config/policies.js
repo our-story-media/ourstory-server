@@ -82,6 +82,7 @@ module.exports.policies = {
       'beacon':['flash','apikeygen'],      
       'lookupshoot':true,
       'removelimit':['superadmin','flash','apiauth'],
+      'restorelimit':['superadmin','flash','apiauth'],
       'iconurl':true,
       'backgroundurl':true,
       'roleimg':true,

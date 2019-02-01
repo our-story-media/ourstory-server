@@ -288,5 +288,8 @@
 	"No can do, sorry.": "No can do, sorry.",
 	"Upload Complete": "Upload Complete",
 	"Theme Image removed!": "Theme Image removed!",
-	"Make sure to add a Particiant Release as your shoot is public": "Make sure to add a Particiant Release as your shoot is public"
+	"Make sure to add a Particiant Release as your shoot is public": "Make sure to add a Particiant Release as your shoot is public",
+	"You can create up to %s shoots simultaneously using Bootlegger, delete an old shoot to continue.": "You can create up to %s shoots simultaneously using Bootlegger, delete an old shoot to continue.",
+	"Limit Removed": "Limit Removed",
+	"Limit Added": "Limit Added"
 }

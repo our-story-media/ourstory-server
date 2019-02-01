@@ -26,8 +26,20 @@
       </div>
 
       <% } %>
+
+
+      <% if (sails.config.SHOOT_LIMIT > 0 || user.nolimit) { %>
         <a href="/commission/new" class="btn btn-lg btn-success">
           <i class="fa fa-plus"></i> <%- __('Start a Shoot Now') %></a>
+          <% } else {%>
+            <div class="row">
+              <div class="col-md-8 col-xs-12 col-md-offset-2">
+                <div class="alert alert-info">
+                  Our Story is currently invite-only as we complete testing and documentation.<br>Please contact <a href="mailto:info@ourstory.video">info@ourstory.video</a> for more information.
+                </div>
+              </div>
+            </div>
+            <% } %>
   </div>
 
   <div ng-if="events.length > 0" class="row">

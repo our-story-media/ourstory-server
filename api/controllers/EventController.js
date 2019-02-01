@@ -693,6 +693,19 @@ module.exports = {
 	},
 
 	/**
+     * Removes limit on number of shoots the can be created by user
+     */
+	restorelimit: function (req, res) {
+		User.findOne(req.param('id')).exec(function (err, u) {
+			u.nolimit = 0;
+			u.save(function (err, u) {
+				req.session.flash = { msg: sails.__('Limit Added') };
+				return res.redirect('/event/admin');
+			});
+		});
+	},
+
+	/**
 	 * @api {socket.io post} /api/shoot/discon/:id Disconnnect
 	 * @apiName discon
 	 * @apiGroup Shoot_Participation
