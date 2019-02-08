@@ -192,7 +192,7 @@
                 <i class="fa fa-fire fa-2x" style="cursor: pointer;" ng-click="tag.burn=!tag.burn;" ng-style="{opacity:(!tag.burn)?'0.5':1}"></i>
               </td>
               <td ng-repeat="lang in topiclangs">
-                <input type="text" class="form-control input-sm" style="min-width: 8em;" ng-model="tag.values[lang.name]"/>
+                <input type="text" maxlength="18" class="form-control input-sm" style="min-width: 8em;" ng-model="tag.values[lang.name]"/>
               </td>
               <td>
                   <div class="text-center">
