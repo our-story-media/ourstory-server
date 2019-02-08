@@ -254,7 +254,7 @@
 
 		<div class="page-header">
 			<h2>
-				<%- __('2. Select Destination') %>
+				<%- __('2. Start Sync') %>
 			</h2>
 			<p>
 				<%- __('Choose where and how to Sync Your files') %>
@@ -262,7 +262,7 @@
 		</div>
 
 		<% if (!sails.config.LOCALONLY) { %>
-		<tabset>
+		<!-- <tabset>
 
 			<tab tooltip-popup-delay="300" tooltip="Links Our Story to your own dropbox account for downloading footage" heading="Dropbox"
 			 is-open="true">
@@ -319,7 +319,7 @@
 				</div>
 			</tab>
 
-			<tab tooltip-popup-delay="300" tooltip="Downloads footage directly to your computer or mobile device" heading=" <%- __('Native Sync Client') %>">
+			<tab tooltip-popup-delay="300" tooltip="Downloads footage directly to your computer or mobile device" heading=" <%- __('Native Sync Client') %>"> -->
 				<div class="row text-center text-muted">
 
 
@@ -344,8 +344,8 @@
 						</button>
 					</div>
 				</div>
-			</tab>
-		</tabset>
+			<!-- </tab> -->
+		<!-- </tabset> -->
 		<% } %>
 
 		<% } %>

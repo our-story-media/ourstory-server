@@ -291,5 +291,10 @@
 	"Make sure to add a Particiant Release as your shoot is public": "Make sure to add a Particiant Release as your shoot is public",
 	"You can create up to %s shoots simultaneously using Bootlegger, delete an old shoot to continue.": "You can create up to %s shoots simultaneously using Bootlegger, delete an old shoot to continue.",
 	"Limit Removed": "Limit Removed",
-	"Limit Added": "Limit Added"
+	"Limit Added": "Limit Added",
+	"Logged In": "Logged In",
+	"Transcode Output": "Transcode Output",
+	"Start Copy to Dropbox": "Start Copy to Dropbox",
+	"Stop and Reset Copy": "Stop and Reset Copy",
+	"2. Start Sync": "2. Start Sync"
 }
