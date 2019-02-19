@@ -333,7 +333,7 @@ It produces high quality, content rich footage with no expense">
 
         <!-- </div> -->
       </div>
-      <div class="col-sm-4 text-right flip">
+      <div class="col-sm-4 col-xs-12 text-right flip">
         <span class="form-inline">
           <input type="text" ng-model="shootsearch" typeahead-on-select="searchEvent($item, $model, $label)" style="display:inline-block;"
             typeahead-loading="loadingShoots" placeholder="<%- __('search shoots') %>" typeahead="n.name for n in getShoot($viewValue) | filter:$viewValue | limitTo:8"
