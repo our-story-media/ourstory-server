@@ -220,10 +220,6 @@
 								<i class="fa fa-edit"></i>
 							</button>
 
-							<!-- <button class="btn btn-link pull-right" ng-click="uploadrole(role.id)">
-								<i class="fa fa-image"></i>
-							</button> -->
-
 							<div style="position:absolute;left:0;top:0;height:100%;width:4em;background-size: cover;background-repeat: no-repeat;background-color: silver"
 							 ng-click="uploadrole(role)" ng-style="{'background-image':'url(/event/roleimg/'+eventinfo.id+'/'+role.id+')'}"
 							 class="float:left">
@@ -437,7 +433,7 @@
 			</div>
 			<div class="modal-body text-center">
 				<span ng-show="currentroleupload.image">
-					<img ng-src="{{'/event/roleimg/'+eventinfo.id+'/'+currentroleupload.id}}" />
+					<img style="max-width:100%;" ng-src="{{'/event/roleimg/'+eventinfo.id+'/'+currentroleupload.id}}" />
 					<br>
 					<a class="btn btn-link" ng-href="/event/clearroleimg/{{eventinfo.id}}/{{currentroleupload.id}}?apikey=<%-apikey%>">
 						<%- __('Remove Image') %>
