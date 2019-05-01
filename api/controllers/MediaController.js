@@ -367,7 +367,7 @@ module.exports = {
 					if (sails.config.LOCALONLY) {
 						//need to transcode locally:
 						//TODO: LOCAL FIX
-						LocalService.transcode(filename);
+						LocalService.transcode(m,filename);
 						return res.json({ msg: 'OK' });						
 					}
 					else {
