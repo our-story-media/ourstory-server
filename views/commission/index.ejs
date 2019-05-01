@@ -382,8 +382,8 @@
 
 				<tabset>
 
-					<tab heading="Archive">
-						<input type="text" ng-model="allshotsfilter" class="form-control" placeholder="enter search term" />
+					<tab heading="<%- __('Archive') %>">
+						<input type="text" ng-model="allshotsfilter" class="form-control" placeholder="<%- __('enter search term')%>" />
 						<br>
 						<div class="list-group" id="allshots" style="overflow-y:scroll;overflow-x: hidden;max-height:400px;">
 							<div class="row">
@@ -394,7 +394,7 @@
 							</div>
 						</div>
 					</tab>
-					<tab heading="Add New">
+					<tab heading="<%- __('Add New') %>">
 						<form class="form-inline" action="/api/commission/addshot/<%- event.id %>?apikey=<%- apikey %>" method="post"
 						 enctype="multipart/form-data">
 							<div class="form-group">

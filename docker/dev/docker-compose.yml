@@ -10,11 +10,11 @@ services:
     restart: always
     build:
       context: ../..
-      dockerfile: Dockerfile.nginx
+      dockerfile: Dockerfile.nginx.local
     ports:
       - "80:80"
     volumes:
-      - "../server.conf:/etc/nginx/conf.d/default.conf:ro"
+      # - "../server.conf:/etc/nginx/conf.d/default.conf:ro"
       - "./upload:/usr/src/app/upload"
     volumes_from:
       - web
@@ -32,6 +32,14 @@ services:
 
   beanstalk:
     image: kusmierz/beanstalkd
+
+  # worker:
+  #   image: bootlegger/ourstory-worker
+  #   depends_on:
+  #     - mongo
+  #     - beanstalk
+  #   volumes:
+  #     - "./upload:/usr/src/app/upload"
 
   web:
     restart: always

@@ -219,8 +219,6 @@
 	"shots of": "shots of",
 	"wanted": "wanted",
 	"no contributors yet": "no contributors yet",
-	"Footage can be shared publically": "Footage can be shared publically",
-	"Footage can be shared Publically": "Footage can be shared Publically",
 	"Footage can be Shared Publically": "Footage can be Shared Publically",
 	"Welcome to Our Story)": "Welcome to Our Story)",
 	"Welcome to Our Story. We are here to help you contribute to great video stories.": "Welcome to Our Story. We are here to help you contribute to great video stories.",
@@ -298,5 +296,8 @@
 	"Stop and Reset Copy": "Stop and Reset Copy",
 	"2. Start Sync": "2. Start Sync",
 	"There was a problem editing this video!": "There was a problem editing this video!",
-	"New Shot Added": "New Shot Added"
+	"New Shot Added": "New Shot Added",
+	"enter search term":"enter search term",
+	"Archive":"Archive",
+	"Add New":"Add New"
 }
