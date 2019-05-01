@@ -40,7 +40,7 @@ bootleggerApp.controller('list', ['$scope', '$http', '$sce', '$localStorage', '$
 
   $scope.getMediaThumb = function (media) {
     //update to find first actual media file:
-    found = false;
+    var found = false;
     i = 0;
     while (!found)
     {
@@ -129,8 +129,8 @@ bootleggerApp.controller('edits', ['$scope', '$http', '$sce', '$localStorage', '
 
   $scope.getMediaThumb = function (media) {
     //update to find first actual media file:
-    found = false;
-    i = 0;
+    var found = false;
+    var i = 0;
     while (!found)
     {
       if (media[i].thumb)
