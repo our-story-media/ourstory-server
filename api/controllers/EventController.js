@@ -1968,15 +1968,15 @@ module.exports = {
 						}
 						else {
 							//console.log("requesting server address");
-							var reqs = require('request');
+							// var reqs = require('request');
 
-							process.nextTick(function () {
+							// process.nextTick(function () {
 								//console.log("tick");
-								reqs(sails.config.multiserver + '/newevent/?id=' + event.id, function (err, ress, body) {
-									if (!err) {
+								// reqs(sails.config.multiserver + '/newevent/?id=' + event.id, function (err, ress, body) {
+									// if (!err) {
 										//console.log("got " + body);
-										whichserver = JSON.parse(body).server;
-									}
+										// whichserver = JSON.parse(body).server;
+									// }
 
 
 									//console.log(body);
@@ -1999,7 +1999,7 @@ module.exports = {
 
 									// console.log("whichserver: " + whichserver);
 
-									event.server = whichserver;
+									// event.server = whichserver;
 									event.save(function (err) {
 
 										//console.log(req.session.User);
@@ -2027,8 +2027,8 @@ module.exports = {
 										// } // end if err
 										// });	//end user find
 									});
-								});//end request for server
-							});//tick
+								// });//end request for server
+							// });//tick
 						}//end if err
 					});//end event create
 				});

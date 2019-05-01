@@ -124,8 +124,8 @@ module.exports = {
                         //if this server is running it
                         //console.log("event server: "+e.server);
                         //console.log(sails.config.hostname);
-                        if (!e.server || e.server == sails.config.hostname + ':' + sails.config.port  || sails.multiserveronline==false)
-                        {
+                        // if (!e.server || e.server == sails.config.hostname + ':' + sails.config.port  || sails.multiserveronline==false)
+                        // {
                         //	console.log('marathon director starting event '+e.name + " / " + e.id);
                             Log.verbose('marathondirector','marathondirector starting event '+e.name);
                             module.exports.AllEvents[e.id] = {
@@ -154,7 +154,7 @@ module.exports = {
 
                                 }
                             });
-                        }
+                        // }
                     }
                 }
                 catch (e)
@@ -180,16 +180,16 @@ module.exports = {
 				{
 					//if this server is running it
 					//console.log('maybe '+e.name);
-					if (!e.server || e.server == sails.config.hostname + ':' + sails.config.port  || sails.multiserveronline==false)
-					{
-						module.exports.AllEvents[e.id] = {
-							id : e.id,
-							data : e,
-							users:{},
-							currentphase:'selection',
-							lastuploadchecked:new Date()
-						};
-					}
+					// if (!e.server || e.server == sails.config.hostname + ':' + sails.config.port  || sails.multiserveronline==false)
+					// {
+					module.exports.AllEvents[e.id] = {
+						id : e.id,
+						data : e,
+						users:{},
+						currentphase:'selection',
+						lastuploadchecked:new Date()
+					};
+					// }
 				}
 				//module.exports.longpoll();
 			});
