@@ -1941,10 +1941,20 @@ module.exports = {
 					neevent.joincode = joincode;
 
 					// Default permissions settings
-					neevent.public = false;
-					neevent.publicview = true;
-					neevent.publicshare = false;
-					neevent.publicedit = true;
+					if (!sails.config.LOCALONLY)
+					{
+						neevent.publicview = true;
+						neevent.publicedit = true;
+						neevent.public = false;
+						neevent.publicshare = false;
+					}
+					else
+					{
+						neevent.public = true;
+						neevent.publicview = true;
+						neevent.publicedit = true;
+						neevent.publicshare = true;
+					}
 
 					//load default tags:
 
