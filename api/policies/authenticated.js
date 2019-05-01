@@ -9,13 +9,14 @@
 
 function isValidReferer(req)
 {
-  // console.log(req.header('host'));
+  // console.log(req.headers);
   // return true;
-  return req.header('host') == 'localhost';
+  return req.header('host') == 'localhost' || _.includes(req.header('referer'),'localhost');
 }
 
 module.exports = function (req, res, ok) {
 
+  // console.log(req);
   //check its from localhost:
   if (sails.config.LOCALONLY && isValidReferer(req))
   {
@@ -83,6 +84,7 @@ module.exports = function (req, res, ok) {
     // User is allowed, proceed to controller
     if (req.session.passport && req.session.passport.user) {
 
+      
       // console.log(req.session.passport.user);
       // console.log('redirect ' + req.options.action);
       // console.log(req.session.passport.user);
@@ -99,8 +101,9 @@ module.exports = function (req, res, ok) {
       }
       else
       {
+
         //GDPR adjustments:
-        if (!req.session.passport.user.consent )
+        if (!req.session.passport.user.consent)
         {
           if (req.wantsJSON)
           {
@@ -111,6 +114,7 @@ module.exports = function (req, res, ok) {
           else
           {
             //send to consent:
+
             return res.redirect('/consent');
           }
         }
@@ -122,7 +126,8 @@ module.exports = function (req, res, ok) {
     }
     else {
       // User is not allowed
-
+        // console.log('not allowed')
+        // console.log(req.session);
         if (req.wantsJSON)
         {
           return res.json(403,{msg:"You are not permitted to perform this action."});
