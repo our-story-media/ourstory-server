@@ -296,5 +296,7 @@
 	"Transcode Output": "Transcode Output",
 	"Start Copy to Dropbox": "Start Copy to Dropbox",
 	"Stop and Reset Copy": "Stop and Reset Copy",
-	"2. Start Sync": "2. Start Sync"
+	"2. Start Sync": "2. Start Sync",
+	"There was a problem editing this video!": "There was a problem editing this video!",
+	"New Shot Added": "New Shot Added"
 }
