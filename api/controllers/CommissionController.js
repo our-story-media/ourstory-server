@@ -252,7 +252,7 @@ module.exports = {
 					else
 					{
 						sails.eventmanager.addevent(req.params.id);
-						ails.eventmanager.updateevent(req.params.id);
+						sails.eventmanager.updateevent(req.params.id);
 						res.json({ msg: 'ok' });
 					}
 				});
