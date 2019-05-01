@@ -352,7 +352,7 @@ module.exports = {
 	//returns a list of valid CC music to use as background music to videos:
 	music: function (req, res) {
 		var output = _.map(music.tracks, (m) => {
-			m.url = sails.config.central_url + '/music/' + m.path;
+			m.url = sails.config.master_url + '/music/' + m.path;
 			return m;
 		});
 		return res.json(output);
