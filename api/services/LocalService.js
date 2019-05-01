@@ -3,12 +3,12 @@ var client = null;
 
 module.exports = {
 
-    transcode: function (file) {
+    transcode: function (media, file) {
         //trigger the transcode
 
         var payload = {
-            input: file,
-            output: 'preview_'+file
+            input: `${media.event_id}/${file}`,
+            output: `${media.event_id}/preview_${file}`
         };
 
         //spits out a file which is in the transcode folder, named preview_<path>
