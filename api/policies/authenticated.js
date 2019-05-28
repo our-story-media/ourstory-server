@@ -10,13 +10,12 @@
 function isValidReferer(req)
 {
   // console.log(req.headers);
-  // return true;
+  // return false;
   return req.header('host') == 'localhost' || _.includes(req.header('referer'),'localhost');
 }
 
 module.exports = function (req, res, ok) {
 
-  // console.log(req);
   //check its from localhost:
   if (sails.config.LOCALONLY && isValidReferer(req))
   {
@@ -46,7 +45,7 @@ module.exports = function (req, res, ok) {
         ],
         emails: [
           {
-            value: 'localadmin@bootlegger.tv'
+            value: 'localadmin@ourstory.video'
           }
         ]
       }
@@ -59,7 +58,6 @@ module.exports = function (req, res, ok) {
   }
   else
   {
-    // console.log('NOT LOCAL');
     
     //if the request has a servertoken (i.e. its operating on behalf of another user...)
     if (req.param('servertoken'))
@@ -84,19 +82,8 @@ module.exports = function (req, res, ok) {
     // User is allowed, proceed to controller
     if (req.session.passport && req.session.passport.user) {
 
-      
-      // console.log(req.session.passport.user);
-      // console.log('redirect ' + req.options.action);
-      // console.log(req.session.passport.user);
-      
-      // if (req.session.passport.user.profile.provider == 'local' && req.options.action != 'sessionkey')
-      // {
-      //   return res.redirect('/auth/sessionkey');
-      // }
-
       if (req.options.action=='acceptconsent' || req.options.action=='consent')
       {
-        // console.log("accept or consent");
         return ok();
       }
       else
@@ -114,7 +101,6 @@ module.exports = function (req, res, ok) {
           else
           {
             //send to consent:
-
             return res.redirect('/consent');
           }
         }
@@ -130,13 +116,30 @@ module.exports = function (req, res, ok) {
         // console.log(req.session);
         if (req.wantsJSON)
         {
-          return res.json(403,{msg:"You are not permitted to perform this action."});
+          // console.log('forbidden');
+          return res.status(403).json({msg:"You are not permitted to perform this action."});
         }
         else
         {
-          req.session.flash = {msg:sails.__('No can do, sorry.')};
-          //console.log("not authorized");
-          return res.redirect('auth/login');
+          if (sails.config.LOCALONLY && isValidReferer(req))
+          {
+            req.session.flash = {msg:sails.__('No can do, sorry.')};
+            //console.log("not authorized");
+            return res.redirect('auth/login');
+          }
+          else{
+            res.locals.localmode = sails.localmode;
+            res.locals.inspect = require('util').inspect;
+            res.locals.moment = require('moment');
+            res.locals.user = '';
+            res.locals.flash = '';
+          
+            if (!res.locals.event)
+            {
+              res.locals.event = {name:''};
+            }
+            return res.status(403).view('notlocal');
+          }
         }
       }
     }
