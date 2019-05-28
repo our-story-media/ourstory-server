@@ -239,7 +239,7 @@
         <div class="clearfix"></div>
       </div>
     </div>
-
+    <% if (!sails.config.LOCALONLY) { %>
   <div class="clearfix"></div>
   <div class="page-header">
     <h1><%- __('Privacy &amp; Access') %>
@@ -329,7 +329,7 @@
     </div>
   </div>
 
-  <% if (!sails.config.LOCALONLY) { %>
+  
   <div ng-show="!event.public && event.joincode" class="well col-sm-4 col-sm-offset-4 text-center" style="margin-top:2em;">
     <h1><i class="fa fa-key"></i>{{event.joincode}}</h1>
     <span class="text-muted"><%- __('Give this code to contributors to join this shoot') %></span>
