@@ -1,46 +1,20 @@
 version: '2'
-# volumes:
-#   mongo-data:
-#     external: false
-#   redis-data:
-#     external: false
 
 services:
 
   nginx-local:
-    # restart: always
     image: bootlegger/nginx-local
     build:
       context: ../..
       dockerfile: Dockerfile.nginx.local
-    # ports:
-    #   - "80:80"
-    # volumes:
-    #   - "./upload:/usr/src/app/upload"
-    # volumes_from:
-    #   - web
 
   nginx:
-    # restart: always
     image: bootlegger/nginx:latest
     build:
       context: ../..
       dockerfile: Dockerfile.nginx
-    # ports:
-    #   - "80:80"
-    # volumes_from:
-    #   - web
 
   web:
     restart: always
     build: ../..
     image: bootlegger/ourstory-server
-    # depends_on: 
-    #   - redis
-    #   - mongo
-    #   - beanstalk
-    # expose:
-    #   - 1337
-    # volumes:
-    #   - "../../ssl:/usr/src/app/ssl"
-    #   - "../../.sailsrc:/usr/src/app/.sailsrc"
