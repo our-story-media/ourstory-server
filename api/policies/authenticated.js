@@ -11,12 +11,14 @@ function isValidReferer(req)
 {
   // console.log(req.headers);
   // return false;
+  // console.log(req.header('host') == 'localhost')
   return req.header('host') == 'localhost' || _.includes(req.header('referer'),'localhost');
 }
 
 module.exports = function (req, res, ok) {
 
   //check its from localhost:
+  // console.log(isValidReferer(req));
   if (sails.config.LOCALONLY && isValidReferer(req))
   {
     //check its not from mobile:
@@ -51,6 +53,7 @@ module.exports = function (req, res, ok) {
       }
     }, function (err, user) {
       req.session.passport.user = user;
+      // console.log(err)
 			// req.logIn(user, function (done) {
         return ok();
 			// });
