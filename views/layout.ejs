@@ -178,6 +178,7 @@ It produces high quality, content rich footage with no expense">
   <script src="/js/watch_controller.js"></script>
   <!--SCRIPTS END-->
   <!--STYLES-->
+  <link rel="stylesheet" href="/styles/bootstrap-switch.css">
   <link rel="stylesheet" href="/styles/bootstrap-tokenfield.css">
   <link rel="stylesheet" href="/styles/carousel.css">
   <link rel="stylesheet" href="/styles/colorpicker.css">
@@ -268,7 +269,7 @@ It produces high quality, content rich footage with no expense">
       <% if (user) { %>
       <div class="col-xs-5 col-sm-3  col-sm-push-6 text-right flip" style="padding-right: 0;min-width:84px;"
         ng-controller="myprofile">
-          <img style="border-radius:15px;width:30px;height:30px;margin-right:2px;" src="<%= user.profile.photos[0].value %>" />
+          <img style="border-radius:15px;width:30px;height:30px;margin-right:2px;" src="<%= user.profile.photos[0].value.replace(sails.config.master_url,'') %>" />
           <a href="#" class="super hidden-xs hidden-sm" data-toggle="modal" data-target="#nameModal">
             <%= user.profile.displayName %>
           </a>
@@ -318,14 +319,14 @@ It produces high quality, content rich footage with no expense">
         </a>
 
         <!-- <div > -->
-        <div class="form-inline pull-right flip" style="display:inline-block;margin-top:.5em">
+        <!-- <div class="form-inline pull-right flip" style="display:inline-block;margin-top:.5em">
           <div class="form-check">
             <input ng-model="settings.processedits" ng-checked="settings.processedits=='true'" ng-change="updateSetting()"
               type="checkbox" class="form-check-input">
             <label class="form-check-label" for="exampleCheck1">
               <%- __('Process Edits') %></label>
           </div>
-        </div>
+        </div> -->
 
         <span class="text-small text-warning pull-right flip" style="margin-top:.5em;margin-right:1em;">{{edits['current-jobs-ready']}}
           <%- __('jobs in queue') %> </span>
@@ -356,7 +357,7 @@ It produces high quality, content rich footage with no expense">
     <% if(event.name != "") { %>
     <div style="background:url(/images/event_back.png);background-size:cover;height:160px;position:relative;">
 
-      <div style="background:url(<%- sails.config.master_url + '/event/backgroundurl/' + event.id %>?cachebust=<%- Date.now() %>);background-size:cover;background-position:center;width:100%;height:100%;top:0;left:0;position:absolute;"></div>
+      <div style="background:url(<%- '/event/backgroundurl/' + event.id %>?cachebust=<%- Date.now() %>);background-size:cover;background-position:center;width:100%;height:100%;top:0;left:0;position:absolute;"></div>
       <div style="position:absolute;width: 100%;height: 100%;background-color: rgba(0,0,0,0.5)"></div>
 
       <h1 class="thetitle" style="clear:both;position:absolute;top:40px;width: 100%;">

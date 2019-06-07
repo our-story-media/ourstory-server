@@ -514,8 +514,9 @@ module.exports = {
 					//console.log(err);
 					//fire off to editor:
 					//send back to user:
-					let canedit = await Settings.findOne({ name: 'processedits' });
-					if (canedit.value == 'true') {
+					let event = await Event.findOne({ id: media[0].event_id });
+
+					if (event.processedits) {
 						edit.code = newlink;
 						edit.progress = 0;
 						edit.shortlink = newlink;
@@ -529,7 +530,7 @@ module.exports = {
 						//console.log(err);
 						//console.log("processing edit");
 						try {
-							if (canedit.value == 'true') {
+							if (event.processedits) {
 								Editor.edit(edit);
 								edit.shortlink = sails.config.master_url + '/v/' + edit.code;
 								res.json(edit);

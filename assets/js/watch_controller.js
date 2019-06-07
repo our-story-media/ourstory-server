@@ -145,6 +145,17 @@ bootleggerApp.controller('edits', ['$scope', '$http', '$sce', '$localStorage', '
     return dateOut.toDate();
   };
 
+  $scope.updateSetting = function()
+  {
+    // console.log('updating setting')
+    socket
+    .post('/api/event/edit/' + mastereventid, { processedits: $scope.event.processedits })
+    .then(function (response) {
+      //done!
+      // console.log(response);
+    });
+  };
+
   (function () {
     
     
@@ -168,6 +179,11 @@ bootleggerApp.controller('edits', ['$scope', '$http', '$sce', '$localStorage', '
       return msToTimeS(total);
     }
 
+    socket.get('/commission/templateinfo/'+mastereventid)
+    .then(function (resp) {
+      $scope.event = resp.data;
+    });
+
     socket.get('/event/contributors/'+mastereventid)
     .then(function (resp) {
       
@@ -181,14 +197,11 @@ bootleggerApp.controller('edits', ['$scope', '$http', '$sce', '$localStorage', '
       .then(function (resp) {
         $scope.edits = resp.data;
 
-       
-
         socket.post('/watch/editupdates', { edits: _.pluck($scope.edits, 'id') }).then(function (resp) {
 
         });
 
         $timeout(function () {
-          // addthis.toolbox('.addthis_toolbox');
           $('.dropdown-submenu a.reassign').on("click", function(e){
             $(this).next('ul').toggle();
             e.stopPropagation();
