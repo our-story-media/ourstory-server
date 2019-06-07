@@ -352,6 +352,7 @@ $scope.isdragging = false;
   $scope.playThis = function(vid) {
     if (!$scope.isdragging)
     {
+      vid.lowres = vid.lowres.replace('<%- sails.config.master_url %>','');
       $scope.sources = [{src: $sce.trustAsResourceUrl(vid.lowres), type: "video/mp4"}];
       $('#playAll').on('hide.bs.modal', function (e) {
         $timeout($scope.API.stop.bind($scope.API), 100);
