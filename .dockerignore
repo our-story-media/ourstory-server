@@ -6,7 +6,7 @@ ssl
 cast
 development notes
 server_config
-upload
+**/upload
 assets/landing/node_modules
 assets/landing/app
 assets/data

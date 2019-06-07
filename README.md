@@ -30,8 +30,8 @@ Runtime External Dependencies:
 - Google Developer Account (optional)
 - Facebook Developer Account (optional)
 - Dropbox Developer Account (optional)
-- Amazon S3 Account (for when not running in local mode)
-- Amazon Elastic Transcoder Account (for not local mode)
+- Amazon S3 Account (not required for Titan)
+- Amazon Elastic Transcoder Account (not required for Titan)
 
 ## Development Notes
 Bootlegger is built on the SailsJS (http://sailsjs.org/) MVC engine, which is based on expressjs.
