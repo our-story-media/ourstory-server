@@ -41,7 +41,7 @@
 </style>
 
 <script>
-    var mastereventid = '<%- theevent.id %>'; 
+    var mastereventid = '<%- theevent.id %>';
 </script>
 
 <div ng-controller="edits" ng-cloak="">
@@ -49,6 +49,26 @@
     <div class="progress" style="position:fixed;top:0;width:100%;left:0;height:2px;margin:0;" ng-show="loading">
         <div class="indeterminate"></div>
     </div>
+
+<div class="row" style="margin-top:2em">
+    <div class="alert alert-info col-sm-6 col-sm-offset-3">
+
+            <i class="fa fa-info fa-3x" style="float:left;margin-right:10px;min-height:75px;"></i>
+			<h3 style="margin:0">
+				<%- __('Enable Publishing!') %>
+				<small style="display:block;">
+						<%- __('Control your computer resources by only enabling publishing during the right phase of the workflow.') %></small>
+			</h3>
+
+        <div class="form-inline flip" style="display:inline-block;margin-top:.5em">
+
+                <input bs-switch ng-model="event.processedits" ng-checked="event.processedits=='true'" ng-change="updateSetting()"
+                type="checkbox" class="form-check-input">
+                <!-- <label class="form-check-label" for="exampleCheck1"><%- __('Publishing is') %> </label> -->
+        </div>
+            </div>
+    </div>
+
     <div class="text-center" style="margin-top:2em;">
         <p class="text-muted" ng-show="edits.length==0">
             <img src="/images/packing.svg" style="width:200px;" />
@@ -62,7 +82,7 @@
                         <div style="background:#f8f8f8;">
                             <a style="padding-bottom:56.25%;overflow:hidden;width:100%;display:block;position:relative;"
                                 ng-href="{{ (!edit.path && !edit.failed) ? '#' : '/v/'+edit.shortlink }}">
-                                <img style="width:100%;position: absolute;top:0;left:0;" ng-src="<%- sails.config.master_url %>/media/thumbnail/{{getMediaThumb(edit.media)}}" />
+                                <img style="width:100%;position: absolute;top:0;left:0;" ng-src="/media/thumbnail/{{getMediaThumb(edit.media)}}" />
 
                                 <progressbar style="position:absolute;bottom:0;width:100%;height:8px;" class="determinate"
                                     max="100" value="edit.progress" type="info" ng-show="(edit.progress && !edit.failed && !edit.path)"></progressbar>
