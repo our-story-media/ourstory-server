@@ -525,6 +525,7 @@ module.exports = {
 					edit.title = title;
 					edit.media = newmedia;
 					edit.description = description;
+					edit.tagslang = event.defaulttopiclang;
 
 					edit.save(async function (err) {
 						//console.log(err);
