@@ -177,7 +177,7 @@
               <a style="padding-bottom:56.25%;overflow:hidden;width:100%;display:block;position:relative;"
                 ng-href="{{(m.path)?'#':''}}" ng-click="(m.path)?playThis(m):null" data-toggle="lightbox">
 
-                <img style="width:100%;position: absolute;top:0;left:0;" ng-src="{{m.thumb}}" />
+                <img style="width:100%;position: absolute;top:0;left:0;" ng-src="{{m.thumb.replace('<%- sails.config.master_url %>','')}}" />
                 <div style="position: absolute;width:100%;margin-top:2em;" class="text-center" ng-show="m.deleted">
                   <i class="fa fa-trash fa-2x"></i>
                   <br>{{m.deletedAt | date:'ha d MMM yy'}}</div>
@@ -186,7 +186,7 @@
               <div style="padding:0.7em;">
                   <p class="text-left" style="margin:0">{{m.createdAt | date:'ha d MMM yy'}} <span class="pull-right text-muted">{{m.meta.static_meta.clip_length | seconds | number:1}}s</span></p>
                   <p class="text-left truncate_s" style="margin:0;max-height:20px;">
-                      <img style="width:16px;height:auto;border-radius: 50%;" ng-src="{{m.user.profile.photo}}" /> {{m.user.profile.displayName}}
+                      <img style="width:16px;height:auto;border-radius: 50%;" ng-src="{{m.user.profile.photo.replace('<%- sails.config.master_url %>','')}}" /> {{m.user.profile.displayName}}
                   </p>
               </div>
               <div ng-show="m.path || !m.deleted" class="btn-group" style="position:absolute;top:0;right:0;">

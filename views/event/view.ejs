@@ -148,7 +148,7 @@
       <div id="info" class="col-xs-12 col-sm-8 col-sm-offset-2">
 
         <div class="form-group">
-          <label tooltip-popup-delay="300" tooltip=" <%- __('A description of what this template can be used for. You can use this in multiple shoots.') %>">
+          <label tooltip-popup-delay="300" tooltip=" <%- __('A description of what this template can be used for.') %>">
             <%- __('Shoot Description') %>
             <i style="color:silver" class="fa fa-question-circle"></i>
           </label>
@@ -171,6 +171,13 @@
 <div class="table-responsive">
         <table class="table">
           <thead>
+            <tr>
+              <th colspan="2" tooltip-append-to-body="true" tooltip="<%- __('Language to Burn Tags in') %>"><%- __('Lang to Burn') %></th>
+              <th class="text-center" ng-repeat="lang in topiclangs track by $index">
+                <input type="radio" ng-value="lang.name" ng-model="event.defaulttopiclang" />
+              </th>
+              <th></th>
+            </tr>
             <tr>
               <th tooltip-append-to-body="true" tooltip="<%- __('Color of the tag') %>"  width="1"><%- __('Color') %></th>
               <th class="text-center" tooltip-append-to-body="true" tooltip="<%- __('Burn onto output video') %>"  width="1"><%- __('Burn') %></th>

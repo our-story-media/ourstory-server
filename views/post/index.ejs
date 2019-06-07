@@ -6,7 +6,14 @@
 	<% if (sails.config.LOCALONLY) { %>
 		<br><br>
 	<div class="alert alert-info col-sm-8 col-sm-offset-2">
-		<%- __('Completed Stories can be downloaded using the <i class="fa fa-ellipsis-v text-primary"></i> button on the <a href="/watch/edits/%s">Stories</a> page.<br>To view all original videos captured, visit the folder on your computer where Our Story Titan is installed.',event.id) %>
+			<i class="fa fa-info fa-3x" style="float:left;margin-right:10px;min-height:75px;"></i>
+			<h3 style="margin:0">
+				<%- __('Video Export!') %>
+				
+				<small style="display:block;">
+						<%- __('Completed Stories can be downloaded using the <i class="fa fa-ellipsis-v text-primary"></i> button on the <a href="/watch/edits/%s">Stories</a> page.<br>To view all original videos captured, visit the folder on your computer where Our Story Titan is installed.',event.id) %></small>
+			</h3>
+		
 	</div>
 	<% } %>
 
