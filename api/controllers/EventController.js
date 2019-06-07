@@ -523,9 +523,9 @@ module.exports = {
 				sails.eventmanager.addevent(id);
 
 				if (err) {
-					return res.json(err, 500);
+					return res.status(500).json(err);
 				} else {
-					return res.json({ msg: 'Updated Succesfully' }, 200);
+					return res.json({ msg: 'Updated Succesfully' });
 				}
 			});
 	},
@@ -538,7 +538,7 @@ module.exports = {
 			ev.name = title;
 			ev.save(function (err) {
 				if (err) {
-					return res.json(err, 500);
+					return res.stauts(500).json(err);
 				} else {
 					return res.json({ msg: 'Updated Succesfully' }, 200);
 				}
@@ -748,7 +748,7 @@ module.exports = {
 				e.roles = allroles;
 				e.ispublic = e.public;
 				e.shotrelease = ev.eventtype.shotrelease ? ev.eventtype.shotrelease : '';
-				e.description = e.description;
+				// e.description = e.description;
 				delete e.codes;
 				delete e.timeline;
 
@@ -1959,6 +1959,7 @@ module.exports = {
 					//load default tags:
 
 					neevent.topics = default_tags;
+					neevent.defaulttopiclang = 'en';
 
 					Event.create(neevent, function (err, event) {
 
