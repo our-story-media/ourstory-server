@@ -311,7 +311,7 @@ It produces high quality, content rich footage with no expense">
   <% if (user && _.contains(sails.config.admin_email,user.profile.emails[0].value)) { %>
   <div class="row" ng-controller="adminlists">
     <div class="bg-success clearfix" style="padding-top:1em;padding-bottom: 1em;margin-left:15px;margin-right:15px;">
-      <div class="col-xs-12 col-sm-8">
+      <div class="col-xs-12 col-sm-4">
 
         <a class="btn btn-primary pull-left flip" href="/event/admin">
           <i class="fa fa fa-cogs"></i>
@@ -328,12 +328,15 @@ It produces high quality, content rich footage with no expense">
           </div>
         </div> -->
 
-        <span class="text-small text-warning pull-right flip" style="margin-top:.5em;margin-right:1em;">{{edits['current-jobs-ready']}}
-          <%- __('jobs in queue') %> </span>
+      </div>
+      <div class="col-sm-4 text-center">
+
+        <span class="text-small text-warning flip" style="margin-top:.5em;display:block;">{{edits['current-jobs-ready']}}
+            <%- __('jobs in queue') %> </span>
+          </div>
 
 
         <!-- </div> -->
-      </div>
       <div class="col-sm-4 col-xs-12 text-right flip">
         <span class="form-inline">
           <input type="text" ng-model="shootsearch" typeahead-on-select="searchEvent($item, $model, $label)" style="display:inline-block;"
