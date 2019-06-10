@@ -427,7 +427,11 @@ module.exports = {
 		Media.findOne(id, function (err, m) {
 			if (m.meta.static_meta.media_type == 'VIDEO' || !m.meta.static_meta.media_type) {
 				if (sails.config.LOCALONLY) {
-					return res.redirect(`${sails.config.FAKES3URL_TRANSCODE}/${m.event_id}/preview_${m.path}`);
+
+					if (req.header('host') == 'localhost' || _.includes(req.header('referer'),'localhost'))
+						return res.redirect(`/upload/transcode/upload/${m.event_id}/preview_${m.path}`);
+					else
+						return res.redirect(`${sails.config.FAKES3URL_TRANSCODE}/${m.event_id}/preview_${m.path}`);
 				}
 				else {
 					var options = {
@@ -477,7 +481,11 @@ module.exports = {
 
 			if (sails.config.LOCALONLY) {
 				// console.log(sails.config.FAKES3URL + '/' + m.path);
-				return res.redirect(`${sails.config.FAKES3URL}${m.event_id}/${m.path}`);
+				if (req.header('host') == 'localhost' || _.includes(req.header('referer'),'localhost'))
+				return res.redirect(`/upload/${m.event_id}/${m.path}`);
+				else
+					return res.redirect(`${sails.config.FAKES3URL}${m.event_id}/${m.path}`);
+				
 			}
 			else {
 				var options = {

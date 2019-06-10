@@ -312,7 +312,10 @@ module.exports = {
 		Edits.findOne(id, function (err, m) {
 			//FOR LOCAL
 			if (sails.config.LOCALONLY) {
-				return res.redirect(`${sails.config.FAKES3URL_TRANSCODE}/edits/${m.shortlink}.mp4`);
+				if (req.header('host') == 'localhost' || _.includes(req.header('referer'),'localhost'))
+					return res.redirect(`/upload/transcode/upload/edits/${m.shortlink}.mp4`);
+				else
+					return res.redirect(`${sails.config.FAKES3URL_TRANSCODE}/edits/${m.shortlink}.mp4`);
 			}
 			else {
 				var options = {
@@ -333,7 +336,10 @@ module.exports = {
 		Edits.findOne(id, function (err, m) {
 			//LOCAL ONLY
 			if (sails.config.LOCALONLY) {
-				return res.redirect(`${sails.config.FAKES3URL}/edits/${m.shortlink}_tags.mp4`);
+				if (req.header('host') == 'localhost' || _.includes(req.header('referer'),'localhost'))
+				return res.redirect(`/edits/${m.shortlink}_tags.mp4`);
+				else
+					return res.redirect(`${sails.config.FAKES3URL}/edits/${m.shortlink}_tags.mp4`);
 			}
 			else {
 				var options = {

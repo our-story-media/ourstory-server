@@ -569,11 +569,12 @@ It produces high quality, content rich footage with no expense">
       <!-- <% }%> -->
     </div>
   </div>
-  <% if (event.name) { %>
-  <script>
-    var mastereventname = "<%- encodeURIComponent(event.name) %>";
-    var mastereventid = "<%- event.id %>";
-    var masteruserid = "<%- user.id %>";
+    <% if (event.name) { %>
+      <script>
+        var mastereventname = "<%- encodeURIComponent(event.name) %>";
+        var mastereventid = "<%- event.id %>";
+        var masteruserid = "<%- user.id %>";
+        var master_url = "<%- sails.config.master_url %>";
   </script>
   <% } %>
 
