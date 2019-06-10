@@ -17,4 +17,4 @@ services:
   web:
     restart: always
     build: ../..
-    image: bootlegger/ourstory-server
+    image: bootlegger/ourstory-server:dev

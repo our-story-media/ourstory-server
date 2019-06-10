@@ -21,3 +21,4 @@ docker/build
 docker/local
 Dockerfile*
 .DS_Store
+hooks

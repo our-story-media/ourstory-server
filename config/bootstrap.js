@@ -34,8 +34,8 @@ module.exports.bootstrap = function (cb) {
 	});
 
 	//check variables are set:
-	if ((sails.config.google_clientid == "googleid") && (sails.config.FACEBOOK_APP_ID == "facebookid")) {
-		Log.error("config", "*** Enter Google or Facebook OAuth Details in config/local.js ***");
+	if ((sails.config.google_clientid == "googleid")) {
+		Log.error("config", "*** Enter Google OAuth Details in .sailsrc ***");
 		throw new Error('OAuth Config Error');
 	}
 
@@ -43,20 +43,20 @@ module.exports.bootstrap = function (cb) {
 
 	//check admin emails:
 	if (sails.config.admin_email.length == 0) {
-		Log.error("config", "*** Add a super admin email address ***");
+		Log.error("config", "*** Add a super admin email address in .sailsrc ***");
 		throw new Error('No Admin Email Address Set');
 	}
 
-	//SETS UP STATIC EDITION JSON:
-	fs.writeFile("assets/landing/public/edition.json", JSON.stringify({
-		"name":sails.config.name,
-		"android":sails.config.PLAYLINK,
-		"ios":sails.config.IOSLINK,
-		"bootlegger":sails.config.bootlegger,
-		"ifrc":sails.config.ifrc
-	}), function(err) {
-		Log.info('bootstrap', "Edition file updated");
-	}); 
+	// //SETS UP STATIC EDITION JSON:
+	// fs.writeFile("assets/landing/public/edition.json", JSON.stringify({
+	// 	"name":sails.config.name,
+	// 	"android":sails.config.PLAYLINK,
+	// 	"ios":sails.config.IOSLINK,
+	// 	"bootlegger":sails.config.bootlegger,
+	// 	"ifrc":sails.config.ifrc
+	// }), function(err) {
+	// 	Log.info('bootstrap', "Edition file updated");
+	// }); 
 
 	Log.info('bootstrap', "Connected to MongoDB on " + sails.config.connections.mongodb.host);
 
@@ -224,7 +224,7 @@ module.exports.bootstrap = function (cb) {
 	var passport = require('passport');
 	var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 	var LocalStrategy = require('passport-local').Strategy;
-	var FacebookStrategy = require('passport-facebook').Strategy;
+	// var FacebookStrategy = require('passport-facebook').Strategy;
 	// var TwitterStrategy = require('passport-twitter').Strategy;
 	var DropboxOAuth2Strategy = require('passport-dropbox-oauth2').Strategy;
 

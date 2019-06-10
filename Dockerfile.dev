@@ -10,7 +10,7 @@ COPY package.json /usr/src/app/
 
 RUN apk add --no-cache --update --repository http://dl-3.alpinelinux.org/alpine/edge/testing \
 	git python gcc g++ make && \
-	npm install --production --silent && \
+	npm install --silent && \
 	apk del git gcc g++ make python && \
 	rm -rf /var/cache/apk/*
 
