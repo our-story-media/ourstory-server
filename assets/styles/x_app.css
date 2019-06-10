@@ -1120,13 +1120,30 @@ z-index: 0;
 
 /* On mouse-over, add a grey background color */
 .mycheckbox:hover {
-background-color: #ccc;
+  background-color: #ccc;
 }
 
-/* When the checkbox is checked, add a blue background */
+.mycheckbox.tags
+{
+  -webkit-filter: saturate(60%);
+  filter: saturate(60%);
+}
+
 .mycheckbox input:checked ~ .content {
-background-color:#d9534f;
-color:white;
+  background-color:#d9534f;
+  color:white;
+  }
+
+/* When the checkbox is checked, add a background */
+.mycheckbox.tags input:checked ~ .content {
+  -webkit-filter: saturate(100%);
+  filter: saturate(100%);
+  color:white;
+}
+
+.mycheckbox.tags:hover {
+  -webkit-filter: saturate(100%);
+  filter: saturate(100%);
 }
 
 .mycheckbox input:checked ~ .content i {

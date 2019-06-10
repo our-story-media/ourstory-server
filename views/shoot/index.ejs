@@ -88,7 +88,7 @@
           <input checklist-model="contributorfilter" checklist-value="contributor.profile.displayName" type="checkbox" autocomplete="off">
           <span class="checkmark"></span>
           <span class="content">
-          <img ng-src="{{contributor.profile.photo}}" /> {{contributor.profile.displayName}} &nbsp;
+          <img ng-src="{{contributor.profile.photo.replace('<%- sails.config.master_url %>','')}}" /> {{contributor.profile.displayName}} &nbsp;
           </span>
         </label>
         <div class="text-muted text-center" ng-hide="contributors.length>0"><%- __('no contributors yet') %><br><br></div>
@@ -109,13 +109,13 @@
       <br>
       <h1><%- __('Tags') %></h1>
       <div>
-          <label class="mycheckbox" ng-repeat="tag in event.topics">
+          <label class="mycheckbox tags" style="color:white;" ng-style="{background:tag.color}" ng-repeat="tag in event.topics">
               <input checklist-model="topicfilter" checklist-value="tag.id"
                 type="checkbox" autocomplete="off">
                 <span class="checkmark"></span>
-                <span class="content">
+                <span class="content" ng-style="{background:tag.color}">
                   <i class="fa fa-check"></i>
-                {{tag.values['<%- req.getLocale() %>']}} &nbsp;
+                {{(tag.values['<%- req.getLocale() %>'])?tag.values['<%- req.getLocale() %>']:tag.values['en']}} &nbsp;
                 </span>
                 </label>
                 <div class="text-muted text-center" ng-hide="event.topics.length>0"><%- __('no tags specified') %><br><br></div>
