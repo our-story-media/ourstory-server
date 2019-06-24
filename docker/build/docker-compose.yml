@@ -15,6 +15,5 @@ services:
       dockerfile: Dockerfile.nginx
 
   web:
-    restart: always
     build: ../..
     image: bootlegger/ourstory-server:dev

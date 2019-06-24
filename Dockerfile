@@ -6,8 +6,6 @@ RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app
 
-COPY package.json /usr/src/app/
-
 COPY . /usr/src/app
 
 RUN apk add --virtual build-dependencies git python gcc g++ make --no-cache --update --repository http://dl-3.alpinelinux.org/alpine/edge/testing && \
