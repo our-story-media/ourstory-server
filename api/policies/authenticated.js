@@ -11,8 +11,8 @@ function isValidReferer(req)
 {
   // console.log(req.headers);
   // return false;
-  // console.log(req.header('host') == 'localhost')
-  return req.header('host') == 'localhost' || _.includes(req.header('referer'),'localhost');
+  // console.log(req.header('host'))
+  return _.startsWith(req.header('host'),'localhost') || _.includes(req.header('referer'),'localhost');
 }
 
 module.exports = function (req, res, ok) {
