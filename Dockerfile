@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 
 RUN apk add --virtual build-dependencies git python gcc g++ make --no-cache --update --repository http://dl-3.alpinelinux.org/alpine/edge/testing && \
-	npm i -g grunt-cli nodemon --silent && \
+	npm i -g grunt-cli --silent && \
 	npm install --silent && \
 	apk del git gcc g++ make python && \
 	rm -rf /var/cache/apk/* && \

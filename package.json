@@ -70,7 +70,7 @@
     "rc":"1.2.8"
   },
   "scripts": {
-    "start": "nodemon --watch false --exitcrash app.js --prod",
+    "start":"node app.js --prod",
     "debug": "node debug app.js",
     "build": "sails www --prod"
   },

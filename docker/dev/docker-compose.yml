@@ -53,10 +53,10 @@ services:
       dockerfile: Dockerfile
     depends_on: 
       - redis
-      # - mongo
+      - mongo
       - beanstalk
     # command: nodemon --watch api app.js # -- --verbose
-    command: node app.js # -- --verbose
+    # command: node app.js # -- --verbose
     expose:
       - 1337
     volumes:
