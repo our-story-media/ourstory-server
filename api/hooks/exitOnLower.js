@@ -11,7 +11,7 @@ module.exports = function(sails){
 
             sails.on('lower',function(){
                 setTimeout(function(){
-                    process.exit(0);
+                    process.exit(3);
                 })
             },1000);
 
