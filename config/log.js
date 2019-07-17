@@ -9,6 +9,13 @@
  * http://sailsjs.org/#documentation
  */
 
+
+// let winston = require('winston');
+// let logger = new winston.Logger();
+// winston.exitOnError = true;
+// winston.remove(winston.transports.Console);
+// logger.add(winston.transports.Console, { colorize: true, level: 'verbose' });
+
 module.exports = {
 
   // Valid `level` configs:
@@ -21,7 +28,8 @@ module.exports = {
   // 'verbose': Display calls from `.error()`, `.warn()`, `.debug()`, `.info()` to `.verbose()`
   //
   log: {
-    level: 'warn'
+    level: 'info'
+    // custom: logger
   }
 
 };

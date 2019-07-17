@@ -14,9 +14,13 @@ var fs = require('fs');
 module.exports.bootstrap = function (cb) {
 	//start http redirect server:
 
+	console.log("** BOOTSTRAP **");
+
 	var request = require('request');
 
 	var myIP = require('my-ip');
+
+	
 
 	sails.winston = require('winston');
 	sails.winston.remove(sails.winston.transports.Console);
