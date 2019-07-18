@@ -72,7 +72,7 @@ By providing your email address to us, you expressly consent to receive emails f
 
 Any communication or material you transmit to us by email or otherwise, including any data, questions, comments, suggestions, or the like is, and will be treated as, non-confidential and non-proprietary. Furthermore, you expressly agree that we are free to use any ideas, concepts, know-how, or techniques contained in any communication you send to us without compensation and for any purpose whatsoever, including but not limited to, developing, manufacturing and marketing products and services using such information.
 
-Site Terms of Use: Use of this Site is governed by, and subject to, the Terms of Use contained at https://ourstory.video/terms. This Privacy Policy is incorporated into such terms. Your use, or access, of the Site constitutes your agreement to be bound by these provisions.
+Site Terms of Use: Use of this Site is governed by, and subject to, the Terms of Use contained at https://ourstory.dev/terms. This Privacy Policy is incorporated into such terms. Your use, or access, of the Site constitutes your agreement to be bound by these provisions.
 
 __Contact:__
 For questions or concerns relating to privacy, we can be contacted at: info@Our Story.tv.

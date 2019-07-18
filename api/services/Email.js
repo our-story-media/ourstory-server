@@ -32,7 +32,7 @@ exports.sendEmail = function (options) {
                 }
             }],
             from: {
-                email: "info@ourstory.video",
+                email: "info@ourstory.dev",
                 name: 'Our Story'
             },
             subject: options.subject,

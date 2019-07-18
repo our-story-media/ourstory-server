@@ -46,4 +46,4 @@ Controller logic is located in `api\controllers\<controller>.js`
 
 ![](platform.svg)
 
-Our Story is an open source suite of tools developed by [Open Lab](http://openlab.ncl.ac.uk) that enables community commissioning and contribution of video. See [the website]( https://guide.ourstory.video) for more information.
+Our Story is an open source suite of tools developed by [Open Lab](http://openlab.ncl.ac.uk) that enables community commissioning and contribution of video. See [the website]( https://ourstory.dev) for more information.

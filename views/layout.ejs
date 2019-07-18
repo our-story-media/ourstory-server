@@ -44,7 +44,7 @@
         "content": {
           "message": "This website uses a cookie for Google Analytics to aid our understanding of how people use video.",
           "link": "Learn More",
-          "href": "https://ourstory.video/privacy",
+          "href": "https://ourstory.dev/privacy",
           "dismiss": "Decline"
         },
         onInitialise: function (status) {
@@ -358,23 +358,20 @@ It produces high quality, content rich footage with no expense">
   <% if (user && typeof(viewonly)=='undefined') { %>
   <div class="text-center hidden-xs" ng-controller="titleController" style="margin-bottom: 10px;border-bottom-left-radius: 20px;overflow: hidden;border-bottom-right-radius: 20px;">
     <% if(event.name != "") { %>
-    <div style="background:url(/images/event_back.png);background-size:cover;height:160px;position:relative;">
+    <div>
 
-      <div style="background:url(<%- '/event/backgroundurl/' + event.id %>?cachebust=<%- Date.now() %>);background-size:cover;background-position:center;width:100%;height:100%;top:0;left:0;position:absolute;"></div>
-      <div style="position:absolute;width: 100%;height: 100%;background-color: rgba(0,0,0,0.5)"></div>
-
-      <h1 class="thetitle" style="clear:both;position:absolute;top:40px;width: 100%;">
-        <div ng-hide="editingtitle" style="display:inline;color:white">
+      <h1 class="thetitle" >
+        <div ng-hide="editingtitle" style="display:inline;color:silver;">
           <% if (typeof(pagetitle)!='undefined'){ %>
           <%- pagetitle %>
           <% }%>
         </div>
-        <span style="color:white" ng-hide="editingtitle">
+        <span ng-hide="editingtitle">
           <%= event.name %>
         </span>
-        <input id="titleedit" ng-keydown="titlechanged($event)" ng-show="editingtitle" class="form-control" style="top:60px;background:transparent;border-top:none;border-left:none;border-right:none;border-bottom:1px solid white;height:40px;line-height: 1.1;font-family:Open Sans,Helvetica Neue,Segoe UI,Segoe WP,sans-serif;font-size:30px;color:white;padding:0px;text-align:center;"
+        <input id="titleedit" ng-keydown="titlechanged($event)" ng-show="editingtitle" class="form-control" style="background:transparent;border-top:none;border-left:none;border-right:none;border-bottom:1px solid black;border-radius:0;box-shadow:none;height:40px;line-height: 1.1;font-family:Open Sans,Helvetica Neue,Segoe UI,Segoe WP,sans-serif;font-size:36px;padding:0px;text-align:center;"
           type="text" value="<%= event.name %>" />
-        <a ng-hide="editingtitle" style="color:white;font-size:10pt;padding-bottom:10px;vertical-align:middle" href="#"
+        <a ng-hide="editingtitle" style="font-size:10pt;padding-bottom:10px;vertical-align:middle" href="#"
           ng-click="edittitle();">
           <sup>
             <i tooltip="Change Shoot Title" class="glyphicon glyphicon-pencil"></i>
@@ -557,10 +554,10 @@ It produces high quality, content rich footage with no expense">
         <%- __('Privacy') %></a> &middot;
       <a class="text-muted" href="/terms">
         <%- __('Terms') %></a> &middot;
-      <a class="text-muted" href="https://guide.ourstory.video">
+      <a class="text-muted" href="https://ourstory.dev">
         <%- __('Our Guide') %></a> &middot;
-      <a class="text-muted" href="https://guide.ourstory.video/platform">
-        <%- __('Platform') %></a> &middot;
+      <!-- <a class="text-muted" href="https://guide.ourstory.dev/platform"> -->
+        <!-- <%- __('Platform') %></a> &middot; -->
       <!-- <a class="text-muted" href="/getapp">Download App</a> &middot; -->
       <span>&copy;
         <%- __('Our Story') %>
