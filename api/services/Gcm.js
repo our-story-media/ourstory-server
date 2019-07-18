@@ -60,7 +60,7 @@ if (!sails.config.LOCALONLY) {
 	serviceAccount = require(__dirname + '/../../ssl/firebase.json');
 	admin.initializeApp({
 		credential: admin.credential.cert(serviceAccount),
-		databaseURL: "https://integral-kiln-490.firebaseio.com"
+		databaseURL: sails.config.FIREBASEDATABASE
 	});
 }
 

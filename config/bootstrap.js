@@ -14,8 +14,6 @@ var fs = require('fs');
 module.exports.bootstrap = function (cb) {
 	//start http redirect server:
 
-	console.log("** BOOTSTRAP **");
-
 	var request = require('request');
 
 	var myIP = require('my-ip');
@@ -62,21 +60,21 @@ module.exports.bootstrap = function (cb) {
 	// 	Log.info('bootstrap', "Edition file updated");
 	// }); 
 
-	Log.info('bootstrap', "Connected to MongoDB on " + sails.config.connections.mongodb.host);
+	Log.info('bootstrap', "Connected to MongoDB on " + sails.config.connections.mongodb.url);
 
 	//sails.winston.remove(sails.winston.transports.Console);
 	// Log.info('bootstrap', 'started', { local: sails.config.LOCALONLY });
 
-	// insert default settings:
-	Settings.findOne({name:'processedits'}).exec(function(err,data){
-		// console.log(data);
-		if (!data)
-		{
-			Settings.create({ name: 'processedits',value:false }).exec(function(){
-				Log.info('bootstrap', 'Added Init Settings', { local: sails.config.LOCALONLY });
-			});
-		}
-	});
+	// // insert default settings:
+	// Settings.findOne({name:'processedits'}).exec(function(err,data){
+	// 	// console.log(data);
+	// 	if (!data)
+	// 	{
+	// 		Settings.create({ name: 'processedits',value:false }).exec(function(){
+	// 			Log.info('bootstrap', 'Added Init Settings', { local: sails.config.LOCALONLY });
+	// 		});
+	// 	}
+	// });
 
 	/**
 	 * GDPR User Sanitisation
@@ -151,55 +149,55 @@ module.exports.bootstrap = function (cb) {
 						Log.info('bootstrap', 'Init Templates');
 					});
 
-					if (!sails.config.LOCALONLY) {
-						//update default backgrounds to s3:
-						var ss3 = require('s3');
-						var s3 = ss3.createClient({
-							s3Options: {
-								accessKeyId: sails.config.AWS_ACCESS_KEY_ID,
-								secretAccessKey: sails.config.AWS_SECRET_ACCESS_KEY,
-								region: sails.config.S3_REGION
-							},
-						});
-						var params = {
-							localDir: __dirname + '/../assets/backgrounds/',
-							s3Params: {
-								Bucket: sails.config.S3_BUCKET,
-								Prefix: "upload/backgrounds/",
-								ACL: 'public-read'
-							},
-						};
-						var uploader = s3.uploadDir(params);
-						uploader.on('error', function (err) {
-							console.error("unable to sync:", err.stack);
-							Log.error('bootstrap', 'Default Image Sync Error', err);
-						});
-						uploader.on('progress', function () {
-							process.stdout.write("Default backgrounds upload: " + ((uploader.progressAmount / uploader.progressTotal) * 100).toString().substr(0, 4) + "%\r")
-						});
-						uploader.on('end', function () {
-							Log.info('bootstrap', 'Default Image Sync Complete');
-						});
-					}
+					// if (!sails.config.LOCALONLY) {
+					// 	//update default backgrounds to s3:
+					// 	var ss3 = require('s3');
+					// 	var s3 = ss3.createClient({
+					// 		s3Options: {
+					// 			accessKeyId: sails.config.AWS_ACCESS_KEY_ID,
+					// 			secretAccessKey: sails.config.AWS_SECRET_ACCESS_KEY,
+					// 			region: sails.config.S3_REGION
+					// 		},
+					// 	});
+					// 	var params = {
+					// 		localDir: __dirname + '/../assets/backgrounds/',
+					// 		s3Params: {
+					// 			Bucket: sails.config.S3_BUCKET,
+					// 			Prefix: "upload/backgrounds/",
+					// 			ACL: 'public-read'
+					// 		},
+					// 	};
+					// 	var uploader = s3.uploadDir(params);
+					// 	uploader.on('error', function (err) {
+					// 		console.error("unable to sync:", err.stack);
+					// 		Log.error('bootstrap', 'Default Image Sync Error', err);
+					// 	});
+					// 	uploader.on('progress', function () {
+					// 		process.stdout.write("Default backgrounds upload: " + ((uploader.progressAmount / uploader.progressTotal) * 100).toString().substr(0, 4) + "%\r")
+					// 	});
+					// 	uploader.on('end', function () {
+					// 		Log.info('bootstrap', 'Default Image Sync Complete');
+					// 	});
+					// }
 				}
 			}
 		});
 
 		//checkfix old server media links
-		Media.find({
-			thumb: {
-				'startsWith': 'http://bootlegger.s3.amazonaws.com'
-			}
-		}).exec(function (err, media) {
-			_.each(media, function (m) {
-				if (m.thumb) {
-					m.thumb = m.thumb.replace('http://bootlegger.s3.amazonaws.com', '');
-					m.save(function (err, done) {
-						//done 
-					});
-				}
-			});
-		});
+		// Media.find({
+		// 	thumb: {
+		// 		'startsWith': 'http://bootlegger.s3.amazonaws.com'
+		// 	}
+		// }).exec(function (err, media) {
+		// 	_.each(media, function (m) {
+		// 		if (m.thumb) {
+		// 			m.thumb = m.thumb.replace('http://bootlegger.s3.amazonaws.com', '');
+		// 			m.save(function (err, done) {
+		// 				//done 
+		// 			});
+		// 		}
+		// 	});
+		// });
 
 		if (sails.config.LOCALONLY) {
 			Whitelabel.find({}).exec(function (err, wl) {

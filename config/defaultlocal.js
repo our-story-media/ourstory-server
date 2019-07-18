@@ -15,8 +15,6 @@ module.exports = {
   
     beta: false,
   
-    BRANCHKEY: '',
-  
     hostname: 'localhost',
   
     admin_email: ['localadmin@ourstory.video'],

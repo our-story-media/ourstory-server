@@ -27,13 +27,11 @@ module.exports.routes = {
     'get /auth/local': 'AuthController.local',
     'post /auth/locallogin': 'AuthController.process_local',
     'post /event/map/:id/:role':'EventController.map',
-    
     'get /event/backgroundurl':'EventController.backgroundurl',
     'get /event/roleimg/:id/:role?':'EventController.roleimg',
     'post /event/clearbackground/:id':'EventController.clearbackground',
     'get /event/clearroleimg/:id/:role':'EventController.clearroleimg',
     'get /event/contributors/:id':'EventController.contributors',
-
 
     /*
     API ENDPOINTS
@@ -58,12 +56,9 @@ module.exports.routes = {
     'post /api/post/updateoutputs': 'PostController.updateoutputs',
     'post /api/commission/addshot/:id?': 'CommissionController.addshot',
     'get /api/commission/example': 'CommissionController.example',
-    // 'get /api/commission/savetoreuse': 'CommissionController.savetoreuse',
-    // 'get /api/commission/savetocommunity': 'CommissionController.savetocommunity',
     'post /api/commission/update': 'CommissionController.update',
     'get /api/commission/info': 'CommissionController.info',
     'get /api/commission/templateinfo/:id': 'CommissionController.templateinfo',
-    // 'get /api/commission/savetooriginal': 'CommissionController.savetooriginal',
     'get /api/commission/allshots': 'CommissionController.allshots',
     'post /api/commission/updateshots': 'CommissionController.updateshots',
     'get /api/event/registercode/:code?': 'EventController.registercode',

@@ -19,7 +19,7 @@ const VERSION_STRING = 13;
 // const moment = require('moment');
 const urlencode = require('urlencode');
 
-const landingPage = fs.readFileSync(__dirname + '/../../assets/landing/public/index.html').toString();
+// const landingPage = fs.readFileSync(__dirname + '/../../assets/landing/public/index.html').toString();
 const rtlDetect = require('rtl-detect');
 
 module.exports = {
@@ -213,7 +213,7 @@ module.exports = {
 					//if (req.device.type == 'phone')
 					//	return res.view({upcoming:_.take(ups,3),_layoutFile: '../login_mobile.ejs'});
 					//	else
-					return res.send(landingPage);
+					return res.redirect('/getstarted');
 					// return res.view({ upcoming: _.take(ups, 3), _layoutFile: '../login.ejs' });
 					// });
 				}

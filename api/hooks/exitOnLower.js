@@ -13,7 +13,7 @@ module.exports = function(sails){
                 setTimeout(function(){
                     process.exit(3);
                 })
-            },1000);
+            },5000);
 
             return cb();
 

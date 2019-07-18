@@ -47,15 +47,15 @@ services:
 
   web:
     restart: on-failure
-    image: bootlegger/ourstory-server:dev
+    # image: bootlegger/ourstory-server:dev
     build:
       context: ../..
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     depends_on: 
       - redis
       - mongo
       - beanstalk
-    # command: nodemon --watch api app.js # -- --verbose
+    command: nodemon --watch api app.js # -- --verbose
     # command: node app.js # -- --verbose
     expose:
       - 1337

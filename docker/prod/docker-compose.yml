@@ -1,0 +1,86 @@
+version: '3.7'
+
+volumes:
+  mongo-data:
+  redis-data:
+  www:
+  data:
+  assets:
+
+services:
+  reverse-proxy:
+    image: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./certs:/etc/traefik/acme
+      - ./config.toml:/etc/traefik/traefik.toml
+
+  nginx:
+    restart: on-failure
+    image: bootlegger/nginx
+    volumes:
+      - www:/usr/src/app/www:ro
+      - data:/usr/src/app/data:ro
+      - assets:/usr/src/app/assets:ro
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host:app.ourstory.dev,localhost"
+      traefik.port: "80"
+      traefik.protocol: "http"
+
+  redis:
+    restart: on-failure
+    image: redis:alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+
+  mongo:
+    restart: on-failure
+    image: mvertes/alpine-mongo
+    volumes:
+      - mongo-data:/data/db
+
+  beanstalk:
+    restart: on-failure 
+    image: kusmierz/beanstalkd
+
+  worker:
+    restart: on-failure
+    image: bootlegger/ourstory-worker:dev
+    depends_on:
+      - mongo
+      - beanstalk
+    volumes:
+      - www:/usr/src/app/www:ro
+      - data:/usr/src/app/data:ro
+      - assets:/usr/src/app/assets:ro
+      - ./.sailsrc:/usr/src/app/.sailsrc:ro
+
+  web:
+    restart: on-failure
+    image: bootlegger/ourstory-server:dev
+    depends_on: 
+      - redis
+      - mongo
+      - beanstalk
+    volumes:
+      - www:/usr/src/app/www
+      - data:/usr/src/app/data
+      - assets:/usr/src/app/assets
+      - ./.sailsrc:/usr/src/app/.sailsrc:ro
+      - ./firebase.json:/usr/src/app/ssl/firebase.json
+  
+  # mongodbbackup:
+  #   image: 'halvves/mongodb-backup-s3:latest'
+  #   links:
+  #     - mongodb
+  #   environment:
+  #     - AWS_ACCESS_KEY_ID=myaccesskeyid
+  #     - AWS_SECRET_ACCESS_KEY=mysecretaccesskey
+  #     - BUCKET=my-s3-bucket
+  #     - BACKUP_FOLDER=prod/db/
+  #   restart: always
