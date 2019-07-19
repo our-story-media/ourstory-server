@@ -15,7 +15,9 @@ Our Story starts by default into the Local Server (Titan) mode.
 To start an online installation, volume map the following:
 
 - .sailsrc:/usr/src/app/.sailsrc (standard rc file overriding default environment variables)
-- firebase.json:/usr/src/app/ssl/firebase.json (for push notifications)
+- ssl/firebase.json:/usr/src/app/ssl/firebase.json (for push notifications)
+- ssl/cloudfrontkey.pem:/usr/src/app/ssl/cloudfrontkey.pem
+- ssl/cloudfrontpk.pem:/usr/src/app/ssl/cloudfrontpk.pem
 
 # Development
 
@@ -27,13 +29,13 @@ Once started with `docker-compose up`, the server will be accesible at [http://l
 
 Use the `docker/build/docker-compose` file to build and push your images and then deploy using the instructions above.
 
-Runtime External Dependencies:
+Runtime External Dependencies for Online Edition:
 
-- Google Developer Account (optional)
-- Facebook Developer Account (optional)
-- Dropbox Developer Account (optional)
-- Amazon S3 Account (not required for Titan)
-- Amazon Elastic Transcoder Account (not required for Titan)
+- Google Developer Account
+- Dropbox Developer Account
+- Amazon S3 Account
+- Amazon Elastic Transcoder Account
+- SendGrid Account
 
 ## Development Notes
 Bootlegger is built on the SailsJS (http://sailsjs.org/) MVC engine, which is based on expressjs.

@@ -15,7 +15,7 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./certs:/etc/traefik/acme
+      - ./acme.json:/etc/traefik/acme.json
       - ./config.toml:/etc/traefik/traefik.toml
 
   nginx:
@@ -27,7 +27,7 @@ services:
       - assets:/usr/src/app/assets:ro
     labels:
       traefik.enable: "true"
-      traefik.frontend.rule: "Host:app.ourstory.dev,localhost"
+      traefik.frontend.rule: "Host:app.ourstory.dev"
       traefik.port: "80"
       traefik.protocol: "http"
 
@@ -72,7 +72,7 @@ services:
       - data:/usr/src/app/data
       - assets:/usr/src/app/assets
       - ./.sailsrc:/usr/src/app/.sailsrc:ro
-      - ./firebase.json:/usr/src/app/ssl/firebase.json:ro
+      - ./ssl:/usr/src/app/ssl:ro
   
   mongodbbackup:
     image: 'stefanprodan/mgob:1.0'

@@ -2,3 +2,4 @@
 certs
 firebase.json
 backup.yaml
+*.pem

@@ -22,8 +22,9 @@ domain = "app.ourstory.dev"
 
 [acme]
 email = "tom.bartindale@monash.edu"
+acmeLogging = true
+storage = "acme.json"
 entryPoint = "https"
 onHostRule = true
   [acme.httpChallenge]
   entryPoint = "http"
-acmeLogging = true
