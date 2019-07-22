@@ -1278,37 +1278,8 @@ module.exports = {
 
 	},
 
-	// updaterole: function (req, res) {
-	// 	// console.log(req.params.all());
-	// 	try {
-	// 		Event.findOne(req.param('id')).exec(function (err, m) {
-	// 			//console.log(m);
-	// 			//console.log(m.eventtype.roles[parseInt(req.param('role'))]);
-	// 			//console.log(m.eventtype.roles[parseInt(req.param('role'))]);
-	// 			var role = _.find(m.eventtype.roles, { id: parseInt(req.param('role')) });
-	// 			role.position = [req.param('x'), req.param('y')];
-	// 			// m.eventtype.roles[parseInt(req.param('role'))].position = [req.param('x'), req.param('y')];
-	// 			// console.log(m.eventtype.roles[parseInt(req.param('role'))]);
-	// 			m.save(function () {
-	// 				res.json({ msg: 'done' });
-	// 			});
-	// 		});
-	// 	}
-	// 	catch (e) {
-	// 		console.log(e);
-	// 	}
-	// },
-
 	// upload role img:
 	map: function (req, res) {
-
-		// var knox = require('knox-s3');
-		// //upload map file for an event role:
-		// var knox_params = {
-		// 	key: sails.config.AWS_ACCESS_KEY_ID,
-		// 	secret: sails.config.AWS_SECRET_ACCESS_KEY,
-		// 	bucket: sails.config.S3_BUCKET
-		// }
 
 		if (req.file('map') != undefined) {
 
@@ -1325,9 +1296,11 @@ module.exports = {
 				var uuid = require('uuid');
 				var fakeid = uuid.v1();
 				var filename = fakeid + tt[0].filename.replace(' ', '');
-				var tmp = '.tmp/uploads/' + tt[0].fd;
-
+				var tmp = '.tmp/uploads/' + tt[0].fd; // this is where sails puts the files:
+				// console.log(tmp);
+				// console.log("file:"+tt[0].fd);
 				//generate role map:
+				// console.log(tt[0]);
 
 				if (sails.config.LOCALONLY) {
 
@@ -1355,13 +1328,13 @@ module.exports = {
 					});
 				}
 				else {
-					// var client = knox.createClient(knox_params);
+					
 					client.putFile(tmp, 'upload/' + filename,
 						function (err, result) {
 							//done uploading
 							if (err) {
 								req.session.flash = { msg: sails.__("Error Uploading Image") };
-								res.redirect('/commission/' + req.param('id'));
+								return res.redirect('/commission/' + req.param('id'));
 							}
 
 							Event.findOne(req.param('id')).exec(function (err, m) {

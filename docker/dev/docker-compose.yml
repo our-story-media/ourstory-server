@@ -55,7 +55,7 @@ services:
       - redis
       - mongo
       - beanstalk
-    command: nodemon --watch api app.js # -- --verbose
+    command: nodemon --watch api app.js -- --verbose
     # command: node app.js # -- --verbose
     expose:
       - 1337
@@ -65,5 +65,7 @@ services:
       - "../../api:/usr/src/app/api"
       - "../../assets:/usr/src/app/assets"
       - "../../views:/usr/src/app/views"
-      - "../../ssl:/usr/src/app/ssl"
+      - "../prod/ssl:/usr/src/app/ssl"
+      - ../prod/.sailsrc:/usr/src/app/.sailsrc:ro
+      - ../prod/ssl:/usr/src/app/ssl:ro
       # - "../../.sailsrc:/usr/src/app/.sailsrc"

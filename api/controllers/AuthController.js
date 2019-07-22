@@ -303,24 +303,24 @@ module.exports = {
 		}
 	},
 
-	facebook_return: function (req, res, next) {
-		req.session.firstlogin = true;
-		if (req.session.ismobile) {
-			passport.authenticate('facebook', { successRedirect: '/auth/sessionkey', failureRedirect: '/auth/login', failureFlash: true })(req, res, next);
-		}
-		else {
-			passport.authenticate('facebook', { successRedirect: '/dashboard', failureRedirect: '/auth/login', failureFlash: true })(req, res, next);
-		}
-	},
+	// facebook_return: function (req, res, next) {
+	// 	req.session.firstlogin = true;
+	// 	if (req.session.ismobile) {
+	// 		passport.authenticate('facebook', { successRedirect: '/auth/sessionkey', failureRedirect: '/auth/login', failureFlash: true })(req, res, next);
+	// 	}
+	// 	else {
+	// 		passport.authenticate('facebook', { successRedirect: '/dashboard', failureRedirect: '/auth/login', failureFlash: true })(req, res, next);
+	// 	}
+	// },
 
-	dropbox_return: function (req, res, next) {
-		passport.authenticate('dropbox-oauth2', { successRedirect: '/post/' + req.session.dbeventid, failureRedirect: '/post/' + req.session.dbeventid })(req, res, next);
-	},
+	// dropbox_return: function (req, res, next) {
+	// 	passport.authenticate('dropbox-oauth2', { successRedirect: '/post/' + req.session.dbeventid, failureRedirect: '/post/' + req.session.dbeventid })(req, res, next);
+	// },
 
-	facebook: function (req, res, next) {
-		var uuid = require('uuid');
-		passport.authenticate('facebook', { scope: ['email'], authType: 'reauthenticate', authNonce: uuid.v4() })(req, res, next);
-	},
+	// facebook: function (req, res, next) {
+	// 	var uuid = require('uuid');
+	// 	passport.authenticate('facebook', { scope: ['email'], authType: 'reauthenticate', authNonce: uuid.v4() })(req, res, next);
+	// },
 
 	google: function (req, res, next) {
 		passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'], prompt: 'select_account' })(req, res, next);

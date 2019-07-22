@@ -2,17 +2,17 @@ version: '2'
 
 services:
 
-  nginx-local:
-    image: bootlegger/nginx-local
-    build:
-      context: ../..
-      dockerfile: Dockerfile.nginx.local
-
   nginx:
     image: bootlegger/nginx:latest
     build:
       context: ../..
       dockerfile: Dockerfile.nginx
+
+  nginx-local:
+    image: bootlegger/nginx-local
+    build:
+      context: ../..
+      dockerfile: Dockerfile.nginx.local
 
   web:
     build: ../..

@@ -228,7 +228,7 @@ module.exports.bootstrap = function (cb) {
 	var LocalStrategy = require('passport-local').Strategy;
 	// var FacebookStrategy = require('passport-facebook').Strategy;
 	// var TwitterStrategy = require('passport-twitter').Strategy;
-	var DropboxOAuth2Strategy = require('passport-dropbox-oauth2').Strategy;
+	// var DropboxOAuth2Strategy = require('passport-dropbox-oauth2').Strategy;
 
 	passport.use(new LocalStrategy(
 		function (username, password, done) {
@@ -244,22 +244,22 @@ module.exports.bootstrap = function (cb) {
 	var protocol = (_.contains(process.argv, '--prod') ? 'https' : 'http');
 
 	if (!sails.config.LOCALONLY) {
-		passport.use(new DropboxOAuth2Strategy({
-			apiVersion: '2',
-			clientID: sails.config.dropbox_clientid,
-			clientSecret: sails.config.dropbox_clientsecret,
-			passReqToCallback: true,
-			callbackURL: sails.config.master_url + '/auth/dropbox_return'
-		},
-			function (req, accessToken, refreshToken, profile, done) {
-				Log.info('dropbox', 'Login', { user_id: req.session.passport.user.id });
-				req.session.passport.user.dropbox = {};
-				req.session.passport.user.dropbox.id = profile.id;
-				req.session.passport.user.dropbox.refreshToken = refreshToken;
-				req.session.passport.user.dropbox.accessToken = accessToken;
-				return done(null, req.session.passport.user);
-			}
-		));
+		// passport.use(new DropboxOAuth2Strategy({
+		// 	apiVersion: '2',
+		// 	clientID: sails.config.dropbox_clientid,
+		// 	clientSecret: sails.config.dropbox_clientsecret,
+		// 	passReqToCallback: true,
+		// 	callbackURL: sails.config.master_url + '/auth/dropbox_return'
+		// },
+		// 	function (req, accessToken, refreshToken, profile, done) {
+		// 		Log.info('dropbox', 'Login', { user_id: req.session.passport.user.id });
+		// 		req.session.passport.user.dropbox = {};
+		// 		req.session.passport.user.dropbox.id = profile.id;
+		// 		req.session.passport.user.dropbox.refreshToken = refreshToken;
+		// 		req.session.passport.user.dropbox.accessToken = accessToken;
+		// 		return done(null, req.session.passport.user);
+		// 	}
+		// ));
 
 		passport.use(new GoogleStrategy({
 			clientID: sails.config.google_clientid,
