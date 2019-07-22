@@ -57,9 +57,11 @@ module.exports = {
             }
             var signedUrl = cloudfront.getSignedUrl(`${sails.config.S3_CLOUD_URL}/${role.image}`, options);
             
+            // console.log(signedUrl);
+
             await new Promise(function(resolve,reject){
 
-              
+              // console.log(ff);
               let stream = request(signedUrl).pipe(fs.createWriteStream(ff));
               stream.on('finish', function () { resolve(); });
               // console.log(resp);
@@ -68,7 +70,10 @@ module.exports = {
             });
             // fs.createWriteStream(ff));
           }
-          console.log(ff);
+
+          // console.log('getting here')
+
+          // console.log(ff);
           
           let sub = await sharp(ff).resize(200).toBuffer();
 

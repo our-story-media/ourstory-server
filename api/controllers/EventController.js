@@ -1328,11 +1328,15 @@ module.exports = {
 					});
 				}
 				else {
+
+					if (_.startsWith(tt[0].fd,'/'))
+						tmp = tt[0].fd;
 					
 					client.putFile(tmp, 'upload/' + filename,
 						function (err, result) {
 							//done uploading
 							if (err) {
+								console.log(err);
 								req.session.flash = { msg: sails.__("Error Uploading Image") };
 								return res.redirect('/commission/' + req.param('id'));
 							}
