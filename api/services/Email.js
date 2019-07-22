@@ -68,10 +68,10 @@ exports.newUser = function (user) {
             name: user.profile.displayName
         };
 
-        options.subject= sails.__('Welcome to Our Story)');
-            options.content= sails.__("Welcome to Our Story. We are here to help you contribute to great video stories.");
-            options.btnurl= sails.config.master_url;
-            options.btntext= sails.__("Get Started Now");
+        options.subject= sails.__('Welcome to Our Story');
+        options.content= sails.__("Welcome to Our Story. We are here to help you coordinate great video stories.");
+        options.btnurl= sails.config.master_url;
+        options.btntext= sails.__("Get Started Now");
         exports.sendEmail(options);
     }
 };
