@@ -1,7 +1,7 @@
 {
   "name": "bootlegger",
   "private": true,
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Real time production control system for participatory video.",
   "devDependencies": {
     "grunt-contrib-clean": "^0.5.0",
@@ -65,10 +65,10 @@
     "aws-cloudfront-sign": "~2.1.2",
     "@sendgrid/mail": "~6.2.1",
     "sharp": "0.21.0",
-    "rc":"1.2.8"
+    "rc": "1.2.8"
   },
   "scripts": {
-    "start":"node app.js --prod",
+    "start": "node app.js --prod",
     "debug": "node debug app.js",
     "build": "sails www --prod"
   },
