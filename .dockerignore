@@ -19,6 +19,7 @@ platform.svg
 emails
 docker/build
 docker/local
+docker/dev
 Dockerfile*
 .DS_Store
 hooks
