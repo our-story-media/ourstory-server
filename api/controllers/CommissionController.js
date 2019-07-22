@@ -72,14 +72,9 @@ module.exports = {
 
 				var dest_file = path.resolve('./data/images/' + path.basename(tmp));
 				var dest_file_thumb = path.resolve('./data/icons/' + path.basename(tmp) + '_small.png');
-				// console.log(dest_file);
-				// console.log(dest_file_thumb);
-
-				// console.log(tt[0]);
 				
-
-				// console.log(tmp);
-				
+				if (_.startsWith(tt[0].fd,'/'))
+					tmp = tt[0].fd;
 
 				sharp(tmp)
 					.resize(853, 480)
