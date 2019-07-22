@@ -2,7 +2,7 @@ FROM node:8-alpine
 
 LABEL maintainer="Tom Bartindale <tom.bartindale@ncl.ac.uk>"
 
-RUN mkdir -p /usr/src/app && npm i -g grunt-cli nodemon --silent
+RUN mkdir -p /usr/src/app/upload && npm i -g grunt-cli nodemon --silent
 
 WORKDIR /usr/src/app
 

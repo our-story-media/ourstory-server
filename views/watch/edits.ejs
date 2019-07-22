@@ -50,22 +50,25 @@
         <div class="indeterminate"></div>
     </div>
 
-<div class="row" style="margin-top:2em">
+<div style="margin-top:2em">
     <div class="alert alert-info col-sm-8 col-sm-offset-2">
 
-            <i class="fa fa-info fa-3x" style="float:left;margin-right:10px;min-height:75px;"></i>
+            <i class="fa fa-info-circle fa-3x" style="float:left;margin-right:10px;min-height:75px;"></i>
 			<h3 style="margin:0">
-				<%- __('Enable Publishing!') %>
+                <%- __('Enable Publishing!') %>
+                
+                <div class="form-inline flip" style="float:right;line-height:1em;">
+
+                    <input bs-switch ng-model="event.processedits" ng-checked="event.processedits=='true'" ng-change="updateSetting()"
+                    type="checkbox" class="form-check-input">
+                    <!-- <label class="form-check-label" for="exampleCheck1"><%- __('Publishing is') %> </label> -->
+            </div>
+
 				<small style="display:block;">
 						<%- __('Control your computer resources by only enabling publishing during the right phase of the workflow.') %></small>
 			</h3>
 
-        <div class="form-inline flip" style="display:inline-block;margin-top:.5em">
-
-                <input bs-switch ng-model="event.processedits" ng-checked="event.processedits=='true'" ng-change="updateSetting()"
-                type="checkbox" class="form-check-input">
-                <!-- <label class="form-check-label" for="exampleCheck1"><%- __('Publishing is') %> </label> -->
-        </div>
+        
             </div>
     </div>
 

@@ -1354,3 +1354,13 @@ body.modal-open {
     right: 156px !important;
     left: inherit !important;
 }
+
+.alert h3
+{
+  line-height: 1.7em;
+}
+
+.alert h3 small
+{
+  line-height: 1.3em;
+}

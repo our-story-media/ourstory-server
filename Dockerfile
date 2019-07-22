@@ -1,8 +1,8 @@
 FROM node:8-alpine
 
-LABEL maintainer="Tom Bartindale <tom.bartindale@ncl.ac.uk>"
+LABEL maintainer="Tom Bartindale <tom.bartindale@monash.edu>"
 
-RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/app/upload
 
 WORKDIR /usr/src/app
 
