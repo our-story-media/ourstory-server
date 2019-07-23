@@ -47,7 +47,7 @@ services:
 
   web:
     restart: on-failure
-    # image: bootlegger/ourstory-server:dev
+    # image: bootlegger/ourstory-server:dev-staged
     build:
       context: ../..
       dockerfile: Dockerfile.dev

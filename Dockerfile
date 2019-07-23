@@ -1,6 +1,4 @@
-FROM node:8-alpine
-
-LABEL maintainer="Tom Bartindale <tom.bartindale@monash.edu>"
+FROM node:8-alpine AS builder
 
 RUN mkdir -p /usr/src/app/upload
 
@@ -22,6 +20,15 @@ RUN apk add --virtual build-dependencies git python gcc g++ make --no-cache --up
 	apk del build-dependencies && \
 	npm uninstall -g grunt-cli && \
 	npm cache clean --force
+
+# Final image:
+FROM node:8-alpine
+
+LABEL maintainer="Tom Bartindale <tom.bartindale@monash.edu>"
+
+WORKDIR /usr/src/app
+
+COPY --from=builder /usr/src/app .
 
 EXPOSE 1337
 
