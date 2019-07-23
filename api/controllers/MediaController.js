@@ -18,7 +18,7 @@ const _ = require('lodash');
 // const crypto = require('crypto');
 
 const AWS = require('aws-sdk');
-AWS.config.region = 'eu-west-1';
+AWS.config.region = sails.config.S3_REGION;
 // const urlencode = require('urlencode');
 const ss3 = require('s3');
 const s3 = ss3.createClient({
@@ -811,7 +811,7 @@ module.exports = {
 			})
 		}
 		else {
-			AWS.config.update({ accessKeyId: sails.config.AWS_ACCESS_KEY_ID, secretAccessKey: sails.config.AWS_SECRET_ACCESS_KEY });
+			AWS.config.update({ accessKeyId: sails.config.AWS_ACCESS_KEY_ID, secretAccessKey: sails.config.AWS_SECRET_ACCESS_KEY,  });
 			var s3 = new AWS.S3({ computeChecksums: true }); // this is the default setting
 			var params = { Bucket: sails.config.S3_BUCKET, Key: `upload/${eventid}/${filename}`};
 			var url = s3.getSignedUrl('putObject', params);
