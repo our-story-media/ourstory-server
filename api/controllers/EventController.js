@@ -1297,6 +1297,8 @@ module.exports = {
 				var fakeid = uuid.v1();
 				var filename = fakeid + tt[0].filename.replace(' ', '');
 				var tmp = '.tmp/uploads/' + tt[0].fd; // this is where sails puts the files:
+				if (_.startsWith(tt[0].fd,'/'))
+					tmp = tt[0].fd;
 				// console.log(tmp);
 				// console.log("file:"+tt[0].fd);
 				//generate role map:
@@ -1329,8 +1331,7 @@ module.exports = {
 				}
 				else {
 
-					if (_.startsWith(tt[0].fd,'/'))
-						tmp = tt[0].fd;
+					
 					
 					client.putFile(tmp, 'upload/' + filename,
 						function (err, result) {
