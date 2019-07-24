@@ -516,7 +516,7 @@ module.exports = {
 			Edits.genlink(function (newlink) {
 				//console.log(newlink);
 				//return new edit and shortcode
-				Edits.findOrCreate({ id: req.param('id') }, { user_id: req.session.passport.user.id, shortlink: newlink, media: newmedia, code: newlink, title: title, description: description }).exec(async function (err, edit) {
+				Edits.findOrCreate({ id: req.param('id') }, { user_id: req.session.passport.user.id, media: newmedia, title: title, description: description }).exec(async function (err, edit) {
 					//console.log(err);
 					//fire off to editor:
 					//send back to user:
