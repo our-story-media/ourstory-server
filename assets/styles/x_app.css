@@ -195,7 +195,7 @@ a.list-group-item.active
     .myalert
     {
       list-style: none;
-      margin:0;
+      /* margin:0; */
       padding:15px;
     }
 
@@ -1363,4 +1363,8 @@ body.modal-open {
 .alert h3 small
 {
   line-height: 1.3em;
+}
+
+h2 {
+  text-align: center;
 }

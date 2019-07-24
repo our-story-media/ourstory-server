@@ -106,9 +106,9 @@
     </div>
 
     <div class="row">
-      <% if (!sails.config.LOCALONLY) { %>
+      <% if (!sails.config.LOCALONLY && false) { %>
       <form action="/event/background/<%- event.id %>?apikey=<%- apikey%>" method="post" enctype="multipart/form-data">
-        <label class="col-sm-4 control-label" data-delay="300" toolip="Loads a background that contributors will see when they log into the mobile app">
+        <label class="col-sm-4 control-label" data-delay="300" tooltip="Loads a background that contributors will see when they log into the mobile app">
           <%- __('Background Image for Shoot') %>
           <i style="color:silver" class="fa fa-question-circle"></i>
         </label>
@@ -164,8 +164,7 @@
 
   <div class="clearfix"></div>
   <div class="page-header">
-    <h1><%- __('Tags') %>
-    </h1>
+    <h2><%- __('Tags') %></h1>
     <div class="row">
       <div class="col-md-8 col-md-offset-2">
 <div class="table-responsive">
@@ -249,8 +248,7 @@
     <% if (!sails.config.LOCALONLY) { %>
   <div class="clearfix"></div>
   <div class="page-header">
-    <h1><%- __('Privacy &amp; Access') %>
-    </h1>
+    <h2><%- __('Privacy &amp; Access') %></h2>
   </div>
 
   <div class="form-horizontal">
@@ -346,7 +344,7 @@
   <% if (!sails.config.LOCALONLY) { %>
   <div class="clearfix"></div>
   <div class="page-header">
-    <h1><%- __('Rights &amp; Releases') %></h1>
+    <h2><%- __('Rights &amp; Releases') %></h2>
   </div>
   <div class="row">
   <div class="col-md-8 col-md-offset-2" style="margin-top:2em;">
@@ -517,7 +515,7 @@
   <div class="clearfix"></div>
   <% if (!sails.config.LOCALONLY) { %>
   <div class="page-header">
-    <h1><%- __('Production Team') %></h1>
+    <h2><%- __('Production Team') %></h2>
   </div>
 
 
@@ -576,7 +574,7 @@
       <div class="input-group cold-xs-12 col-sm-7">
         <input type="email" id="admina" class="form-control" placeholder="email" required="true" />
         <span class="input-group-btn">
-          <button class="btn" ng-click="addadmin();"><%- __('Add') %></button>
+          <button class="btn btn-primary" ng-click="addadmin();"><%- __('Add') %></button>
         </span>
       </div>
       <div class="text-warning text-center">
