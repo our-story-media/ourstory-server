@@ -17,6 +17,50 @@
 		
 	</div>
 </div>
+	<% } else { %>
+		<div style="margin-top:2em">
+			<div class="alert alert-info col-sm-8 col-sm-offset-2">
+					<i class="fa fa-arrow-circle-down fa-3x" style="float:left;margin-right:10px;min-height:75px;"></i>
+					<h3 style="margin:0">
+						<%- __('Video Export!') %>
+						
+						<small style="display:block;">
+								<ul style="margin-left: 30px;">
+									<li><%- __('Completed Stories can be downloaded using the <i class="fa fa-ellipsis-v text-primary"></i> button on the <a href="/watch/edits/%s">Stories</a> page.<br>Individual videos can be downloaded in a similar way.',event.id) %>
+									</li>
+									<li><%- __('View and Download the Meta-Data associated with this shoot') %>
+								
+											<div class="btn-group">
+												<a type="button" href="/post/document/<%-event.id %>?apikey=<%-apikey %>" class=" btn btn-link"
+												 tooltip-popup-delay="300" tooltip-append-to-body="true" tooltip="<%- __('Makes a document with thumbnails of each shot and its metadata') %>">
+													<i class="glyphicon glyphicon-th-list"></i>
+													<%- __('View Shot List') %></a>
+									
+												<button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+													<span class="caret"></span>
+													<span class="sr-only">Toggle Dropdown</span>
+												</button>
+									
+												<ul class="dropdown-menu" role="menu">
+													<!-- <li>
+															<a ng-click="getedl();">
+																<i class="fa fa-download"></i> Download EDL (FCP XML)</a>
+															</li> -->
+													<li>
+														<a href="/post/document/<%-event.id %>?apikey=<%- apikey %>">HTML</a>
+													</li>
+													<li>
+														<a href="/media/nicejson/<%-event.id %>?apikey=<%- apikey %>">JSON</a>
+													</li>
+												</ul>
+											</div>
+									</li>
+								</ul>
+							</small>
+					</h3>
+				
+			</div>
+		</div>
 	<% } %>
 
 	<div class="alert alert-danger col-sm-8 col-sm-offset-2" ng-show="nums.missingfrom.length>0" style="margin-top:20px;">
@@ -101,40 +145,14 @@
 
 	<% if (!sails.config.LOCALONLY) { %>
 
-	<div class="alert alert-info col-sm-8 col-sm-offset-2 text-center" style="position: relative;margin-top:2em;">
+	<!-- <div class="alert alert-outline col-sm-8 col-sm-offset-2 text-center" style="position: relative;margin-top:2em;"> -->
 		<!-- Split button -->
+		<!-- <div class="text-center">
 		
-		<p style="margin-bottom: 1em;">
-			<%- __('View and Download the Meta-Data associated with this shoot') %>
-			
-		</p>
-		<div class="btn-group">
-			<a type="button" href="/post/document/<%-event.id %>?apikey=<%-apikey %>" class=" btn btn-primary"
-			 tooltip-popup-delay="300" tooltip-append-to-body="true" tooltip="<%- __('Makes a document with thumbnails of each shot and its metadata') %>">
-				<i class="glyphicon glyphicon-th-list"></i>
-				<%- __('View Shot List') %></a>
+	</div> -->
+		<!-- <div class="clearfix"></div> -->
 
-			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-				<span class="caret"></span>
-				<span class="sr-only">Toggle Dropdown</span>
-			</button>
-
-			<ul class="dropdown-menu" role="menu">
-				<!-- <li>
-						<a ng-click="getedl();">
-							<i class="fa fa-download"></i> Download EDL (FCP XML)</a>
-						</li> -->
-				<li>
-					<a href="/post/document/<%-event.id %>?apikey=<%- apikey %>">HTML</a>
-				</li>
-				<li>
-					<a href="/media/nicejson/<%-event.id %>?apikey=<%- apikey %>">JSON</a>
-				</li>
-			</ul>
-		</div>
-		<div class="clearfix"></div>
-
-	</div>
+	<!-- </div> -->
 	<div class="clearfix"></div>
 
 	<div class="text-center" ng-hide="exportopen">

@@ -115,7 +115,7 @@
                 <span class="checkmark"></span>
                 <span class="content" ng-style="{background:tag.color}">
                   <i class="fa fa-check"></i>
-                {{(tag.values['<%- req.getLocale() %>'])?tag.values['<%- req.getLocale() %>']:tag.values['en']}} &nbsp;
+                {{(tag.values[event.defaulttopiclang])?tag.values[event.defaulttopiclang]:tag.values['en']}} &nbsp;
                 </span>
                 </label>
                 <div class="text-muted text-center" ng-hide="event.topics.length>0"><%- __('no tags specified') %><br><br></div>

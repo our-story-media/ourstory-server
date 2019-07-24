@@ -1368,3 +1368,8 @@ body.modal-open {
 h2 {
   text-align: center;
 }
+
+.alert .outline
+{
+  border: 1px silver solid;
+}
