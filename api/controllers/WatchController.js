@@ -336,10 +336,7 @@ module.exports = {
 		Edits.findOne(id, function (err, m) {
 			//LOCAL ONLY
 			if (sails.config.LOCALONLY) {
-				if (req.header('host') == 'localhost' || _.includes(req.header('referer'),'localhost'))
-				return res.redirect(`/edits/${m.shortlink}_tags.mp4`);
-				else
-					return res.redirect(`${sails.config.FAKES3URL}/edits/${m.shortlink}_tags.mp4`);
+				return res.redirect(`${sails.config.FAKES3URL}/edits/${m.shortlink}_tags.mp4`);
 			}
 			else {
 				var options = {
