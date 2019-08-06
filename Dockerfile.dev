@@ -2,7 +2,8 @@ FROM node:8-alpine
 
 LABEL maintainer="Tom Bartindale <tom.bartindale@ncl.ac.uk>"
 
-RUN mkdir -p /usr/src/app/upload && npm i -g grunt-cli nodemon --silent
+RUN mkdir -p /usr/src/app/upload
+# && npm i -g grunt-cli nodemon --silent
 
 WORKDIR /usr/src/app
 
@@ -11,7 +12,7 @@ RUN apk add --no-cache --update --repository http://dl-3.alpinelinux.org/alpine/
 
 COPY package.json /usr/src/app/
 
-RUN npm install --silent
+RUN npm install
 
 COPY . /usr/src/app
 
