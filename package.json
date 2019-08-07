@@ -70,7 +70,8 @@
   "scripts": {
     "start": "node app.js --prod",
     "debug": "node debug app.js",
-    "build": "sails www --prod"
+    "build": "sails www --prod",
+    "buildgrunt": "grunt buildProd"
   },
   "main": "app.js",
   "author": "Tom Bartindale",
