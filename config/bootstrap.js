@@ -9,24 +9,17 @@
  */
 
 var fs = require('fs');
-// var Server = require('node-ssdp').Server;
 
 module.exports.bootstrap = function (cb) {
 	//start http redirect server:
-
 	var request = require('request');
 
 	var myIP = require('my-ip');
-
-	
 
 	sails.winston = require('winston');
 	sails.winston.remove(sails.winston.transports.Console);
 	sails.winston.add(sails.winston.transports.Console, { colorize: true, level: 'info' });
 	require('winston-mongodb').MongoDB;
-
-	// var dbconn = 'mongodb://'+sails.config.connections.mongodb.user+((sails.config.connections.mongodb.password)?':'+sails.config.connections.mongodb.password:'')+'@'+sails.config.connections.mongodb.host+':'+sails.config.connections.mongodb.port+'/'+sails.config.connections.mongodb.database;
-
 	sails.winston.add(sails.winston.transports.MongoDB, {
 		level: 'verbose',
 		db: sails.config.connections.mongodb.url,
@@ -230,15 +223,56 @@ module.exports.bootstrap = function (cb) {
 	// var TwitterStrategy = require('passport-twitter').Strategy;
 	// var DropboxOAuth2Strategy = require('passport-dropbox-oauth2').Strategy;
 
-	passport.use(new LocalStrategy(
-		function (username, password, done) {
-			User.findOne({
-				username: username,
-				password: password
+	passport.use(new LocalStrategy({passReqToCallback: true},
+		function (req, username, password, done) {
+			// User.findOne({
+			// 	username: username,
+			// 	password: password
+			// }, function (err, user) {
+			// 	return done(err, user);
+			// });
+			// console.log('processing local');
+			if (sails.config.LOGINCODE == '')
+			{
+				// console.log('NO LOGIN CODE')
+				// req.session.flash = {msg:'NO LOGINCODE set!'};
+				return done(sails.__('No Local Login Code Set'),null);
+			}
+
+			if (password == sails.config.LOGINCODE)
+			{
+
+			User.findOrCreate({
+				localadmin: true
+			},
+			{
+				localadmin: true,
+				consent: new Date(),
+				nolimit: 1,
+				profile: {
+					displayName: sails.__('Director'),
+					provider: 'local',
+					photos: [
+						{
+							value: sails.config.master_url + '/images/user.png'
+						}
+					],
+					emails: [
+						{
+							value: 'localadmin@ourstory.video'
+						}
+					]
+				}
 			}, function (err, user) {
-				return done(err, user);
+				return done(err,user);
 			});
 		}
+		else
+		{
+			// req.session.flash = {msg:'Login Code Incorrect!'};
+			return done(sails.__('Invalid Local Login Code'),null);
+		}
+	}
 	));
 
 	var protocol = (_.contains(process.argv, '--prod') ? 'https' : 'http');
@@ -293,7 +327,7 @@ module.exports.bootstrap = function (cb) {
 					Log.info('google', 'Login', { user_id: profile.id });
 
 					user.profile.photos = sn_profile.photos;
-					user.save(function(err){
+					user.save(function (err) {
 						return done(err, user);
 					});
 				});
@@ -311,7 +345,7 @@ module.exports.bootstrap = function (cb) {
 		// 		Log.info('facebook', 'Login', { user_id: profile.id });
 		// 		// profile._json.picture = 'http://graph.facebook.com/' + profile.id + '/picture';
 
-				
+
 		// 		if (profile.emails) {
 
 		// 			var sn_profile = {
@@ -366,7 +400,7 @@ module.exports.bootstrap = function (cb) {
 
 	// sails.localmode = false;
 	// if (sails.config.LOCALONLY) {
-		//startup the event manager:
+	//startup the event manager:
 	sails.hostname = sails.config.hostname + ':' + sails.config.port;
 	sails.multiserveronline = false;
 	sails.eventmanager = require('./eventmanager.js');

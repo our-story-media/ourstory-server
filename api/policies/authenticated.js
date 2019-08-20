@@ -9,6 +9,8 @@
 
 function isValidReferer(req)
 {
+  //FOR DEBUGGING!
+  return false;
   // console.log(req.headers);
   // return false;
   // console.log(req.header('host'))
@@ -16,7 +18,6 @@ function isValidReferer(req)
 }
 
 module.exports = function (req, res, ok) {
-
   //check its from localhost:
   // console.log(isValidReferer(req));
   if (sails.config.LOCALONLY && isValidReferer(req))
@@ -85,6 +86,8 @@ module.exports = function (req, res, ok) {
     // User is allowed, proceed to controller
     if (req.session.passport && req.session.passport.user) {
 
+      // console.log("has user");
+
       if (req.options.action=='acceptconsent' || req.options.action=='consent')
       {
         return ok();
@@ -131,16 +134,23 @@ module.exports = function (req, res, ok) {
             return res.redirect('auth/login');
           }
           else{
+
+            //send to Local Code Login:
+
             res.locals.localmode = sails.localmode;
             res.locals.inspect = require('util').inspect;
             res.locals.moment = require('moment');
             res.locals.user = '';
-            res.locals.flash = '';
+            if (!res.locals.flash)
+              res.locals.flash = '';
           
             if (!res.locals.event)
             {
               res.locals.event = {name:''};
             }
+
+            // console.log(req.session.flash);
+            // res.locals.flash = req.session.flash;
             return res.status(403).view('notlocal');
           }
         }

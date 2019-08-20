@@ -3,6 +3,8 @@ module.exports = {
     LIVEMODE: false,
   
     LOCALONLY: true,
+
+    LOGINCODE: '',
   
     name: 'Our Story',
     bootlegger: false,

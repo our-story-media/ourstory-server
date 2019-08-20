@@ -19,6 +19,8 @@ COPY . /usr/src/app
 
 EXPOSE 1337
 
+RUN npm install -g nodemon
+
 # RUN grunt buildProd && mkdir -p /usr/src/app/upload/
 
 VOLUME ["/usr/src/app/www","/usr/src/app/data","/usr/src/app/assets", "/usr/src/app/.tmp"]

@@ -12,7 +12,7 @@ services:
       context: ../..
       dockerfile: Dockerfile.nginx.local
     ports:
-      - "8845:80"
+      - "80:80"
       #- "8845:80"
     volumes:
       # - "../server.conf:/etc/nginx/conf.d/default.conf:ro"
@@ -55,10 +55,12 @@ services:
       - redis
       - mongo
       - beanstalk
-    command: nodemon --watch api app.js -- --verbose
+    command: nodemon --watch api app.js  -- --verbose
+    environment: 
+      sails_LOGINCODE: "abcd"
     # command: node app.js # -- --verbose
-    expose:
-      - 1337
+    # expose:
+      # - 1337
     volumes:
       - ../../config:/usr/src/app/config
       - "./upload:/usr/src/app/upload"

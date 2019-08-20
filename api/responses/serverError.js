@@ -84,11 +84,11 @@ module.exports = function serverError (data, options) {
       else {
         sails.log.warn('res.serverError() :: When attempting to render error page view, an error occured (sending JSON instead).  Details: ', err);
       }
-      console.log('sending jsonx');
+      // console.log('sending jsonx');
       return res.jsonx(data);
     }
 
-    console.log('sending');
+    // console.log('sending');
     return res.send(html);
   });
 

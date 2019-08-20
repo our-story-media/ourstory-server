@@ -180,6 +180,7 @@ module.exports = {
 		else {
 			//console.log("resetting login");
 			if (sails.config.LOCALONLY) {
+				// console.log('sending to dashboard')
 				return res.redirect('/dashboard');
 			}
 
@@ -342,6 +343,33 @@ module.exports = {
 			res.locals.rtl = 'ltr';
 		}
 		return res.view('auth/locallogin.ejs', { _layoutFile: '../blank' });
+	},
+
+	process_admin: function (req,res,next)
+	{
+		//local-login
+		// console.log('process admin');
+		passport.authenticate('local',
+		function(err,user,info){
+			// console.log(user)
+			if (err)
+			{
+				// console.log(err);	
+				// console.log('flash')
+				req.session.flash = {msg:err};
+			}
+			
+			if (user)
+			{
+				req.logIn(user, function () {
+					res.redirect('/dashboard');
+				});
+			}
+			else
+			{
+				res.redirect('/dashboard');
+			}
+		})(req, res, next);
 	},
 
 	process_local: function (req, res, next) {

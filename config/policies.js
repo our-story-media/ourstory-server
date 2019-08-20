@@ -77,7 +77,7 @@ module.exports.policies = {
       'admin_events':['superadmin','flash','apiauth'],
       'removeuser':['superadmin','apiauth'],
       'removeadmin':['authenticated','isowner','apiauth'],
-      'dashboard':['apikeygen','authenticated','flash'],
+      'dashboard':['flash','apikeygen','authenticated'],
       'shortlink':['flash','apikeygen'],
       'beacon':['flash','apikeygen'],      
       'lookupshoot':true,

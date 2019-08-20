@@ -302,8 +302,6 @@ It produces high quality, content rich footage with no expense">
       <% if (user) { %>
       <a href="/dashboard">
         <%- __('My Shoots') %></a>
-      <!-- <a href="/stories"> -->
-        <!-- <%- __('My Stories') %></a> -->
       <% } %>
     </div>
   </div>
@@ -317,16 +315,6 @@ It produces high quality, content rich footage with no expense">
           <i class="fa fa fa-cogs"></i>
           <%- __('Administration') %>
         </a>
-
-        <!-- <div > -->
-        <!-- <div class="form-inline pull-right flip" style="display:inline-block;margin-top:.5em">
-          <div class="form-check">
-            <input ng-model="settings.processedits" ng-checked="settings.processedits=='true'" ng-change="updateSetting()"
-              type="checkbox" class="form-check-input">
-            <label class="form-check-label" for="exampleCheck1">
-              <%- __('Process Edits') %></label>
-          </div>
-        </div> -->
 
       </div>
       <div class="col-sm-4 text-center">
@@ -501,7 +489,6 @@ It produces high quality, content rich footage with no expense">
     <% if(flash && flash.msg) { %>
     <script>var flashmsg = true;</script>
     <ul class="myalert alert alert-info col-sm-8 col-sm-offset-2">
-
       <li>
         <i class="fa fa-exclamation-circle"></i>
         <%- flash.msg %>

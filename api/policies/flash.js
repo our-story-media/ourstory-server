@@ -53,6 +53,7 @@ module.exports = function(req, res, next) {
              return next();
          }
 
+		//  console.log(req.session.flash)
 		 res.locals.flash = _.clone(req.session.flash);
 
 		 req.session.flash = {};

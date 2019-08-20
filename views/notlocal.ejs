@@ -1,12 +1,18 @@
 <div class="text-center">
-<h1 style="font-size:7em;;color:#eee;"><%- __('Access Denied') %></h1>
-
 <div class="main">
   <h1>
     <%- __('Titan Dashboard') %>
   </h1>
-  <h2> 
-    <%- __('Sorry, access to the Titan dashboard is only allowed from the computer running the application.') %>
+  <h2>
+    <form action="/auth/process_admin" method="POST">
+      <input type="hidden" name="username" value="admin" />
+    <div class="input-group" style="max-width:500px;margin:auto auto">
+      <input placeholder="<%- __('enter access code') %>" class="form-control input-lg"  name="password" />
+      <span class="input-group-btn">
+      <input type="submit" class="btn btn-primary btn-lg" value="<%- __('Access Dashboard') %>" />
+      </span>
+    </div>
+    </form>
   </h2>
 </div>
 </div>
