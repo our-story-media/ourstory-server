@@ -16,10 +16,10 @@
     </h1>
 
     <% if (!sails.config.LOCALONLY) { %>
-      <div class=" text-center col-md-8 col-md-offset-2 lead" style="margin-top:2em;">
-          <div style="line-height: 60px">
+      <div class=" text-center col-md-8 col-md-offset-2 lead" >
+          <div style="line-height: 50px">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <a href="https://indaba.dev"><%- __('Read the Guide') %></a> <%- __('to get started') %>
+            <a href="<%- sails.config.central_url %>"><%- __('Read the Guide') %></a> <%- __('to get started') %>
       </div>
        
       <div class="clearfix"></div>

@@ -44,7 +44,7 @@
         "content": {
           "message": "This website uses a cookie for Google Analytics to aid our understanding of how people use video.",
           "link": "Learn More",
-          "href": "https://indaba.dev/privacy",
+          "href": "<%- sails.config.central_url %>/privacy",
           "dismiss": "Decline"
         },
         onInitialise: function (status) {
@@ -105,7 +105,7 @@
     <%- (event && event.name)?' - ' +event.name:'' %>
   </title>
   <meta name="description" content="">
-  <meta name="author" content="https://indaba.dev">
+  <meta name="author" content="<%- sails.config.central_url %>">
   <% } %>
 
   <script>
@@ -540,7 +540,7 @@
         <%- __('Privacy') %></a> &middot;
       <a class="text-muted" href="/terms">
         <%- __('Terms') %></a> &middot;
-      <a class="text-muted" href="https://indaba.dev">
+      <a class="text-muted" href="<%- sails.config.central_url %>">
         <%- __('Guide') %></a> &middot;
       <span>&copy;
         <%- __('Indaba') %>
