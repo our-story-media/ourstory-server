@@ -20,7 +20,7 @@ for (let i=1;i<_.size(loaded);i++)
 {
     // console.log(loaded[i])
     let matching = _.intersection(_.keys(loaded[i]),baseline);
-    let notused = _.without(_.keys(loaded[i]),baseline);
+    let notused = _.difference(_.keys(loaded[i]),baseline);
     let existsonlyinbaseline = _.difference(baseline,_.keys(loaded[i]));
     console.log(`en terms missing from ${locales[i]}: ${_.size(baseline) - _.size(matching)}`);
     console.log(`superflous ${locales[i]} terms not in en: ${_.size(loaded[i]) - _.size(matching) - (_.size(baseline) - _.size(matching))}`)
