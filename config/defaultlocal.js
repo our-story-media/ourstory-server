@@ -6,7 +6,7 @@ module.exports = {
 
     LOGINCODE: '',
   
-    name: 'Our Story',
+    name: 'Indaba',
     bootlegger: false,
     ifrc: false,
   

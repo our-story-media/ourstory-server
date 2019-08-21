@@ -44,7 +44,7 @@
         "content": {
           "message": "This website uses a cookie for Google Analytics to aid our understanding of how people use video.",
           "link": "Learn More",
-          "href": "https://ourstory.dev/privacy",
+          "href": "https://indaba.dev/privacy",
           "dismiss": "Decline"
         },
         onInitialise: function (status) {
@@ -93,21 +93,19 @@
   <meta property="og:image" content="<%- publicevent.iconbackground %>" />
   <meta property="og:url" content="<%- sails.config.master_url %>/s/<%- publicevent.offlinecode %>" />
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:site" content="@BootleggerTV">
   <meta name="twitter:title" content="<%- publicevent.name %>">
   <meta name="twitter:description" content="<%- publicevent.datetext %>">
   <meta name="twitter:image" content="<%- publicevent.iconbackground %>">
   <meta property="author" content="<%- publicevent.user.profile.displayName %>">
   <% } else { %>
   <title>
-    <%- __('Our Story') %>
+    <%- __('Indaba') %>
     <%- (sails.config.beta)?'BETA':'' %>
 
     <%- (event && event.name)?' - ' +event.name:'' %>
   </title>
-  <meta name="description" content="Our Story connects fans together in realtime to act as a coordinated camera crew.
-It produces high quality, content rich footage with no expense">
-  <meta name="author" content="bootlegger.tv">
+  <meta name="description" content="">
+  <meta name="author" content="https://indaba.dev">
   <% } %>
 
   <script>
@@ -115,7 +113,7 @@ It produces high quality, content rich footage with no expense">
     var GOOGLE_MAPS_KEY = '<%= sails.config.GOOGLE_MAPS_KEY %>';
   </script>
 
-  <link href='/styles/opensans.css' rel='stylesheet' type='text/css'>
+  <!-- <link href='/styles/opensans.css' rel='stylesheet' type='text/css'> -->
   <!--<link rel="stylesheet" href="/styles-frontpage/font-awesome.min.css">-->
 
 
@@ -178,6 +176,7 @@ It produces high quality, content rich footage with no expense">
   <script src="/js/watch_controller.js"></script>
   <!--SCRIPTS END-->
   <!--STYLES-->
+  <link rel="stylesheet" href="/styles/00opensans.css">
   <link rel="stylesheet" href="/styles/bootstrap-switch.css">
   <link rel="stylesheet" href="/styles/bootstrap-tokenfield.css">
   <link rel="stylesheet" href="/styles/carousel.css">
@@ -189,7 +188,6 @@ It produces high quality, content rich footage with no expense">
   <link rel="stylesheet" href="/styles/importer.css">
   <link rel="stylesheet" href="/styles/jasny-bootstrap.min.css">
   <link rel="stylesheet" href="/styles/jquery-ui.css">
-  <link rel="stylesheet" href="/styles/opensans.css">
   <link rel="stylesheet" href="/styles/rzslider.min.css">
   <link rel="stylesheet" href="/styles/ui-grid.min.css">
   <link rel="stylesheet" href="/styles/videogular.css">
@@ -227,7 +225,7 @@ It produces high quality, content rich footage with no expense">
               <p>
                 <%- __('Change the name that will be used on credits for shoots you participate in.') %>
               </p>
-              <input type="text" name="name" class="form-control" placeholder="Dave Our Story" value="<%- (user)?user.profile.displayName:'' %>"
+              <input type="text" name="name" class="form-control" placeholder="Dave Indaba" value="<%- (user)?user.profile.displayName:'' %>"
                 required min="10" />
             </div>
             <div class="modal-footer">
@@ -536,22 +534,16 @@ It produces high quality, content rich footage with no expense">
   <div class="container">
     <!-- Site footer -->
     <div class="footer text-muted" style="min-height:100%;text-align:center;">
-
-      <!-- <% if(!sails.config.LOCALONLY) { %> -->
       <a class="text-muted" href="/privacy">
         <%- __('Privacy') %></a> &middot;
       <a class="text-muted" href="/terms">
         <%- __('Terms') %></a> &middot;
-      <a class="text-muted" href="https://ourstory.dev">
-        <%- __('Our Guide') %></a> &middot;
-      <!-- <a class="text-muted" href="https://guide.ourstory.dev/platform"> -->
-        <!-- <%- __('Platform') %></a> &middot; -->
-      <!-- <a class="text-muted" href="/getapp">Download App</a> &middot; -->
+      <a class="text-muted" href="https://indaba.dev">
+        <%- __('Guide') %></a> &middot;
       <span>&copy;
-        <%- __('Our Story') %>
+        <%- __('Indaba') %>
         <%- new Date().getFullYear() %>
       </span>
-      <!-- <% }%> -->
     </div>
   </div>
     <% if (event.name) { %>

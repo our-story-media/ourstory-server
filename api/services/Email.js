@@ -32,8 +32,8 @@ exports.sendEmail = function (options) {
                 }
             }],
             from: {
-                email: "info@ourstory.dev",
-                name: 'Our Story'
+                email: "info@indaba.dev",
+                name: 'Indaba'
             },
             subject: options.subject,
             content:[
@@ -68,8 +68,8 @@ exports.newUser = function (user) {
             name: user.profile.displayName
         };
 
-        options.subject= sails.__('Welcome to Our Story');
-        options.content= sails.__("Welcome to Our Story. We are here to help you coordinate great video stories.");
+        options.subject= sails.__("Welcome to Indaba");
+        options.content= sails.__("Welcome to Indaba. We are here to help you coordinate great video stories.");
         options.btnurl= sails.config.master_url;
         options.btntext= sails.__("Get Started Now");
         exports.sendEmail(options);
@@ -82,7 +82,7 @@ exports.joinInvite = function (email, eventid, newcode) {
             to: email,
             name: sails.__('Friend!'),
             subject: sails.__('Invite to Contribute'),
-            content: sails.__('You have been invited to contribute to the Our Story project %s.', + ev.name ),
+            content: sails.__('You have been invited to contribute to the Indaba project %s.', + ev.name ),
             btnurl: sails.config.master_url + "/join/" + newcode,
             btntext: sails.__("Login to Contribute")
         }

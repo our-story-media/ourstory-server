@@ -1,25 +1,25 @@
 # Our Privacy Policy
 
-Our Story is a tool for creating and sharing video, primarily as part of ongoing research at Newcastle University into participatory video production. Your privacy is important to us and we believe you should always know what data we collect from you and the ways in which we use it. Our aim is to give you meaningful control and empower you to make the best decisions about the information you share with us.
+Indaba is a tool for creating and sharing video, primarily as part of ongoing research at Monash University into participatory video production. Your privacy is important to us and we believe you should always know what data we collect from you and the ways in which we use it. Our aim is to give you meaningful control and empower you to make the best decisions about the information you share with us.
 
 ## Key Points
 
 Here are some key points from the policy, but please read the full document:
 
-* Our Story is a public service and anything you post is available instantly to anyone around the world.
-* Our Story has been developed at Open Lab, Newcastle University as a research project. Any information we collect from you will be stored securely in the **EU** and may be subject to processing. We often publish findings based on user activity, these publications will never contain information or data that could be used to identify you as an individual.
-* When you use Our Story, even if you are just browsing through the content, we receive some personal information about you like your IP address and the type of device you are using. When you sign up you may be asked for additional information such as your email address, name and a public profile which we use to keep your account secure and improve the experience for yourself and other users.
+* Indaba is a public service and anything you post is available instantly to anyone around the world.
+* Indaba has been developed at Monash University as a research project. Any information we collect from you will be stored securely in and out of the **EU** and may be subject to processing. We often publish findings based on user activity, these publications will never contain information or data that could be used to identify you as an individual.
+* When you use Indaba, even if you are just browsing through the content, we receive some personal information about you like your IP address and the type of device you are using. When you sign up you may be asked for additional information such as your email address, name and a public profile which we use to keep your account secure and improve the experience for yourself and other users.
 *  If you have any questions about this policy, how we collect or process your personal data or anything else related to our privacy practices, you can contact us at any time.
-* Our Story may share personal data with businesses outside of the EU in order to provide a better service. Our Story is hosted on Digital Ocean servers https://www.digitalocean.com/security/gdpr/data-processing-agreement/, uses AWS https://aws.amazon.com/compliance/data-privacy-faq/ for storing data securely and SendGrid https://sendgrid.com/policies/privacy/services-privacy-policy/ to distribute emails.
-* Our Story complies with GDPR and any external services that are not based in the EU comply with the EU-US Privacy Shield Frameworks as set forth by the U.S. Department of Commerce regarding the collection, use, and retention of personal data from the EU and Switzerland. For more information about the Privacy Shield generally, and to view the certificates online, please visit https://www.privacyshield.gov.
+* Indaba may share personal data with businesses outside of the EU in order to provide a better service. Indaba is hosted on Digital Ocean servers https://www.digitalocean.com/security/gdpr/data-processing-agreement/, uses AWS https://aws.amazon.com/compliance/data-privacy-faq/ for storing data securely and SendGrid https://sendgrid.com/policies/privacy/services-privacy-policy/ to distribute emails.
+* Indaba complies with GDPR and any external services that are not based in the EU comply with the EU-US Privacy Shield Frameworks as set forth by the U.S. Department of Commerce regarding the collection, use, and retention of personal data from the EU and Switzerland. For more information about the Privacy Shield generally, and to view the certificates online, please visit https://www.privacyshield.gov.
 
 ## What and Where we store data
 
-Data you create (video, metadata) through the Our Story platform is stored securly on EU based servers. We use the following external services to provide the full Our Story experience.
+Data you create (video, metadata) through the Indaba platform is stored securly. We use the following external services to provide the full Indaba experience.
 
-- Video and data are stored on AWS and Digital Ocean servers.
+- Video and data are stored on AWS servers.
 - Anonymised logs of interaction with the site are stored with Google Analytics (unless you have opted out using the cookie banner).
-- If you have logged in using Google or Facebook, we store only your account name, email and profile picture in order to credit you appropriatly within the platform.
+- If you have logged in using Google, we store only your account name, email and profile picture in order to credit you appropriatly within the platform.
 - For each video created, we may store the location, time and user account associated with the video along with any other information provided by you through the application (such as self-identifying your location).
 
 ## What we do with the data
@@ -31,7 +31,7 @@ Data you create (video, metadata) through the Our Story platform is stored secur
 
 # Privacy Policy
 
-University of Newcastle Upon Tyne (“Newcastle University”, “we”, “us”), the owner of [Our Story], an online and mobile based video commissioning platform (the “Site”, or "Service"), recognizes the importance of your privacy. Therefore, we have created this Privacy Policy so that you know how we use and disclose your information when you make it available to us. This Privacy Policy applies solely to information collected at this Site. By using or accessing the Site, you signify your agreement to be bound by our Privacy Policy.
+Monash University (“we”, “us”), the owner of [Indaba], an online and mobile based video commissioning platform (the “Site”, or "Service"), recognizes the importance of your privacy. Therefore, we have created this Privacy Policy so that you know how we use and disclose your information when you make it available to us. This Privacy Policy applies solely to information collected at this Site. By using or accessing the Site, you signify your agreement to be bound by our Privacy Policy.
 
 __Personal Information that we collect:__
 We do not collect personal information from you unless you voluntarily provide it to us, such as when you register for the Site or submit content which self-identifies you.
@@ -63,7 +63,7 @@ __Changes to this Privacy Policy:__
 We reserve the right, at our discretion, to change, modify, add, or remove portions from this Privacy Policy at any time. Your continued use of the Site following the posting of any changes to this Privacy Policy means you accept and consent to such changes.
 
 __Opt-Out Process:__
-If you do not want to receive communications (including email digests and push notifications) from us in the future, please send an email to us at info@Our Story.tv requesting that your account be removed.
+If you do not want to receive communications (including email digests and push notifications) from us in the future, please send an email to us at info@indaba.dev requesting that your account be removed.
 
 We are not, however, responsible for removing your personal information from the lists of any third party who has previously been provided your information in accordance with this Privacy Policy or your consent, such as a sponsor. You should contact such third parties directly if you wish to have your personal information removed from their lists.
 
@@ -72,9 +72,9 @@ By providing your email address to us, you expressly consent to receive emails f
 
 Any communication or material you transmit to us by email or otherwise, including any data, questions, comments, suggestions, or the like is, and will be treated as, non-confidential and non-proprietary. Furthermore, you expressly agree that we are free to use any ideas, concepts, know-how, or techniques contained in any communication you send to us without compensation and for any purpose whatsoever, including but not limited to, developing, manufacturing and marketing products and services using such information.
 
-Site Terms of Use: Use of this Site is governed by, and subject to, the Terms of Use contained at https://ourstory.dev/terms. This Privacy Policy is incorporated into such terms. Your use, or access, of the Site constitutes your agreement to be bound by these provisions.
+Site Terms of Use: Use of this Site is governed by, and subject to, the Terms of Use contained at https://app.indaba.dev/terms. This Privacy Policy is incorporated into such terms. Your use, or access, of the Site constitutes your agreement to be bound by these provisions.
 
 __Contact:__
-For questions or concerns relating to privacy, we can be contacted at: info@Our Story.tv.
+For questions or concerns relating to privacy, we can be contacted at: info@indaba.dev.
 
 *Effective Date: This Privacy Policy was last updated on 24th May 2018.*

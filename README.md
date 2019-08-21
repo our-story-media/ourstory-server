@@ -38,7 +38,7 @@ Runtime External Dependencies for Online Edition:
 - SendGrid Account
 
 ## Development Notes
-Bootlegger is built on the SailsJS (http://sailsjs.org/) MVC engine, which is based on expressjs.
+Our Story is built on the SailsJS (http://sailsjs.org/) MVC engine, which is based on expressjs.
 
 View files are located in `views\<controller>\<view>.ejs`
 
@@ -48,4 +48,4 @@ Controller logic is located in `api\controllers\<controller>.js`
 
 ![](platform.svg)
 
-Our Story is an open source suite of tools developed by [Open Lab](http://openlab.ncl.ac.uk) that enables community commissioning and contribution of video. See [the website]( https://ourstory.dev) for more information.
+Our Story is an open source suite of tools developed by [Open Lab](http://openlab.ncl.ac.uk) that enables community commissioning and contribution of video. See [the website](https://indaba.dev) for more information.

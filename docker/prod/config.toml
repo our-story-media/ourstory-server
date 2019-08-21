@@ -18,7 +18,7 @@ defaultEntryPoints = ["https","http"]
 endpoint="unix://var/run/docker.sock"
 watch=true
 exposedByDefault = false
-domain = "app.ourstory.dev"
+domain = "app.indaba.dev"
 
 [acme]
 email = "tom.bartindale@monash.edu"

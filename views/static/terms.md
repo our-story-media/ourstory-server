@@ -1,6 +1,6 @@
 # Terms of Use
 
-Please read these terms of use carefully before using the services offered by University of Newcastle Upon Tyne (“Newcastle University”, "University of Newcastle Upon Tyne", “we”, “us”). These terms of use set forth the legally binding terms and conditions for your use of the website at https://ourstory.dev (the "Service") and the services, features, content, applications or widgets offered by Newcastle University (collectively with the Service, the "Service").
+Please read these terms of use carefully before using the services offered by University of Newcastle Upon Tyne (“Newcastle University”, "University of Newcastle Upon Tyne", “we”, “us”). These terms of use set forth the legally binding terms and conditions for your use of the website at https://indaba.dev (the "Service") and the services, features, content, applications or widgets offered by Newcastle University (collectively with the Service, the "Service").
 
 __Please read these Terms of Use carefully before using the Service. If you do not accept these Terms of Use, then you may not use the Service. These Terms of Use are subject to change by us at any time, effective when posted on the Service. Your continued use after such notice will constitute acceptance by you of such changes.__
 
@@ -39,7 +39,7 @@ The Service is a space dedicated to helping communities engage in new and creati
 13. involves commercial activities and/or sales without our prior written consent such as contests, sweepstakes, barter, advertising, or pyramid schemes;
 14. or includes a photograph or video footage of another person that you have posted without that person's consent or other third party content including but not limited to music, trademarks, logos, artwork or any other copyrighted, trademarked, or proprietary third party content that you have not secured permission to include on the Site.
 
-If you wish to report any Content or conduct on the Service that you believe is inappropriate, please contact us at info@ourstory.dev.
+If you wish to report any Content or conduct on the Service that you believe is inappropriate, please contact us at info@indaba.dev.
 
 __NO CONTENT MONITORING:__
 We are under no obligation to screen or monitor Content, but may review Content from time to time at our sole discretion to review compliance with these Terms of Use. We will make all determinations as to what Content is appropriate in our sole discretion. We may include, edit or remove any Content at any time without notice. We may employ automated monitoring devices or techniques to protect our users from mass unsolicited communications (also known as "spam") and/or other types of electronic communications that we deem objectionable. Such devices or techniques are not perfect, and we will not be responsible for any legitimate communication that is blocked, or for any unsolicited communication that is not blocked. Mailboxes may have a limited storage capacity. If you exceed the maximum permitted storage space, we may employ automated devices that delete or block email messages that exceed the limit. We will not be responsible for such deleted or blocked messages.
@@ -48,7 +48,7 @@ __TERMINATION OF ACCESS:__
 In addition to any right or remedy that may be available to us under these Terms of Use or applicable law, we may suspend, limit or terminate all or a portion of your access to the Service, at any time with or without notice and with or without cause. In addition, we may refer any information on illegal activities, including your identity, to the proper authorities.
 
 __PRIVACY:__
-The privacy of your personally identifiable information is very important to us. For more information on what information we collect and how we use such information, please read our Privacy Policy at https://ourstory.dev/privacy
+The privacy of your personally identifiable information is very important to us. For more information on what information we collect and how we use such information, please read our Privacy Policy at https://indaba.dev/privacy
 
 __LINKS:__
 This Service may contain links to other web sites not maintained by us (including without limitation Facebook, Twitter and other social media platforms). We encourage you to be aware when you leave our Service and to read the terms and conditions and privacy statements of each and every web site that you visit. We are not responsible for the practices or the content of such other web sites or services.
@@ -84,6 +84,6 @@ __WAIVER; REMEDIES:__
 The failure by us to partially or fully exercise any rights or the waiver of any breach of these Terms of Use by you, shall not prevent a subsequent exercise of such right by us or be deemed a waiver by us of any subsequent breach by you of the same or any other term of these Terms of Use. Our rights and remedies under these Terms of Use shall be cumulative, and the exercise of any such right or remedy shall not limit our right to exercise any other right or remedy. NOTICES. Any and all notices to be given by either one of us to the other pursuant to or in connection with these Terms of Use shall be deemed sufficiently given when forwarded by e-mail in each case addressed to you at the e-mail address you have given us or to us at the e-mail address displayed on the Service.
 
 __CONTACT INFORMATION:__
-Should you have any questions, you may contact us at info@ourstory.dev.
+Should you have any questions, you may contact us at info@indaba.dev.
 
 _These Terms of Use were last updated on 23rd July 2015._
