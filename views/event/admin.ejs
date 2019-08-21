@@ -48,7 +48,7 @@
 
 <tabset>
 	
-    <tab select="showshoots()" heading="Shoots">
+    <tab select="showshoots()" heading="<%- __('Shoots') %>">
 			<span class="text-muted"><%- __('Order By:') %></span>
 			<a href="" ng-click="ordere('name')"><%- __('Name') %></a><span class="sortorder" ng-show="predicatee === 'name'" ng-class="{reverse:reversee}"></span> |
 			<a href="" ng-click="ordere('createdAt')"><%- __('Joined') %></a><span class="sortorder" ng-show="predicatee === 'createdAt'" ng-class="{reverse:reversee}"></span> |
@@ -84,7 +84,7 @@
 			</div>
 
 		</tab>
-		<tab select="showusers()" heading="Users">
+		<tab select="showusers()" heading="<%- __('Participants') %>">
 			<span class="text-muted"><%- __('Order By:') %></span>
 			<a href="" ng-click="order('profile.name.familyName')"><%- __('Name') %></a><span class="sortorder" ng-show="predicate === 'profile.name.familyName'" ng-class="{reverse:reverse}"></span> |
 			<a href="" ng-click="order('createdAt')"><%- __('Joined') %></a><span class="sortorder" ng-show="predicate === 'createdAt'" ng-class="{reverse:reverse}"></span> |
@@ -99,7 +99,7 @@
 					<div class="row">
 					<div class="col-xs-12 col-sm-8">
 						<h4 class="list-group-item-heading">
-							<img style="width:26px;height:auto;border-radius: 50%;" ng-src="{{user.profile.photos[0].value}}" /> <strong>{{user.profile.displayName}}</strong> <em>{{user.profile.emails[0].value}}</em>
+							<img style="width:26px;height:auto;border-radius: 50%;" ng-src="{{user.profile.photos[0].value.replace('<%- sails.config.master_url %>','')}}" /> <strong>{{user.profile.displayName}}</strong> <em>{{user.profile.emails[0].value}}</em>
 						</h4>
 						<i class="fa fa-clock-o" tooltip="<%- __('user joined') %>"></i> {{user.createdAt | date:'short'}} 
 						<i class="fa fa-users" tooltip="<%- __('shoots owned') %>"></i> {{user.owned}} 

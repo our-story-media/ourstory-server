@@ -39,13 +39,13 @@ module.exports = {
 
 		Event.findOne(lookupid).exec(function (err, event) {
 			if (event == undefined) {
-				console.log("no event found view page " + lookupid);
+				// console.log("no event found view page " + lookupid);
 				//req.session.flash = {err:"Event not found"};
 				return res.redirect('/dashboard');
 			}
 			//console.log(event);
 			event.calcphases();
-			res.view({ event: event, pagetitle: 'Adjust' });
+			res.view({ event: event, pagetitle: req.__('Adjust') });
 		});
 	},
 
@@ -58,7 +58,7 @@ module.exports = {
 
 				//console.log(err);
 				if (tt.length == 0) {
-					req.session.flash = sails.__('No image provided');
+					req.session.flash = req.__('No image provided');
 					return res.redirect('/commission/' + req.param('id'));
 				}
 
@@ -115,7 +115,7 @@ module.exports = {
 								newshot.wanted = 7;
 								newshot.max_length = 20;
 								Shot.create(newshot).exec(function (err, done) {
-									req.session.flash = sails.__("New Shot Added");
+									req.session.flash = req.__("New Shot Added");
 									return res.redirect('/commission/' + req.param('id'));
 								});
 							}); //write file
@@ -287,7 +287,7 @@ module.exports = {
 		let event = await Event.findOne(req.param('id'));
 
 		event.id = null;
-		event.name = "Copy of " + event.name;
+		event.name = sails.__("Copy of %s", event.name);
 
 		Event.create(event,function(err){	
 			return res.redirect('/dashboard');

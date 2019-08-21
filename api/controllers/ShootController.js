@@ -37,7 +37,7 @@ module.exports = {
       }
       //console.log(event);
       event.calcphases();
-      res.view({ event: event, pagetitle: 'Review' });
+      res.view({ event: event, pagetitle: req.__('Review') });
     });
   },
 
@@ -76,17 +76,17 @@ module.exports = {
             _.each(users, function (u) {
               if (u.pushcode) //for testing.... && u.profile.emails[0].value == sails.config.admin_email
               {
-                Gcm.sendMessage(u.platform, u.pushcode, sails.__("Indaba Message"), req.param('message'), null);
+                Gcm.sendMessage(u.platform, u.pushcode, req.__("Indaba Message"), req.param('message'), null);
               }
             });
-            req.session.flash = { msg: sails.__("Message Sent!") };
+            req.session.flash = { msg: req.__("Message Sent!") };
             res.redirect('/shoot/' + req.param('id'));
           });
         });
       });
     }
     else {
-      req.session.flash = { msg: sails.__("No Message Given!") };
+      req.session.flash = { msg: req.__("No Message Given!") };
       res.redirect('/shoot/' + req.param('id'));
     }
   }

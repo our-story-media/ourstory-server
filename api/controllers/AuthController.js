@@ -62,7 +62,7 @@ module.exports = {
 		User.findOne(req.session.passport.user.id).exec(function (err, user) {
 			var nn = req.param('name').split(' ');
 			if (nn.length < 1) {
-				req.session.flash = { msg: sails.__('Please enter your full, real name') };
+				req.session.flash = { msg: req.__('Please enter your full, real name') };
 				return res.redirect('/');
 			}
 
@@ -74,7 +74,7 @@ module.exports = {
 
 			user.save(function (err, u) {
 				//console.log(u);
-				req.session.flash = { msg: sails.__('Your name has been updated!') };
+				req.session.flash = { msg: req.__('Your name has been updated!') };
 				return res.redirect('/');
 			});
 		});
@@ -375,7 +375,7 @@ module.exports = {
 	process_local: function (req, res, next) {
 
 		if (_.size(req.param('firstName')) < 3) {
-			req.session.flash = { msg: sails.__('Please type a longer name') };
+			req.session.flash = { msg: req.__('Please type a longer name') };
 			return res.redirect('/auth/local');
 		}
 

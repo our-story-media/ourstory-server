@@ -162,7 +162,7 @@ module.exports = {
 			user.currentevent = '';
 			user.save(function (err, done) {
 				//console.log(done);
-				req.session.flash = { msg: sails.__('User Removed') };
+				req.session.flash = { msg: req.__('User Removed') };
 				return res.redirect('/event/admin');
 			});
 		});
@@ -229,7 +229,7 @@ module.exports = {
 
 			if (event == undefined) {
 				console.log("no event found view page " + lookupid);
-				req.session.flash = { err: sails.__("Event not found") };
+				req.session.flash = { err: req.__("Event not found") };
 				return res.redirect('/dashboard');
 			}
 			event.calcphases();
@@ -253,7 +253,7 @@ module.exports = {
 				else {
 					event.ownedby_user = { profile: { displayName: 'Unknown User' } };
 				}
-				res.view({ event: event, pagetitle: 'Prepare' });
+				res.view({ event: event, pagetitle: req.__('Prepare') });
 
 			});
 		});
@@ -266,7 +266,7 @@ module.exports = {
 			// destroy the record
 			if (ev != undefined) {
 				ev.destroy(function (err) {
-					req.session.flash = { err: sails.__("Shoot removed") };
+					req.session.flash = { err: req.__("Shoot removed") };
 					return res.redirect('/event/admin');
 				});
 			}
@@ -289,7 +289,7 @@ module.exports = {
 					if (eventid == req.session.passport.user.currentevent)
 						req.session.passport.user.currentevent = null;
 
-					req.session.flash = { err: sails.__("Shoot removed") };
+					req.session.flash = { err: req.__("Shoot removed") };
 					return res.redirect('/dashboard');
 				});
 			}
@@ -686,7 +686,7 @@ module.exports = {
 		User.findOne(req.param('id')).exec(function (err, u) {
 			u.nolimit = 1;
 			u.save(function (err, u) {
-				req.session.flash = { msg: sails.__('Limit Removed') };
+				req.session.flash = { msg: req.__('Limit Removed') };
 				return res.redirect('/event/admin');
 			});
 		});
@@ -699,7 +699,7 @@ module.exports = {
 		User.findOne(req.param('id')).exec(function (err, u) {
 			u.nolimit = 0;
 			u.save(function (err, u) {
-				req.session.flash = { msg: sails.__('Limit Added') };
+				req.session.flash = { msg: req.__('Limit Added') };
 				return res.redirect('/event/admin');
 			});
 		});
@@ -1290,7 +1290,7 @@ module.exports = {
 				}
 
 				if (tt.length != 1) {
-					req.session.flash = { msg: sails.__('No file given') };
+					req.session.flash = { msg: req.__('No file given') };
 					return res.redirect('/commission/' + req.param('id'));
 				}
 				var uuid = require('uuid');
@@ -1318,13 +1318,13 @@ module.exports = {
 
 							Utility.generateRoleMap(m, function (newevent) {
 								newevent.save(function (err) {
-									req.session.flash = { msg: sails.__("Upload Complete") };
+									req.session.flash = { msg: req.__("Upload Complete") };
 									res.redirect('/commission/' + req.param('id'));
 								});
 							});
 						}
 						else {
-							req.session.flash = { msg: sails.__("Error Uploading Image") };
+							req.session.flash = { msg: req.__("Error Uploading Image") };
 							res.redirect('/commission/' + req.param('id'));
 						}
 					});
@@ -1338,7 +1338,7 @@ module.exports = {
 							//done uploading
 							if (err) {
 								console.log(err);
-								req.session.flash = { msg: sails.__("Error Uploading Image") };
+								req.session.flash = { msg: req.__("Error Uploading Image") };
 								return res.redirect('/commission/' + req.param('id'));
 							}
 
@@ -1357,14 +1357,14 @@ module.exports = {
 											if (!err && m != undefined) {
 
 												newevent.save(function (err) {
-													req.session.flash = { msg: sails.__("Upload Complete") };
+													req.session.flash = { msg: req.__("Upload Complete") };
 													res.redirect('/commission/' + req.param('id'));
 												});
 											}
 											else {
 												console.log(err);
 
-												req.session.flash = { msg: sails.__("Error Uploading Image") };
+												req.session.flash = { msg: req.__("Error Uploading Image") };
 												res.redirect('/commission/' + req.param('id'));
 											}
 										});
@@ -1414,12 +1414,12 @@ module.exports = {
 									if (!err && m != undefined) {
 										m.iconbackground = filename + ".png";
 										m.save(function (err) {
-											req.session.flash = { msg: sails.__("Upload Complete") };
+											req.session.flash = { msg: req.__("Upload Complete") };
 											res.redirect('/event/view/' + req.param('id'));
 										});
 									}
 									else {
-										req.session.flash = { msg: sails.__("Error Uploading Image") };
+										req.session.flash = { msg: req.__("Error Uploading Image") };
 										res.redirect('/event/view/' + req.param('id'));
 									}
 								});
@@ -1437,13 +1437,13 @@ module.exports = {
 											if (!err && m != undefined) {
 												m.iconbackground = filename + ".png";
 												m.save(function (err) {
-													req.session.flash = { msg: sails.__("Upload Complete") };
+													req.session.flash = { msg: req.__("Upload Complete") };
 													res.redirect('/event/view/' + req.param('id'));
 												});
 											}
 											else {
 												console.log(err);
-												req.session.flash = { msg: sails.__("Error Uploading Image") };
+												req.session.flash = { msg: req.__("Error Uploading Image") };
 												res.redirect('/event/view/' + req.param('id'));
 											}
 										});
@@ -1478,12 +1478,12 @@ module.exports = {
 				m.iconbackground = "";
 				m.save(function (err) {
 					console.log(err);
-					req.session.flash = { msg: sails.__("Background removed!") };
+					req.session.flash = { msg: req.__("Background removed!") };
 					res.redirect('/event/view/' + req.param('id'));
 				});
 			}
 			else {
-				req.session.flash = { msg: sails.__("Error Removing Background") };
+				req.session.flash = { msg: req.__("Error Removing Background") };
 				res.redirect('/event/view/' + req.param('id'));
 			}
 		});
@@ -1506,12 +1506,12 @@ module.exports = {
 								function (err, result) {
 
 									if (!err && m != undefined) {
-										req.session.flash = { msg: sails.__("Theme Image removed!") };
+										req.session.flash = { msg: req.__("Theme Image removed!") };
 										res.redirect('/commission/' + req.param('id'));
 									}
 									else {
 
-										req.session.flash = { msg: sails.__("Error Removing Image") };
+										req.session.flash = { msg: req.__("Error Removing Image") };
 										res.redirect('/commission/' + req.param('id'));
 									}
 								});
@@ -1519,7 +1519,7 @@ module.exports = {
 						else
 						{
 							// console.log(err);
-							req.session.flash = { msg: sails.__("Theme Image removed!") };
+							req.session.flash = { msg: req.__("Theme Image removed!") };
 							res.redirect('/commission/' + req.param('id'));
 						}
 					});
@@ -1527,7 +1527,7 @@ module.exports = {
 
 			}
 			else {
-				req.session.flash = { msg: sails.__("Error Removing Image") };
+				req.session.flash = { msg: req.__("Error Removing Image") };
 				res.redirect('/commission/' + req.param('id'));
 			}
 		});
@@ -1585,7 +1585,7 @@ module.exports = {
 						.toFile(tmp + "_small.png", function (err) {
 
 							if (err) {
-								req.session.flash = { msg: sails.__("Error Uploading Image") };
+								req.session.flash = { msg: req.__("Error Uploading Image") };
 								return res.redirect('/event/view/' + req.param('id'));
 							}
 
@@ -1597,12 +1597,12 @@ module.exports = {
 									if (!err && m != undefined) {
 										m.icon = filename + ".png";
 										m.save(function (err) {
-											req.session.flash = { msg: sails.__("Upload Complete") };
+											req.session.flash = { msg: req.__("Upload Complete") };
 											res.redirect('/event/view/' + req.param('id'));
 										});
 									}
 									else {
-										req.session.flash = { msg: sails.__("Error Uploading Image") };
+										req.session.flash = { msg: req.__("Error Uploading Image") };
 										res.redirect('/event/view/' + req.param('id'));
 									}
 								});
@@ -1623,12 +1623,12 @@ module.exports = {
 											if (!err && m != undefined) {
 												m.icon = filename + ".png";
 												m.save(function (err) {
-													req.session.flash = { msg: sails.__("Upload Complete") };
+													req.session.flash = { msg: req.__("Upload Complete") };
 													res.redirect('/event/view/' + req.param('id'));
 												});
 											}
 											else {
-												req.session.flash = { msg: sails.__("Error Uploading Image") };
+												req.session.flash = { msg: req.__("Error Uploading Image") };
 												res.redirect('/event/view/' + req.param('id'));
 											}
 										});
@@ -1639,7 +1639,7 @@ module.exports = {
 					// });
 				}
 				catch (e) {
-					req.session.flash = { msg: sails.__("Error Uploading Image") };
+					req.session.flash = { msg: req.__("Error Uploading Image") };
 					return res.redirect('/event/view/' + req.param('id'));
 				}
 
@@ -1830,7 +1830,7 @@ module.exports = {
 	 */
 	addevent: function (req, res, next) {
 		if (!req.param('agree')) {
-			req.session.flash = { msg: sails.__('Please agree to the terms and conditions.') };
+			req.session.flash = { msg: req.__('Please agree to the terms and conditions.') };
 			return res.redirect('/commission/new');
 		}
 
@@ -2295,7 +2295,7 @@ module.exports = {
 	shortlink: function (req, res) {
 		//console.log(req.param('shortlink'));
 		if (!req.param('shortlink')) {
-			req.session.flash = { error: sails.__('Sorry, that\'s not a link we recognise.') };
+			req.session.flash = { error: req.__('Sorry, that\'s not a link we recognise.') };
 			return res.redirect('/dashboard');
 		}
 
@@ -2343,7 +2343,7 @@ module.exports = {
 				});
 			}
 			else {
-				req.session.flash = { error: sails.__('Sorry, that\'s not a link we recognise.') };
+				req.session.flash = { error: req.__('Sorry, that\'s not a link we recognise.') };
 				return res.redirect('/dashboard');
 			}
 		});

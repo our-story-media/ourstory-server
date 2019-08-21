@@ -39,7 +39,7 @@ module.exports = function (req, res, ok) {
       consent: new Date(),
       nolimit:1,
       profile: {
-        displayName: sails.__('Director'),
+        displayName: req.__('Director'),
         provider: 'local',
         photos: [
           {
@@ -129,7 +129,7 @@ module.exports = function (req, res, ok) {
         {
           if (sails.config.LOCALONLY && isValidReferer(req))
           {
-            req.session.flash = {msg:sails.__('No can do, sorry.')};
+            req.session.flash = {msg:req.__('No can do, sorry.')};
             //console.log("not authorized");
             return res.redirect('auth/login');
           }

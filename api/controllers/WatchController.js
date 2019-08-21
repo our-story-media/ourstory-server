@@ -58,7 +58,7 @@ module.exports = {
 		//list all edits for a shoot:
 		Event.findOne(req.params.id, function (err, ev) {
 			if (ev)
-				return res.view({ theevent: ev, event: ev, pagetitle: 'Stories for ' });
+				return res.view({ theevent: ev, event: ev, pagetitle: req.__('Stories for ') });
 			else
 				return res.redirect('/dashboard');
 		})
@@ -392,7 +392,7 @@ module.exports = {
 
 		Edits.genlink(function (newlink) {
 			//console.log(newlink);
-			original.title = 'Copy of ' + original.title;
+			original.title = req.__("Copy of %s", original.title);
 			delete original.code;
 			delete original.shortlink;
 			original.progress = 0;
@@ -651,7 +651,7 @@ module.exports = {
 	shortlink: function (req, res) {
 		//console.log(req.param('shortlink'));
 		if (!req.param('shortlink')) {
-			req.session.flash = { msg: sails.__('Sorry, that\'s not a link we recognise.') };
+			req.session.flash = { msg: req.__('Sorry, that\'s not a link we recognise.') };
 			console.log("r1");
 			return res.redirect('/dashboard');
 		}
@@ -660,7 +660,7 @@ module.exports = {
 			if (edit) {
 				Event.findOne(edit.media[0].event_id).exec(function (err, ev) {
 					if (!ev) {
-						req.session.flash = { msg: sails.__('Sorry, that\'s not a link we recognise.') };
+						req.session.flash = { msg: req.__('Sorry, that\'s not a link we recognise.') };
 						console.log("r2");
 						return res.redirect('/dashboard');
 					}
@@ -679,7 +679,7 @@ module.exports = {
 				//return res.redirect(301, sails.config.S3_TRANSCODE_URL + edit.path);
 			}
 			else {
-				req.session.flash = { msg: sails.__('Sorry, that\'s not a link we recognise.') };
+				req.session.flash = { msg: req.__('Sorry, that\'s not a link we recognise.') };
 				console.log("r3");
 				return res.redirect('/dashboard');
 			}

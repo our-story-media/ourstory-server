@@ -49,7 +49,7 @@ else
                   }
                   else
                   {
-                    req.session.flash = {msg:sails.__('No can do, sorry (you are not the owner or a participant of this event).')};
+                    req.session.flash = {msg:req.__('No can do, sorry (you are not the owner or a participant of this event).')};
                     return res.redirect('/dashboard');
                   }
                 });
@@ -68,14 +68,14 @@ else
         else
         {
           //no event specified
-            req.session.flash = {msg:sails.__('No event specified.')};
+            req.session.flash = {msg:req.__('No event specified.')};
             return res.redirect('/dashboard');
         }
       });
     }
     else
     {
-       req.session.flash = {msg:sails.__('No can do, sorry (you are not logged in).')};
+       req.session.flash = {msg:req.__('No can do, sorry (you are not logged in).')};
        return res.redirect('/dashboard');
     }
   }

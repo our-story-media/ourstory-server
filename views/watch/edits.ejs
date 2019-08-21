@@ -59,7 +59,7 @@
                 
                 <div class="form-inline flip" style="float:right;line-height:1em;">
 
-                    <input bs-switch ng-model="event.processedits" ng-checked="event.processedits=='true'" ng-change="updateSetting()"
+                    <input bs-switch switch-on-text="<%- __('On') %>" switch-off-text="<%- __('Off') %>" ng-model="event.processedits" ng-checked="event.processedits=='true'" ng-change="updateSetting()"
                     type="checkbox" class="form-check-input">
                     <!-- <label class="form-check-label" for="exampleCheck1"><%- __('Publishing is') %> </label> -->
             </div>

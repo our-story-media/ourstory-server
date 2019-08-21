@@ -236,7 +236,7 @@ module.exports.bootstrap = function (cb) {
 			{
 				// console.log('NO LOGIN CODE')
 				// req.session.flash = {msg:'NO LOGINCODE set!'};
-				return done(sails.__('No Local Login Code Set'),null);
+				return done(req.__('No Local Login Code Set'),null);
 			}
 
 			if (password == sails.config.LOGINCODE)
@@ -250,7 +250,7 @@ module.exports.bootstrap = function (cb) {
 				consent: new Date(),
 				nolimit: 1,
 				profile: {
-					displayName: sails.__('Director'),
+					displayName: req.__('Director'),
 					provider: 'local',
 					photos: [
 						{
@@ -270,7 +270,7 @@ module.exports.bootstrap = function (cb) {
 		else
 		{
 			// req.session.flash = {msg:'Login Code Incorrect!'};
-			return done(sails.__('Invalid Local Login Code'),null);
+			return done(req.__('Invalid Local Login Code'),null);
 		}
 	}
 	));
