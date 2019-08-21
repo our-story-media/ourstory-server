@@ -67,6 +67,6 @@ services:
       - "../../api:/usr/src/app/api"
       - "../../assets:/usr/src/app/assets"
       - "../../views:/usr/src/app/views"
-      # - ../prod/.sailsrc:/usr/src/app/.sailsrc:ro
-      # - ../prod/ssl:/usr/src/app/ssl:ro
+      - ../prod/.sailsrc:/usr/src/app/.sailsrc:ro
+      - ../prod/ssl:/usr/src/app/ssl:ro
       # - "../prod/.sailsrc:/usr/src/app/.sailsrc"

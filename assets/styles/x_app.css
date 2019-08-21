@@ -157,7 +157,7 @@ a.list-group-item.active
       background:url(/images/logo_web.svg) no-repeat left 2px;
       background-size: auto 28px;
       height:36px;
-      width:135px;
+      width:120px;
       display: inline-block !important;
     }
 
@@ -1347,12 +1347,27 @@ body.modal-open {
 .buildversion
 {
     padding-top:10px;
+    font-family: Open Sans;
+    color:#7a7a7a;
+    font-weight: bold;
+    font-size: 19px;
 }
 
 [dir=rtl] .buildversion
 {
-    right: 156px !important;
+    right: 137px !important;
     left: inherit !important;
+}
+
+[dir=rtl] .buildversion.bvsmall
+{
+    right: 50px !important;
+    left: inherit !important;
+}
+
+[dir=rtl] .profilephoto
+{
+  margin-left:-2em;
 }
 
 .alert h3

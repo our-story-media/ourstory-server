@@ -14,4 +14,3 @@ docker push bootlegger/ourstory-server:arm64
 docker push bootlegger/nginx-local:arm64
 docker push bootlegger/beanstalk:arm64
 docker push bootlegger/ourstory-worker:arm64
-

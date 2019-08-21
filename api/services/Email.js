@@ -68,10 +68,10 @@ exports.newUser = function (user) {
             name: user.profile.displayName
         };
 
-        options.subject= req.__("Welcome to Indaba");
-        options.content= req.__("Welcome to Indaba. We are here to help you coordinate great video stories.");
+        options.subject= sails.__("Welcome to Indaba");
+        options.content= sails.__("Welcome to Indaba. We are here to help you coordinate great video stories.");
         options.btnurl= sails.config.master_url;
-        options.btntext= req.__("Get Started Now");
+        options.btntext= sails.__("Get Started Now");
         exports.sendEmail(options);
     }
 };
@@ -80,11 +80,11 @@ exports.joinInvite = function (email, eventid, newcode) {
     Event.findOne(eventid).exec(function (err, ev) {
         var options = {
             to: email,
-            name: req.__('Friend!'),
-            subject: req.__('Invite to Contribute'),
-            content: req.__('You have been invited to contribute to the Indaba project %s.', + ev.name ),
+            name: sails.__('Friend!'),
+            subject: sails.__('Invite to Contribute'),
+            content: sails.__('You have been invited to contribute to the Indaba project %s.', + ev.name ),
             btnurl: sails.config.master_url + "/join/" + newcode,
-            btntext: req.__("Login to Contribute")
+            btntext: sails.__("Login to Contribute")
         }
         exports.sendEmail(options);
     });

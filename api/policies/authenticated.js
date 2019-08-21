@@ -10,10 +10,7 @@
 function isValidReferer(req)
 {
   //FOR DEBUGGING!
-  return false;
-  // console.log(req.headers);
   // return false;
-  // console.log(req.header('host'))
   return _.startsWith(req.header('host'),'localhost') || _.includes(req.header('referer'),'localhost');
 }
 
