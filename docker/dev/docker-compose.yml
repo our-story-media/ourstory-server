@@ -55,7 +55,7 @@ services:
       - redis
       - mongo
       - beanstalk
-    command: nodemon --watch api app.js  -- --verbose
+    command: nodemon --watch api app.js #  -- --verbose
     environment: 
       sails_LOGINCODE: "abcd"
     # command: node app.js # -- --verbose
@@ -67,6 +67,7 @@ services:
       - "../../api:/usr/src/app/api"
       - "../../assets:/usr/src/app/assets"
       - "../../views:/usr/src/app/views"
-      - ../prod/.sailsrc:/usr/src/app/.sailsrc:ro
-      - ../prod/ssl:/usr/src/app/ssl:ro
+      # - ../prod/.sailsrc:/usr/src/app/.sailsrc:ro
+      # - ../prod/ssl:/usr/src/app/ssl:ro
+      - ../../../ourstory-worker:/usr/src/ourstory-worker
       # - "../prod/.sailsrc:/usr/src/app/.sailsrc"

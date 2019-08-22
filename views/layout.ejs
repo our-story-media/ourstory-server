@@ -542,12 +542,20 @@
         <%- __('Privacy') %></a> &middot;
       <a class="text-muted" href="/terms">
         <%- __('Terms') %></a> &middot;
-      <a class="text-muted" href="<%- sails.config.central_url %>">
+      <a class="text-muted" href="https://indaba.dev">
         <%- __('Guide') %></a> &middot;
       <span>&copy;
         <%- __('Indaba') %>
         <%- new Date().getFullYear() %>
       </span>
+      <span>&middot;
+        Dashboard: v<%- sails.config.version %>
+      </span>
+      <% if (sails.config.workerversion) { %>
+      <span>&middot;
+        Worker: v<%- sails.config.workerversion %>
+      </span>
+      <% } %>
     </div>
   </div>
     <% if (event.name) { %>

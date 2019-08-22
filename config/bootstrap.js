@@ -42,6 +42,29 @@ module.exports.bootstrap = function (cb) {
 		throw new Error('No Admin Email Address Set');
 	}
 
+	fs.exists('./package.json',function(yes){
+		if (yes)
+		{
+			let myversion = require('../package.json');
+			sails.config.version = myversion.version;
+		}
+	});
+
+	fs.exists('../ourstory-worker/package.json',function(yes){
+		if (yes)
+		{
+			let myversion = require('../../ourstory-worker/package.json');
+			sails.config.workerversion = myversion.version;
+		}
+	});
+	
+
+	// if (fs.existsSync('../../ourstory-worker/package.json'))
+	// {
+	// 	let workerversion = require('../../ourstory-worker/package.json');
+	// 	sails.config.workerversion = workerversion.version;
+	// }
+
 	// //SETS UP STATIC EDITION JSON:
 	// fs.writeFile("assets/landing/public/edition.json", JSON.stringify({
 	// 	"name":sails.config.name,
