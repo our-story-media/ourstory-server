@@ -264,7 +264,7 @@
         } %>
       </div>
 
-      <% if (user) { %>
+      
       <div class="col-xs-5 col-sm-3  col-sm-push-6 text-right flip" style="padding-right: 0;min-width:84px;padding-top:4px;"
         ng-controller="myprofile">
         <div class="dropdown" style="display:inline-block">
@@ -280,23 +280,25 @@
             </li>
             <% }) %>
           </ul>
-        </div>  
+        </div>
+        <% if (user) { %>
         &middot;
+        
         <a href="#" class="super hidden-xs hidden-sm" data-toggle="modal" data-target="#nameModal">
           <%= user.profile.displayName %>
         </a>
         <img class="profilephoto" style="border-radius:15px;width:26px;height:26px;margin-right:2px;" src="<%= user.profile.photos[0].value.replace(sails.config.master_url,'') %>" />
           <% if (!sails.config.LOCALONLY) { %>
-            <a href="/auth/logout">
+            <a class="logoutbtn" href="/auth/logout">
               <i style=" vertical-align: middle;margin-left:2px;" class="fa fa-2x fa-sign-out"></i>
             </a>
             <% } %>
            
             
-            
+            <% } %>
       <div class="clearfix"></div>
     </div>
-    <% } %>
+   
 
     <div class="mainmenunew col-sm-6 col-xs-12 text-center col-sm-pull-3 hidden-xs">
       <% if (user) { %>

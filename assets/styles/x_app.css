@@ -1370,6 +1370,12 @@ body.modal-open {
   margin-left:-2em;
 }
 
+[dir=rtl] .logoutbtn
+{
+  margin-right:2em;
+  margin-left:-2em;
+}
+
 .alert h3
 {
   line-height: 1.7em;

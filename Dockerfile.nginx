@@ -1,5 +1,5 @@
 FROM nginx:alpine
-LABEL maintainer="Tom Bartindale <tom.bartindale@ncl.ac.uk>"
+LABEL maintainer="Tom Bartindale <tom.bartindale@monash.edu>"
 RUN mkdir /templates
 COPY docker/bootlegger.conf /etc/nginx/vhost.d/default
 COPY docker/nginx.tmpl /templates/nginx.tmpl

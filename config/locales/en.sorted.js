@@ -226,16 +226,16 @@
  "You are in delete mode - clicking <i style=\"color:red;\" class=\"fa fa-trash-o\"></i> will permanently remove all media associated with the video!": "You are in delete mode - clicking <i style=\"color:red;\" class=\"fa fa-trash-o\"></i> will permanently remove all media associated with the video!",
  "You cannot <mark>contribute</mark> videos to the community Shoots here. To do that please use the Indaba app from the Play Store.": "You cannot <mark>contribute</mark> videos to the community Shoots here. To do that please use the Indaba app from the Play Store.",
  "You do not need to stay on this page. We will send an email to <span class=\"text-muted\">%s</span> when the copy is finished.": "You do not need to stay on this page. We will send an email to <span class=\"text-muted\">%s</span> when the copy is finished.",
- "ar": "ar",
+ "ar": "عربى",
  "clips available": "clips available",
  "contributors": "contributors",
  "decide what to shoot": "decide what to shoot",
  "download your videos for offline editing": "download your videos for offline editing",
  "enter access code": "enter access code",
- "es": "es",
+ "es": "Español",
  "enter search term": "enter search term",
  "e.g.": "e.g.",
- "fr": "fr",
+ "fr": "Français",
  "jobs in queue": "jobs in queue",
  "last saved at": "last saved at",
  "no tags created yet": "no tags created yet",
@@ -261,5 +261,6 @@
  "user joined": "user joined",
  "view all community stories": "view all community stories",
  "videos captured": "videos captured",
- "wanted": "wanted"
+ "wanted": "wanted",
+ "en": "English"
 }
