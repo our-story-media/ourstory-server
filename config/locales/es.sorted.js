@@ -235,6 +235,7 @@
  "e.g.": "p. ej.",
  "enter search term": "ingrese el término de búsqueda",
  "enter access code": "enter access code",
+ "en": "English",
  "fr": "Français",
  "jobs in queue": "trabajos en cola",
  "last saved at": "Última vez guardado en",
@@ -262,5 +263,5 @@
  "videos captured": "videos capturados",
  "view all community stories": "ver todas las historias de la comunidad",
  "wanted": "deseado",
- "en": "English"
+ "GLOBAL_RELEASE": "La privacidad es importante para nosotros. <ul class = 'browser-default'> <li> Cuidaremos sus datos de forma segura y los anonimizaremos cuando los usemos para investigación académica. </li> <li> Puede solicitar que se eliminen sus datos en cualquier momento contactando us. </li> </ul> <p class = 'flow-text'> Antes de grabar videos: </p> <ul class = 'browser-default'> <li> Asegúrese de que la persona que está grabando haya aceptado para grabar. </li> <li> Acepte que cualquier video que grabe pueda ser visto por su comunidad. </li> </ul>"
 }

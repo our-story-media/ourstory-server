@@ -8,6 +8,18 @@ let words = ['English','Español','Français','عربى'];
 
 let loaded = [];
 
+var files = fs.readdirSync('./external');
+// console.log(files);
+let external_keys = _.uniq(files.map((f)=>{
+    return f.split('.')[0];
+}));
+
+// console.log(external_keys);
+
+// return;
+
+
+
 async function main() {
 
     for (let loc of locales) {
@@ -39,11 +51,19 @@ async function main() {
                 used[k] = loaded[0][k].trim();
         }
 
-        console.log(words[0]);
+        // console.log(words[0]);
         used['en'] = words[0];
         used['es'] = words[1];
         used['fr'] = words[2];
         used['ar'] = words[3];
+
+        for (let ex of files)
+        {
+            let key = ex.split('.')[0];
+            let loc = ex.split('.')[1];
+            if (loc==locales[i])
+                used[key] = fs.readFileSync('./external/' + ex).toString();
+        }
 
         fs.writeFileSync(`${locales[i]}.sorted.js`, JSON.stringify(used, null, 1));
 
@@ -65,13 +85,22 @@ async function main() {
         let translated = {};
         for (let k of _.sortBy(existsonlyinbaseline, 0)) {
             let totranslate = loaded[0][k].trim();
-            let [translation] = await translate.translate(totranslate, locales[i]);
-            console.log(`Translated ${totranslate} into ${locales[i]}: ${translation}`);
-            translated[k] = translation;
+            if (!_.includes(external_keys, k))
+            {
+                let [translation] = await translate.translate(totranslate, locales[i]);
+                console.log(`Translated ${totranslate} into ${locales[i]}: ${translation}`);
+                translated[k] = translation;
+            }
+            else
+            {
+                console.log(`Ignoring ${k}`);
+            }
         }
 
         fs.writeFileSync(`${locales[i]}.translated.js`, JSON.stringify(translated, null, 1));
     }
+
+    //add on translations of the langs:
 
     let original = {};
     for (let k of _.sortBy(baseline, 0)) {
@@ -81,6 +110,14 @@ async function main() {
     original['es'] = words[1];
     original['fr'] = words[2];
     original['ar'] = words[3];
+
+    for (let ex of files)
+    {
+        let key = ex.split('.')[0];
+        let loc = ex.split('.')[1];
+        if (loc=='en')
+            original[key] = fs.readFileSync('./external/' + ex).toString();
+    }
 
 
     fs.writeFileSync(`en.sorted.js`, JSON.stringify(original, null, 1));

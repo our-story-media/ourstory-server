@@ -12,6 +12,6 @@
 module.exports.i18n = {
   defaultLocale:'en',
   locales: ['en','es','fr','ar'],
-  updateFiles:false,
+  updateFiles:true,
   cookie: 'bootlegger_lang'
 };

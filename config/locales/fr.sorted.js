@@ -235,6 +235,7 @@
  "es": "Español",
  "enter search term": "entrez le terme de recherche",
  "e.g.": "par exemple",
+ "en": "English",
  "fr": "Français",
  "jobs in queue": "emplois en file d'attente",
  "last saved at": "Dernier enregistré à",
@@ -262,5 +263,5 @@
  "view all community stories": "voir toutes les histoires de la communauté",
  "videos captured": "vidéos capturées",
  "wanted": "voulait",
- "en": "English"
+ "GLOBAL_RELEASE": "La vie privée est importante pour nous. <ul class = 'browser-default'> <li> Nous traiterons vos données en toute sécurité et les anonymiserons lors de leur utilisation pour des recherches universitaires. </ li> <li> Vous pouvez demander que vos données soient supprimées à tout moment en contactant nous. </ li> </ ul> <p class = 'flow-text'> Avant d'enregistrer des vidéos: </ p> <ul class = 'browser-default'> <li> Assurez-vous que la personne que vous enregistrez a accepté à enregistrer. </ li> <li> Acceptez le fait que votre communauté puisse voir toute vidéo que vous enregistrez. </ li> </ ul>"
 }
