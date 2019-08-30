@@ -5,54 +5,114 @@
  */
 // const path = require('path');
 const uuid = require('uuid');
+const path = require('path');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
 module.exports = {
 
-	index:function(req,res)
-	{
-		return res.json({msg:'Welcome to the API. Visit '+sails.config.master_url+'/api/docs for documentation.'});
+	index: function (req, res) {
+		return res.json({ msg: 'Welcome to the API. Visit ' + sails.config.master_url + '/api/docs for documentation.' });
 	},
 
-	log: function(req,res)
-	{
+	log: function (req, res) {
 		//dummy ep to force log:
 		return res.json({});
 	},
 
-	getkey:function(req,res)
-	{
-		User.findOne(req.session.passport.user.id).exec(function(err,u)
-		{
-			if (u.apikey)
-			{
+	getkey: function (req, res) {
+		User.findOne(req.session.passport.user.id).exec(function (err, u) {
+			if (u.apikey) {
 				return res.json(u.apikey);
 			}
-			else
-			{
-				return res.json({msg:'no valid key'});
+			else {
+				return res.json({ msg: 'no valid key' });
 			}
 
 		});
 	},
-	
+
+	backup: async function (req, res) {
+		if (sails.config.LOCALONLY) {
+			let ff = path.join(__dirname, '..', '..', 'upload','indaba.backup');
+			// console.log(sails.config.connections.mongodb.url)
+			try
+			{
+				const {err, stdout, stderr} = await exec(`mongodump --host mongo --db bootlegger --archive=${ff} --gzip`);
+				res.setHeader("Content-Disposition",'attachment; filename="indaba.backup"');
+				return res.sendfile(ff);
+			}
+			catch (e)
+			{
+				console.log(e);
+				req.session.flash = {err:req.__('Problem Creating Backup')};
+				return res.redirect('/event/admin/');
+			}
+		}
+		else {
+			return res.status(403);
+		}
+	},
+
+	restore: function (req, res) {
+		if (sails.config.LOCALONLY) {
+
+			req.file('file').upload(async function (err, tt) {
+				if (tt.length == 0) {
+					req.session.flash = req.__('No file provided');
+					return res.redirect('/event/admin/');
+				}
+				
+				// console.log(tt[0].fd)
+				let ff = '.tmp/uploads/' + tt[0].fd;
+				if (_.startsWith(tt[0].fd,'/'))
+					ff = tt[0].fd;
+
+				// let ff = path.join(__dirname, '..', '..', 'upload','indaba.backup');
+				// console.log(sails.config.connections.mongodb.url)
+				try
+				{
+					const {err, stdout, stderr} = await exec(`mongorestore --host mongo --db bootlegger --drop --archive=${ff} --gzip`);
+					// res.setHeader("Content-Disposition",'attachment; filename="indaba.backup"');
+					// return res.sendfile(ff);
+					// console.log('import complete')
+					req.session.flash = {msg:'Import Complete'}
+					res.redirect('/event/admin/');
+				}
+				catch (e)
+				{
+					console.log(e);
+					req.session.flash = {err:req.__('Problem Restoring Backup')};
+					return res.redirect('/event/admin/');
+				}
+
+						// res.redirect('/event/admin/');
+				});
+			}
+			else {
+			// console.log('no do')
+			return res.status(403);
+		}
+	}
+
 	// signup:function(req,res)
 	// {
 	// 	return res.view();
 	// },
-	
+
 	// newkey:function(req,res)
 	// {
 	// 	User.findOne(req.session.passport.user.id).exec(function(err,u)
 	// 	{
 	// 		var apiobj = u.apikey;
-			
+
 	// 		if (apiobj.apiaccess == 'live')
 	// 		{
 	// 			apiobj.apikey = uuid.v4();
 	// 		}
 
 	// 		apiobj.apitype = 'redirect';
-			
+
 	// 		u.apikey = apiobj;
 
 	// 		u.save(function(done)
@@ -67,12 +127,12 @@ module.exports = {
 	// 	User.findOne(req.session.passport.user.id).exec(function(err,u)
 	// 	{
 	// 		var apiobj = u.apikey;
-			
+
 	// 		if (apiobj.apiaccess == 'live')
 	// 		{
 	// 			apiobj.servertoken = uuid.v4();
 	// 		}
-			
+
 	// 		u.apikey = apiobj;
 
 	// 		u.save(function(done)
@@ -81,7 +141,7 @@ module.exports = {
 	// 		});
 	// 	});
 	// },
-	
+
 	// updateapi:function(req,res)
 	// {
 	// 	User.findOne(req.session.passport.user.id).exec(function(err,u)
@@ -140,4 +200,5 @@ module.exports = {
 	// 		});
 	// 	});
 	// }
+
 };

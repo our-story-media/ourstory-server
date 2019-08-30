@@ -282,7 +282,7 @@ module.exports.bootstrap = function (cb) {
 					],
 					emails: [
 						{
-							value: 'localadmin@ourstory.video'
+							value: 'localadmin@indaba.dev'
 						}
 					]
 				}

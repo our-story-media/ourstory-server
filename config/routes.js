@@ -16,7 +16,6 @@ module.exports.routes = {
     'get /shoot/:id?': 'ShootController.index',
     'get /terms': 'StaticController.terms',
     'get /privacy': 'StaticController.privacy',
-    // 'get /getapp': 'AuthController.getapp',
     'get /join/:id?': 'AuthController.join',
     'post /joincode': 'AuthController.joincode',
     'get /joincomplete': 'AuthController.joincomplete',
@@ -64,6 +63,9 @@ module.exports.routes = {
     'post /api/commission/updateshots': 'CommissionController.updateshots',
     'get /api/event/registercode/:code?': 'EventController.registercode',
     'post /api/log': 'ApiController.log',
+
+    'get /api/backup':'ApiController.backup',
+    'post /api/restore':'ApiController.restore',
 
     //info
     'get /api/status': 'AuthController.status',

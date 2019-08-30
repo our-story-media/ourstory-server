@@ -25,6 +25,8 @@ module.exports.policies = {
     {
         //'*':'api_key',
         '*':['apiauth'],
+        'backup':['authenticated','superadmin'],
+        'restore':['authenticated','superadmin'],
         'signup':['authenticated','flash','apikeygen'],
         'activate':'authenticated',
         'newkey':'authenticated',

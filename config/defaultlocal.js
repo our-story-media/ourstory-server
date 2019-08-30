@@ -19,7 +19,7 @@ module.exports = {
   
     hostname: 'localhost',
   
-    admin_email: ['localadmin@ourstory.video'],
+    admin_email: ['localadmin@indaba.dev'],
   
     IOSLINK: 'https://itunes.apple.com/us/app/bootlegger/id1053074626?ls=1&mt=8',
   
