@@ -45,7 +45,7 @@ module.exports = function (req, res, ok) {
         ],
         emails: [
           {
-            value: 'localadmin@ourstory.video'
+            value: 'localadmin@indaba.dev'
           }
         ]
       }
