@@ -64,8 +64,12 @@ module.exports.routes = {
     'get /api/event/registercode/:code?': 'EventController.registercode',
     'post /api/log': 'ApiController.log',
 
-    'get /api/backup':'ApiController.backup',
-    'post /api/restore':'ApiController.restore',
+    // 'get /api/backup':'ApiController.backup',
+    // 'post /api/restore':'ApiController.restore',
+    'get /api/backupusb':'ApiController.backupusb',
+    'get /api/restoreusb':'ApiController.restoreusb',
+    'get /api/copyprogress':'ApiController.getcopyprogress',
+
 
     //info
     'get /api/status': 'AuthController.status',

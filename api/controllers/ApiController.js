@@ -5,11 +5,14 @@
  */
 // const path = require('path');
 const uuid = require('uuid');
-const path = require('path');
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+
+
 
 module.exports = {
+
+	getcopyprogress: function (req, res) {
+		return res.json({ progress: Backup.copyprogress });
+	},
 
 	index: function (req, res) {
 		return res.json({ msg: 'Welcome to the API. Visit ' + sails.config.master_url + '/api/docs for documentation.' });
@@ -32,20 +35,26 @@ module.exports = {
 		});
 	},
 
-	backup: async function (req, res) {
+	backupusb: function (req, res) {
 		if (sails.config.LOCALONLY) {
-			let ff = path.join(__dirname, '..', '..', 'upload','indaba.backup');
-			// console.log(sails.config.connections.mongodb.url)
-			try
-			{
-				const {err, stdout, stderr} = await exec(`mongodump --host mongo --db bootlegger --archive=${ff} --gzip`);
-				res.setHeader("Content-Disposition",'attachment; filename="indaba.backup"');
-				return res.sendfile(ff);
+
+			if (Backup.backuprunning) {
+				req.session.flash = { err: req.__('Backup or Restore already running') };
+				return res.redirect('/event/admin/');
 			}
-			catch (e)
-			{
+
+			try {
+				//create mongo dump:
+
+				Backup.backup();
+
+				req.session.flash = { msg: req.__('Backup Initiated') };
+
+				return res.redirect('/event/admin/');
+			}
+			catch (e) {
 				console.log(e);
-				req.session.flash = {err:req.__('Problem Creating Backup')};
+				req.session.flash = { err: req.__('Problem Initiating Backup') };
 				return res.redirect('/event/admin/');
 			}
 		}
@@ -54,151 +63,30 @@ module.exports = {
 		}
 	},
 
-	restore: function (req, res) {
+	restoreusb: function (req, res) {
 		if (sails.config.LOCALONLY) {
 
-			req.file('file').upload(async function (err, tt) {
-				if (tt.length == 0) {
-					req.session.flash = req.__('No file provided');
-					return res.redirect('/event/admin/');
-				}
-				
-				// console.log(tt[0].fd)
-				let ff = '.tmp/uploads/' + tt[0].fd;
-				if (_.startsWith(tt[0].fd,'/'))
-					ff = tt[0].fd;
+			let source = req.param('source');
 
-				// let ff = path.join(__dirname, '..', '..', 'upload','indaba.backup');
-				// console.log(sails.config.connections.mongodb.url)
-				try
-				{
-					const {err, stdout, stderr} = await exec(`mongorestore --host mongo --db bootlegger --drop --archive=${ff} --gzip`);
-					// res.setHeader("Content-Disposition",'attachment; filename="indaba.backup"');
-					// return res.sendfile(ff);
-					// console.log('import complete')
-					req.session.flash = {msg:'Import Complete'}
-					res.redirect('/event/admin/');
-				}
-				catch (e)
-				{
-					console.log(e);
-					req.session.flash = {err:req.__('Problem Restoring Backup')};
-					return res.redirect('/event/admin/');
-				}
-
-						// res.redirect('/event/admin/');
-				});
+			if (Backup.backuprunning) {
+				req.session.flash = { err: req.__('Backup or Restore already running') };
+				return res.redirect('/event/admin/');
 			}
-			else {
-			// console.log('no do')
+
+			try {
+				
+				Backup.restore(source);
+				req.session.flash = { msg: req.__('Restore Initiated') }
+				res.redirect('/event/admin/');
+			}
+			catch (e) {
+				console.log(e);
+				req.session.flash = { err: req.__('Problem Initiating Restore') };
+				return res.redirect('/event/admin/');
+			}
+		}
+		else {
 			return res.status(403);
 		}
 	}
-
-	// signup:function(req,res)
-	// {
-	// 	return res.view();
-	// },
-
-	// newkey:function(req,res)
-	// {
-	// 	User.findOne(req.session.passport.user.id).exec(function(err,u)
-	// 	{
-	// 		var apiobj = u.apikey;
-
-	// 		if (apiobj.apiaccess == 'live')
-	// 		{
-	// 			apiobj.apikey = uuid.v4();
-	// 		}
-
-	// 		apiobj.apitype = 'redirect';
-
-	// 		u.apikey = apiobj;
-
-	// 		u.save(function(done)
-	// 		{
-	// 			return res.json({msg:'ok'});
-	// 		});
-	// 	});
-	// },
-
-	// servertoken:function(req,res)
-	// {
-	// 	User.findOne(req.session.passport.user.id).exec(function(err,u)
-	// 	{
-	// 		var apiobj = u.apikey;
-
-	// 		if (apiobj.apiaccess == 'live')
-	// 		{
-	// 			apiobj.servertoken = uuid.v4();
-	// 		}
-
-	// 		u.apikey = apiobj;
-
-	// 		u.save(function(done)
-	// 		{
-	// 			return res.json({msg:'ok'});
-	// 		});
-	// 	});
-	// },
-
-	// updateapi:function(req,res)
-	// {
-	// 	User.findOne(req.session.passport.user.id).exec(function(err,u)
-	// 	{
-	// 		u.apikey.apitype = req.param('apitype');
-	// 		u.apikey.callbackfunction = req.param('callbackfunction');
-	// 		u.apikey.redirecturl = req.param('redirecturl');
-
-	// 		u.save(function(done)
-	// 		{
-	// 			return res.json({msg:'ok'});
-	// 		});
-	// 	});
-	// },
-
-	// revokeapi:function(req,res)
-	// {
-	// 	User.findOne(req.params.id).exec(function(err,user)
-	// 	{
-	// 		user.apikey.apiaccess = 'locked';
-	// 		user.save(function(err,done){
-	// 			return res.redirect('/event/admin');
-	// 		});
-	// 	});
-	// },
-
-	// unrevokeapi:function(req,res)
-	// {
-	// 	User.findOne(req.params.id).exec(function(err,user)
-	// 	{
-	// 		user.apikey.apiaccess = 'live';
-	// 		user.save(function(err,done){
-	// 			return res.redirect('/event/admin');
-	// 		});
-	// 	});
-	// },
-
-	// activate:function(req,res)
-	// {
-	// 	User.findOne(req.session.passport.user.id).exec(function(err,u)
-	// 	{
-	// 		//var apiobj = u.apikey || {apiaccess : 'live'};
-	// 		//console.log(u);
-	// 		if (typeof(u.apikey)=='undefined')
-	// 		{
-	// 			u.apikey = {};
-	// 			req.session.passport.user.apikey = {apiaccess: 'live'};
-	// 			u.apikey.apikey = uuid.v4();
-	// 			u.apikey.apiaccess = 'live';
-	// 			u.apikey.apitype = 'redirect';
-	// 		}
-
-	// 		u.save(function(done)
-	// 		{
-	// 			return res.json({msg:'ok'});
-	// 		});
-	// 	});
-	// }
-
 };

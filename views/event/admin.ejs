@@ -1,140 +1,225 @@
 <style>
-.big
-{
-	font-size:25pt;
-	color:silver;
-	line-height: 14pt;
-	display: block;
-	float: left;
-	text-align: center;
-	margin-right: 5px;
-	width:20%;
-}
+	.big {
+		font-size: 25pt;
+		color: silver;
+		line-height: 14pt;
+		display: block;
+		float: left;
+		text-align: center;
+		margin-right: 5px;
+		width: 20%;
+	}
 
-.big small
-{
-	font-size: 10pt;
-	clear:both;
-	display:inline-block;
+	.big small {
+		font-size: 10pt;
+		clear: both;
+		display: inline-block;
 
-}
+	}
 
-.status{
-	float:right;
-	width:50%;
-}
+	.status {
+		float: right;
+		width: 50%;
+	}
 
-  .sortorder:after {
-    content: '\25b2';
-  }
-  .sortorder.reverse:after {
-    content: '\25bc';
-  }
+	.sortorder:after {
+		content: '\25b2';
+	}
+
+	.sortorder.reverse:after {
+		content: '\25bc';
+	}
 </style>
 
 <div ng-app="adminApp" ng-controller="admin" ng-cloak>
 
-<div class="progress" style="position:fixed;top:0;width:100%;left:0;height:2px;margin:0;"  ng-show="loading_edits || loading_shoots || loading_users">
-      <div class="indeterminate"></div>
-  </div>
+	<div class="progress" style="position:fixed;top:0;width:100%;left:0;height:2px;margin:0;"
+		ng-show="loading_edits || loading_shoots || loading_users">
+		<div class="indeterminate"></div>
+	</div>
 
-<div class="page-header">
-    <h1><%- __('Administration') %></h1>
-</div>
+	<div class="page-header">
+		<h1><%- __('Administration') %></h1>
+	</div>
 
-<div class="alert alert-info">
-	
-	<%- __('User and Shoots across all deployments are shown here. To administer a specific Shoot, visit the <a href="/">Dashboard</a>.	') %>	
-	
-	<% if (sails.config.LOCALONLY) { %>
-	<div>	
-		<a href="/api/backup?apikey=<%- apikey %>">Download Backup</a> &middot;
-		<form id="theform" enctype="multipart/form-data" action="/api/restore?apikey=<%- apikey %>" method="POST" style="display: inline-block">
-			<input id="selectedFile" type="file" style="display: none;" name="file" style="display: inline-block"/>
-			<a type="button" href="#" onclick="document.getElementById('selectedFile').click();">Select File</a>
-			&middot;
-			<a href="#" type="submit" onclick="document.getElementById('theform').submit()">Upload</a>
-		</form>
-	</div>	
+	<div class="alert alert-info">
+
+		<%- __('User and Shoots across all deployments are shown here. To administer a specific Shoot, visit the <a href="/">Dashboard</a>.	') %>
+
+		<% if (sails.config.LOCALONLY && !usb) { %>
+		<div>
+			<a href="/api/backup?apikey=<%- apikey %>">Download Backup</a> &middot;
+			<form id="theform" enctype="multipart/form-data" action="/api/restore?apikey=<%- apikey %>" method="POST"
+				style="display: inline-block">
+				<input id="selectedFile" type="file" style="display: none;" name="file" style="display: inline-block" />
+				<a type="button" href="#" onclick="document.getElementById('selectedFile').click();">Select File</a>
+				&middot;
+				<a href="#" type="submit" onclick="document.getElementById('theform').submit()">Upload</a>
+			</form>
+		</div>
+		<% } %>
+
+
+	</div>
+
+
+
+
+	<% if (sails.config.LOCALONLY && usb) { %>
+
+	<div class="panel panel-info" style="padding:1em;">
+
+		<div style="float:left;margin-right:1em;padding:0.3em;">
+			<!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+			<svg style="width:30px;" alt="USB Flash Drive by Lemon Liu from the Noun Project" version="1.1" id="Layer_1"
+				xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+				viewBox="0 0 45.9 101.6" xml:space="preserve">
+				<g>
+					<path d="M6.9,26.7h32v-26h-32V26.7z M31.9,10.7v6h-6v-6H31.9z M19.9,10.7v6h-6v-6H19.9z" />
+					<path d="M0.9,30.7v64c0,3.3,2.7,6,6,6H39c3.3,0,6-2.7,6-6v-64H0.9z M30.9,53.1h-1.1v1c0,3.6-1.7,5.1-3.3,6.4
+					c-1.4,1.2-2.6,2.1-2.7,4.3l0,5.9c1.2,0.4,2.3,1.5,2.3,2.9c0,1.7-1.4,3-3,3s-3-1.4-3-3c0-1.3,1-2.5,2.3-2.9v-1.6
+					c0-2.3-1.3-3.3-2.7-4.5c-1.6-1.3-3.2-2.8-3.2-6.4l0-2.4c-0.7-0.3-1.3-1-1.3-1.8c0-1.1,0.9-2,2-2c1.1,0,2,0.9,2,2
+					c0,0.8-0.6,1.5-1.2,1.8l0,2.7c0,2.7,1.4,3.8,2.8,5c0.5,0.4,1.1,0.8,1.5,1.3V45.7h-1.7l2.5-4.9l2.5,4.9h-1.7v15.1
+					c0.4-0.5,1.1-0.9,1.5-1.3c1.5-1.2,2.9-2.3,2.9-5v-1.3H27V49h3.8L30.9,53.1L30.9,53.1z" />
+				</g>
+			</svg>
+
+		</div>
+		<div style="float:left;">
+			<% if (!inprogress) {%>
+			<strong><%- __('Backups on currently inserted USB Drive') %></strong>
+			<% if (backups.length) { %>
+			<ul style="list-style: none;margin:0;padding:0;margin-bottom:1em;">
+				<% for (let b of backups) { %>
+				<li><%- b.name %> - <a href="/api/restoreusb?source=<%-b.path %>&apikey=<%- apikey %>"><%- __('Restore') %></a></li>
+				<% } %>
+			</ul>
+			<% } else { %>
+			<span class="text-muted"><%- __('No backups on this drive...') %></span>
+			<% } %>
+			<a class="btn btn-primary" href="/api/backupusb?apikey=<%- apikey %>"><%- __('Backup to this Drive') %></a>
+			
+			<% } else { %>
+				<div style="font-size:3em;line-height:1.3em;" class="pg"></div>
+				<i><%- __('Backup or Restore in progress...') %></i>
+			<script>
+				setInterval(function () {
+					$.get('/api/copyprogress?apikey=<%- apikey %>').success(function (data) {
+						$('.pg').text(data.progress + '%');
+					});
+				}, 1000);
+			</script>
+			<% } %>
+		</div>
+	</div>
 	<% } %>
-</div>
 
-<tabset>
-	
-    <tab select="showshoots()" heading="<%- __('Shoots') %>">
+	<tabset>
+
+		<tab select="showshoots()" heading="<%- __('Shoots') %>">
 			<span class="text-muted"><%- __('Order By:') %></span>
-			<a href="" ng-click="ordere('name')"><%- __('Name') %></a><span class="sortorder" ng-show="predicatee === 'name'" ng-class="{reverse:reversee}"></span> |
-			<a href="" ng-click="ordere('createdAt')"><%- __('Joined') %></a><span class="sortorder" ng-show="predicatee === 'createdAt'" ng-class="{reverse:reversee}"></span> |
-			<a href="" ng-click="ordere('lasttouched')"><%- __('Last Touched') %></a><span class="sortorder" ng-show="predicatee === 'lasttouched'" ng-class="{reverse:reversee}"></span> |
-			<a href="" ng-click="ordere('totalmedia')"><%- __('Total Media') %></a><span class="sortorder" ng-show="predicatee === 'totalmedia'" ng-class="{reverse:reversee}"></span> |
-			<a href="" ng-click="ordere('participants')"><%- __('Participants') %></a><span class="sortorder" ng-show="predicatee === 'participants'" ng-class="{reverse:reversee}"></span> |
-			<a href="" ng-click="ordere('totalfilesize')"><%- __('Filesize') %></a><span class="sortorder" ng-show="predicatee === 'totalfilesize'" ng-class="{reverse:reversee}"></span>
+			<a href="" ng-click="ordere('name')"><%- __('Name') %></a><span class="sortorder"
+				ng-show="predicatee === 'name'" ng-class="{reverse:reversee}"></span> |
+			<a href="" ng-click="ordere('createdAt')"><%- __('Joined') %></a><span class="sortorder"
+				ng-show="predicatee === 'createdAt'" ng-class="{reverse:reversee}"></span> |
+			<a href="" ng-click="ordere('lasttouched')"><%- __('Last Touched') %></a><span class="sortorder"
+				ng-show="predicatee === 'lasttouched'" ng-class="{reverse:reversee}"></span> |
+			<a href="" ng-click="ordere('totalmedia')"><%- __('Total Media') %></a><span class="sortorder"
+				ng-show="predicatee === 'totalmedia'" ng-class="{reverse:reversee}"></span> |
+			<a href="" ng-click="ordere('participants')"><%- __('Participants') %></a><span class="sortorder"
+				ng-show="predicatee === 'participants'" ng-class="{reverse:reversee}"></span> |
+			<a href="" ng-click="ordere('totalfilesize')"><%- __('Filesize') %></a><span class="sortorder"
+				ng-show="predicatee === 'totalfilesize'" ng-class="{reverse:reversee}"></span>
 
 			<div class="list-group">
-				<a class="list-group-item" href="#"><input type="text" placeholder="<%- __('search...') %>" ng-model="search.$" class="form-control input-lg" /></a>
+				<a class="list-group-item" href="#"><input type="text" placeholder="<%- __('search...') %>"
+						ng-model="search.$" class="form-control input-lg" /></a>
 				<div ng-repeat="(server,events) in events">
-				  	<div dir-paginate="event in events | filter:search | orderBy:predicatee:reversee | itemsPerPage:20" pagination-id="shoots" class="list-group-item">
-							<div class="row">
-									<div class="col-xs-12 col-sm-10">
-											<h4 class="list-group-item-heading">
-													<a href="/event/view/{{event.id}}">{{event.name}}</a>
-											</h4>
-											<span ng-if="event.joincode"><i class="fa fa-key" ></i> {{event.joincode}}</span>
-											<i class="fa fa-clock-o" tooltip="shoot last touched" ng-show="event.lasttouched"></i> {{event.lasttouched | date:short}}
-											<i class="fa fa-video-camera" tooltip="total videos"></i>  {{event.totalmedia}}
-											<i class="fa fa-user" tooltip="total contributors"></i> {{event.participants}}
-											<i class="fa fa-film" tooltip="total filesize"></i> {{event.totalfilesize | number:2}}MB
-											<br>
-											<i class="fa fa-users" tooltip="owners"></i> <a href="#" ng-click="search.$=user.profile.displayName" ng-repeat="user in event.users track by $index">{{user.profile.displayName}}, </a><br>
-									</div>
-					    		<div class="col-xs-12 col-sm-2">
-										<a ng-href="/event/kill/{{event.id}}?apikey=<%-apikey%>" onclick="return confirm('<%- __('Really Kill Event?') %>')" class="btn btn-link btn-sm btn-danger pull-right"><%- __('Kill Event') %></a>
-								</div>
-								</div>
+					<div dir-paginate="event in events | filter:search | orderBy:predicatee:reversee | itemsPerPage:20"
+						pagination-id="shoots" class="list-group-item">
+						<div class="row">
+							<div class="col-xs-12 col-sm-10">
+								<h4 class="list-group-item-heading">
+									<a href="/event/view/{{event.id}}">{{event.name}}</a>
+								</h4>
+								<span ng-if="event.joincode"><i class="fa fa-key"></i> {{event.joincode}}</span>
+								<i class="fa fa-clock-o" tooltip="shoot last touched" ng-show="event.lasttouched"></i>
+								{{event.lasttouched | date:short}}
+								<i class="fa fa-video-camera" tooltip="total videos"></i> {{event.totalmedia}}
+								<i class="fa fa-user" tooltip="total contributors"></i> {{event.participants}}
+								<i class="fa fa-film" tooltip="total filesize"></i> {{event.totalfilesize | number:2}}MB
+								<br>
+								<i class="fa fa-users" tooltip="owners"></i> <a href="#"
+									ng-click="search.$=user.profile.displayName"
+									ng-repeat="user in event.users track by $index">{{user.profile.displayName}},
+								</a><br>
+							</div>
+							<div class="col-xs-12 col-sm-2">
+								<a ng-href="/event/kill/{{event.id}}?apikey=<%-apikey%>"
+									onclick="return confirm('<%- __('Really Kill Event?') %>')"
+									class="btn btn-link btn-sm btn-danger pull-right"><%- __('Kill Event') %></a>
+							</div>
+						</div>
 					</div>
-                </div>
-                <dir-pagination-controls pagination-id="shoots"></dir-pagination-controls>
+				</div>
+				<dir-pagination-controls pagination-id="shoots"></dir-pagination-controls>
 			</div>
 
 		</tab>
 		<tab select="showusers()" heading="<%- __('Participants') %>">
 			<span class="text-muted"><%- __('Order By:') %></span>
-			<a href="" ng-click="order('profile.name.familyName')"><%- __('Name') %></a><span class="sortorder" ng-show="predicate === 'profile.name.familyName'" ng-class="{reverse:reverse}"></span> |
-			<a href="" ng-click="order('createdAt')"><%- __('Joined') %></a><span class="sortorder" ng-show="predicate === 'createdAt'" ng-class="{reverse:reverse}"></span> |
-			<a href="" ng-click="order('owned')"><%- __('Owned') %></a><span class="sortorder" ng-show="predicate === 'owned'" ng-class="{reverse:reverse}"></span> |
-			<a href="" ng-click="order('participatedin')"><%- __('Participated In') %></a><span class="sortorder" ng-show="predicate === 'participatedin'" ng-class="{reverse:reverse}"></span> |
-			<a href="" ng-click="order('created')"><%- __('Produced') %></a><span class="sortorder" ng-show="predicate === 'created'" ng-class="{reverse:reverse}"></span> |
-			<a href="" ng-click="order('edits')"><%- __('Edits') %></a><span class="sortorder" ng-show="predicate === 'edits'" ng-class="{reverse:reverse}"></span>
+			<a href="" ng-click="order('profile.name.familyName')"><%- __('Name') %></a><span class="sortorder"
+				ng-show="predicate === 'profile.name.familyName'" ng-class="{reverse:reverse}"></span> |
+			<a href="" ng-click="order('createdAt')"><%- __('Joined') %></a><span class="sortorder"
+				ng-show="predicate === 'createdAt'" ng-class="{reverse:reverse}"></span> |
+			<a href="" ng-click="order('owned')"><%- __('Owned') %></a><span class="sortorder"
+				ng-show="predicate === 'owned'" ng-class="{reverse:reverse}"></span> |
+			<a href="" ng-click="order('participatedin')"><%- __('Participated In') %></a><span class="sortorder"
+				ng-show="predicate === 'participatedin'" ng-class="{reverse:reverse}"></span> |
+			<a href="" ng-click="order('created')"><%- __('Produced') %></a><span class="sortorder"
+				ng-show="predicate === 'created'" ng-class="{reverse:reverse}"></span> |
+			<a href="" ng-click="order('edits')"><%- __('Edits') %></a><span class="sortorder"
+				ng-show="predicate === 'edits'" ng-class="{reverse:reverse}"></span>
 
 			<div class="list-group">
-				<a class="list-group-item" href="#"><input type="text" placeholder="<%- __('search...') %>" ng-model="search_users" class="form-control input-lg" /></a>
-				<div dir-paginate="user in users | filter:search_users | orderBy:predicate:reverse | itemsPerPage:20" pagination-id="users"  class="list-group-item">
+				<a class="list-group-item" href="#"><input type="text" placeholder="<%- __('search...') %>"
+						ng-model="search_users" class="form-control input-lg" /></a>
+				<div dir-paginate="user in users | filter:search_users | orderBy:predicate:reverse | itemsPerPage:20"
+					pagination-id="users" class="list-group-item">
 					<div class="row">
-					<div class="col-xs-12 col-sm-8">
-						<h4 class="list-group-item-heading">
-							<img style="width:26px;height:auto;border-radius: 50%;" ng-src="{{user.profile.photos[0].value.replace('<%- sails.config.master_url %>','')}}" /> <strong>{{user.profile.displayName}}</strong> <em>{{user.profile.emails[0].value}}</em>
-						</h4>
-						<i class="fa fa-clock-o" tooltip="<%- __('user joined') %>"></i> {{user.createdAt | date:'short'}} 
-						<i class="fa fa-users" tooltip="<%- __('shoots owned') %>"></i> {{user.owned}} 
-						<i class="fa fa-user" tooltip="<%- __('shoots participated in') %>"></i> {{user.participatedin}}
-						<i class="fa fa-video-camera" tooltip="<%- __('videos captured') %>"></i> {{user.created}}
-						<i class="fa fa-film" tooltip="<%- __('stories made') %>"></i> {{user.edits}}
-						<span ng-show="user.apiaccess"> api {{user.apiaccess}},</span>
+						<div class="col-xs-12 col-sm-8">
+							<h4 class="list-group-item-heading">
+								<img style="width:26px;height:auto;border-radius: 50%;"
+									ng-src="{{user.profile.photos[0].value.replace('<%- sails.config.master_url %>','')}}" />
+								<strong>{{user.profile.displayName}}</strong> <em>{{user.profile.emails[0].value}}</em>
+							</h4>
+							<i class="fa fa-clock-o" tooltip="<%- __('user joined') %>"></i>
+							{{user.createdAt | date:'short'}}
+							<i class="fa fa-users" tooltip="<%- __('shoots owned') %>"></i> {{user.owned}}
+							<i class="fa fa-user" tooltip="<%- __('shoots participated in') %>"></i>
+							{{user.participatedin}}
+							<i class="fa fa-video-camera" tooltip="<%- __('videos captured') %>"></i> {{user.created}}
+							<i class="fa fa-film" tooltip="<%- __('stories made') %>"></i> {{user.edits}}
+							<span ng-show="user.apiaccess"> api {{user.apiaccess}},</span>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<a ng-show="!user.deleted" href="/event/removeuser/{{user.id}}?apikey=<%-apikey%>"
+								onclick="return confirm('<%- __('Really Remove User?') %>')"
+								class="btn btn-link btn-danger btn-sm pull-right"><%- __('Remove') %></a>
+							&nbsp
+							<a ng-show="!user.nolimit" href="/event/removelimit/{{user.id}}?apikey=<%-apikey%>"
+								class="btn btn-primary btn-sm  btn-link pull-right"><%- __('Remove Limit') %></a>
+							&nbsp
+							<a ng-show="user.nolimit" href="/event/restorelimit/{{user.id}}?apikey=<%-apikey%>"
+								class="btn btn-primary btn-sm  btn-link pull-right"><%- __('Restore Limit') %></a>
+						</div>
 					</div>
-					<div class="col-xs-12 col-sm-4">
-					<a ng-show="!user.deleted" href="/event/removeuser/{{user.id}}?apikey=<%-apikey%>" onclick="return confirm('<%- __('Really Remove User?') %>')"  class="btn btn-link btn-danger btn-sm pull-right"><%- __('Remove') %></a>
-					&nbsp
-					<a ng-show="!user.nolimit" href="/event/removelimit/{{user.id}}?apikey=<%-apikey%>" class="btn btn-primary btn-sm  btn-link pull-right"><%- __('Remove Limit') %></a>
-					&nbsp
-					<a ng-show="user.nolimit" href="/event/restorelimit/{{user.id}}?apikey=<%-apikey%>" class="btn btn-primary btn-sm  btn-link pull-right"><%- __('Restore Limit') %></a>
 				</div>
-			</div>
-				</div>
-                <dir-pagination-controls pagination-id="users"></dir-pagination-controls>
+				<dir-pagination-controls pagination-id="users"></dir-pagination-controls>
 			</div>
 
 		</tab>
 		<div class="clearfix"></div>
-</tabset>
+	</tabset>
 </div>
 <div class="clearfix"></div>

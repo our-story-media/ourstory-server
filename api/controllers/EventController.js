@@ -13,7 +13,11 @@
 // const urlencode = require('urlencode');
 const path = require('path');
 const fs = require('fs-extra');
-// const lwip = require('lwip');
+const util = require('util');
+const fss = require('fs');
+const stat = util.promisify(fss.stat);
+const readdir = util.promisify(fss.readdir);
+
 let sharp = require('sharp');
 const _ = require('lodash');
 const moment = require('moment');
@@ -55,8 +59,30 @@ function ValidateEmail(inputText) {
 
 module.exports = {
 
-	admin: function (req, res) {
-		res.view();
+	admin: async function (req, res) {
+
+		let usb = false;
+		let backups = [];
+		let files = [];
+		let s = await stat('/usbdrive');
+		// console.log(sails.controllers.api);
+		let inprogress = Backup.backuprunning;
+
+		// console.log(stat)
+		if (s && s.isDirectory())
+		{
+			if (fs.existsSync('/usbdrive/indaba')){			
+				files = await readdir('/usbdrive/indaba');
+				backups = _.sortBy(_.map(files, function(f) {
+					return {
+					name: moment(new Date(parseInt(f))).fromNow(),
+					path: f
+				}}),'path');
+			}
+			
+			usb = true;
+		}
+		res.view({usb,backups,inprogress});
 	},
 
 	// admin_edits: function (req, res) {

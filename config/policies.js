@@ -27,6 +27,8 @@ module.exports.policies = {
         '*':['apiauth'],
         'backup':['authenticated','superadmin'],
         'restore':['authenticated','superadmin'],
+        'backupusb':['authenticated','superadmin'],
+        'restoreusb':['authenticated','superadmin'],
         'signup':['authenticated','flash','apikeygen'],
         'activate':'authenticated',
         'newkey':'authenticated',
