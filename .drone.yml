@@ -24,4 +24,4 @@ steps:
       from_secret: docker_password
     build_args:
       - TARGETPLATFORM=linux/arm/v7
-    context: install/
+    context: docker/titan/
