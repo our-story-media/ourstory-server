@@ -1,16 +1,16 @@
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/our-story-media/ourstory-server.svg) ![GitHub](https://img.shields.io/github/license/our-story-media/ourstory-server.svg) ![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/bootlegger/ourstory-server.svg) 
 
-# Our Story Server
+# Indaba Server
 
-Our Story is a system to orchestrate multiple users capturing footage for a film shoot. 
+Indaba is a system to orchestrate multiple users capturing footage for a film shoot. 
 
-Each user's native mobile application connects to a Our Story server, which coordinates their actions according to  pre-defined shoot templates.
+Each user's native mobile application connects to a Indaba server, which coordinates their actions according to  pre-defined shoot templates.
 
 # Docker
 
 Use the DockerHub image /bootlegger/ourstory-server
 
-Our Story starts by default into the Local Server (Titan) mode.
+Indaba starts by default into the Local Server (Titan) mode.
 
 To start an online installation, volume map the following:
 
@@ -21,7 +21,7 @@ To start an online installation, volume map the following:
 
 # Development
 
-Use the `docker/dev/docker-compose` file provided to start a local development environment. This includes a basic redis, mongodb and Our Story installation with volume maps to the local development files.
+Use the `docker/dev/docker-compose` file provided to start a local development environment. This includes a basic redis, mongodb and Indaba installation with volume maps to the local development files.
 
 Once started with `docker-compose up`, the server will be accesible at [http://localhost]().
 
@@ -32,14 +32,6 @@ Use the `docker/build/docker-compose` file to build and push your images and the
 Runtime External Dependencies for Online Edition:
 
 - Google Developer Account
-- Dropbox Developer Account
 - Amazon S3 Account
 - Amazon Elastic Transcoder Account
 - SendGrid Account
-
-## Development Notes
-Our Story is built on the SailsJS (http://sailsjs.org/) MVC engine, which is based on expressjs.
-
-View files are located in `views\<controller>\<view>.ejs`
-
-Controller logic is located in `api\controllers\<controller>.js`
