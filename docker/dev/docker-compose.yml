@@ -31,6 +31,7 @@ services:
     image: mvertes/alpine-mongo
     volumes:
       - mongo-data:/data/db
+      - ./backup:/backup
     ports:
       - '27017:27017'
 
@@ -71,3 +72,6 @@ services:
       # - ../prod/ssl:/usr/src/app/ssl:ro
       - ../../../ourstory-worker:/usr/src/ourstory-worker
       # - "../prod/.sailsrc:/usr/src/app/.sailsrc"
+      - ./usbdrive:/usbdrive
+      - ./redis:/redis
+      # - /var/run/docker.sock:/var/run/docker.sock

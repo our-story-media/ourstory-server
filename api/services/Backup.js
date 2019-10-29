@@ -72,10 +72,16 @@ exports.backup = async function () {
 
 exports.restore = async function (source) {
     try {
+        
         this.backuprunning = true;
+
         await exec(`mongorestore --host mongo --db bootlegger --drop --archive=/usbdrive/indaba/${source}/upload/indaba.mongodb --gzip`);
 
+        await exec(`pkill redis-server`);
+
         await exec(`cd /redis && tar xvf /usbdrive/indaba/${source}/upload/indaba.redis --strip 1`);
+
+        await exec(`redis-server &`);
 
         await new Promise((res, rej) => {
             let command = realexec(`rsync -a --info=progress2 /usbdrive/indaba/${source}/upload/* ${path.join(__dirname, '..', '..', "upload")}`);

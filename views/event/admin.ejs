@@ -87,7 +87,7 @@
 		</div>
 		<div style="float:left;">
 			<% if (!inprogress) {%>
-			<strong><%- __('Backups on currently inserted USB Drive') %></strong>
+			<strong><%- __('Backups on currently inserted USB Drive') %></strong><br>
 			<% if (backups.length) { %>
 			<ul style="list-style: none;margin:0;padding:0;margin-bottom:1em;">
 				<% for (let b of backups) { %>
@@ -95,7 +95,7 @@
 				<% } %>
 			</ul>
 			<% } else { %>
-			<span class="text-muted"><%- __('No backups on this drive...') %></span>
+			<span class="text-muted"><%- __('No backups on this drive...') %></span><br>
 			<% } %>
 			<a class="btn btn-primary" href="/api/backupusb?apikey=<%- apikey %>"><%- __('Backup to this Drive') %></a>
 			
