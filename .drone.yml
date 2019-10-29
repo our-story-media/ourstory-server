@@ -18,6 +18,8 @@ steps:
     repo: bootlegger/titan-compact
     dockerfile: docker/titan/Dockerfile
     auto_tag: true
+    tags:
+      - latest
     username:
       from_secret: docker_username
     password:
