@@ -1,4 +1,12 @@
-![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/our-story-media/ourstory-server.svg) ![GitHub](https://img.shields.io/github/license/our-story-media/ourstory-server.svg) ![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/bootlegger/ourstory-server.svg) 
+![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/our-story-media/ourstory-server.svg) ![GitHub](https://img.shields.io/github/license/our-story-media/ourstory-server.svg) 
+
+AMD64 Build
+
+[![Build Status](https://dev.azure.com/ourstorytitan/OurStoryBuilds/_apis/build/status/our-story-media.ourstory-server?branchName=master)](https://dev.azure.com/ourstorytitan/OurStoryBuilds/_build/latest?definitionId=10&branchName=master)
+
+ARM v7 Titan Build
+
+[![Build Status](https://cloud.drone.io/api/badges/our-story-media/ourstory-server/status.svg)](https://cloud.drone.io/our-story-media/ourstory-server)
 
 # Indaba Server
 
