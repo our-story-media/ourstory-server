@@ -61,3 +61,6 @@ firebase.json
 upload
 backup
 temp
+uploadold
+usbdrive
+redis
