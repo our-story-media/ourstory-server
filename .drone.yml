@@ -12,39 +12,39 @@ trigger:
     - tag
 
 steps:
-# - name: Build and Push  
-#   image: plugins/docker
-#   settings:
-#     repo: bootlegger/titan-compact
-#     dockerfile: docker/titan/Dockerfile
-#     auto_tag: true
-#     tags:
-#       - latest
-#     username:
-#       from_secret: docker_username
-#     password:
-#       from_secret: docker_password
-#     build_args:
-#       - TARGETPLATFORM=linux/arm/v7
-#     context: docker/titan/
-- name: Save Docker
+- name: Build and Push  
   image: plugins/docker
-  volumes:
-  - name: output
-    path: /output
-  commands:
-    - docker pull bootlegger/titan-compact:latest
-    - docker save -o /output/indaba-update.tar bootlegger/titan-compact:latest
-- name: Upload
-  image: plugins/s3
-  volumes:
-  - name: output
-    path: /output
   settings:
-    bucket: ourstory-v2-live
-    access_key: 
-      from_secret: access_key
-    secret_key: 
-      from_secret: secret_key
-    source: /output/indaba-update.tar
-    target: titan/indaba-update.tar
+    repo: bootlegger/titan-compact
+    dockerfile: docker/titan/Dockerfile
+    auto_tag: true
+    tags:
+      - latest
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    build_args:
+      - TARGETPLATFORM=linux/arm/v7
+    context: docker/titan/
+# - name: Save Docker
+#   image: plugins/docker
+#   volumes:
+#   - name: output
+#     path: /output
+  # commands:
+  #   - docker pull bootlegger/titan-compact:latest
+  #   - docker save -o /output/indaba-update.tar bootlegger/titan-compact:latest
+# - name: Upload
+#   image: plugins/s3
+#   volumes:
+#   - name: output
+#     path: /output
+#   settings:
+#     bucket: ourstory-v2-live
+#     access_key: 
+#       from_secret: access_key
+#     secret_key: 
+#       from_secret: secret_key
+#     source: /output/indaba-update.tar
+#     target: titan/indaba-update.tar
