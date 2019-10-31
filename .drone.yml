@@ -12,22 +12,22 @@ trigger:
     - tag
 
 steps:
-- name: Build and Push  
-  image: plugins/docker
-  settings:
-    repo: bootlegger/titan-compact
-    dockerfile: docker/titan/Dockerfile
-    auto_tag: true
-    tags:
-      - latest
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-    build_args:
-      - TARGETPLATFORM=linux/arm/v7
-    context: docker/titan/
-- name: Save and Upload
+# - name: Build and Push  
+#   image: plugins/docker
+#   settings:
+#     repo: bootlegger/titan-compact
+#     dockerfile: docker/titan/Dockerfile
+#     auto_tag: true
+#     tags:
+#       - latest
+#     username:
+#       from_secret: docker_username
+#     password:
+#       from_secret: docker_password
+#     build_args:
+#       - TARGETPLATFORM=linux/arm/v7
+#     context: docker/titan/
+- name: Save Docker
   image:  docker:18.09.0-dind
   volumes:
     - output:/output
