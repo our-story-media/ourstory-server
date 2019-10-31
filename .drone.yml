@@ -30,14 +30,16 @@ steps:
 - name: Save Docker
   image:  docker:18.09.0-dind
   volumes:
-    - output:/output
+  - name: output
+    path: /output
   commands:
     - docker pull bootlegger/titan-compact:latest
     - docker save -o /output/indaba-update.tar bootlegger/titan-compact:latest
 - name: Upload
   image: plugins/s3
   volumes:
-    - output:/output
+  - name: output
+    path: /output
   settings:
     bucket: ourstory-v2-live
     access_key: 
