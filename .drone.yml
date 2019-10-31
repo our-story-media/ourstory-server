@@ -12,7 +12,7 @@ trigger:
     - tag
 
 steps:
-- name: docker  
+- name: Build and Push  
   image: plugins/docker
   settings:
     repo: bootlegger/titan-compact
@@ -27,3 +27,18 @@ steps:
     build_args:
       - TARGETPLATFORM=linux/arm/v7
     context: docker/titan/
+- name: Save and Upload
+  image: docker
+  commands:
+    - docker pull bootlegger/titan-compact:latest
+    - docker save -o ./indaba-update.tar bootlegger/titan-compact:latest
+  - name: upload
+  image: plugins/s3
+  settings:
+    bucket: ourstory-v2-live
+    access_key: 
+      from_secret: access_key
+    secret_key: 
+      from_secret: secret_key
+    source: ./indaba-update.tar
+    target: ./titan/indaba-update.tar

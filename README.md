@@ -6,7 +6,7 @@ AMD64 Build
 
 ARM v7 Titan Build
 
-[![Build Status](https://cloud.drone.io/api/badges/our-story-media/ourstory-server/status.svg)](https://cloud.drone.io/our-story-media/ourstory-server)
+[![Build Status](https://cloud.drone.io/api/badges/our-story-media/ourstory-server/status.svg)](https://cloud.drone.io/our-story-media/ourstory-server) [![](https://images.microbadger.com/badges/image/bootlegger/titan-compact.svg)](https://microbadger.com/images/bootlegger/titan-compact "Get your own image badge on microbadger.com")
 
 # Indaba Server
 
