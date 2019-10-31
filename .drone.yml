@@ -28,17 +28,21 @@ steps:
       - TARGETPLATFORM=linux/arm/v7
     context: docker/titan/
 - name: Save and Upload
-  image: docker
+  image:  docker:18.09.0-dind
+  volumes:
+    - output:/output
   commands:
     - docker pull bootlegger/titan-compact:latest
-    - docker save -o ./indaba-update.tar bootlegger/titan-compact:latest
+    - docker save -o /output/indaba-update.tar bootlegger/titan-compact:latest
 - name: Upload
   image: plugins/s3
+  volumes:
+    - output:/output
   settings:
     bucket: ourstory-v2-live
     access_key: 
       from_secret: access_key
     secret_key: 
       from_secret: secret_key
-    source: ./indaba-update.tar
-    target: ./titan/indaba-update.tar
+    source: /output/indaba-update.tar
+    target: titan/indaba-update.tar
