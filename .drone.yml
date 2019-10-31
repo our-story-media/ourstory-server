@@ -32,7 +32,7 @@ steps:
   commands:
     - docker pull bootlegger/titan-compact:latest
     - docker save -o ./indaba-update.tar bootlegger/titan-compact:latest
-  - name: upload
+- name: Upload
   image: plugins/s3
   settings:
     bucket: ourstory-v2-live
