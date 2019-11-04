@@ -24,3 +24,4 @@ Dockerfile*
 .DS_Store
 hooks
 temp
+VERSION
