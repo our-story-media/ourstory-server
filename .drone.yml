@@ -17,15 +17,15 @@ steps:
   commands:
     - echo -n "latest,$DRONE_TAG" > .tags
     - cat .tags
-# - name: Build and Push  
-#   image: plugins/docker
-#   settings:
-#     repo: bootlegger/titan-compact
-#     dockerfile: docker/titan/Dockerfile
-#     username:
-#       from_secret: docker_username
-#     password:
-#       from_secret: docker_password
-#     build_args:
-#       - TARGETPLATFORM=linux/arm/v7
-#     context: docker/titan/
+- name: Build and Push  
+  image: plugins/docker
+  settings:
+    repo: bootlegger/titan-compact
+    dockerfile: docker/titan/Dockerfile
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    build_args:
+      - TARGETPLATFORM=linux/arm/v7
+    context: docker/titan/
