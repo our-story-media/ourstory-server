@@ -15,7 +15,7 @@ steps:
 - name: Set Tags
   image: golang:1.10.0-alpine
   commands:
-    - echo -n "latest,$(DRONE_TAG)" > .tags
+    - echo -n "latest,$$TAG" > .tags
 - name: Build and Push  
   image: plugins/docker
   settings:
