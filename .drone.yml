@@ -12,7 +12,8 @@ trigger:
     - tag
 
 steps:
-- image: golang:1.10.0-alpine
+- name: Set Tags
+  image: golang:1.10.0-alpine
   commands:
     - echo -n "latest,$(git-buildnumber)" > .tags
 - name: Build and Push  
