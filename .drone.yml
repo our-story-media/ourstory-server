@@ -15,16 +15,17 @@ steps:
 - name: Set Tags
   image: golang:1.10.0-alpine
   commands:
-    - echo -n "latest,$$TAG" > .tags
-- name: Build and Push  
-  image: plugins/docker
-  settings:
-    repo: bootlegger/titan-compact
-    dockerfile: docker/titan/Dockerfile
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-    build_args:
-      - TARGETPLATFORM=linux/arm/v7
-    context: docker/titan/
+    - echo -n "latest,$DRONE_TAG" > .tags
+    - cat .tags
+# - name: Build and Push  
+#   image: plugins/docker
+#   settings:
+#     repo: bootlegger/titan-compact
+#     dockerfile: docker/titan/Dockerfile
+#     username:
+#       from_secret: docker_username
+#     password:
+#       from_secret: docker_password
+#     build_args:
+#       - TARGETPLATFORM=linux/arm/v7
+#     context: docker/titan/
