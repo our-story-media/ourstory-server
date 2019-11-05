@@ -2,7 +2,7 @@
 
 echo "Downloading latest tagged version"
 
-docker pull bootlegger/titan-compact:latest
+docker pull --platform linux/arm/v7 bootlegger/titan-compact:latest
 
 echo "Saving to tar file"
 

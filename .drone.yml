@@ -12,14 +12,14 @@ trigger:
     - tag
 
 steps:
+- image: golang:1.10.0-alpine
+  commands:
+    - echo -n "latest,$(git-buildnumber)" > .tags
 - name: Build and Push  
   image: plugins/docker
   settings:
     repo: bootlegger/titan-compact
     dockerfile: docker/titan/Dockerfile
-    auto_tag: true
-    tags:
-      - latest
     username:
       from_secret: docker_username
     password:
