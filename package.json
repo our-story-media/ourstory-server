@@ -81,7 +81,8 @@
     "assets": [
       "assets/**/*",
       "data/**/*",
-      "views/**/*"
+      "views/**/*",
+      "node_modules/sails/lib/hooks/http/default-favicon.ico"
     ]
   }
 }
