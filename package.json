@@ -75,5 +75,13 @@
   },
   "main": "app.js",
   "author": "Tom Bartindale",
-  "license": "MIT"
+  "license": "MIT",
+  "pkg":{
+    "scripts": "**/*.js",
+    "assets": [
+      "assets/**/*",
+      "data/**/*",
+      "views/**/*"
+    ]
+  }
 }
