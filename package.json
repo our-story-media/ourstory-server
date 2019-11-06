@@ -42,7 +42,7 @@
     "optimist": "~0.3.4",
     "passport": "~0.2.0",
     "passport-google": "~0.3.0",
-    "passport-google-oauth": "~0.2.0",
+    "passport-google-oauth20": "2.0.0",
     "passport-local": "~1.0.0",
     "redis": "~2.8.0",
     "request": "~2.65.0",

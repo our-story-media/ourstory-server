@@ -240,7 +240,7 @@ module.exports.bootstrap = function (cb) {
 
 	//start passport authentication
 	var passport = require('passport');
-	var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+	var GoogleStrategy = require('passport-google-oauth20').Strategy;
 	var LocalStrategy = require('passport-local').Strategy;
 	// var FacebookStrategy = require('passport-facebook').Strategy;
 	// var TwitterStrategy = require('passport-twitter').Strategy;
