@@ -64,23 +64,27 @@ module.exports = {
 		let usb = false;
 		let backups = [];
 		let files = [];
-		let s = await stat('/usbdrive');
-		// console.log(sails.controllers.api);
-		let inprogress = Backup.backuprunning;
+		let inprogress = false;
+		
 
-		// console.log(stat)
-		if (s && s.isDirectory())
+		if (sails.config.LOCALONLY)
 		{
-			if (fs.existsSync('/usbdrive/indaba')){			
-				files = await readdir('/usbdrive/indaba');
-				backups = _.sortBy(_.map(files, function(f) {
-					return {
-					name: moment(new Date(parseInt(f))).fromNow(),
-					path: f
-				}}),'path');
+			let s = await stat('/usbdrive');
+			// console.log(sails.controllers.api);
+			inprogress = Backup.backuprunning;
+			if (s && s.isDirectory())
+			{
+				if (fs.existsSync('/usbdrive/indaba')){			
+					files = await readdir('/usbdrive/indaba');
+					backups = _.sortBy(_.map(files, function(f) {
+						return {
+						name: moment(new Date(parseInt(f))).fromNow(),
+						path: f
+					}}),'path');
+				}
+				
+				usb = true;
 			}
-			
-			usb = true;
 		}
 		res.view({usb,backups,inprogress});
 	},
