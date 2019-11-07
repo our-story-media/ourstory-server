@@ -369,12 +369,19 @@ module.exports = {
 		Media.findOne(id, function (err, m) {
 
 			if (sails.config.LOCALONLY) {
-				// console.log(sails.config.FAKES3URL + '/' + m.path);
+
+				// res.header('Content-Disposition','attachment');
+
 				if (req.header('host') == 'localhost' || _.includes(req.header('referer'),'localhost'))
-				return res.redirect(`/upload/${m.event_id}/${m.path}`);
+				{
+					// console.log("localhost");
+					return res.redirect(`/upload/${m.event_id}/${m.path}`);
+				}
 				else
+				{
+					// console.log("localhost");
 					return res.redirect(`${sails.config.FAKES3URL}${m.event_id}/${m.path}`);
-				
+				}
 			}
 			else {
 				var options = {
@@ -1021,53 +1028,4 @@ module.exports = {
 			return res.json(output);
 		});
 	}
-
-
-	// castlist: function (req, res) {
-	// 	Event.findOne(req.params.id, function (err, ev) {
-	// 		User.find({}).exec(function (err, users) {
-	// 			//console.log(req.params.id);
-	// 			//gets media for event
-	// 			Media.find({ 'event_id': req.params.id, path: { '!': undefined } }).sort('createdAt DESC').limit(100).exec(function (err, data) {
-	// 				_.each(data, function (m) {
-	// 					//for each media, set nice name;
-	// 					//m.meta.role_ex = ev.eventtype.roles[m.meta.static_meta.role];
-	// 					m.user = _.findWhere(users, { id: m.created_by });
-	// 					//console.log(m.meta.static_meta.shot);
-	// 					//console.log(_.findWhere(ev.eventtype.shot_types,{id:m.meta.static_meta.shot}));
-	// 					m.meta.shot_ex = ev.eventtype.shot_types[m.meta.static_meta.shot];
-	// 					if (!m.meta.shot_ex)
-	// 						m.meta.shot_ex = { name: 'Unknown' };
-
-	// 					m.meta.coverage_class_ex = ev.coverage_classes[m.meta.static_meta.coverage_class];
-	// 					if (m.meta.coverage_class_ex == undefined) {
-	// 						m.meta.coverage_class_ex = { name: "Unknown" };
-	// 					}
-
-	// 					var timestamp = m.meta.static_meta.captured_at.split(' ');
-	// 					var uu = "unknown";
-	// 					if (m.user)
-	// 						uu = m.user.profile.displayName;
-
-	// 					//taken out: timestamp[1].replace(':','-').replace(':','-') + ' ' +
-	// 					m.title = m.meta.shot_ex.name + ' of ' + m.meta.coverage_class_ex.name + ' by ' + uu;
-	// 					m.contentId = sails.config.S3_CLOUD_URL + m.path;
-	// 					m.image = m.thumb;
-	// 					delete m.meta;
-	// 					delete m.path;
-	// 					delete m.name;
-	// 					delete m.user;
-	// 					delete m.thumb;
-	// 					delete m.updatedAt;
-	// 					delete m.createdAt;
-	// 					delete m.id;
-	// 					delete m.event_id;
-	// 					delete m.created_by;
-	// 				});
-	// 				//console.log(data);
-	// 				return res.json(data);
-	// 			});
-	// 		});
-	// 	});
-	// }
 };

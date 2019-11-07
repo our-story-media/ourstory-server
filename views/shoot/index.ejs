@@ -194,9 +194,11 @@
                       <i class="fa fa-ellipsis-v"></i>
                   </button>
                   <ul class="dropdown-menu dropdown-menu-right">
-                      <li ng-show="m.path"><a ng-href="{{m.originalpath}}">
+                      <li ng-show="m.path">
+                        <a ng-href="{{m.originalpath.replace('<%- sails.config.master_url %>','')}}">
                           <%- __('Download') %>
-                      </a></li>
+                        </a>
+                    </li>
                     <li ng-show="!m.deleted"><a href="#" ng-click="removeclip(m,$event)"><%- __('Delete') %></a></li>
                   </ul>
                 </div>
