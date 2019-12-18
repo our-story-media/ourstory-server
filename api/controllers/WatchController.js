@@ -64,6 +64,46 @@ module.exports = {
 		})
 	},
 
+	subs: async function (req, res) {
+		try {
+			var edit = await Edits.findOne(req.params.id);
+			var subs = edit.transcription || {chunks:[]};
+			
+			// || {chunks:[
+			// 	{
+			// 		starttime: '00:45:23.560',
+			// 		endtime: '00:45:27.560',
+			// 		contributions:[
+			// 			{
+			// 				text: 'This is subtitle 1'
+			// 			}
+			// 		]
+			// 	}
+			// ]};
+			//convert the transcription object to srt:
+
+			var subs_text = "";
+
+			var sequence = 0;
+
+			var subs_text = _.map(subs.chunks, function (chunk) {
+				sequence++;
+				var text = chunk.contributions[0].text;
+				var start = chunk.starttime.replace('.',',');
+				var end = chunk.endtime.replace('.',',');
+
+				return `${sequence}\n${start} --> ${end}\n${text}\n\n`;
+			});
+
+			res.header('Content-Disposition','attachment; filename="subtitles.srt"');
+			return res.send(subs_text.join());
+		}
+		catch (e) {
+			console.log(e);
+			return res.status(500);
+		}
+	},
+
 	mymedia: function (req, res) {
 		Edits.find({ user_id: req.session.passport.user.id }).exec(function (err, edits) {
 			Media.find({ created_by: req.session.passport.user.id }).exec(function (err, media) {
@@ -206,7 +246,7 @@ module.exports = {
 	},
 
 	/**
-	 * @api {post} /api/post/edit Get Edit
+	 * @api {get} /api/post/edit Get Edit
 	 * @apiName getedit
 	 * @apiGroup Post_Production
 	 * @apiVersion 0.0.2
@@ -247,6 +287,7 @@ module.exports = {
 			tmpedit.media = req.param('media');
 			tmpedit.title = req.param('title');
 			tmpedit.description = req.param('description');
+			tmpedit.transcription = req.param('transcription');
 			var newmedia = [];
 			_.each(tmpedit.media, function (m) {
 				var newm = {
@@ -312,7 +353,7 @@ module.exports = {
 		Edits.findOne(id, function (err, m) {
 			//FOR LOCAL
 			if (sails.config.LOCALONLY) {
-				if (req.header('host') == 'localhost' || _.includes(req.header('referer'),'localhost'))
+				if (req.header('host') == 'localhost' || _.includes(req.header('referer'), 'localhost'))
 					return res.redirect(`/upload/transcode/upload/edits/${m.shortlink}.mp4`);
 				else
 					return res.redirect(`${sails.config.FAKES3URL_TRANSCODE}/edits/${m.shortlink}.mp4`);
@@ -565,7 +606,7 @@ module.exports = {
 		if (canedit.value == 'true') {
 			Edits.findOne(req.params.id).exec(function (err, edit) {
 				if (edit) {
-					
+
 					console.log("restarting edit");
 					//console.log(edit);
 					//console.log(edit.media);
@@ -684,5 +725,9 @@ module.exports = {
 				return res.redirect('/dashboard');
 			}
 		});
+	},
+
+	transcribe: function (req, res) {
+		res.view({ id: req.param('id'), _layoutFile: null });
 	}
 };
