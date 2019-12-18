@@ -92,7 +92,14 @@ module.exports.policies = {
       'roleimg':true,
       'contributors':['authenticated','isowner','apiauth']
     },
-
+    'transcribe':{
+      '*':['superadmin','authenticated','apiauth'],
+      'index':['superadmin','authenticated','apiauth','apikeygen','flash'],
+      'step1':['superadmin','authenticated','apiauth','apikeygen','flash'],
+      'step2':['superadmin','authenticated','apiauth','apikeygen','flash'],
+      'step3':['superadmin','authenticated','apiauth','apikeygen','flash'],
+      'subs':['superadmin','authenticated','apiauth']
+    },
     'watch':
     {
         'view':['authenticated','viewonly','flash','apikeygen'],
@@ -109,6 +116,7 @@ module.exports.policies = {
         'getvideofull':['authenticated','apiauth','checkmedia_full'],
         'getvideotags':['authenticated','apiauth','checkmedia_full'],
         'edits':['authenticated','isowner','apikeygen','flash'],
+        'edit':['authenticated','apikeygen','flash'],
         'alledits':['authenticated','isowner','apiauth'],
         'editprogress':['authenticated','apiauth'],
         'clone':['authenticated','apiauth'],

@@ -64,45 +64,7 @@ module.exports = {
 		})
 	},
 
-	subs: async function (req, res) {
-		try {
-			var edit = await Edits.findOne(req.params.id);
-			var subs = edit.transcription || {chunks:[]};
-			
-			// || {chunks:[
-			// 	{
-			// 		starttime: '00:45:23.560',
-			// 		endtime: '00:45:27.560',
-			// 		contributions:[
-			// 			{
-			// 				text: 'This is subtitle 1'
-			// 			}
-			// 		]
-			// 	}
-			// ]};
-			//convert the transcription object to srt:
-
-			var subs_text = "";
-
-			var sequence = 0;
-
-			var subs_text = _.map(subs.chunks, function (chunk) {
-				sequence++;
-				var text = chunk.contributions[0].text;
-				var start = chunk.starttime.replace('.',',');
-				var end = chunk.endtime.replace('.',',');
-
-				return `${sequence}\n${start} --> ${end}\n${text}\n\n`;
-			});
-
-			res.header('Content-Disposition','attachment; filename="subtitles.srt"');
-			return res.send(subs_text.join());
-		}
-		catch (e) {
-			console.log(e);
-			return res.status(500);
-		}
-	},
+	
 
 	mymedia: function (req, res) {
 		Edits.find({ user_id: req.session.passport.user.id }).exec(function (err, edits) {
@@ -725,9 +687,5 @@ module.exports = {
 				return res.redirect('/dashboard');
 			}
 		});
-	},
-
-	transcribe: function (req, res) {
-		res.view({ id: req.param('id'), _layoutFile: null });
 	}
 };

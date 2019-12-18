@@ -59,7 +59,7 @@ module.exports = {
       }
       //console.log(event);
       event.calcphases();
-      res.view({event:event,sessionkey:sessionkey,pagetitle:req.__('Export')});
+      res.view({event:event, sessionkey:sessionkey, pagetitle:req.__('Export')});
     });
   },
 

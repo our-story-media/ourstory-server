@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/transcription/step1/build/static/css/main.d1b05096.chunk.css",
+    "main.js": "/transcription/step1/build/static/js/main.f50618b0.chunk.js",
+    "main.js.map": "/transcription/step1/build/static/js/main.f50618b0.chunk.js.map",
+    "runtime-main.js": "/transcription/step1/build/static/js/runtime-main.b003dda8.js",
+    "runtime-main.js.map": "/transcription/step1/build/static/js/runtime-main.b003dda8.js.map",
+    "static/css/2.01188f5a.chunk.css": "/transcription/step1/build/static/css/2.01188f5a.chunk.css",
+    "static/js/2.fc442382.chunk.js": "/transcription/step1/build/static/js/2.fc442382.chunk.js",
+    "static/js/2.fc442382.chunk.js.map": "/transcription/step1/build/static/js/2.fc442382.chunk.js.map",
+    "index.html": "/transcription/step1/build/index.html",
+    "precache-manifest.b8f5dd0eae252bbb538498d5193adcb4.js": "/transcription/step1/build/precache-manifest.b8f5dd0eae252bbb538498d5193adcb4.js",
+    "service-worker.js": "/transcription/step1/build/service-worker.js",
+    "static/css/2.01188f5a.chunk.css.map": "/transcription/step1/build/static/css/2.01188f5a.chunk.css.map",
+    "static/css/main.d1b05096.chunk.css.map": "/transcription/step1/build/static/css/main.d1b05096.chunk.css.map",
+    "static/js/2.fc442382.chunk.js.LICENSE": "/transcription/step1/build/static/js/2.fc442382.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b003dda8.js",
+    "static/css/2.01188f5a.chunk.css",
+    "static/js/2.fc442382.chunk.js",
+    "static/css/main.d1b05096.chunk.css",
+    "static/js/main.f50618b0.chunk.js"
+  ]
+}
