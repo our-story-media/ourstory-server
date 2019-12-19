@@ -1,11 +1,18 @@
 import React, { Component } from "react";
 import { Player, BigPlayButton, ControlBar, Shortcut } from "video-react";
-import { Button } from "reactstrap";
 import SingleLineGridList from "./lineGrid";
 import PopupDialog from "./popupDialog";
 import axios from 'axios';
+import {Button,Container} from '@material-ui/core';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import Replay5 from '@material-ui/icons/Replay5';
+import Snackbar from '@material-ui/core/Snackbar';
+import ReactDOM from 'react-dom'
+import { ArrowBack } from "@material-ui/icons";
 
 export default class VideoPlayer extends Component {
+  
   constructor(props, context) {
     super(props, context);
 
@@ -18,8 +25,10 @@ export default class VideoPlayer extends Component {
       source: props.src,
       open: false,
       options: ["Backward 2 Seconds", "Add New Breakpoint", "Discard Setting"],
-      
+      erroropen: false
     };
+
+    
   }
 
   componentDidMount() {
@@ -28,7 +37,7 @@ export default class VideoPlayer extends Component {
 
       this.serverRequest = axios.get('/api/watch/edit/'+this.props.id).then(function (result) {
         // var lastGist = result[0];
-        console.log(result);
+        // console.log(result);
 
         if (!result.data.transcription)
         {
@@ -62,21 +71,38 @@ export default class VideoPlayer extends Component {
     this.player.play();
   };
 
+  skipBack = () => {
+    const { player } = this.player.getState();
+    this.player.seek(player.currentTime - 2);
+  }
+
+  backButton = () => {
+    window.history.back();
+  }
+
   handleDelete = (startTime, endTime) => {
+
     // Remove the chunk selected
-    let original = this.state.original.transcription.chunks.filter(c => c.startTime !== startTime);
+    let original = this.state.original;
+    let originalchunks = original.transcription.chunks.filter(c => c.startTime !== startTime);
 
     // Replace the next chunk's start time with the start time of the chunk deleted
     let index = this.state.original.transcription.chunks.findIndex(c => c.startTime === endTime);
-    if (index >= 1) original.transcription.chunks[--index].startTime = startTime;
+    if (index >= 1) originalchunks[--index].startTime = startTime;
+
+    // console.log(original)
+
+    original.transcription.chunks = originalchunks;
 
     this.setState({ original });
     this.saveEdit();
   };
 
   handleClickOpen = () => {
-    this.player.pause();
-    this.setState({ open: true });
+    // this.player.pause();
+    // this.setState({ open: true });
+
+    this.handleConfirm();
   };
 
   handleClose = value => {
@@ -102,7 +128,6 @@ export default class VideoPlayer extends Component {
     let original = this.state.original;
 
     let newChunk = {
-      img: "/transcription/step1/build/static/images/grid-list/default.jpg",
       endTime: currentTime
     };
 
@@ -110,6 +135,14 @@ export default class VideoPlayer extends Component {
     let index = this.state.original.transcription.chunks.findIndex(
       c => currentTime >= c.startTime && currentTime <= c.endTime
     );
+
+    if (currentTime == 0)
+    {
+      this.setState({
+        erroropen: true
+      });
+      return;
+    }
 
     if (index >= 1) {
       // Insert the new chunk into the middle of the list
@@ -131,28 +164,47 @@ export default class VideoPlayer extends Component {
 
     this.setState({ original });
     this.saveEdit();
+
+  }
+
+  closeError = ()=>{
+    this.setState({
+      erroropen: false
+    });
   }
 
   render() {
     return (
       <div>
+        <br />
+        {/* <Card>
+          <CardContent>
+          
+          </CardContent>
+        </Card>
+        <br /> */}
+        <h2 style={{position:'absolute', width:'15%', right:'1em', top:'3em'}}>Create a breakpoint when someone stops talking</h2>
+        <Container style={{maxWidth:'800px'}}>
+
         <Player
           ref={player => {
             this.player = player;
           }}
-        >
+          >
           <source src={this.state.source} />
           <BigPlayButton position="center" />
           <Shortcut clickable={true} />
           <ControlBar autoHide={false} />
         </Player>
-
-        <div className="py-3">
-          <Button onClick={this.handleClickOpen} className="m-2">
+        </Container>
+<br />
+        {/* <div className="py-3"> */}
+          {/* <Button  className="m-2">
             Set Breakpoint
-          </Button>
+          </Button> */}
 
           <SingleLineGridList
+          style={{width:'100%'}}
             onPlay={this.handlePlay}
             onDelete={this.handleDelete}
             chunks={this.state.original.transcription.chunks}
@@ -165,9 +217,28 @@ export default class VideoPlayer extends Component {
           />
 
           <div id="output"></div>
-          <div>{JSON.stringify(this.state.original)}</div>
+          {/* <div>{JSON.stringify(this.state.original)}</div> */}
+          <Fab color="primary" onClick={this.skipBack} aria-label="left" style={{position:'absolute', left:'2em', top:'45%'}}>
+            <Replay5 />
+          </Fab>
+          <Fab color="primary" onClick={this.handleClickOpen} aria-label="add" style={{position:'absolute', right:'1em', top:'45%'}}>
+            <AddIcon />
+          </Fab>
+          <Button onClick={this.backButton} style={{position:'absolute', left:'0', top:'1em'}}>
+              <ArrowBack />
+            </Button>
+          <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        open={this.state.erroropen}
+        autoHideDuration={1000}
+        onClose={this.closeError}
+        message="Cannot add breakpoint here"
+      ></Snackbar>
         </div>
-      </div>
+      // </div>
     );
   }
 }

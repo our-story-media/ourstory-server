@@ -21,31 +21,20 @@ module.exports = {
     step2: function(req,res)
     {
         //transcribe
-        return res.view({ id: req.param('id'), _layoutFile: null });
+        return res.sendfile(path.join(__dirname,'..','..','/assets/transcription/step2/build/index.html'));
     },
 
     step3: function(req,res)
     {
         //review
-        return res.view({ id: req.param('id') , _layoutFile: null });
+        return res.sendfile(path.join(__dirname,'..','..','/assets/transcription/step3/build/index.html'));
     },
 
     subs: async function (req, res) {
         try {
             var edit = await Edits.findOne(req.params.id);
             var subs = edit.transcription || { chunks: [] };
-
-            // || {chunks:[
-            // 	{
-            // 		starttime: '00:45:23.560',
-            // 		endtime: '00:45:27.560',
-            // 		contributions:[
-            // 			{
-            // 				text: 'This is subtitle 1'
-            // 			}
-            // 		]
-            // 	}
-            // ]};
+            
             //convert the transcription object to srt:
 
             var subs_text = "";
@@ -54,10 +43,9 @@ module.exports = {
 
             var subs_text = _.map(subs.chunks, function (chunk) {
                 sequence++;
-                var text = chunk.contributions[0].text;
+                var text = chunk.adoptedContribution.text;
                 var start = chunk.starttime.replace('.', ',');
                 var end = chunk.endtime.replace('.', ',');
-
                 return `${sequence}\n${start} --> ${end}\n${text}\n\n`;
             });
 
