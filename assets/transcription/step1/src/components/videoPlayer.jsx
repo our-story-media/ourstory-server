@@ -46,6 +46,13 @@ export default class VideoPlayer extends Component {
           }
         }
 
+        result.data.transcription.chunks.forEach(chunk => {
+          chunk.starttime = toMS(chunk.starttime);
+          chunk.endtime = toMS(chunk.endtime);
+        })
+
+        console.log(result.data);
+
         this.setState({
           original: result.data
         });
@@ -60,14 +67,34 @@ export default class VideoPlayer extends Component {
   }
 
   saveEdit() {
-    axios.post('/api/watch/savedit/' + this.props.id + '?apikey=' + this.props.apikey,  this.state.original).then(function (result) { 
-      // Update last saved display
-      console.log(result)
-    });
+    // let { original } = this.state;
+    // let newChunks = [...this.state.original.transcription.chunks];
+
+    // let newOriginal = {transcription: {}}
+    let newOriginal = Object.assign({}, this.state.original);
+    let newChunks = [...newOriginal.transcription.chunks]
+
+    // let newTranscription = Array.assign([],this.state.original.trq);
+
+    console.log(newChunks);
+    // newChunks.forEach(chunk => {
+    for (var i=0;i<newChunks.length;i++)
+    {
+      newChunks[i].starttime1 =  toSrt({...newChunks[i]}.starttime);
+      newChunks[i].endtime1 = toSrt({...newChunks[i]}.endtime);
+    }
+    
+    console.log("newchunks: ", newChunks);
+    // newOriginal.transcription.chunks = newChunks;
+
+    // axios.post('/api/watch/savedit/' + this.props.id + '?apikey=' + this.props.apikey,  newOriginal).then(function (result) { 
+    //   // Update last saved display
+    //   console.log(result)
+    // });
   };
 
-  handlePlay = startTime => {
-    this.player.seek(startTime);
+  handlePlay = starttime => {
+    this.player.seek(starttime);
     this.player.play();
   };
 
@@ -80,15 +107,15 @@ export default class VideoPlayer extends Component {
     window.history.back();
   }
 
-  handleDelete = (startTime, endTime) => {
+  handleDelete = (starttime, endtime) => {
 
     // Remove the chunk selected
     let original = this.state.original;
-    let originalchunks = original.transcription.chunks.filter(c => c.startTime !== startTime);
+    let originalchunks = original.transcription.chunks.filter(c => c.starttime !== starttime);
 
     // Replace the next chunk's start time with the start time of the chunk deleted
-    let index = this.state.original.transcription.chunks.findIndex(c => c.startTime === endTime);
-    if (index >= 1) originalchunks[--index].startTime = startTime;
+    let index = this.state.original.transcription.chunks.findIndex(c => c.starttime === endtime);
+    if (index >= 1) originalchunks[--index].starttime = starttime;
 
     // console.log(original)
 
@@ -125,15 +152,15 @@ export default class VideoPlayer extends Component {
   handleConfirm() {
     // Record the thumbnail of the current endtime
     const { currentTime } = this.state.player;
-    let original = this.state.original;
+    let original = Object.assign({},this.state.original);
 
     let newChunk = {
-      endTime: currentTime
+      endtime: currentTime
     };
 
     // Get the index where the current time is larger than the start and smaller than the end
-    let index = this.state.original.transcription.chunks.findIndex(
-      c => currentTime >= c.startTime && currentTime <= c.endTime
+    let index = original.transcription.chunks.findIndex(
+      c => currentTime >= c.starttime && currentTime <= c.endtime
     );
 
     if (currentTime == 0)
@@ -146,24 +173,30 @@ export default class VideoPlayer extends Component {
 
     if (index >= 1) {
       // Insert the new chunk into the middle of the list
-      original.transcription.chunks[index].startTime = currentTime;
-      newChunk.startTime = original.transcription.chunks[--index].endTime;
+      original.transcription.chunks[index].starttime = currentTime;
+      newChunk.starttime = original.transcription.chunks[--index].endtime;
       original.transcription.chunks.splice(++index, 0, newChunk);
     } else if (index === 0) {
       // Insert the new chunk into the front of the list
-      original.transcription.chunks[index].startTime = currentTime;
-      newChunk.startTime = 0;
+      original.transcription.chunks[index].starttime = currentTime;
+      newChunk.starttime = 0;
       original.transcription.chunks.splice(index, 0, newChunk);
     } else {
       // Insert the new chunk into the back of the list
       const c = original.transcription.chunks.slice(-1)[0];
-      if (c) newChunk.startTime = c.endTime;
-      else newChunk.startTime = 0;
+      if (c) newChunk.starttime = c.endtime;
+      else newChunk.starttime = 0;
       original.transcription.chunks.push(newChunk);
     }
 
-    this.setState({ original });
-    this.saveEdit();
+    // console.log(original)
+    
+    this.setState({original},function(){
+      console.log("Just before save", original);
+      // console.log(this.state.original);
+      
+      this.saveEdit();
+    });
 
   }
 
@@ -241,4 +274,46 @@ export default class VideoPlayer extends Component {
       // </div>
     );
   }
+}
+
+function toMS (timestamp) {
+
+  return 1234;
+
+  console.log("timestamp : " +timestamp);
+
+  if (!isNaN(timestamp)) {
+    return timestamp
+  }
+
+  const match = timestamp.match(/^(?:(\d{2,}):)?(\d{2}):(\d{2})[,.](\d{3})$/)
+
+  if (!match) {
+    throw new Error('Invalid SRT or VTT time format: "' + timestamp + '"')
+  }
+
+  const hours = match[1] ? parseInt(match[1], 10) * 3600000 : 0
+  const minutes = parseInt(match[2], 10) * 60000
+  const seconds = parseInt(match[3], 10) * 1000
+  const milliseconds = parseInt(match[4], 10)
+
+  return hours + minutes + seconds + milliseconds
+}
+
+function toSrt (duration) {
+  // return "11:11:11,000";
+  
+  console.log("duration: " + duration)
+  let timestamp = duration * 1000;
+  var milliseconds = parseInt((parseFloat(timestamp) % 1000) / 100),
+  seconds = Math.floor((timestamp / 1000) % 60),
+  minutes = Math.floor((timestamp / (1000 * 60)) % 60),
+  hours = Math.floor((timestamp / (1000 * 60 * 60)) % 24);
+
+  
+  hours = (hours < 10) ? "0" + hours : hours;
+  minutes = (minutes < 10) ? "0" + minutes : minutes;
+  seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+  return hours + ":" + minutes + ":" + seconds + "," + milliseconds;
 }

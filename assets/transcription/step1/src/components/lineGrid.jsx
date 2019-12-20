@@ -43,24 +43,24 @@ function SingleLineGridList(props) {
         {chunks.map(chunk => (
           // <GridListTile
             
-            // key={chunk.startTime} >
-          <Card onClick={() => props.onPlay(chunk.startTime)} style={{display:'inline-block',margin:'0.2em'}}>
+            // key={chunk.starttime} >
+          <Card onClick={() => props.onPlay(chunk.starttime)} style={{display:'inline-block',margin:'0.2em'}}>
             <CardActionArea>
             <CardContent>
               <h2 style={{'textAlign':'center'}}>
-              {timeFormatter(chunk.startTime)} - {timeFormatter(chunk.endTime)}
+              {timeFormatter(chunk.starttime)} - {timeFormatter(chunk.endtime)}
               </h2>
             </CardContent>
             </CardActionArea>
             <CardActions disableSpacing={true}>
             <Button size="small" color="primary" onClick={() =>
-                  props.onPlay(chunk.startTime)
+                  props.onPlay(chunk.starttime)
                 }>
               <PlayArrow />
                 
                 </Button>
             <Button size="small" color="primary" onClick={() =>
-                  props.onDelete(chunk.startTime, chunk.endTime)
+                  props.onDelete(chunk.starttime, chunk.endtime)
                 }>
               <Cancel />
                 
@@ -70,15 +70,15 @@ function SingleLineGridList(props) {
           // </GridListTile>
 
           // <GridListTile
-          //   onClick={() => props.onPlay(chunk.startTime)}
-          //   key={chunk.startTime} >
-          //   <img src={chunk.img} alt={chunk.startTime} />
+          //   onClick={() => props.onPlay(chunk.starttime)}
+          //   key={chunk.starttime} >
+          //   <img src={chunk.img} alt={chunk.starttime} />
 
           //   {/* <VideoThumbnail
           //   crossorigin="anonymous"
           //   videoUrl="http://media.w3.org/2010/05/bunny/movie.mp4"
           //   thumbnailHandler={(thumbnail) => console.log(thumbnail)}
-          //   snapshotAtTime={chunk.startTime}
+          //   snapshotAtTime={chunk.starttime}
           //   cors={true}
           //   width={120}
           //   height={80}
@@ -86,16 +86,16 @@ function SingleLineGridList(props) {
 
           //   <GridListTileBar
           //     title={
-          //       timeFormatter(chunk.startTime) +
+          //       timeFormatter(chunk.starttime) +
           //       " - " +
-          //       timeFormatter(chunk.endTime)
+          //       timeFormatter(chunk.endtime)
           //     }
           //     classes={{
           //       root: classes.titleBar
           //     }}
           //     actionIcon={
-          //       <IconButton aria-label={`star ${chunk.startTime}`} onClick={() =>
-          //         props.onDelete(chunk.startTime, chunk.endTime)
+          //       <IconButton aria-label={`star ${chunk.starttime}`} onClick={() =>
+          //         props.onDelete(chunk.starttime, chunk.endtime)
           //       }>
           //         <CancelIcon
                     
