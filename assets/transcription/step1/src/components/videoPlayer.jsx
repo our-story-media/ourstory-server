@@ -73,6 +73,8 @@ export default class VideoPlayer extends Component {
       let newChunk = {};
       newChunk.starttime = toSrt({ ...chunks[i] }.starttime);
       newChunk.endtime = toSrt({ ...chunks[i] }.endtime);
+      newChunk.creatorid = chunks[i].creatorid;
+      newChunk.updatedat = new Date();
       newChunks.push(newChunk);
     }
 
@@ -150,8 +152,11 @@ export default class VideoPlayer extends Component {
     const { currentTime } = this.state.player;
     let original = Object.assign({}, this.state.original);
 
+    console.log("Name to be saved: ", this.props.name)
+
     let newChunk = {
-      endtime: currentTime
+      endtime: currentTime,
+      creatorid: this.props.name
     };
 
     // Get the index where the current time is larger than the start and smaller than the end
