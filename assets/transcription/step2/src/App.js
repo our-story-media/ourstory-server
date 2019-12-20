@@ -6,22 +6,17 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 function App() {
   // const id = "123";
-  // const apiKey = "23123";
+  // const apikey = "23123";
   const user = "dave";
 
-
   const id = window.location.href.split('/')[5].split('?')[0];
-  const apiKey = window.location.href.split('apikey=')[1];
+  const apikey = window.location.href.split('apikey=')[1];
 
   // const src = "http://media.w3.org/2010/05/bunny/movie.mp4";
   const src = `/api/watch/getvideo/${id}`;
-
   // const transcriptionUri = '/example.json';
-
-  
-
   const transcriptionUri = `/api/watch/edit/${id}`;
-  const updateRequestUri = `/api/watch/savedit/${id}?apikey=${apiKey}`;
+  const updateRequestUri = `/api/watch/savedit/${id}?apikey=${apikey}`;
 
   const [ data, setData ] = React.useState({});
 
@@ -32,7 +27,6 @@ function App() {
       return response.json();
     })
     .then((result)=>{
-      // console.log(result.transcription);
       setData(result);
     })
     .catch((err)=>{
@@ -42,10 +36,10 @@ function App() {
 
   // update data
   const handleUpdate = (chunks)=>{
-    const nextData = {...data, chunks}
+    const nextData = {...data, transcription: {...data.transcription, chunks}}
     setData(nextData);
 
-    const body = JSON.stringify({data});
+    const body = JSON.stringify(nextData);
     console.log(body)
     fetch(updateRequestUri, {
       method: 'post',
@@ -63,7 +57,7 @@ function App() {
     })
   }
 
-  const chunks = get(data, ['chunks'], []);
+  const chunks = get(data, ['transcription','chunks'], []);
   return (
     <React.Fragment>
       <CssBaseline/>
