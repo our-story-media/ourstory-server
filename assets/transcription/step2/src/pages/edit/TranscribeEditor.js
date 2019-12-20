@@ -22,30 +22,20 @@ export default function TranscribeEditor(props){
   const [ startTime, setStartTime] = React.useState(0);
   const [ focus, setFocus] = React.useState(null);
 
-  const handleSelect = (selection)=>{
-    const chunk = chunks[selection.chunkId];
+  const handleSelect = (chunkId)=>{
+    const chunk = chunks[chunkId];
+    setFocus(chunkId);
     setStartTime(chunk.starttime);
-    setFocus(selection.chunkId);
-    setSelection(selection);
   }
 
-  const updateChunk = (chunkId, chunkData)=>{
-    onUpdate(chunks.map((chunk, index)=>(index === chunkId) ? {...chunk, ...chunkData} : chunk));
+  const handleUpdate = ({chunkId, contribId, content})=>{
+    const contributions = contribId < 0 ?
+      [...chunks[chunkId].contributions || [], {user, text:content}] :
+      chunks[chunkId].contributions.map((contribution,index)=>(index ===contribId ? {...contribution, text:content} : contribution));
+    const nextChunks = chunks.map((chunk, index)=>(index === chunkId) ? {...chunk, contributions} : chunk)
+    onUpdate(nextChunks);
   }
 
-  const handleCreateContrib = (contrib)=>{
-    const {chunkId} = selection;
-    const contributions = [...chunks[chunkId].contributions || [], contrib ];
-    updateChunk(chunkId, {contributions})
-    setSelection(null);
-  }
-
-  const handleUpdateContrib = (result)=>{
-    const {chunkId, contribId} = selection;
-    const contributions = chunks[chunkId].contributions.map((contribution,index)=>(index ===contribId ? result : contribution));
-    updateChunk(chunkId, {contributions})
-    setSelection(null);
-  }
 
   return (
     <Container fixed>
@@ -63,33 +53,12 @@ export default function TranscribeEditor(props){
         </Paper>
       </Box>
 
-      {selection && selection.contribution && (
-        <Box marginTop={3}>
-          <ContribEditor
-            title="Edit Contribution"
-            chunk={chunks[selection.chunkId]}
-            contrib={selection.contribution}
-            onCancel={()=>{setSelection(null)}}
-            onSubmit={handleUpdateContrib}/>
-        </Box>
-      )}
-
-      {selection && !selection.contribution && (
-        <Box marginTop={3}>
-          <ContribEditor
-            title="Add Contribution"
-            chunk={chunks[selection.chunkId]}
-            contrib={{user, localeto:'en-AU'}}
-            onCancel={()=>{setSelection(null)}}
-            onSubmit={handleCreateContrib}/>
-        </Box>
-      )}
-
-      <Box marginTop={3} style={{display: selection ? 'none' : 'block'}}>
+      <Box marginTop={3}>
         <ChunkList
           user={user}
           chunks={chunks}
           activeIndex={focus}
+          onUpdate={handleUpdate}
           onSelect={handleSelect}/>
       </Box>
 

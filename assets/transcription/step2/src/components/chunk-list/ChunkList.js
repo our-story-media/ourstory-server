@@ -14,25 +14,21 @@ const useStyles = makeStyles((theme)=>createStyles({
 export default function ChunkList(props){
   const { user, chunks, activeIndex, onSelect } = props;
   const classes = useStyles(props);
-  console.log(user);
-  console.log(chunks);
   return (
     <div className={classes.root}>
       {chunks.map((chunk, index)=>{
         const contributions = chunk.contributions || [];
-        const contribIndex = contributions.findIndex(contribution=>contribution.user === user);
-        const contribution = contribIndex < 0 ? null : chunk.contributions[contribIndex]
+        const contribId = contributions.findIndex(contribution=>contribution.user === user);
+        const contribution = contribId < 0 ? null : chunk.contributions[contribId];
+        const content = contribution ? contribution.text : "";
         return (
           <ChunkItem
             key={index}
             chunk={chunk}
             focused={activeIndex === index}
-            contribution={contribution}
-            onClick={()=>onSelect({
-              chunkId: index,
-              contribId: contribIndex,
-              contribution
-            })}/>
+            content={content}
+            onUpdate={(content)=>props.onUpdate({chunkId: index, contribId, content}) }
+            onActive={()=>props.onSelect(index)}/>
         );
       })}
     </div>

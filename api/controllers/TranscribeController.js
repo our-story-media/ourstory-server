@@ -15,7 +15,21 @@ module.exports = {
             console.log(req.param('name'));
         }
 
-		return res.view({ id: req.param('id'), edit });
+        var withContrib = _.filter(edit.transcription.chunks,function(c){
+            return c.contributions.length > 0;
+        });
+
+        var reviewed = _.filter(edit.transcription.chunks,function(c){
+            return c.adoptedContribution;
+        });
+
+        var progress = {
+            stage1: (edit.transcription.chunks.length > 0) ? 100 : 0,
+            stage2: Math.round((withContrib.length / edit.transcription.chunks.length)*100),
+            stage3: Math.round((reviewed.length / edit.transcription.chunks.length)*100)
+        }
+
+		return res.view({ id: req.param('id'), edit, progress });
     },
     
     step1: function(req,res)
