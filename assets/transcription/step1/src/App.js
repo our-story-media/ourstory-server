@@ -14,8 +14,8 @@ function App() {
   var id = window.location.href.split("/")[5].split("?")[0];
   var apikey = parsed.apikey;
   var name = parsed.name;
-  console.log(parsed);
-  console.log("Name: ", name)
+  // console.log(parsed);
+  // console.log("Name: ", name)
   
 
   // var id = 1;

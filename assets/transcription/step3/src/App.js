@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import TranscriptionScroll from "./components/transcriptionScroll";
+import queryString from "query-string";
 
 const sources = {
   bunnyTrailer: "http://media.w3.org/2010/05/bunny/trailer.mp4",
@@ -8,8 +9,13 @@ const sources = {
 };
 
 const id = window.location.href.split("/")[5].split("?")[0];
-const apikey = window.location.href.split("apikey=")[1];
-const reviewer = "PeterChen";
+// const apikey = window.location.href.split("apikey=")[1];
+// const reviewer = "PeterChen";
+
+const parsed = queryString.parse(window.location.search);
+
+const apikey = parsed.apikey;
+const reviewer = parsed.name;
 
 function App() {
   return (

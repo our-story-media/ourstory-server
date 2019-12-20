@@ -37,6 +37,8 @@ export default class TranscriptionScroll extends Component {
         }
 
         result.data.transcription.chunks.forEach(chunk => {
+          if (!chunk.contributions) chunk.contributions = [];
+
           chunk.contributions.forEach(contribution => {
             if (!contribution.annotations) contribution.annotations = [];
           })

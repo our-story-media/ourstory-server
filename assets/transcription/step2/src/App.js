@@ -2,15 +2,20 @@ import React from 'react';
 import get from 'lodash/get';
 import TranscribeEditor from 'pages/edit';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import queryString from "query-string";
 
 
 function App() {
   // const id = "123";
   // const apikey = "23123";
-  const user = "dave";
 
   const id = window.location.href.split('/')[5].split('?')[0];
-  const apikey = window.location.href.split('apikey=')[1];
+  // const apikey = window.location.href.split('apikey=')[1];
+
+  const parsed = queryString.parse(window.location.search);
+  
+  const apikey = parsed.apikey;
+  const user = parsed.name;
 
   // const src = "http://media.w3.org/2010/05/bunny/movie.mp4";
   const src = `/api/watch/getvideo/${id}`;
