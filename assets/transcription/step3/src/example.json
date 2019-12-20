@@ -1,0 +1,404 @@
+{
+  "id": 1,
+  "chunks": [
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:00:00,260",
+      "endtime": "00:00:02,880",
+      "contributions": [
+        {
+          "text": "The story of Zika",
+          "timestamp": "dd-mm-yyyy-hh:mm:ss",
+          "user": "tom",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        },
+        {
+          "text": "The story of Zika",
+          "timestamp": "dd-mm-yyyy-hh:mm:ss",
+          "user": "dave",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:00:18,880",
+      "endtime": "00:00:22,480",
+      "contributions": [
+        {
+          "text": "How are you? My name is Jesús Pardo and we are from here in the community of",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:00:22,490",
+      "endtime": "00:00:27,710",
+      "contributions": [
+        {
+          "text": "Ondas Del Caribe. Where we can find that it is a neighborhood where it is difficult for",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:00:27,710",
+      "endtime": "00:00:32,419",
+      "contributions": [
+        {
+          "text": "people to access places and move around, because of the waste water as",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:00:32,419",
+      "endtime": "00:00:36,320",
+      "contributions": [
+        {
+          "text": "you can see now. This waste water has become",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:00:36,320",
+      "endtime": "00:00:40,220",
+      "contributions": [
+        {
+          "text": "a very big problem for the community. And through this we observe that",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:00:40,220",
+      "endtime": "00:00:45,680",
+      "contributions": [
+        {
+          "text": "the Zika insect reproduces. Which then has become a problem and created difficulties",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:00:45,680",
+      "endtime": "00:00:50,350",
+      "contributions": [
+        {
+          "text": "for families, children, parents and a problem which keeps recurring",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:00:50,350",
+      "endtime": "00:00:55,480",
+      "contributions": [
+        {
+          "text": "continously. We keep seeing these episodes in the family of children who are being",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:00:55,480",
+      "endtime": "00:01:00,890",
+      "contributions": [
+        {
+          "text": "affected by the Zika virus. We have come to tell one such real life story,",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:00,890",
+      "endtime": "00:01:07,160",
+      "contributions": [
+        {
+          "text": "of a child, actually a child of a friend here from the neighborhood whose",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:07,160",
+      "endtime": "00:01:12,080",
+      "contributions": [
+        {
+          "text": "child was affected by this. And then let's hear the story told straight from the",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:12,080",
+      "endtime": "00:01:13,700",
+      "contributions": [
+        {
+          "text": "father of the child in his own words.",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:13,700",
+      "endtime": "00:01:15,940",
+      "contributions": [
+        {
+          "text": "Good afternoon neighbor, pleased to meet you. My name is Ronaldo Serrano.",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:16,200",
+      "endtime": "00:01:20,100",
+      "contributions": [
+        {
+          "text": "My name is Libni Pardo. We are from the 'Prevention against",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:20,120",
+      "endtime": "00:01:23,340",
+      "contributions": [
+        {
+          "text": "Zika'. My colleague is going to explain a very important issue.",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:23,400",
+      "endtime": "00:01:25,540",
+      "contributions": [
+        {
+          "text": "Welcome, please sit down.",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:25,540",
+      "endtime": "00:01:28,080",
+      "contributions": [
+        {
+          "text": "My good neighbor, look. These are one of the",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:28,080",
+      "endtime": "00:01:34,580",
+      "contributions": [
+        {
+          "text": "practices that normally the community does daily; leave stagnant water,",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:34,640",
+      "endtime": "00:01:39,890",
+      "contributions": [
+        {
+          "text": "tires in poor condition that still remain in their yards. These becomes",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:39,890",
+      "endtime": "00:01:44,119",
+      "contributions": [
+        {
+          "text": "mosquito breeding sites and one of the most infamous mosquitoes is Zika.",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:44,119",
+      "endtime": "00:01:46,119",
+      "contributions": [
+        {
+          "text": "My partner will explain to you what Zika is.",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:46,119",
+      "endtime": "00:01:48,560",
+      "contributions": [
+        {
+          "text": "One of the mosquitoes, Zika,",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:48,560",
+      "endtime": "00:01:55,040",
+      "contributions": [
+        {
+          "text": "produces between 150 to 300 eggs. Well, to avoid that this immediately",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:55,040",
+      "endtime": "00:01:59,500",
+      "contributions": [
+        {
+          "text": "infect your community, we will need to eliminate",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "creatorid": "del",
+      "timestamp": "dd-mm-yyyy-hh:mm:ss",
+      "starttime": "00:01:59,500",
+      "endtime": "00:02:02,540",
+      "contributions": [
+        {
+          "text": "these types of activities. Exactly!",
+          "user": "",
+          "localeto": "en-AU",
+          "localefrom": "es_CO",
+          "annotations": []
+        }
+      ]
+    }
+  ]
+}

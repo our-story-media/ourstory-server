@@ -70,13 +70,13 @@ module.exports = {
             var subs_text = _.map(subs.chunks, function (chunk) {
                 sequence++;
                 var text = chunk.adoptedContribution.text;
-                var start = chunk.starttime.replace('.', ',');
-                var end = chunk.endtime.replace('.', ',');
-                return `${sequence}\n${start} --> ${end}\n${text}\n\n`;
+                var start = chunk.starttime;
+                var end = chunk.endtime;
+                return `${parseInt(sequence)}\n${start} --> ${end}\n${text}\n\n`;
             });
 
             res.header('Content-Disposition', 'attachment; filename="subtitles.srt"');
-            return res.send(subs_text.join());
+            return res.send(subs_text.join(''));
         }
         catch (e) {
             console.log(e);
