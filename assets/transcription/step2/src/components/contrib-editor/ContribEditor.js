@@ -34,8 +34,8 @@ export default function ChunkEditor(props){
     props.onCancel();
   }
 
-  const {startTime, endTime} = chunk;
-  const subheader = `${startTime} - ${endTime}`
+  const {starttime, endtime} = chunk;
+  const subheader = `${starttime} - ${endtime}`
 
   return (
     <Card className={classes.root}>

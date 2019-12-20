@@ -21,7 +21,7 @@ function App() {
   
 
   const transcriptionUri = `/api/watch/edit/${id}`;
-  const updateRequestUri = `/api/watch/savedit/${id}?apiKey=${apiKey}`;
+  const updateRequestUri = `/api/watch/savedit/${id}?apikey=${apiKey}`;
 
   const [ data, setData ] = React.useState({});
 
@@ -32,8 +32,8 @@ function App() {
       return response.json();
     })
     .then((result)=>{
-      console.log(result.transcription);
-      setData(result.transcription);
+      // console.log(result.transcription);
+      setData(result);
     })
     .catch((err)=>{
       console.error(err);
@@ -45,7 +45,7 @@ function App() {
     const nextData = {...data, chunks}
     setData(nextData);
 
-    const body = JSON.stringify({data: nextData});
+    const body = JSON.stringify({data});
     console.log(body)
     fetch(updateRequestUri, {
       method: 'post',

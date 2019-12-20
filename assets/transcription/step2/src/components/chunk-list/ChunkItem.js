@@ -22,8 +22,8 @@ type ChunkItemProps = {
 export default function ChunkItem(props : ChunkItemProps){
   const { chunk, contribution, onClick } = props;
   const classes = useStyles(props);
-  const {startTime, endTime} = chunk;
-  const title = `${startTime} - ${endTime}`
+  const {starttime, endtime} = chunk;
+  const title = `${starttime} - ${endtime}`
   return (
     <Card className={classes.root} onClick={onClick}>
       <CardHeader

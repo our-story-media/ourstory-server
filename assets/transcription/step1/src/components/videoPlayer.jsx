@@ -44,8 +44,8 @@ export default class VideoPlayer extends Component {
         }
 
         result.data.transcription.chunks.forEach(chunk => {
-          chunk.starttime = toMS(chunk.starttime);
-          chunk.endtime = toMS(chunk.endtime);
+          chunk.starttime = toSecond(chunk.starttime);
+          chunk.endtime = toSecond(chunk.endtime);
         });
 
         console.log(result.data);
@@ -77,12 +77,15 @@ export default class VideoPlayer extends Component {
     }
 
     console.log("newchunks: ", newChunks);
-    // newOriginal.transcription.chunks = newChunks;
 
-    // axios.post('/api/watch/savedit/' + this.props.id + '?apikey=' + this.props.apikey,  newOriginal).then(function (result) {
-    //   // Update last saved display
-    //   console.log(result)
-    // });
+    let tempstr = JSON.stringify(this.state.original);
+    let temp = JSON.parse(tempstr);
+    temp.transcription.chunks = newChunks;
+
+    axios.post('/api/watch/savedit/' + this.props.id + '?apikey=' + this.props.apikey,  temp).then(function (result) {
+      // Update last saved display
+      console.log(result)
+    });
   }
 
   handlePlay = starttime => {
@@ -278,7 +281,7 @@ export default class VideoPlayer extends Component {
   }
 }
 
-function toMS(timestamp) {
+function toSecond(timestamp) {
   if (!isNaN(timestamp)) {
     return timestamp;
   }
@@ -294,12 +297,10 @@ function toMS(timestamp) {
   const seconds = parseInt(match[3], 10) * 1000;
   const milliseconds = parseInt(match[4], 10);
 
-  return hours + minutes + seconds + milliseconds;
+  return (hours + minutes + seconds + milliseconds) / 1000;
 }
 
 function toSrt(duration) {
-  // return "11:11:11,000";
-
   console.log("duration: " + duration);
   let timestamp = duration * 1000;
   var milliseconds = parseInt((parseFloat(timestamp) % 1000) / 100),
@@ -307,9 +308,15 @@ function toSrt(duration) {
     minutes = Math.floor((timestamp / (1000 * 60)) % 60),
     hours = Math.floor((timestamp / (1000 * 60 * 60)) % 24);
 
+    console.log(milliseconds)
+  if (milliseconds < 10) milliseconds = "00" + milliseconds
+  else milliseconds = "0" + milliseconds
+
   hours = hours < 10 ? "0" + hours : hours;
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
+
+  console.log(hours + ":" + minutes + ":" + seconds + "," + milliseconds)
 
   return hours + ":" + minutes + ":" + seconds + "," + milliseconds;
 }

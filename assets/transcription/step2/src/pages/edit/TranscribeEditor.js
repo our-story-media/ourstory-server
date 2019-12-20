@@ -35,7 +35,7 @@ export default function TranscribeEditor(props){
 
   const handleCreateContrib = (contrib)=>{
     const {chunkId} = selection;
-    const contributions = [...chunks[chunkId].contributions, contrib ];
+    const contributions = [...chunks[chunkId].contributions || [], contrib ];
     updateChunk(chunkId, {contributions})
     setSelection(null);
   }
