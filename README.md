@@ -1,10 +1,12 @@
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/our-story-media/ourstory-server.svg) ![GitHub](https://img.shields.io/github/license/our-story-media/ourstory-server.svg) 
 
 AMD64 Build
+*auto built for tagged versions on Azure DevOps*
 
 [![Build Status](https://dev.azure.com/ourstorytitan/OurStoryBuilds/_apis/build/status/our-story-media.ourstory-server?branchName=master)](https://dev.azure.com/ourstorytitan/OurStoryBuilds/_build/latest?definitionId=10&branchName=master)
 
 ARM v7 Titan Build
+*auto built for tagged versions on Drone.io*
 
 [![Build Status](https://cloud.drone.io/api/badges/our-story-media/ourstory-server/status.svg)](https://cloud.drone.io/our-story-media/ourstory-server) [![](https://images.microbadger.com/badges/image/bootlegger/titan-compact.svg)](https://microbadger.com/images/bootlegger/titan-compact "Get your own image badge on microbadger.com")
 
