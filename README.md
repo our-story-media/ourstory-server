@@ -5,7 +5,7 @@ AMD64 Build
 
 [![Build Status](https://dev.azure.com/ourstorytitan/OurStoryBuilds/_apis/build/status/our-story-media.ourstory-server?branchName=master)](https://dev.azure.com/ourstorytitan/OurStoryBuilds/_build/latest?definitionId=10&branchName=master)
 
-ARM v7 Titan Build
+ARM v7 Titan Compact Build (Includes server and worker)
 *auto built for tagged versions on Drone.io*
 
 [![Build Status](https://cloud.drone.io/api/badges/our-story-media/ourstory-server/status.svg)](https://cloud.drone.io/our-story-media/ourstory-server) [![](https://images.microbadger.com/badges/image/bootlegger/titan-compact.svg)](https://microbadger.com/images/bootlegger/titan-compact "Get your own image badge on microbadger.com")
@@ -45,3 +45,13 @@ Runtime External Dependencies for Online Edition:
 - Amazon S3 Account
 - Amazon Elastic Transcoder Account
 - SendGrid Account
+
+# Titan Builds
+
+The `images.tar` and `indaba-update.tar` files, used for the Windows Titan and RPi Titan software can be generated using the scripts in `docker/titan`.
+
+`build-compact.sh` builds the compact RPi docker image (local version of Drone.io process).
+
+`uploadtitan-amd64.sh` tags and uploads the Windows x64 Docker tar file.
+
+`uploadtitan-armv7.sh` tags and uploads the RPi armv7 Docker tar file containing titan-compact.
