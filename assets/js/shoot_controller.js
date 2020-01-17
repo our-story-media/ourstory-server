@@ -161,12 +161,22 @@ bootleggerApp.filter('hasEditTag', function() {
 bootleggerApp.filter('topicFilter', function() {
   return function( items, params ) {
       var filtered = [];
+
+      // console.log("params: "+typeof(params[0]));
+
       // If time is with the range
       angular.forEach(items, function(item) {
         if ((params && item.meta && item.meta.static_meta && item.meta.static_meta['-topics']))
         {
+          
           var t = item.meta.static_meta['-topics'].split(',');
-          if (_.union(t,params).length > 0)
+          var intersection = _.intersection(_.map(t,parseInt), params);
+          // console.log("t: "+typeof(t[0]));
+
+          // console.log('t:'+t)
+          // console.log('union:'+_.intersection(t,params))
+          // if (_.intersection(t,params).length > 0)
+          if (intersection.length > 0)
             filtered.push(item);
         }
         else
