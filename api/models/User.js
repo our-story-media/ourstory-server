@@ -45,7 +45,7 @@ getlocalcode:function(cb)
 	  	{
 			newcode = Math.floor((Math.random()*99999)).toString();
 			//find list of codes
-			if (!_.contains(allcodes,newcode))
+			if (!_.includes(allcodes,newcode))
 				done=true;
 		}
 		//console.log('newcode: '+newcode);

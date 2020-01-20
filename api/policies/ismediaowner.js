@@ -14,7 +14,7 @@ module.exports = function (req, res, ok) {
 	if (!id || !user)
 		return res.forbidden();
 	
-	if (req.session.passport && req.session.passport.user && _.contains(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
+	if (req.session.passport && req.session.passport.user && _.includes(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
 	{
 		return ok();
 	}
@@ -29,7 +29,7 @@ module.exports = function (req, res, ok) {
 			
 			Event.findOne(media.event_id,function(err,shoot){
 				//if the user is admin on the shoot for the media				
-				if (_.contains(shoot.ownedby,user))
+				if (_.includes(shoot.ownedby,user))
 					return ok();
 				else
                     return forbidden();

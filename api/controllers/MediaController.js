@@ -697,7 +697,7 @@ module.exports = {
 									users.push(mm);
 								});
 
-								users = _.unique(users);
+								users = _.uniq(users);
 								//anyone who's invited:
 								User.find({ id: users }).exec(function (err, users) {
 									_.each(users, function (u) {
@@ -803,7 +803,7 @@ module.exports = {
 			});
 
 
-			var users = _.unique(_.pluck(data, 'created_by')).length;
+			var users = _.uniq(_.map(data, 'created_by')).length;
 			var mins = _.reduce(data, function (sum, m) {
 				if (m.meta.static_meta.clip_length) {
 					var durations = m.meta.static_meta.clip_length.split(':');
@@ -886,7 +886,7 @@ module.exports = {
 
 			var output = [];
 			_.forOwn(keys, function (value, key) {
-				output.push({ key: key, title: keys[key].title, transform: keys[key].transform, examples: keys[key].examples = _.unique(value.examples) });
+				output.push({ key: key, title: keys[key].title, transform: keys[key].transform, examples: keys[key].examples = _.uniq(value.examples) });
 			});
 
 			res.json(output);
@@ -955,7 +955,7 @@ module.exports = {
 			}
 			else {
 				//console.log('bottom of tree, return files');
-				//console.log(_.pluck(files,'path'));
+				//console.log(_.map(files,'path'));
 
 				return _.map(files, function (r) {
 					//console.log(r.meta.static_meta.nicepath);

@@ -530,7 +530,7 @@ module.exports = {
 						if (module.exports.event_modules[k].AllEvents[eventid])
 						{
 							var users = module.exports.event_modules[k].AllEvents[eventid].users;
-							cb(_.pluck(users,'id'));
+							cb(_.map(users,'id'));
 						}
 					}
 				});

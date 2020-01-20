@@ -419,7 +419,7 @@ module.exports = {
 		Shot.find({}).exec(function (err, shots) {
 
 			//remove duplicates:
-			var uni = _.unique(shots, function (u) {
+			var uni = _.uniq(shots, function (u) {
 				return u.name + u.icon;
 			})
 			res.json(uni);
@@ -454,18 +454,18 @@ module.exports = {
 	// 		//add in missing modules:
 	// 		if (!myev.post_modules) {
 	// 			myev.post_modules = {};
-	// 			_.each(_.pluck(sails.eventmanager.post_modules, 'codename'), function (m) {
+	// 			_.each(_.map(sails.eventmanager.post_modules, 'codename'), function (m) {
 	// 				myev.post_modules[m] = 0;
 	// 			});
 	// 		}
 
 	// 		if (!myev.shoot_modules) {
 	// 			myev.shoot_modules = {};
-	// 			_.each(_.pluck(sails.eventmanager.event_modules, 'codename'), function (m) {
+	// 			_.each(_.map(sails.eventmanager.event_modules, 'codename'), function (m) {
 	// 				myev.shoot_modules[m] = 0;
 	// 			});
 
-	// 			//var lastone = _.last(_.pluck(sails.eventmanager.event_modules,'codename'));
+	// 			//var lastone = _.last(_.map(sails.eventmanager.event_modules,'codename'));
 	// 			myev.shoot_modules['marathondirector'] = "1";
 	// 		}
 

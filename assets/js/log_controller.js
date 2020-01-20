@@ -29,7 +29,7 @@ bootleggerApp.filter('testFilter', function() {
           var str = JSON.stringify(item).toLowerCase();
           var push = true;
           _.each(terms,function(t){
-            if (_.contains(str,t.trim()))
+            if (_.includes(str,t.trim()))
               push = false;  
            })
            if (push)

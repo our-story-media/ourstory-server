@@ -113,7 +113,7 @@ module.exports = {
         '/%s/destroy/:id?': 'destroy'
       };
 
-      var shortcutAction = _.findWhere(shortcutRoutes, function (blueprint, pattern) {
+      var shortcutAction = _.find(shortcutRoutes, function (blueprint, pattern) {
         var shortcutRoute = util.format(pattern, baseRoute);
         return req.route.path === shortcutRoute;
       });
@@ -129,7 +129,7 @@ module.exports = {
         'delete /%s/:id?': 'destroy'
       };
 
-      var restAction = _.findWhere(restRoutes, function (blueprint, pattern) {
+      var restAction = _.find(restRoutes, function (blueprint, pattern) {
         var restRoute = util.format(pattern, baseRoute);
         return requestRoute === restRoute;
       });
@@ -145,7 +145,7 @@ module.exports = {
           'delete /%s/:parentid/%s': 'remove'
         };
 
-        return _.findWhere(associationRoutes, function (blueprint, pattern) {
+        return _.find(associationRoutes, function (blueprint, pattern) {
           var associationRoute = util.format(pattern, baseRoute, alias);
           return requestRoute === associationRoute;
         });

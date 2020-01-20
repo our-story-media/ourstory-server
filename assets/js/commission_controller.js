@@ -115,7 +115,7 @@ bootleggerApp.controller('commission', ['$scope', '$bootleggerSails', '$timeout'
   }
 
   $scope.addrole = function () {
-    var index = (parseInt(_.max(_.pluck($scope.event.roles, 'id'))) + 1) || 0;
+    var index = (parseInt(_.max(_.map($scope.event.roles, 'id'))) + 1) || 0;
     $scope.event.roles.unshift({ id: index, name: 'New Role', description: '', shot_ids: [], editing: true });
   }
 
@@ -128,7 +128,7 @@ bootleggerApp.controller('commission', ['$scope', '$bootleggerSails', '$timeout'
     if (!$scope.event.phases)
       $scope.event.phases = [];
 
-    var index = parseInt(_.max(_.pluck($scope.event.phases, 'id'))) + 1;
+    var index = parseInt(_.max(_.map($scope.event.phases, 'id'))) + 1;
     $scope.event.phases.unshift({ id: index, name: 'New Phase', description: '', roles: [], editing: true });
   }
 
@@ -286,7 +286,7 @@ bootleggerApp.controller('commission', ['$scope', '$bootleggerSails', '$timeout'
     }
     else {
       _.each($scope.event.shot_types, function (s) {
-        if (s.shot_type == 'PHOTO' && _.contains(_.find($scope.event.roles, { id: role }).shot_ids, s.id))
+        if (s.shot_type == 'PHOTO' && _.includes(_.find($scope.event.roles, { id: role }).shot_ids, s.id))
           count++;
       });
       //console.log(count +" shots in role from main list, shots in role from role "+$scope.event.roles[role].shot_ids.length);
@@ -311,7 +311,7 @@ bootleggerApp.controller('commission', ['$scope', '$bootleggerSails', '$timeout'
     else {
       _.each($scope.event.shot_types, function (s) {
 
-        if ((s.shot_type == 'VIDEO' || s.shot_type == undefined) && _.contains(_.find($scope.event.roles, { id: role }).shot_ids, s.id)) {
+        if ((s.shot_type == 'VIDEO' || s.shot_type == undefined) && _.includes(_.find($scope.event.roles, { id: role }).shot_ids, s.id)) {
           //console.log(s.shot_type);
           count++;
         }
@@ -336,7 +336,7 @@ bootleggerApp.controller('commission', ['$scope', '$bootleggerSails', '$timeout'
     }
     else {
       _.each($scope.event.shot_types, function (s) {
-        if (s.shot_type == 'AUDIO' && _.contains(_.find($scope.event.roles, { id: role }).shot_ids, s.id))
+        if (s.shot_type == 'AUDIO' && _.includes(_.find($scope.event.roles, { id: role }).shot_ids, s.id))
           count++;
       });
       //console.log((count / $scope.event.roles[role].shot_ids.length) *100 + " audio");
@@ -374,14 +374,14 @@ bootleggerApp.controller('commission', ['$scope', '$bootleggerSails', '$timeout'
 
   $scope.inRole = function (m) {
     if ($scope.selection.currentrole)
-      return _.contains($scope.selection.currentrole.shot_ids, m.id);
+      return _.includes($scope.selection.currentrole.shot_ids, m.id);
     else
       return false;
   }
 
   $scope.inPhase = function (r) {
     if ($scope.selection.currentphase)
-      return _.contains($scope.selection.currentphase.roles, r.id);
+      return _.includes($scope.selection.currentphase.roles, r.id);
     else
       return false;
   }

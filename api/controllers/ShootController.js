@@ -67,7 +67,7 @@ module.exports = {
 
         Media.find({ event_id: req.param('id') }).exec(function (err, media) {
           _.each(media, function (m) {
-            if (!_.contains(users, m.created_by))
+            if (!_.includes(users, m.created_by))
               users.push(m.created_by);
           });
 

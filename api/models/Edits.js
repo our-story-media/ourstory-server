@@ -27,14 +27,14 @@ module.exports = {
 			var allcodes = new Array();
 
 			//get all codes:
-			var allcodes = _.pluck(events, 'shortlink');
+			var allcodes = _.map(events, 'shortlink');
 
 			while (!done)
 			{
 
 				newcode = shortId.generate();
 				//find list of codes
-				if (!_.contains(allcodes,newcode))
+				if (!_.includes(allcodes,newcode))
 					done=true;
 			}
 			//console.log('newcode: '+newcode);

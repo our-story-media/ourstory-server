@@ -100,7 +100,7 @@ bootleggerApp.filter('checkFilter', function() {
           return items;
         // If time is with the range
         angular.forEach(items, function(item) {
-          if (_.contains(params.value,getProperty(item, params.name)))
+          if (_.includes(params.value,getProperty(item, params.name)))
             filtered.push(item);
         });
         return filtered;
@@ -545,38 +545,38 @@ $scope.$watch('masterpix', function(newValue, oldValue) {
 
 $scope.updateFilters = function()
 {
-  $scope.contributors = _.unique(_.compact(_.map($scope.media,function(m){
+  $scope.contributors = _.uniq(_.compact(_.map($scope.media,function(m){
     return m.user;
   })),
   function(u){
     return u.profile.displayName;
   });
 
-  $scope.roles = _.unique(_.map($scope.media,function(m){
+  $scope.roles = _.uniq(_.map($scope.media,function(m){
     return m.meta.role_ex.name;
   }));
 
-  $scope.coverage = _.unique(_.map($scope.media,function(m){
+  $scope.coverage = _.uniq(_.map($scope.media,function(m){
     return m.meta.coverage_class_ex.name;
   }));
 
-  $scope.phases = _.unique(_.map($scope.media,function(m){
+  $scope.phases = _.uniq(_.map($scope.media,function(m){
       return m.meta.phase_ex.name;
   }));
 
-  $scope.takenshots = _.unique(_.map($scope.media,function(m){
+  $scope.takenshots = _.uniq(_.map($scope.media,function(m){
     return m.meta.shot_ex;
   }),function(u){
     return u.id;
   });
 
-   $scope.takenmeta = _.unique(_.map($scope.media,function(m){
+   $scope.takenmeta = _.uniq(_.map($scope.media,function(m){
     return m.meta.meta;
   }));
 
   // $scope.tagsmeta = 
 
-  // $scope.tagsmeta = _.unique(_.compact(_.flatten(_.map($scope.media,function(m){
+  // $scope.tagsmeta = _.uniq(_.compact(_.flatten(_.map($scope.media,function(m){
   //   if (m.meta && m.meta.static_meta && m.meta.static_meta['-topics'])
   //     return m.meta.static_meta['-topics'].split(',');
   //   else

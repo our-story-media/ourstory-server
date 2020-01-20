@@ -88,8 +88,8 @@ module.exports = {
 		let data = await Media.find({}, { fields: { 'created_by': 1, 'event_id': 1, 'meta.static_meta.clip_length': 1 }, sort: 'created_by' }).sort('created_by');
 		// console.log(data);
 		var medialength = data.length;
-		var ucount = _.unique(_.pluck(data, 'created_by')).length;
-		var evcount = _.unique(_.pluck(data, 'event_id')).length;
+		var ucount = _.uniq(_.map(data, 'created_by')).length;
+		var evcount = _.uniq(_.map(data, 'event_id')).length;
 
 		var mins = _.reduce(data, function (a, f) {
 			if (f.meta.static_meta.clip_length) {
@@ -105,7 +105,7 @@ module.exports = {
 				return a;
 			}
 		}, 0);
-		//var evcount = _.unique(_.pluck(data,'event_id')).length;
+		//var evcount = _.uniq(_.map(data,'event_id')).length;
 
 		return res.json({ users: ucount, events: evcount, media: medialength, mins: mins, stories });
 		//live right now...
@@ -195,7 +195,7 @@ module.exports = {
 			else {
 				if (!req.wantsJSON) {
 					// Event.find({ public: [1, true] }).exec(function (err, upcoming) {
-					// 	//console.log(_.pluck(upcoming,'name'));
+					// 	//console.log(_.map(upcoming,'name'));
 					// 	var ups = _.filter(upcoming, function (u) {
 					// 		//console.log(u.ends);
 					// 		//console.log(moment(u.ends,"DD-MM-YYYY"));
@@ -525,7 +525,7 @@ module.exports = {
 	 * @apiSuccess {String} msg Should return 'ok'
 	 */
 	fakejson: function (req, res) {
-		if (!_.contains(process.argv, '--prod')) {
+		if (!_.includes(process.argv, '--prod')) {
 			var uuid = require('node-uuid');
 			var fakeid = uuid.v1();
 			usercount++;

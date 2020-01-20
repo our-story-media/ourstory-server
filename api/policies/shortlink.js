@@ -16,7 +16,7 @@
 		{
 			Event.findOne(edit.media[0].event_id).exec(function(err,ev){
 				
-				if (ev && ev.publicshare || edit.user_id == req.session.passport.user.id || _.contains(ev.ownedby,req.session.passport.user.id) || _.contains(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
+				if (ev && ev.publicshare || edit.user_id == req.session.passport.user.id || _.includes(ev.ownedby,req.session.passport.user.id) || _.includes(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
 				{
 					return ok();
 				}

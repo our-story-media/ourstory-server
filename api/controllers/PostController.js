@@ -74,9 +74,9 @@ module.exports = {
 
         var notuploaded = _.filter(media,function(m){return typeof m.path == 'undefined';});
         //console.log("notuploaded: "+notuploaded.length);
-        var usersnotuploaded = _.pluck(notuploaded,'created_by');
+        var usersnotuploaded = _.map(notuploaded,'created_by');
         //console.log("user: "+usersnotuploaded.length);
-        var uniqueusers = _.unique(usersnotuploaded);
+        var uniqueusers = _.uniq(usersnotuploaded);
         //console.log("unique users: "+uniqueusers);
         //for each one of these, find the session info:
         //console.log("send msg"+us);
@@ -168,7 +168,7 @@ module.exports = {
       });
       //emit status:
 
-      var users = _.unique(_.pluck(data, 'created_by')).length;
+      var users = _.uniq(_.map(data, 'created_by')).length;
       var mins = _.reduce(data, function(sum, m) {
         if (m.meta.static_meta.clip_length)
         {
@@ -183,7 +183,7 @@ module.exports = {
         }
       },0);
 
-      //var usersmissing = _.pluck(missing, 'created_by')).length;
+      //var usersmissing = _.map(missing, 'created_by')).length;
       //console.log(usersmissing);
 
         User.find({}).exec(function(err,allusers)
@@ -195,7 +195,7 @@ module.exports = {
             // console.log(usersmissing);
 
             usersmissing=  _.map(usersmissing,function(val, num){
-              var x = _.findWhere(allusers, {id: num});
+              var x = _.find(allusers, {id: num});
               if (x)
               return {
                 name: x.profile.displayName,
@@ -239,11 +239,11 @@ module.exports = {
               // m.meta.role_ex = ev.eventtype.roles[m.meta.static_meta.role];
               if (m.meta.role_ex==undefined)
                 m.meta.role_ex = {name:'Unknown'};
-              m.user = _.findWhere(users, {id: m.created_by});
+              m.user = _.find(users, {id: m.created_by});
               if (!m.user)
                 m.user = {profile:{displayName:'Unknown'}};
               //console.log(m.meta.static_meta.shot);
-              //console.log(_.findWhere(ev.eventtype.shot_types,{id:m.meta.static_meta.shot}));
+              //console.log(_.find(ev.eventtype.shot_types,{id:m.meta.static_meta.shot}));
               m.meta.shot_ex = ev.eventtype.shot_types[m.meta.static_meta.shot];
               if (!m.meta.shot_ex)
                 m.meta.shot_ex = {name:'Unknown'};

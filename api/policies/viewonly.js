@@ -13,7 +13,7 @@ module.exports = function (req, res, ok) {
 
 var ev = req.params.id;
 
-if (_.contains(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
+if (_.includes(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
 {
   return ok();
 }
@@ -29,7 +29,7 @@ else
         {
             //console.log(e.ownedby + " " + req.session.passport.user.id);
             //console.log(_.filter(e.codes,function(c){ return c.uid == req.session.passport.user.id; }));
-            if ((e.codes && _.filter(e.codes,function(c){ return c.uid == req.session.passport.user.id; }).length > 0 && e.publicview) || (_.contains(e.ownedby,req.session.passport.user.id)))
+            if ((e.codes && _.filter(e.codes,function(c){ return c.uid == req.session.passport.user.id; }).length > 0 && e.publicview) || (_.includes(e.ownedby,req.session.passport.user.id)))
             {
               return ok();
             }

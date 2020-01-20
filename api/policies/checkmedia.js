@@ -65,7 +65,7 @@ module.exports = function (req, res, ok) {
 		if (req.session.passport && req.session.passport.user.localadmin)
 			return ok();
 
-		if (req.session.passport && req.session.passport.user && _.contains(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
+		if (req.session.passport && req.session.passport.user && _.includes(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
 		{
 			return ok();
 		}
@@ -85,7 +85,7 @@ module.exports = function (req, res, ok) {
 					if (!err && shoot)
 					{
 						//if the user is admin on the shoot for the media				
-						if (_.contains(shoot.ownedby,user))
+						if (_.includes(shoot.ownedby,user))
 							return ok();
 						
 						//if the user is a contributor to the shoot and the shoot allows viewing

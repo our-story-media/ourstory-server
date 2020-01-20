@@ -60,7 +60,7 @@ module.exports = {
               m.meta.role_ex = { name: 'Unknown' };
             }
 
-            var uuu = _.findWhere(users, { id: m.created_by });
+            var uuu = _.find(users, { id: m.created_by });
             m.user = { profile: { displayName: 'Anon' } };
 
             if (uuu) {
@@ -73,7 +73,7 @@ module.exports = {
               }
             }
             //console.log(m.meta.static_meta.shot);
-            //console.log(_.findWhere(ev.eventtype.shot_types,{id:m.meta.static_meta.shot}));
+            //console.log(_.find(ev.eventtype.shot_types,{id:m.meta.static_meta.shot}));
             if (m.meta.static_meta.shot) {
               m.meta.shot_ex = ev.eventtype.shot_types[m.meta.static_meta.shot];
             }
@@ -155,7 +155,7 @@ module.exports = {
                 m.meta.role_ex = { name: 'Unknown' };
               }
 
-              //var uuu = _.findWhere(users, {id: m.created_by});
+              //var uuu = _.find(users, {id: m.created_by});
               m.user = { profile: { displayName: 'Anon' } };
 
               if (user) {
@@ -168,7 +168,7 @@ module.exports = {
                 }
               }
               //console.log(m.meta.static_meta.shot);
-              //console.log(_.findWhere(ev.eventtype.shot_types,{id:m.meta.static_meta.shot}));
+              //console.log(_.find(ev.eventtype.shot_types,{id:m.meta.static_meta.shot}));
               if (m.meta.static_meta.shot) {
                 m.meta.shot_ex = ev.eventtype.shot_types[m.meta.static_meta.shot];
               }

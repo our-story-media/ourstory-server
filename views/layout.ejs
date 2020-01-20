@@ -308,7 +308,7 @@
     </div>
   </div>
 
-  <% if (user && _.contains(sails.config.admin_email,user.profile.emails[0].value)) { %>
+  <% if (user && _.includes(sails.config.admin_email,user.profile.emails[0].value)) { %>
   <div class="row" ng-controller="adminlists">
     <div class="bg-success clearfix" style="padding-top:1em;padding-bottom: 1em;margin-left:15px;margin-right:15px;">
       <div class="col-xs-12 col-sm-4 col-xs-2">

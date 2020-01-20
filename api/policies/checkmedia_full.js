@@ -49,7 +49,7 @@ module.exports = function (req, res, ok) {
 		if (!id || !user)
 			return res.notFound(); 
 		
-		if (req.session.passport && req.session.passport.user && _.contains(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
+		if (req.session.passport && req.session.passport.user && _.includes(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
 			return ok();
 		
 		Media.findOne(id,function(err,media){
@@ -64,7 +64,7 @@ module.exports = function (req, res, ok) {
 					if (!err && shoot)
 					{
 						//if the user is admin on the shoot for the media				
-						if (_.contains(shoot.ownedby,user))
+						if (_.includes(shoot.ownedby,user))
 							return ok();
 					}
 					return res.notFound();				

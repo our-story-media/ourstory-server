@@ -15,7 +15,7 @@ module.exports = function (req, res, ok) {
   //console.log(req.session.passport.user);
   if (req.session.passport.user) {
 
-    if (req.session.passport.user.nolimit || _.contains(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
+    if (req.session.passport.user.nolimit || _.includes(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
     {
       return ok();
     }
@@ -27,7 +27,7 @@ module.exports = function (req, res, ok) {
 
         // var has = _.map(evs,function(ev){
         //   //console.log(ev.ownedby);
-        //   if (_.contains(ev.ownedby,req.session.passport.user.id))
+        //   if (_.includes(ev.ownedby,req.session.passport.user.id))
         //     return ev;
         // });
 

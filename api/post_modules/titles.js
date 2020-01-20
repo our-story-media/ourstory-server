@@ -20,7 +20,7 @@ function genedl(event,callback)
 		Media.find({event_id:event},function(err, medias){
 
 			//find unique users:
-			var uniqusers = _.uniq(_.pluck(medias,'created_by'));
+			var uniqusers = _.uniq(_.map(medias,'created_by'));
 			var allusers = _.map(uniqusers,function(u){
 				return _.find(users,{id:u});
 			});

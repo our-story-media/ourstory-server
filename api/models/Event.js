@@ -80,8 +80,8 @@ module.exports = {
 		//   console.log("genzip " + this.id);
 			dir = path.normalize(dir);
 			// console.log(dir);
-			var images = _.pluck(this.eventtype.shot_types,'image');
-			var icons = _.pluck(this.eventtype.shot_types,'icon');
+			var images = _.map(this.eventtype.shot_types,'image');
+			var icons = _.map(this.eventtype.shot_types,'icon');
 
 			var im_files = _.map(images,function(m)
 			{
@@ -304,7 +304,7 @@ module.exports = {
 	  	{
 			newcode = Math.floor((Math.random()*99999)).toString().substring(0,4);
 			//find list of codes
-			if (!_.contains(allcodes,newcode))
+			if (!_.includes(allcodes,newcode))
 				done=true;
 		}
 		//console.log('newcode: '+newcode);

@@ -80,9 +80,9 @@ module.exports = {
 						var allmedia_grouped = _.groupBy(allmedia, 'event_id');
 
 						var regrouped = [];
-						var plucked = _.pluck(keep, 'id');
+						var plucked = _.map(keep, 'id');
 						_.each(grouped, function (val, key) {
-							if (_.contains(plucked, key)) {
+							if (_.includes(plucked, key)) {
 								var ev = _.find(keep, { 'id': key });
 								//combine with more media if public view allowed:
 
@@ -111,7 +111,7 @@ module.exports = {
 						Event.find({}).exec(function (err, allevents) {
 
 							var events = _.filter(allevents, function (e) {
-								return _.contains(e.ownedby, req.session.passport.user.id);
+								return _.includes(e.ownedby, req.session.passport.user.id);
 							});
 							return res.json({ edits: edits, shoots: regrouped, owned: events });
 						});
@@ -149,7 +149,7 @@ module.exports = {
 			return res.status(500).json({ msg: 'No edit found' });
 
 		Edits.find({ 'media.0.event_id': req.params.id }).exec(function (err, edits) {
-			var user_ids = _.pluck(edits, 'user_id');
+			var user_ids = _.map(edits, 'user_id');
 			User.find(user_ids).exec(function (err, users) {
 				_.each(edits, function (e) {
 					var u = _.find(users, { id: e.user_id });
@@ -666,7 +666,7 @@ module.exports = {
 					}
 					User.findOne(edit.user_id).exec(function (err, user) {
 						// console.log(req.session)
-						if (ev.publicshare || (req.session && req.session.passport && req.session.passport.user && _.contains(ev.ownedby, req.session.passport.user.id)) || (req.session && req.session.passport && req.session.passport.user && _.contains(sails.config.admin_email, req.session.passport.user.profile.emails[0].value))) {
+						if (ev.publicshare || (req.session && req.session.passport && req.session.passport.user && _.includes(ev.ownedby, req.session.passport.user.id)) || (req.session && req.session.passport && req.session.passport.user && _.includes(sails.config.admin_email, req.session.passport.user.profile.emails[0].value))) {
 							edit.user = user;
 							res.view({ edit: edit, _layoutFile: null });
 						}

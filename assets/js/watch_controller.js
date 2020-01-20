@@ -91,7 +91,7 @@ bootleggerApp.controller('list', ['$scope', '$http', '$sce', '$localStorage', '$
       .then(function (resp) {
         $scope.edits = resp.data.edits;
 
-        socket.post('/watch/editupdates', { edits: _.pluck($scope.edits, 'id') }).then(function (resp) {
+        socket.post('/watch/editupdates', { edits: _.map($scope.edits, 'id') }).then(function (resp) {
 
         });
 
@@ -197,7 +197,7 @@ bootleggerApp.controller('edits', ['$scope', '$http', '$sce', '$localStorage', '
       .then(function (resp) {
         $scope.edits = resp.data;
 
-        socket.post('/watch/editupdates', { edits: _.pluck($scope.edits, 'id') }).then(function (resp) {
+        socket.post('/watch/editupdates', { edits: _.map($scope.edits, 'id') }).then(function (resp) {
 
         });
 

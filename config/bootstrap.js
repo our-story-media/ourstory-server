@@ -298,7 +298,7 @@ module.exports.bootstrap = function (cb) {
 	}
 	));
 
-	var protocol = (_.contains(process.argv, '--prod') ? 'https' : 'http');
+	var protocol = (_.includes(process.argv, '--prod') ? 'https' : 'http');
 
 	if (!sails.config.LOCALONLY) {
 		// passport.use(new DropboxOAuth2Strategy({

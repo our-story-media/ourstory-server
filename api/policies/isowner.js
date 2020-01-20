@@ -13,7 +13,7 @@ module.exports = function (req, res, ok) {
 
   //console.log(ev);
 
-  if (req.session.passport.user && _.contains(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
+  if (req.session.passport.user && _.includes(sails.config.admin_email,req.session.passport.user.profile.emails[0].value))
   {
     //req.session.passport.user.currentevent = ev;
     return ok();
@@ -24,9 +24,9 @@ module.exports = function (req, res, ok) {
     {
       //console.log(req.session.passport.user.id);
       Event.find().where({id:ev}).exec(function (err,e){
-        //console.log(_.contains(e[0].ownedby,req.session.passport.user.id));
+        //console.log(_.includes(e[0].ownedby,req.session.passport.user.id));
         //console.log(ev);
-        if (e.length == 1 && _.contains(e[0].ownedby,req.session.passport.user.id))
+        if (e.length == 1 && _.includes(e[0].ownedby,req.session.passport.user.id))
         {
           //console.log("ok perm");
           return ok();

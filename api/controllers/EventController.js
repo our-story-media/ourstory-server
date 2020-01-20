@@ -113,8 +113,8 @@ module.exports = {
 				Event.find({}, function (err, events) {
 					_.each(events, function (ev) {
 						ev.totalmedia = _.size(med_grp[ev.id]);
-						ev.lasttouched = _.max(_.pluck(med_grp[ev.id], 'createdAt'));
-						ev.participants = _.size(_.unique(_.pluck(med_grp[ev.id], 'created_by')));
+						ev.lasttouched = _.max(_.map(med_grp[ev.id], 'createdAt'));
+						ev.participants = _.size(_.uniq(_.map(med_grp[ev.id], 'created_by')));
 						ev.users = _.map(ev.ownedby, function (u) {
 							return _.find(users, { 'id': u });
 						});
@@ -140,8 +140,8 @@ module.exports = {
 					//group by user:
 					_.each(events, function (ev) {
 						ev.totalmedia = _.size(med_grp[ev.id]);
-						ev.lasttouched = _.max(_.pluck(med_grp[ev.id], 'createdAt'));
-						ev.participants = _.size(_.unique(_.pluck(med_grp[ev.id], 'created_by')));
+						ev.lasttouched = _.max(_.map(med_grp[ev.id], 'createdAt'));
+						ev.participants = _.size(_.uniq(_.map(med_grp[ev.id], 'created_by')));
 						ev.totalfilesize = _.sum(_.map(med_grp[ev.id], function (g) {
 							return g.meta.static_meta.filesize;
 						})) / 1024.0;
@@ -151,12 +151,12 @@ module.exports = {
 
 						_.each(users, function (u) {
 							u.events = _.filter(events, function (e) {
-								return _.contains(e.ownedby, u.id);
+								return _.includes(e.ownedby, u.id);
 							});
 
 							u.owned = _.size(u.events);
 							u.created = _.size(_.filter(allmedia, { 'created_by': u.id }));
-							u.participatedin = _.size(_.unique(_.pluck(_.filter(allmedia, { 'created_by': u.id }), 'event_id')));
+							u.participatedin = _.size(_.uniq(_.map(_.filter(allmedia, { 'created_by': u.id }), 'event_id')));
 							u.edits = _.size(_.find(edits, { 'user_id': u.id }));
 						});
 
@@ -169,7 +169,7 @@ module.exports = {
 
 	contributors: async function (req, res) {
 		let media = await Media.find({ event_id: req.param('id') });
-		let us = _.unique(_.pluck(media, 'created_by'));
+		let us = _.uniq(_.map(media, 'created_by'));
 		let users = await User.find({ id: us }, {
 			fields: {
 				'profile.displayName': 1,
@@ -784,7 +784,7 @@ module.exports = {
 
 				var tempcoverage = ev.coverage_classes;
 				_.each(tempcoverage, function (el) {
-					el.items = _.pluck(el.items, 'name');
+					el.items = _.map(el.items, 'name');
 				});
 
 				ev.coverage_classes = tempcoverage;
@@ -801,7 +801,7 @@ module.exports = {
 						path: { '!': null }
 					}).exec(function (err, media) {
 
-						e.numberofcontributors = _.size(_.unique(media, 'created_by'));
+						e.numberofcontributors = _.size(_.uniq(media, 'created_by'));
 						e.numberofclips = _.size(media);
 
 						e.icon = (e.icon && e.icon != '') ? sails.config.master_url + '/event/iconurl/' + e.id : '';
@@ -860,7 +860,7 @@ module.exports = {
 				var tempcoverage = e.coverage_classes;
 
 				_.each(tempcoverage, function (el) {
-					el.items = _.pluck(el.items, 'name');
+					el.items = _.map(el.items, 'name');
 				});
 
 				e.shottypes = ev.eventtype.shot_types;
@@ -928,7 +928,7 @@ module.exports = {
 							//console.log("grouping");
 							var mm = _.find(users, { id: d.ownedby[0] });
 							//console.log(mm);
-							if (!_.contains(output, { group: mm.profile.displayName })) {
+							if (!_.includes(output, { group: mm.profile.displayName })) {
 								//console.log('creating group');
 								output.push({ group: mm.profile.displayName, icon: mm.profile.photos[0].value, events: [] });
 							}
@@ -956,7 +956,7 @@ module.exports = {
 	 */
 	mycontributions: function (req, res) {
 		Media.find({ created_by: req.session.passport.user.id }).exec(function (err, media) {
-			var events = _.unique(_.pluck(media, 'event_id'));
+			var events = _.uniq(_.map(media, 'event_id'));
 
 			//from media
 			Event.findByListBuildVariant(req, events, function (err, all) {
@@ -1034,7 +1034,7 @@ module.exports = {
 						created_by = req.session.passport.user.id;
 
 					Media.find({ created_by: created_by }).exec(function (err, media) {
-						var events = _.pluck(media, 'event_id');
+						var events = _.map(media, 'event_id');
 
 						Event.findListByBuildVariant(req, events, function (err, all) {
 							_.each(all, function (d) {
@@ -1062,7 +1062,7 @@ module.exports = {
 										//console.log("grouping");
 
 										//console.log(mm);
-										if (!_.contains(output, { group: mm.profile.displayName })) {
+										if (!_.includes(output, { group: mm.profile.displayName })) {
 											//console.log('creating group');
 											output.push({ group: mm.profile.displayName, icon: mm.profile.photos[0].value, events: [] });
 										}
@@ -1284,7 +1284,7 @@ module.exports = {
 				Event.findOne(req.param('id'), function (err, ev) {
 					//console.log(ev);
 					if (err == null && ev != null) {
-						if (!_.contains(ev.ownedby, u.id)) {
+						if (!_.includes(ev.ownedby, u.id)) {
 							//console.log(u);
 							ev.ownedby.push(u.id);
 							ev.ownedby = _.compact(ev.ownedby);
@@ -1566,7 +1566,7 @@ module.exports = {
 
 	featured: function (req, res) {
 		Event.findFeaturedByBuildVariant(req, function (err, shoots) {
-			var users_ids = _.flatten(_.pluck(shoots, 'ownedby'));
+			var users_ids = _.flatten(_.map(shoots, 'ownedby'));
 			User.find({ id: users_ids }).exec(function (err, users) {
 				_.each(shoots, function (e) {
 					var mm = _.find(users, { id: e.ownedby[0] });
@@ -1900,18 +1900,18 @@ module.exports = {
 			//add in missing modules:
 			if (!myev.post_modules) {
 				myev.post_modules = {};
-				_.each(_.pluck(sails.eventmanager.post_modules, 'codename'), function (m) {
+				_.each(_.map(sails.eventmanager.post_modules, 'codename'), function (m) {
 					myev.post_modules[m] = 0;
 				});
 			}
 
 			if (!myev.shoot_modules) {
 				myev.shoot_modules = {};
-				_.each(_.pluck(sails.eventmanager.event_modules, 'codename'), function (m) {
+				_.each(_.map(sails.eventmanager.event_modules, 'codename'), function (m) {
 					myev.shoot_modules[m] = 0;
 				});
 
-				//var lastone = _.last(_.pluck(sails.eventmanager.event_modules,'codename'));
+				//var lastone = _.last(_.map(sails.eventmanager.event_modules,'codename'));
 				if (sails.config.LIVEMODE)
 					myev.shoot_modules['autodirector'] = "1";
 				else
@@ -2364,7 +2364,7 @@ module.exports = {
 
 					Media.find({ event_id: event.id }).exec(function (err, media) {
 						var contr = media.length;
-						var users = _.unique(media, 'created_by').length;
+						var users = _.uniq(media, 'created_by').length;
 
 						event.mediacount = contr;
 						event.usercount = users;

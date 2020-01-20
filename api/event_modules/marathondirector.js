@@ -251,9 +251,9 @@ module.exports = {
 
 					var notuploaded = _.filter(media,{path:undefined});
 					//console.log("notuploaded: "+notuploaded.length);
-					var usersnotuploaded = _.pluck(notuploaded,'created_by');
+					var usersnotuploaded = _.map(notuploaded,'created_by');
 					//console.log("user: "+usersnotuploaded.length);
-					var uniqueusers = _.unique(usersnotuploaded);
+					var uniqueusers = _.uniq(usersnotuploaded);
 					//console.log("unique users: "+uniqueusers);
 					//for each one of these, find the session info:
 					User.find({id:uniqueusers}).exec(function(err, users)
@@ -562,7 +562,7 @@ module.exports = {
 
 		// 		//message this user
 		// 		if (_.size(module.exports.AllEvents[event].users)>1)
-		// 			User.publishUpdate(user,{msg:"Welcome, "+ _.without(_.pluck(module.exports.AllEvents[event].users, 'name'),module.exports.AllEvents[event].users[user].name) + " are on the film crew too"});
+		// 			User.publishUpdate(user,{msg:"Welcome, "+ _.without(_.map(module.exports.AllEvents[event].users, 'name'),module.exports.AllEvents[event].users[user].name) + " are on the film crew too"});
 		// 		else
 		// 			User.publishUpdate(user,{msg:"Welcome, you are the first to join the film crew"});
 		// 	}
@@ -636,7 +636,7 @@ module.exports = {
 
 			_.each(tempcoverage,function(el)
 			{
-				el.items = _.pluck(el.items, 'name');
+				el.items = _.map(el.items, 'name');
 			});
 
 			e.shottypes = ev.eventtype.shot_types;
