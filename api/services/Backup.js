@@ -24,7 +24,7 @@ exports.backup = async function () {
         //create redis dump:
         await exec(`tar cvf ${redisfile} /redis`);
 
-        let dest = `/usbdrive/usb0/indaba/${Date.now()}`;
+        let dest = `/usbdrive/usb/indaba/${Date.now()}`;
 
         try {
             await mkdir(dest, { recursive: true });
@@ -75,16 +75,16 @@ exports.restore = async function (source) {
         
         this.backuprunning = true;
 
-        await exec(`mongorestore --host mongo --db bootlegger --drop --archive=/usbdrive/usb0/indaba/${source}/upload/indaba.mongodb --gzip`);
+        await exec(`mongorestore --host mongo --db bootlegger --drop --archive=/usbdrive/usb/indaba/${source}/upload/indaba.mongodb --gzip`);
 
         await exec(`pkill redis-server`);
 
-        await exec(`cd /redis && tar xvf /usbdrive/usb0/indaba/${source}/upload/indaba.redis --strip 1`);
+        await exec(`cd /redis && tar xvf /usbdrive/usb/indaba/${source}/upload/indaba.redis --strip 1`);
 
         await exec(`redis-server &`);
 
         await new Promise((res, rej) => {
-            let command = realexec(`rsync -a --info=progress2 /usbdrive/usb0/indaba/${source}/upload/* ${path.join(__dirname, '..', '..', "upload")}`);
+            let command = realexec(`rsync -a --info=progress2 /usbdrive/usb/indaba/${source}/upload/* ${path.join(__dirname, '..', '..', "upload")}`);
             command.stdout.on('data', (data) => {
                 // console.log(data);
 

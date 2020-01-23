@@ -69,13 +69,13 @@ module.exports = {
 
 		if (sails.config.LOCALONLY)
 		{
-			let s = await stat('/usbdrive/usb0');
+			let s = await stat('/usbdrive/usb');
 			// console.log(sails.controllers.api);
 			inprogress = Backup.backuprunning;
 			if (s && s.isDirectory())
 			{
-				if (fs.existsSync('/usbdrive/usb0/indaba')){
-					files = await readdir('/usbdrive/usb0/indaba');
+				if (fs.existsSync('/usbdrive/usb/indaba')){
+					files = await readdir('/usbdrive/usb/indaba');
 					backups = _.sortBy(_.map(files, function(f) {
 						return {
 						name: moment(new Date(parseInt(f))).fromNow(),
