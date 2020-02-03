@@ -30,15 +30,14 @@ exports.backup = async function () {
             await mkdir(dest, { recursive: true });
         }
         catch (e) {
-
+            console.error(e);
         }
 
-        // await exec(`cp -R ${path.join(__dirname, '..', '..', "upload")} ${dest}`);
+        this.copyprogress = 0;
 
         await new Promise((res, rej) => {
             let command = realexec(`rsync -a --info=progress2 ${path.join(__dirname, '..', '..', "upload")} ${dest}`);
             command.stdout.on('data', (data) => {
-                // console.log(data);
 
                 var re = new RegExp(/\s(\d*)%/);
                 let prog = data.match(re);
@@ -50,7 +49,7 @@ exports.backup = async function () {
             });
             command.stderr.on('data', (data) => {
                 // let progress = data.split(' ');
-                // console.log(data);
+                Log.error(data);
             });
             command.on('exit', (err) => {
                 if (err)
@@ -63,7 +62,8 @@ exports.backup = async function () {
         exports.copyprogress = 100;
     }
     catch (e) {
-        throw e;
+        
+        console.error(e);
     }
     finally {
         this.backuprunning = false;
@@ -82,6 +82,8 @@ exports.restore = async function (source) {
         await exec(`cd /redis && tar xvf /usbdrive/usb/indaba/${source}/upload/indaba.redis --strip 1`);
 
         await exec(`redis-server &`);
+
+        this.copyprogress = 0;
 
         await new Promise((res, rej) => {
             let command = realexec(`rsync -a --info=progress2 /usbdrive/usb/indaba/${source}/upload/* ${path.join(__dirname, '..', '..', "upload")}`);
@@ -111,7 +113,7 @@ exports.restore = async function (source) {
         exports.copyprogress = 100;
     }
     catch (e) {
-        throw e;
+        console.error(e);
     }
     finally {
         this.backuprunning = false;

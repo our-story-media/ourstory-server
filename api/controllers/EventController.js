@@ -17,6 +17,8 @@ const util = require('util');
 const fss = require('fs');
 const stat = util.promisify(fss.stat);
 const readdir = util.promisify(fss.readdir);
+const exec = util.promisify(require('child_process').exec);
+// const realexec = require('child_process').exec;
 
 let sharp = require('sharp');
 const _ = require('lodash');
@@ -57,6 +59,7 @@ function ValidateEmail(inputText) {
 	}
 }
 
+
 module.exports = {
 
 	admin: async function (req, res) {
@@ -70,9 +73,21 @@ module.exports = {
 		if (sails.config.LOCALONLY)
 		{
 			let s = await stat('/usbdrive/usb');
-			// console.log(sails.controllers.api);
+			
 			inprogress = Backup.backuprunning;
-			if (s && s.isDirectory())
+
+			//change to detect if mount exists, as its always a directory:
+			
+			try
+			{
+				await exec('findmnt -R /usbdrive/usb');
+				isusb = true;
+			}
+			catch {
+				//not a usb mounted
+			}
+
+			if (s && isusb)
 			{
 				if (fs.existsSync('/usbdrive/usb/indaba')){
 					files = await readdir('/usbdrive/usb/indaba');
