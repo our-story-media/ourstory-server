@@ -52,6 +52,8 @@ The `images.tar` and `indaba-update.tar` files, used for the Windows Titan and R
 
 `build-compact.sh` builds the compact RPi docker image (local version of Drone.io process).
 
+To build a new Titan version -- one of the following must be run locally to update the cached tar file on S3.
+
 `uploadtitan-amd64.sh` tags and uploads the Windows x64 Docker tar file.
 
 `uploadtitan-armv7.sh` tags and uploads the RPi armv7 Docker tar file containing titan-compact.

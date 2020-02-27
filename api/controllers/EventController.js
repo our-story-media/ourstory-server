@@ -83,7 +83,7 @@ module.exports = {
 				await exec('findmnt -R /usbdrive/usb');
 				isusb = true;
 			}
-			catch {
+			catch (e) {
 				//not a usb mounted
 			}
 
