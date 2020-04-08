@@ -6,6 +6,9 @@ trigger:
   tags:
     include:
     - '*'
+    exclude:
+    - 'beta'
+pr: none
 
 resources:
 - repo: self
