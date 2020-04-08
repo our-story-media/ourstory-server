@@ -68,18 +68,20 @@ module.exports = {
 		let backups = [];
 		let files = [];
 		let inprogress = false;
+		let s;
 		
 
 		if (sails.config.LOCALONLY)
 		{
-			let s = await stat('/usbdrive/usb');
-			
-			inprogress = Backup.backuprunning;
-
-			//change to detect if mount exists, as its always a directory:
-			
 			try
 			{
+				let s = await stat('/usbdrive/usb');
+			
+				inprogress = Backup.backuprunning;
+
+				//change to detect if mount exists, as its always a directory:
+			
+		
 				await exec('findmnt -R /usbdrive/usb');
 				isusb = true;
 			}
