@@ -9,24 +9,32 @@ module.exports = {
         
         console.log(req.param('name'));
 
+        let withContrib=[],reviewed=[];
+
         if (req.method =='POST')
         {
             req.session.name = req.param('name');
             console.log(req.param('name'));
         }
 
-        var withContrib = _.filter(edit.transcription.chunks,function(c){
-            return c.contributions.length > 0;
-        });
+        if (edit.transcription && edit.transcription.chunks)
+        {
 
-        var reviewed = _.filter(edit.transcription.chunks,function(c){
-            return c.adoptedContribution;
-        });
+            withContrib = _.filter(edit.transcription.chunks,function(c){
+                return c.contributions.length > 0;
+            });
 
+            reviewed = _.filter(edit.transcription.chunks,function(c){
+                return c.adoptedContribution;
+            });
+        }
+
+        let chunkLength = (edit.transcription && edit.transcription.chunks)?edit.transcription.chunks.length:0; 
+        
         var progress = {
-            stage1: (edit.transcription.chunks.length > 0) ? 100 : 0,
-            stage2: Math.round((withContrib.length / edit.transcription.chunks.length)*100),
-            stage3: Math.round((reviewed.length / edit.transcription.chunks.length)*100)
+            stage1: (chunkLength > 0) ? 100 : 0,
+            stage2: Math.round((withContrib.length / chunkLength)*100),
+            stage3: Math.round((reviewed.length / chunkLength)*100)
         }
 
 		return res.view({ id: req.param('id'), edit, progress });
@@ -83,7 +91,7 @@ module.exports = {
 
             var subs_text = _.map(subs.chunks, function (chunk) {
                 sequence++;
-                var text = chunk.adoptedContribution.text;
+                var text = (chunk.adoptedContribution)?chunk.adoptedContribution.text:'';
                 var start = chunk.starttime;
                 var end = chunk.endtime;
                 return `${parseInt(sequence)}\n${start} --> ${end}\n${text}\n\n`;
