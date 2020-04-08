@@ -19,17 +19,16 @@ module.exports = {
 
         if (edit.transcription && edit.transcription.chunks)
         {
-
             withContrib = _.filter(edit.transcription.chunks,function(c){
-                return c.contributions.length > 0;
+                return (c.contributions)?c.contributions.length > 0:false;
             });
 
             reviewed = _.filter(edit.transcription.chunks,function(c){
-                return c.adoptedContribution;
+                return (c.adoptedContribution)?c.adoptedContribution:false;
             });
         }
 
-        let chunkLength = (edit.transcription && edit.transcription.chunks)?edit.transcription.chunks.length:0; 
+        let chunkLength = (edit.transcription && edit.transcription.chunks) ? edit.transcription.chunks.length : 0; 
         
         var progress = {
             stage1: (chunkLength > 0) ? 100 : 0,
