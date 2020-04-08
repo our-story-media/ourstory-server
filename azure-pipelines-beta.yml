@@ -5,8 +5,6 @@
 trigger:
   tags:
     include:
-    - '*'
-    exclude:
     - 'beta'
   pr: none
 
@@ -33,5 +31,4 @@ stages:
         Dockerfile: '**/Dockerfile'
         tags: |
           $(tag)
-          latest
         addPipelineData: false
