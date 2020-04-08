@@ -32,6 +32,10 @@ module.exports.routes = {
     'get /event/clearroleimg/:id/:role':'EventController.clearroleimg',
     'get /event/contributors/:id':'EventController.contributors',
     'post /auth/process_admin':'AuthController.process_admin',
+    '/transcribe/:id?':'TranscribeController.index',
+    'get /transcribe/s1/:id?':'TranscribeController.step1',
+    'get /transcribe/s2/:id?':'TranscribeController.step2',
+    'get /transcribe/s3/:id?':'TranscribeController.step3',
 
     /*
     API ENDPOINTS
@@ -169,5 +173,7 @@ module.exports.routes = {
     'post /api/event/remcode':'EventController.remcode',
     'get /api/settings':'WatchController.getsettings',
     'post /api/settings/update/:name/:value':'WatchController.setting',
-    'get /api/event/clone/:id':'CommissionController.clone'
+    'get /api/event/clone/:id':'CommissionController.clone',
+    'get /api/watch/edit/:id?': 'WatchController.edit',
+    'get /api/transcribe/subs/:id?':'TranscribeController.subs'
 };

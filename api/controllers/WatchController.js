@@ -64,6 +64,8 @@ module.exports = {
 		})
 	},
 
+	
+
 	mymedia: function (req, res) {
 		Edits.find({ user_id: req.session.passport.user.id }).exec(function (err, edits) {
 			Media.find({ created_by: req.session.passport.user.id }).exec(function (err, media) {
@@ -206,7 +208,7 @@ module.exports = {
 	},
 
 	/**
-	 * @api {post} /api/post/edit Get Edit
+	 * @api {get} /api/post/edit Get Edit
 	 * @apiName getedit
 	 * @apiGroup Post_Production
 	 * @apiVersion 0.0.2
@@ -247,6 +249,7 @@ module.exports = {
 			tmpedit.media = req.param('media');
 			tmpedit.title = req.param('title');
 			tmpedit.description = req.param('description');
+			tmpedit.transcription = req.param('transcription');
 			var newmedia = [];
 			_.each(tmpedit.media, function (m) {
 				var newm = {
@@ -312,7 +315,7 @@ module.exports = {
 		Edits.findOne(id, function (err, m) {
 			//FOR LOCAL
 			if (sails.config.LOCALONLY) {
-				if (req.header('host') == 'localhost' || _.includes(req.header('referer'),'localhost'))
+				if (req.header('host') == 'localhost' || _.includes(req.header('referer'), 'localhost'))
 					return res.redirect(`/upload/transcode/upload/edits/${m.shortlink}.mp4`);
 				else
 					return res.redirect(`${sails.config.FAKES3URL_TRANSCODE}/edits/${m.shortlink}.mp4`);
@@ -565,7 +568,7 @@ module.exports = {
 		if (canedit.value == 'true') {
 			Edits.findOne(req.params.id).exec(function (err, edit) {
 				if (edit) {
-					
+
 					console.log("restarting edit");
 					//console.log(edit);
 					//console.log(edit.media);
