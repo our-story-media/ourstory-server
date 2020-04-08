@@ -15,18 +15,34 @@ module.exports = {
             console.log(req.param('name'));
         }
 
-        var withContrib = _.filter(edit.transcription.chunks,function(c){
-            return c.contributions.length > 0;
-        });
+        let withContrib = [];
+        let reviewed = [];
+        let chunkslength = 0;
 
-        var reviewed = _.filter(edit.transcription.chunks,function(c){
-            return c.adoptedContribution;
-        });
+        console.log(edit.transcription);
+
+        if (edit.transcription && edit.transcription.chunks)
+        {
+
+            withContrib = _.filter(edit.transcription.chunks,function(c){
+                return (c.contributions)?c.contributions.length > 0 : false;
+            });
+        
+
+            reviewed = _.filter(edit.transcription.chunks,function(c){
+                return c.adoptedContribution;
+            });
+
+            chunkslength = (edit.transcription.chunks.length > 0) ? 100 : 0;
+        }
+
+
+
 
         var progress = {
-            stage1: (edit.transcription.chunks.length > 0) ? 100 : 0,
-            stage2: Math.round((withContrib.length / edit.transcription.chunks.length)*100),
-            stage3: Math.round((reviewed.length / edit.transcription.chunks.length)*100)
+            stage1: chunkslength,
+            stage2: Math.round((withContrib.length / chunkslength)*100),
+            stage3: Math.round((reviewed.length / chunkslength)*100)
         }
 
 		return res.view({ id: req.param('id'), edit, progress });
@@ -34,12 +50,6 @@ module.exports = {
     
     step1: function(req,res)
     {
-        //chunking
-        // return res.json({ok:'ok'});
-        // var ff = path.join(__dirname,'..','..','/assets/transcription/step1/build/index.html');
-        // var file = fs.readFileSync(ff);
-        // console.log(file);
-
         if (!req.param('name'))
         {
             return res.redirect(`/transcribe/s1/${req.param('id')}/?apikey=${res.locals.apikey}&name=${req.session.name}`);
@@ -83,7 +93,7 @@ module.exports = {
 
             var subs_text = _.map(subs.chunks, function (chunk) {
                 sequence++;
-                var text = chunk.adoptedContribution.text;
+                var text = (chunk.adoptedContribution && chunk.adoptedContribution.text)?chunk.adoptedContribution.text : '';
                 var start = chunk.starttime;
                 var end = chunk.endtime;
                 return `${parseInt(sequence)}\n${start} --> ${end}\n${text}\n\n`;

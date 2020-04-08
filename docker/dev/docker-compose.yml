@@ -68,6 +68,7 @@ services:
       # - 1337
     volumes:
       - ../../config:/usr/src/app/config
+      - ./backup:/backup
       - "./upload:/usr/src/app/upload"
       - "../../api:/usr/src/app/api"
       - "../../assets:/usr/src/app/assets"

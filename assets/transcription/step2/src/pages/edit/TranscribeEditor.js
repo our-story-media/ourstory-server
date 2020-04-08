@@ -36,10 +36,20 @@ export default function TranscribeEditor(props){
     onUpdate(nextChunks);
   }
 
+  const backButton = () => {
+    window.history.back();
+  };
+
 
   return (
     <Container fixed>
       <Box marginTop={3}>
+      <Button
+          onClick={backButton}
+          style={{ position: "absolute", left: "0", top: "1em" }}
+        >
+          <ArrowBack />
+        </Button>
         <Paper>
           <Grid container spacing={4}>
             <Grid item xs={3}/>

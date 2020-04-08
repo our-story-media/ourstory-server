@@ -25,3 +25,9 @@ Dockerfile*
 hooks
 temp
 VERSION
+**/backup
+**/redis
+**/temp
+**/uploaduploadold
+**/usbdrive
+**/titan
