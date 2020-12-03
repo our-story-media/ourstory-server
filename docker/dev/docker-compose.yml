@@ -29,7 +29,7 @@ services:
       - '6379:6379'
 
   mongo:
-    image: mvertes/alpine-mongo
+    image: mongo
     volumes:
       - mongo-data:/data/db
       - ./backup:/backup

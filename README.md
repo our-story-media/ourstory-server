@@ -33,7 +33,14 @@ To start an online installation, volume map the following:
 
 Use the `docker/dev/docker-compose` file provided to start a local development environment. This includes a basic redis, mongodb and Indaba installation with volume maps to the local development files.
 
-Once started with `docker-compose up`, the server will be accesible at [http://localhost]().
+Once started with `docker-compose up`, the server will be accesible at [http://localhost:8845]().
+
+## Restoring backup / test data
+
+1. Place `mongodump` data into ./backup
+2. Open a terminal into the mongo docker container, and run `mongorestore /backup` to restore data.
+
+File assets need to be placed into `./upload`.
 
 # Production Deployment
 
