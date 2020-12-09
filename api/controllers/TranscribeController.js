@@ -52,7 +52,7 @@ module.exports = {
             return res.redirect(`/transcribe/s1/${req.param('id')}/?apikey=${res.locals.apikey}&name=${req.session.name}`);
         }
 
-        return res.sendfile(path.join(__dirname,'..','..','/assets/transcription/step1/build/index.html'));
+        return res.sendfile(path.join(__dirname,'..','..','/assets/transcription/transcription/build/index.html'));
     },
 
     step2: function(req,res)
