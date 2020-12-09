@@ -1,10 +1,12 @@
 // External Dependencies
-import React, { useState } from "react";
-import { Button } from '@material-ui/core';
-import ReactPlayer from "react-player";
+import React, { useState } from 'react';
+import { Container, Button } from '@material-ui/core';
+import ReactPlayer from 'react-player';
+import { PlayArrow, Pause } from '@material-ui/icons';
 
 // Styles
-import "./VideoPlayer.css";
+import useStyles from './VideoPlayerStyles';
+import './VideoPlayer.css';
 
 type VideoPlayerProps = {
   url: string
@@ -12,13 +14,22 @@ type VideoPlayerProps = {
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }: VideoPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false)
+  const play_pause_button_icon = isPlaying ? <Pause/> : <PlayArrow/>;
+  const classes = useStyles();
+
   return (
-    <ReactPlayer
-      url={url}
-      playing={isPlaying}
-      width={"100%"}
-      height={"100%"}
-    />
+    <Container className={classes.videoPlayerContainer} maxWidth='xl'>
+      <ReactPlayer
+        className='react-player'
+        url={url}
+        playing={isPlaying}
+        height={'100%'}
+        width={'100%'}
+      />
+      <Button variant='contained' color='primary' className={classes.videoPlayerPlayButton} onClick={() => setIsPlaying(!isPlaying)}>
+        {play_pause_button_icon}
+      </Button>
+    </Container>
   );
 };
 

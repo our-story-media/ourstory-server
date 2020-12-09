@@ -1,6 +1,5 @@
 // External Dependencies
 import React, { useState } from 'react';
-import { PlayArrow, Pause } from '@material-ui/icons';
 
 // Internal Dependencies
 import story_id from './getId';
@@ -13,7 +12,8 @@ const App: React.FC<{}> = () => {
 
   return (
     <main>
-      <VideoPlayer url={`/api/watch/getvideo/${story_id}`}/>
+      {/* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/}
+      <VideoPlayer url={`http://localhost:8845/api/watch/getvideo/${story_id}`}/>
     </main>
   );
 }
