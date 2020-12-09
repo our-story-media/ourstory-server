@@ -177,3 +177,37 @@ The chunks attribute is an array of 'chunk' objects:
    - When a chunk is played, the player highlights the chunk in the progress
      bar, and automatically pauses at the end of the chunk
    - Deleting a chunk appropriately merges chunks on either side
+
+9. As a user, I want to be able to begin transcribing chunks once I have
+   completed chunking a video
+
+   - Once a video has been completely broken down into chunks, the link to
+     the second step becomes available on the main transcription page
+     
+10. As a user, I want to be able to transcribe chunks concurrently with other
+    users
+
+    - Transcription of chunks can be done concurrently by multiple users
+
+11. As a user, I want to be able to review the chunks I am transcribing one
+    at a time, so that I can focus on transcribing just that chunk
+
+    - During the transcription step, chunks are presented one at a time,
+      each as a standalone video
+    - The video for each chunk is fully play/pausable and scrubbable
+    - The transcription interface allows users to navigate through chunks to
+      make changes to previous chunks' transcriptions
+
+12. As a user, at any time during transcribing, I want to be able to begin work
+    on the review step
+
+    - Once there are transcribed chunks to be reviewed, the link to the review
+      step becomes active
+    - Selecting the Review link presents the review interface
+    - In the review interface, each chunk is presented one at a time, along
+      with the transcriptions that have been completed for that chunk
+    - Users select from the list of transcriptions for that chunk, the best 
+      (most accurate) transcription
+    - Each transcription is accompanied by the name of the author
+    - Once a transcription has been selected from the list, it can be edited to
+      fix any final errors
