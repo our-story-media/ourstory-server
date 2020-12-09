@@ -88,6 +88,31 @@ In the final implementation, the video will be presented one chunk at a time,
 rather than in it's entirety, and users will be able to translate
 just that chunk, before moving onto the next chunk.
 
+## Data Model
+
+Storys are stored in the **Edit** model. The **Edit** model has an attribue
+**"transcriptions"** which stores all the data for the transcription of that
+Story.
+
+Currently, the transcription attribute has only one child: **chunks**.
+
+The chunks attribute is an array of 'chunk' objects:
+- a *startime*
+- an *endtime*
+- a *creatorid*
+- a *contributions* array of 'contribution' objects:
+  - a *user*
+  - a *text* (The text for that transcription)
+
+<br/>
+<br/>
+
+---
+## Note: I propose adding a uuid (or at least an ID) for each chunk object
+---
+<br/>
+<br/>
+
 # Requirements
 
 1. As a user, I want to be able to Transcribe any finished 'Story' my account
