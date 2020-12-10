@@ -10,6 +10,11 @@ const useStyles = makeStyles({
     },
     videoPlayerContainer: {
         position: 'relative',
+    },
+    progressBarContainer: {
+        left: '0',
+        bottom: '0',
+        transform: 'translateY(-170%)',
     }
 });
 

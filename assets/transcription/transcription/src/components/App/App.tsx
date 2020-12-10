@@ -1,19 +1,23 @@
 // External Dependencies
-import React, { useState } from 'react';
+import React from 'react';
 
 // Internal Dependencies
 import story_id from './getId';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
 
 // Styles
-import './App.css';
+import useStyles from './AppStyles';
 
 const App: React.FC<{}> = () => {
+
+  const classes = useStyles();
 
   return (
     <main>
       {/* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/}
-      <VideoPlayer url={`http://localhost:8845/api/watch/getvideo/${story_id}`}/>
+      <div className={classes.videoPlayerContainer}>
+        <VideoPlayer url={`http://localhost:8845/api/watch/getvideo/${story_id}`}/>
+      </div>
     </main>
   );
 }

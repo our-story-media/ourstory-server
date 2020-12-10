@@ -1,4 +1,4 @@
-import React, { useState, useEffect, SetStateAction } from "react";
+import React, { useState, useEffect, SetStateAction } from 'react';
 
 /**
  * This hook provides state for whether the videos play/pause button should be
