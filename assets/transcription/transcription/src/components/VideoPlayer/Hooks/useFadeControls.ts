@@ -9,13 +9,13 @@ import React, { useState, useEffect, SetStateAction } from 'react';
  * shown, hide the button after 'timeUntilFade' milliseconds. If the video is
  * paused, don't fade the button
  * 
- * @param {boolean} isPlaying - state for whether the video is playing or not
+ * @param {boolean} doFade - state for whether the controls should be faded or not
  * @param {number} timeUntilFade - the number of seconds from when the video
  * is playing and the play/pause button is shown until the play/pause button is
  * faded.
  */
 const useFadeControls = (
-  isPlaying: boolean,
+  doFade: boolean,
   timeUntilFade: number = 1000
 ): [boolean, React.Dispatch<SetStateAction<boolean>>] => {
   const [showControls, setShowControls] = useState(true);
@@ -26,7 +26,7 @@ const useFadeControls = (
      * we want to set a timeout, afterwhich, we want to hide the
      * play/pause button
      */ 
-    if (showControls && isPlaying) {
+    if (showControls && doFade) {
       setTimeoutId(
         setTimeout(() => setShowControls(false), timeUntilFade)
       );
@@ -34,11 +34,11 @@ const useFadeControls = (
      * we want to cancel the timeout (this is the case where the
      * video has been paused)
      */
-    } else if (showControls && !isPlaying && timeoutId) {
+    } else if (showControls && !doFade && timeoutId) {
       clearTimeout(timeoutId);
     }
     return () => timeoutId && clearTimeout(timeoutId);
-  }, [showControls, isPlaying]);
+  }, [showControls, doFade]);
 
   return [showControls, setShowControls];
 };

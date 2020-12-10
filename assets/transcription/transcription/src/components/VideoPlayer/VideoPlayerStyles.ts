@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     progressBarContainer: {
         left: '0',
         bottom: '0',
-        transform: 'translateY(-170%)',
+        transform: 'translateY(-150%)',
     }
 });
 
