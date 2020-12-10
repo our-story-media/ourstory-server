@@ -22,8 +22,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }: VideoPlayerProps) => {
   /* State for the progress through the video, as a fraction */
   const [progress, setProgress] = useState(0);
 
-  /* State for whether the play/pause button is visible */
-  const [showControls, setShowControls]  = useFadeControls(isPlaying, 1500);
+  /* State for whether the video controls are visible */
+  const [showControls, setShowControls]  = useFadeControls(isPlaying, 2000);
 
   const play_pause_button_icon = isPlaying ? <Pause fontSize='large'/> : <PlayArrow fontSize='large'/>;
 

@@ -13,6 +13,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progress }: ProgressBarProps)
 
     const classes = useStyles(progress);
 
+    console.log(Number(progress) * 100);
+
     return (
         <div className={classes.bar}>
             <div className={classes.scrollKnob}></div>
