@@ -14,7 +14,7 @@ const useStyles = makeStyles({
         borderRadius: '50%',
         background: 'linear-gradient(45deg, #FE6B8B 30%, #f54414 90%)',
         right: '0',
-        transform: 'translateY(-30%)',
+        transform: 'translate(50%, -30%)',
         position: 'absolute',
     }
 });

@@ -14,11 +14,11 @@ import React, { useState, useEffect, SetStateAction } from 'react';
  * is playing and the play/pause button is shown until the play/pause button is
  * faded.
  */
-const useFadePlayPauseButton = (
+const useFadeControls = (
   isPlaying: boolean,
   timeUntilFade: number = 1000
 ): [boolean, React.Dispatch<SetStateAction<boolean>>] => {
-  const [showPlayPauseButton, setShowPlayPauseButton] = useState(true);
+  const [showControls, setShowControls] = useState(true);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>();
 
   useEffect(() => {
@@ -26,21 +26,21 @@ const useFadePlayPauseButton = (
      * we want to set a timeout, afterwhich, we want to hide the
      * play/pause button
      */ 
-    if (showPlayPauseButton && isPlaying) {
+    if (showControls && isPlaying) {
       setTimeoutId(
-        setTimeout(() => setShowPlayPauseButton(false), timeUntilFade)
+        setTimeout(() => setShowControls(false), timeUntilFade)
       );
     /* If the play/pause button is shown and the video isn't playing,
      * we want to cancel the timeout (this is the case where the
      * video has been paused)
      */
-    } else if (showPlayPauseButton && !isPlaying && timeoutId) {
+    } else if (showControls && !isPlaying && timeoutId) {
       clearTimeout(timeoutId);
     }
     return () => timeoutId && clearTimeout(timeoutId);
-  }, [showPlayPauseButton, isPlaying]);
+  }, [showControls, isPlaying]);
 
-  return [showPlayPauseButton, setShowPlayPauseButton];
+  return [showControls, setShowControls];
 };
 
-export default useFadePlayPauseButton;
+export default useFadeControls;
