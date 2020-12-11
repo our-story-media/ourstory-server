@@ -28,7 +28,7 @@ services:
       - '6379:6379'
 
   mongo:
-    image: mvertes/alpine-mongo
+    image: mongo
     volumes:
       - mongo-data:/data/db
       - ./backup:/backup
@@ -56,9 +56,13 @@ services:
       - redis
       - mongo
       - beanstalk
-    command: nodemon --watch api app.js #  -- --verbose
+    command: nodemon --watch api app.js # -- --verbose
     environment: 
       sails_LOGINCODE: "abcd"
+      sails_NOTRENDERTAGGED: "true"
+      sails_RENDERPROFILE: "cheese"
+      sails_RENDERWIDTH: 360
+      sails_RENDERHEIGHT: 240
     # command: node app.js # -- --verbose
     # expose:
       # - 1337

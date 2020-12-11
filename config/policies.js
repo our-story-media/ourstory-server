@@ -114,7 +114,8 @@ module.exports.policies = {
         'clone':['authenticated','apiauth'],
         'changeownership':['authenticated','apiauth'],
         'setting':['superadmin','authenticated','apiauth'],
-        'getsettings':['superadmin','authenticated','apiauth']
+        'getsettings':['superadmin','authenticated','apiauth'],
+        'rendertagged':['superadmin','authenticated','apiauth']
     },
 
     'shoot':

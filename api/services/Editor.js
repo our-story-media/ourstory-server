@@ -131,8 +131,31 @@ exports.dropbox = function(config) {
 }
 
 exports.edit = function(edit) {
+	edit.mode = '';
+
+	//just render original version (to halve the render time)
+	if (sails.config.NOTRENDERTAGGED && !edit.forcerendertagged)
+		edit.mode='original';
+
+	//just render tagged version (assuming original exists)
+	if (sails.config.NOTRENDERTAGGED && edit.forcerendertagged)
+		edit.mode='tagged';
+
+	// console.log(edit);
+
+	if (sails.config.RENDERPROFILE)
+		edit.profile = sails.config.RENDERPROFILE;
+	
+	if (sails.config.RENDERWIDTH)
+		edit.width = sails.config.RENDERWIDTH;
+
+	if (sails.config.RENDERHEIGHT)
+		edit.height = sails.config.RENDERHEIGHT;
+		
 	if (client==null)
 	{
+		
+		
 		client = new fivebeans.client(sails.config.BEANSTALK_HOST, sails.config.BEANSTALK_PORT);
 		client
 		    .on('connect', function()

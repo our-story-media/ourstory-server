@@ -9,6 +9,7 @@
  */
 
 var fs = require('fs');
+var path = require('path');
 
 module.exports.bootstrap = function (cb) {
 	//start http redirect server:
@@ -131,6 +132,58 @@ module.exports.bootstrap = function (cb) {
 	if (sails.config.LOCALONLY)
 		Log.info('bootstrap', `Loading LOCAL_MODE`);
 
+	/**
+     * Update edit records if the edit file exists:
+     */
+
+	//if we are in online mode -- update .hasoriginal and .hastagged if there is a .path in the object.
+	if (sails.config.LOCALONLY)
+	{
+		//if we are in offline mode -- update .hasoriginal and .hastagged if the files exist
+		Edits.find({}).exec(function(err,edits){
+			Log.error(err);
+			for (var edit of edits)
+			{
+				// console.log(edit);
+				if (edit.path)
+				{
+					// console.log(path.join(__dirname,'..',"upload","edits",edit.code)+".mp4");
+					if (fs.existsSync(path.join(__dirname,'..',"upload","edits",edit.code)+".mp4"))
+					{
+						edit.hasoriginal = true;
+					}
+
+					if (fs.existsSync(path.join(__dirname,'..',"upload","edits",edit.code)+"_tags.mp4"))
+					{
+						edit.hastagged = true;
+					}
+
+					edit.save();
+				}
+			}
+		});
+	}
+	else
+	{
+		Edits.native(function (err, collection) {
+			collection.update({},
+				{
+					"$set": {
+						"hasoriginal": true,
+						"hastagged":true
+					}
+				},
+				{
+					multi: true
+				}, function (err) {
+					// console.log(err);
+					Log.info('bootstrap', 'Setting hasoriginal and hastagged');
+				});
+		});
+	}
+
+	
+
     /**
      * FIRST INSTALL SCRIPTS
      */
@@ -164,56 +217,9 @@ module.exports.bootstrap = function (cb) {
 					EventTemplate.create(JSON.parse(fs.readFileSync('assets/alltemplates.json'))).exec(function (err, done) {
 						Log.info('bootstrap', 'Init Templates');
 					});
-
-					// if (!sails.config.LOCALONLY) {
-					// 	//update default backgrounds to s3:
-					// 	var ss3 = require('s3');
-					// 	var s3 = ss3.createClient({
-					// 		s3Options: {
-					// 			accessKeyId: sails.config.AWS_ACCESS_KEY_ID,
-					// 			secretAccessKey: sails.config.AWS_SECRET_ACCESS_KEY,
-					// 			region: sails.config.S3_REGION
-					// 		},
-					// 	});
-					// 	var params = {
-					// 		localDir: __dirname + '/../assets/backgrounds/',
-					// 		s3Params: {
-					// 			Bucket: sails.config.S3_BUCKET,
-					// 			Prefix: "upload/backgrounds/",
-					// 			ACL: 'public-read'
-					// 		},
-					// 	};
-					// 	var uploader = s3.uploadDir(params);
-					// 	uploader.on('error', function (err) {
-					// 		console.error("unable to sync:", err.stack);
-					// 		Log.error('bootstrap', 'Default Image Sync Error', err);
-					// 	});
-					// 	uploader.on('progress', function () {
-					// 		process.stdout.write("Default backgrounds upload: " + ((uploader.progressAmount / uploader.progressTotal) * 100).toString().substr(0, 4) + "%\r")
-					// 	});
-					// 	uploader.on('end', function () {
-					// 		Log.info('bootstrap', 'Default Image Sync Complete');
-					// 	});
-					// }
 				}
 			}
 		});
-
-		//checkfix old server media links
-		// Media.find({
-		// 	thumb: {
-		// 		'startsWith': 'http://bootlegger.s3.amazonaws.com'
-		// 	}
-		// }).exec(function (err, media) {
-		// 	_.each(media, function (m) {
-		// 		if (m.thumb) {
-		// 			m.thumb = m.thumb.replace('http://bootlegger.s3.amazonaws.com', '');
-		// 			m.save(function (err, done) {
-		// 				//done 
-		// 			});
-		// 		}
-		// 	});
-		// });
 
 		if (sails.config.LOCALONLY) {
 			Whitelabel.find({}).exec(function (err, wl) {
@@ -242,9 +248,6 @@ module.exports.bootstrap = function (cb) {
 	var passport = require('passport');
 	var GoogleStrategy = require('passport-google-oauth20').Strategy;
 	var LocalStrategy = require('passport-local').Strategy;
-	// var FacebookStrategy = require('passport-facebook').Strategy;
-	// var TwitterStrategy = require('passport-twitter').Strategy;
-	// var DropboxOAuth2Strategy = require('passport-dropbox-oauth2').Strategy;
 
 	passport.use(new LocalStrategy({passReqToCallback: true},
 		function (req, username, password, done) {
@@ -301,22 +304,6 @@ module.exports.bootstrap = function (cb) {
 	var protocol = (_.contains(process.argv, '--prod') ? 'https' : 'http');
 
 	if (!sails.config.LOCALONLY) {
-		// passport.use(new DropboxOAuth2Strategy({
-		// 	apiVersion: '2',
-		// 	clientID: sails.config.dropbox_clientid,
-		// 	clientSecret: sails.config.dropbox_clientsecret,
-		// 	passReqToCallback: true,
-		// 	callbackURL: sails.config.master_url + '/auth/dropbox_return'
-		// },
-		// 	function (req, accessToken, refreshToken, profile, done) {
-		// 		Log.info('dropbox', 'Login', { user_id: req.session.passport.user.id });
-		// 		req.session.passport.user.dropbox = {};
-		// 		req.session.passport.user.dropbox.id = profile.id;
-		// 		req.session.passport.user.dropbox.refreshToken = refreshToken;
-		// 		req.session.passport.user.dropbox.accessToken = accessToken;
-		// 		return done(null, req.session.passport.user);
-		// 	}
-		// ));
 
 		passport.use(new GoogleStrategy({
 			clientID: sails.config.google_clientid,
@@ -357,48 +344,6 @@ module.exports.bootstrap = function (cb) {
 			}
 		));
 
-		// passport.use(new FacebookStrategy({
-		// 	clientID: sails.config.FACEBOOK_APP_ID,
-		// 	clientSecret: sails.config.FACEBOOK_APP_SECRET,
-		// 	callbackURL: sails.config.master_url + '/auth/facebook_return',
-		// 	profileFields: ['id', 'name', 'picture.type(small)', 'emails', 'displayName']
-		// },
-		// 	function (token, tokensecret, profile, done) {
-		// 		//console.log(profile);
-		// 		Log.info('facebook', 'Login', { user_id: profile.id });
-		// 		// profile._json.picture = 'http://graph.facebook.com/' + profile.id + '/picture';
-
-
-		// 		if (profile.emails) {
-
-		// 			var sn_profile = {
-		// 				"id": profile.id,
-		// 				"displayName": profile.displayName,
-		// 				"provider": profile.provider,
-		// 				"photos": [
-		// 					{
-		// 						"value": profile.photos[0].value
-		// 					}
-		// 				],
-		// 				"emails": [
-		// 					{
-		// 						"value": profile.emails[0].value
-		// 					}
-		// 				]
-		// 			};
-
-		// 			User.findOrCreate({ uid: String(profile.id) }, { uid: String(profile.id), profile: sn_profile }, function (err, user) {
-		// 				user.profile.photos = sn_profile.photos;
-		// 				user.save(function(err){
-		// 					return done(err, user);
-		// 				});
-		// 			});
-		// 		}
-		// 		else {
-		// 			return done(null, false, { message: 'Please allow Bootlegger access to your email address!' });
-		// 		}
-		// 	}
-		// ));
 	}
 
 	passport.serializeUser(function (user, done) {
@@ -408,21 +353,6 @@ module.exports.bootstrap = function (cb) {
 	passport.deserializeUser(function (user, done) {
 		done(null, user);
 	});
-
-	// if (!sails.config.git_version) {
-	// 	sails.log.verbose('No GIT repo installed here');
-	// 	sails.config.git_version = {
-	// 		branch: 'production',
-	// 		date: '?',
-	// 		time: '?',
-	// 		message: '?'
-	// 	};
-	// }
-
-	// cb();
-
-	// sails.localmode = false;
-	// if (sails.config.LOCALONLY) {
 	//startup the event manager:
 	sails.hostname = sails.config.hostname + ':' + sails.config.port;
 	sails.multiserveronline = false;
@@ -430,18 +360,4 @@ module.exports.bootstrap = function (cb) {
 	sails.eventmanager.init(sails, function () {
 		cb();
 	});
-	// }
-	// else {
-	// 	//not local -- tell the central server to reload events:
-	// 	// Log.info('bootstrap', "Signing on with Multi-Control Server");
-	// 	sails.hostname = sails.config.hostname + ':' + sails.config.port;
-	// 	Log.info('bootstrap', "Current Hostname is " + sails.hostname);
-	// 	sails.multiserveronline = false;
-	// 		//startup the event manager:
-	// 	sails.eventmanager = require('./eventmanager.js');
-	// 	sails.eventmanager.init(sails, function () {
-	// 		cb();
-	// 	});
-	// 	// });
-	// }
 };

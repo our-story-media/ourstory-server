@@ -38,17 +38,6 @@ if (!sails.config.LOCALONLY)
 	client = knox.createClient(knox_params);
 }
 
-function phonenumber(inputtxt) {
-	var phoneno = /^\+?([0-9]{6,})$/;
-	if (inputtxt.match(phoneno)) {
-		return true;
-	}
-	else {
-		//alert("message");
-		return false;
-	}
-}
-
 function ValidateEmail(inputText) {
 	var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 	if (inputText.match(mailformat)) {
@@ -67,19 +56,20 @@ module.exports = {
 		let usb = false;
 		let backups = [];
 		let files = [];
+		let s=null;
 		let inprogress = false;
 		
 
 		if (sails.config.LOCALONLY)
 		{
-			let s = await stat('/usbdrive/usb');
 			
 			inprogress = Backup.backuprunning;
-
+			
 			//change to detect if mount exists, as its always a directory:
 			
 			try
 			{
+				// let s = await stat('/usbdrive/usb');
 				await exec('findmnt -R /usbdrive/usb');
 				isusb = true;
 			}
@@ -103,20 +93,6 @@ module.exports = {
 		}
 		res.view({usb,backups,inprogress});
 	},
-
-	// admin_edits: function (req, res) {
-	// 	User.find({}).exec(function (err, users) {
-	// 		Edits.find({}).exec(function (err, alledits) {
-	// 			_.each(alledits, function (e) {
-	// 				e.user = _.find(users, function (u) {
-	// 					return u.id.toString() == e.user_id.toString();
-	// 				});
-	// 				//console.log(e.user)
-	// 			});
-	// 			return res.json({ edits: alledits });
-	// 		});
-	// 	});
-	// },
 
 	admin_events: function (req, res) {
 		User.find({}).exec(function (err, users) {

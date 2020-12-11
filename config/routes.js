@@ -146,7 +146,7 @@ module.exports.routes = {
     'get /api/editing/music': { controller: 'WatchController', action: 'music', cors: true },
 
     'get /api/watch/canceleditupdates': 'WatchController.canceleditupdates',
-    // 'get /api/watch/restartedit/:id?': 'WatchController.restartedit',
+    'get /api/watch/rendertagged/:eventid/:id?': 'WatchController.rendertagged',
     'post /api/watch/savedit/:id?': 'WatchController.saveedit',
     'post /api/watch/newedit/:id?': 'WatchController.newedit',
     'post /api/watch/deleteedit/:id?': 'WatchController.deleteedit',

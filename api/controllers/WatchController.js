@@ -559,6 +559,50 @@ module.exports = {
 		}
 	},
 
+	rendertagged: async function(req,res)
+	{
+		// console.log('render tagged visit')
+
+		let canedit = await Settings.findOne({ name: 'processedits' });
+		if (canedit.value == 'true') {
+			Edits.findOne(req.params.id).exec(function (err, edit) {
+				if (edit) {
+					
+					console.log("rendering tagged");
+					//console.log(edit);
+					//console.log(edit.media);
+					//console.log(edit.media.length > 1);
+
+					//TODO CHANGE THIS BACK
+					if (edit.media && edit.media.length > 0) {
+						edit.failed = false;
+						edit.fail = false;
+						edit.path = null;
+						edit.progress = null;
+						edit.forcerendertagged = true;
+						edit.save(function (err) {
+							//fire off to editor:
+							//send back to user:
+							console.log("edit submitted");
+							Editor.edit(edit);
+							edit.shortlink = sails.config.master_url + '/v/' + edit.code;
+							res.redirect('/watch/edits/'+req.params.eventid);
+						});
+					}
+					else {
+						res.redirect('/watch/edits/'+req.params.eventid);
+					}
+				}
+				else {
+					res.redirect('/watch/edits/'+req.params.eventid);
+				}
+			});
+		}
+		else {
+			res.redirect('/watch/edits/'+req.params.eventid);
+		}
+	},
+
 	restartedit: async function (req, res) {
 
 		let canedit = await Settings.findOne({ name: 'processedits' });
