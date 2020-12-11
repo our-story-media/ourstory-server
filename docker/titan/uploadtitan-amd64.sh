@@ -42,6 +42,6 @@ echo "Uploading Version"
 
 aws s3 cp indaba-stack.version s3://ourstory-v2-live/titan/
 
-echo "Copy to indaba-update.tar"
+echo "Copy to images.tar"
 
 aws s3 cp s3://ourstory-v2-live/titan/$FILENAME s3://ourstory-v2-live/titan/images.tar
