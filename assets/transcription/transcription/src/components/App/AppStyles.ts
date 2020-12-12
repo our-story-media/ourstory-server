@@ -6,6 +6,9 @@ const useStyles = makeStyles({
         height: '80vh',
         margin: 'auto',
         marginTop: '4vh',
+    },
+    main: {
+        background: 'black',
     }
 });
 

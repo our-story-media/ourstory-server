@@ -13,7 +13,7 @@ const App: React.FC<{}> = () => {
   const classes = useStyles();
 
   return (
-    <main>
+    <main className={classes.main}>
       {/* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/}
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer url={`http://localhost:8845/api/watch/getvideo/${story_id}`}/>

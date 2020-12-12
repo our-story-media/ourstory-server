@@ -2,7 +2,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 type stylesProps = {
     barProgress: number,
-    initialOffset: number,
 }
 
 const useStyles = makeStyles({
@@ -18,15 +17,6 @@ const useStyles = makeStyles({
             transparent 100%
         )`,
         position: 'relative',
-    }),
-    scrollKnob: (props: stylesProps) => ({
-        width: '12px',
-        height: '12px',
-        borderRadius: '50%',
-        background: 'linear-gradient(45deg, #FE6B8B 30%, #f54414 90%)',
-        left: `${Number(props.initialOffset) * 100}%`,
-        transform: 'translate(-5px, -5px)',
-        position: 'absolute',
     }),
 });
 
