@@ -1,12 +1,11 @@
 // External Dependencies
-import React, { useEffect, useRef, useState } from "react";
-import { Container, Button } from "@material-ui/core";
-import ReactPlayer, { ReactPlayerProps } from "react-player";
+import React, { useRef } from "react";
+import { Container, Button, Slider } from "@material-ui/core";
+import ReactPlayer from "react-player";
 import { PlayArrow, Pause } from "@material-ui/icons";
 
 // Internal Dependencies
-import useFadeControls from "./Hooks/useFadeControls";
-import ProgressBar from "./ProgressBar/ProgressBar";
+import useVideoPlayerProps from "./Hooks/useVideoPlayerProps";
 
 // Styles
 import useStyles from "./VideoPlayerStyles";
@@ -19,18 +18,17 @@ type VideoPlayerProps = {
 };
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }: VideoPlayerProps) => {
-  /* State for whether the video is currently playing */
-  const [isPlaying, setIsPlaying] = useState(false);
-  /* State for the progress through the video, as a fraction */
-  const [progress, setProgress] = useState(0);
-  /* State for whether the user is scrolling through the video */
-  const [dragging, setDragging] = useState(false);
+  /* A reference to the ReactPlayer component. This is required to fetch the progression of the video */
+  const playerRef = useRef<ReactPlayer>(null);
 
-  /* State for whether the video controls are visible */
-  const [showControls, setShowControls] = useFadeControls(
-    !dragging && isPlaying,
-    2000
-  );
+  /* The useVideoPlayerProps hook maintains the logic for this component */
+  const [
+    playerProps,
+    progressBarProps,
+    showControls,
+    isPlaying,
+    toggleIsPlaying,
+  ] = useVideoPlayerProps(playerRef);
 
   const play_pause_button_icon = isPlaying ? (
     <Pause fontSize="large" />
@@ -40,51 +38,29 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }: VideoPlayerProps) => {
 
   const classes = useStyles();
 
-  const playerRef = useRef<ReactPlayer>(null);
-
-  const playerProps: ReactPlayerProps = {
-    className: "react-player",
-    url: url,
-    playing:
-      !dragging &&
-      isPlaying /* Don't progress the player if the user is scrolling through the video */,
-    height: "100%",
-    width: "100%",
-    progressInterval: 250,
-    onProgress: ({ played /*playedSeconds, loaded, loadedSeconds*/ }) =>
-      setProgress(played),
-    onClick: () => setShowControls((state) => !state),
-  };
-
-  useEffect(() => {
-    if (dragging || !isPlaying) {
-      console.log(progress);
-      console.log(playerRef.current);
-      playerRef.current &&
-        progress &&
-        playerRef.current.seekTo(progress, "fraction");
-    }
-  }, [progress]);
-
   return (
     <Container className={classes.videoPlayerContainer} maxWidth="xl">
-      <ReactPlayer ref={playerRef} {...playerProps} />
+      <ReactPlayer
+        url={url}
+        ref={playerRef}
+        width="100%"
+        height="100%"
+        {...playerProps}
+      />
       {showControls && (
         <>
+          {/* Play/Pause Button */}
           <Button
             variant="contained"
             color="primary"
             className={classes.videoPlayerPlayButton}
-            onClick={() => setIsPlaying((state) => !state)}
+            onClick={toggleIsPlaying}
           >
             {play_pause_button_icon}
           </Button>
           <div className={classes.progressBarContainer}>
-            <ProgressBar
-              progress={progress * 100}
-              setProgress={setProgress}
-              setDragging={setDragging}
-            />
+            {/* Progress Bar */}
+            <Slider {...progressBarProps} />
           </div>
         </>
       )}
