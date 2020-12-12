@@ -18,7 +18,7 @@ const useVideoPlayerProps = (
   playerRef: RefObject<ReactPlayer>
 ): [ReactPlayerProps, any, boolean, boolean, () => void] => {
   /* State for whether the video is currently playing */
-  const [isPlaying, toggleIsPlaying] = useToggle(false);
+  const [isPlaying, toggleIsPlaying, setIsPlaying] = useToggle(false);
 
   /* State for whether the video source has been loaded */
   const [isLoaded, setIsLoaded] = useState(false);
@@ -45,6 +45,7 @@ const useVideoPlayerProps = (
       setProgress(played),
     onClick: () => setShowControls((state) => !state),
     onReady: () => setIsLoaded(true),
+    onEnded: () => setIsPlaying(false),
   };
 
   /* These are the props that will be passed onto the Slider component (the slider component is the video progress bar) */

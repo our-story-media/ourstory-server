@@ -14,7 +14,10 @@ const useStyles = makeStyles({
     progressBarContainer: {
         left: '0',
         bottom: '0',
-        transform: 'translateY(-150%)',
+        transform: 'translateY(-50%)',
+    },
+    progressBar: {
+        color: '#f54414',
     }
 });
 

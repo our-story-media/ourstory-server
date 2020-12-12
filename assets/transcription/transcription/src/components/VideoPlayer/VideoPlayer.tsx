@@ -60,7 +60,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }: VideoPlayerProps) => {
           </Button>
           <div className={classes.progressBarContainer}>
             {/* Progress Bar */}
-            <Slider {...progressBarProps} />
+            <Slider classes={{colorPrimary: classes.progressBar}} {...progressBarProps} />
           </div>
         </>
       )}
