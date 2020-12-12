@@ -1,5 +1,5 @@
 // External Dependencies
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Container, Button } from '@material-ui/core';
 import ReactPlayer, { ReactPlayerProps } from 'react-player';
 import { PlayArrow, Pause } from '@material-ui/icons';
@@ -13,7 +13,9 @@ import useStyles from './VideoPlayerStyles';
 
 type VideoPlayerProps = {
   /** The url of the video */
-  url: string
+  url: string,
+  /** The beginning and end time points of the video to play as fractions */
+  split?: { start: number, end: number },
 };
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }: VideoPlayerProps) => {
@@ -43,26 +45,28 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }: VideoPlayerProps) => {
     onProgress: ({ played, /*playedSeconds, loaded, loadedSeconds*/ }) => setProgress(played) ,
     onClick: () => setShowControls(state => !state),
   }
+  
+  useEffect(() => {
+    if (dragging || !isPlaying) {
+      console.log(progress);
+      console.log(playerRef.current);
+      playerRef.current && progress && playerRef.current.seekTo(progress, 'fraction');
+    }
+  }, [progress]);
 
   return (
     <Container className={classes.videoPlayerContainer} maxWidth='xl'>
       <ReactPlayer ref={playerRef} {...playerProps}/>
-      {
-        showControls &&
-        <>
           <Button variant='contained' color='primary' className={classes.videoPlayerPlayButton} onClick={() => setIsPlaying(state => !state)}>
             {play_pause_button_icon}
           </Button>
           <div className={classes.progressBarContainer}>
-            <ProgressBar setDragging={setDragging}
-                         onScroll = { offset => {
-                           playerRef.current && playerRef.current.seekTo(offset, 'fraction');
-                           playerRef.current && setProgress(playerRef.current.getCurrentTime() / playerRef.current.getDuration());
-                         }}
-                         progress={progress}/>
+            <ProgressBar
+              progress={progress * 100}
+              setProgress={setProgress}
+              setDragging={setDragging}
+              />
           </div>
-        </>
-      }
     </Container>
   );
 };
