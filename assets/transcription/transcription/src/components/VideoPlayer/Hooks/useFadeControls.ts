@@ -1,4 +1,4 @@
-import React, { useState, useEffect, SetStateAction } from 'react';
+import React, { useState, useRef, useEffect, SetStateAction } from 'react';
 
 /**
  * This hook provides state for whether the videos play/pause button should be
@@ -19,26 +19,17 @@ const useFadeControls = (
   timeUntilFade: number = 1000
 ): [boolean, React.Dispatch<SetStateAction<boolean>>] => {
   const [showControls, setShowControls] = useState(true);
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>();
+  const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    /* When the play/pause button is shown and the video is playing, 
-     * we want to set a timeout, afterwhich, we want to hide the
-     * play/pause button
-     */ 
-    if (showControls && doFade) {
-      setTimeoutId(
-        setTimeout(() => setShowControls(false), timeUntilFade)
-      );
-    /* If the play/pause button is shown and the video isn't playing,
-     * we want to cancel the timeout (this is the case where the
-     * video has been paused)
-     */
-    } else if (showControls && !doFade && timeoutId) {
-      clearTimeout(timeoutId);
+    if (doFade && showControls && !timeoutId.current) {
+      timeoutId.current = setTimeout(() => setShowControls(false), timeUntilFade);
+    } else if (!doFade && timeoutId.current) {
+      clearTimeout(timeoutId.current);
+      timeoutId.current = null;
     }
-    return () => timeoutId && clearTimeout(timeoutId);
-  }, [showControls, doFade]);
+
+  }, [showControls, doFade, timeUntilFade]);
 
   return [showControls, setShowControls];
 };
