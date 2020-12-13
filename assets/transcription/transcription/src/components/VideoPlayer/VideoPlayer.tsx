@@ -17,7 +17,7 @@ type VideoPlayerProps = {
   split?: { start: number; end: number };
 };
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }: VideoPlayerProps) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, split = { start: 0, end: 1} }: VideoPlayerProps) => {
   /* A reference to the ReactPlayer component. This is required to fetch the progression of the video */
   const playerRef = useRef<ReactPlayer>(null);
 
@@ -28,7 +28,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }: VideoPlayerProps) => {
     showControls,
     isPlaying,
     toggleIsPlaying,
-  ] = useVideoPlayerProps(playerRef);
+  ] = useVideoPlayerProps(playerRef, split);
 
   const play_pause_button_icon = isPlaying ? (
     <Pause fontSize="large" />
