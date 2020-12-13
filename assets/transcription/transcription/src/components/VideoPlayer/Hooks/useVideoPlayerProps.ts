@@ -1,5 +1,5 @@
 // External Dependencies
-import { useState, useEffect, RefObject } from "react";
+import { useState, useEffect, RefObject, MutableRefObject } from "react";
 import ReactPlayer, { ReactPlayerProps } from "react-player";
 
 // Internal Dependencies
@@ -15,6 +15,7 @@ import useFadeControls from "./useFadeControls";
  * @param playerRef - a reference to the player that this hook controls
  */
 const useVideoPlayerProps = (
+  progressRef: MutableRefObject<number>,
   playerRef: RefObject<ReactPlayer>,
   /** The beginning and end of the clip of the video to play, as a fraction
    *  If, for example, start is 0 and end is 0.5, only play the first half of
@@ -34,6 +35,11 @@ const useVideoPlayerProps = (
   /* State for the progress through the video, as a fraction */
   const [progress, setProgress] = useState(split.start);
 
+  useEffect(() => {
+    if (progressRef)
+      progressRef.current = progress;
+  }, [progress, progressRef]);
+
   /* The useFadecontrols hook maintains the state for whether the video controls should be shown */
   const [showControls, setShowControls] = useFadeControls(
     !dragging && isPlaying,
@@ -43,7 +49,7 @@ const useVideoPlayerProps = (
   /* These are the props that will be passed onto the ReactPlayer component */
   const playerProps: ReactPlayerProps = {
     playing:
-      !dragging /* Don't progress the player if the user is scrolling through the video */ &&
+      !dragging && /* Don't progress the player if the user is scrolling through the video */
       isPlaying,
     progressInterval: 250,
     onProgress: ({ played /*playedSeconds, loaded, loadedSeconds*/ }) =>

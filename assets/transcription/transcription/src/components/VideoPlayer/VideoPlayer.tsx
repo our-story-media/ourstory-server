@@ -1,5 +1,5 @@
 // External Dependencies
-import React, { useRef } from "react";
+import React, { MutableRefObject, useRef } from "react";
 import { Container, Button, Slider } from "@material-ui/core";
 import ReactPlayer from "react-player";
 import { PlayArrow, Pause } from "@material-ui/icons";
@@ -13,11 +13,17 @@ import useStyles from "./VideoPlayerStyles";
 type VideoPlayerProps = {
   /** The url of the video */
   url: string;
+  /** The VideoPlayer component will inform it's parent of it's current progress
+   *  into the video through this mutable reference.
+   *  The VideoPlayer guarantees that the value of this reference will always be
+   * the current progress through the video as a fraction
+   */
+  progress: MutableRefObject<number>;
   /** The beginning and end time points of the video to play as fractions */
   split?: { start: number; end: number };
 };
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, split = { start: 0, end: 1} }: VideoPlayerProps) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, progress, split = { start: 0, end: 1} }: VideoPlayerProps) => {
   /* A reference to the ReactPlayer component. This is required to fetch the progression of the video */
   const playerRef = useRef<ReactPlayer>(null);
 
@@ -28,7 +34,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, split = { start: 0, end:
     showControls,
     isPlaying,
     toggleIsPlaying,
-  ] = useVideoPlayerProps(playerRef, split);
+  ] = useVideoPlayerProps(progress, playerRef, split);
 
   const play_pause_button_icon = isPlaying ? (
     <Pause fontSize="large" />

@@ -7,9 +7,6 @@ const useStyles = makeStyles({
         margin: 'auto',
         marginTop: '4vh',
     },
-    main: {
-        background: 'black',
-    }
 });
 
 export default useStyles;
