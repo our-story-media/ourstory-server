@@ -14,9 +14,10 @@ import useFadeControls from "./useFadeControls";
  * 
  * @param playerRef - a reference to the player that this hook controls
  */
-const useVideoPlayerProps = (
+const useVideoPlayer = (
   progressRef: MutableRefObject<number>,
   playerRef: RefObject<ReactPlayer>,
+  setDuration: (state: number) => void,
   /** The beginning and end of the clip of the video to play, as a fraction
    *  If, for example, start is 0 and end is 0.5, only play the first half of
    *  the video
@@ -35,10 +36,17 @@ const useVideoPlayerProps = (
   /* State for the progress through the video, as a fraction */
   const [progress, setProgress] = useState(split.start);
 
+  /* Keep the progress reference up to date with the value of progress */
   useEffect(() => {
     if (progressRef)
       progressRef.current = progress;
   }, [progress, progressRef]);
+  
+  useEffect(() => {
+    if (isLoaded && playerRef.current) {
+      setDuration(playerRef.current.getDuration());
+    }
+  }, [setDuration, playerRef, isLoaded]);
 
   /* The useFadecontrols hook maintains the state for whether the video controls should be shown */
   const [showControls, setShowControls] = useFadeControls(
@@ -55,7 +63,7 @@ const useVideoPlayerProps = (
     onProgress: ({ played /*playedSeconds, loaded, loadedSeconds*/ }) =>
       setProgress(played),
     onClick: () => setShowControls((state) => !state),
-    onReady: () => {setIsLoaded(true)},
+    onReady: () => setIsLoaded(true),
     onEnded: () => setIsPlaying(false),
   };
 
@@ -104,4 +112,4 @@ const useVideoPlayerProps = (
   ];
 };
 
-export default useVideoPlayerProps;
+export default useVideoPlayer;
