@@ -1,16 +1,17 @@
 // External Dependencies
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 // Internal Dependencies
-import story_id from "./getId";
-import VideoPlayer from "../VideoPlayer/VideoPlayer";
-import ChunkCard from "../ChunkCard/ChunkCard";
-import { Chunk } from "../../types";
+import story_id from './getId';
+import VideoPlayer from '../VideoPlayer/VideoPlayer';
+import ChunkCard from '../ChunkCard/ChunkCard';
+import { Chunk } from '../../types';
 import { ProgressState } from '../VideoPlayer/Hooks/useVideoPlayerProgress';
 
 // Styles
-import useStyles from "./AppStyles";
-import { Button } from "@material-ui/core";
+import useStyles from './AppStyles';
+import { Button } from '@material-ui/core';
+import { Add, History } from '@material-ui/icons';
 
 const zeroPad = (value: number) =>
   ((rounded) => (rounded < 10 ? `0${rounded}` : rounded.toString()))(
@@ -23,7 +24,7 @@ const toTimeStamp = (seconds: number) =>
   )}:${zeroPad(Math.round((seconds - Math.floor(seconds)) * 100))}`;
 
 const getLastEndTimeStamp = (chunks: Chunk[]): string =>
-  chunks.length > 0 ? chunks[chunks.length - 1].endtimestamp : "00:00:00:00";
+  chunks.length > 0 ? chunks[chunks.length - 1].endtimestamp : '00:00:00:00';
 
 const getLastEndTimeSeconds = (chunks: Chunk[]): number =>
   chunks.length > 0 ? chunks[chunks.length - 1].endtimeseconds : 0;
@@ -84,7 +85,7 @@ const App: React.FC<{}> = () => {
               starttimeseconds: enclosingChunk.starttimeseconds,
               endtimestamp: toTimeStamp(progressState.progress * duration),
               endtimeseconds: progressState.progress,
-              creatorid: "test",
+              creatorid: 'test',
               updatedat: new Date(),
               id: (Date.now() + 10).toString(),
             },
@@ -93,7 +94,7 @@ const App: React.FC<{}> = () => {
               starttimeseconds: progressState.progress,
               endtimestamp: enclosingChunk.endtimestamp,
               endtimeseconds: enclosingChunk.endtimeseconds,
-              creatorid: "test",
+              creatorid: 'test',
               updatedat: new Date(),
               id: Date.now().toString(),
             },
@@ -107,7 +108,7 @@ const App: React.FC<{}> = () => {
             endtimestamp: toTimeStamp(progressState.progress * duration),
             starttimeseconds: getLastEndTimeSeconds(chunks),
             endtimeseconds: progressState.progress,
-            creatorid: "Test",
+            creatorid: 'Test',
             updatedat: new Date(),
             id: Date.now().toString(),
           },
@@ -137,9 +138,13 @@ const App: React.FC<{}> = () => {
           url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
         />
       </div>
-      <Button variant="contained" color="primary" onClick={handleNewChunk}>
-        Create Chunk
+      <Button variant='contained' color='primary' onClick={() => setProgressState({progress: progressState.progress - (5 / duration), fromPlayer: false})}>
+        <History />
       </Button>
+      <Button variant='contained' color='primary' onClick={handleNewChunk}>
+        <Add />
+      </Button>
+
       <div className={classes.chunksContainer}>
         {chunks.map((c) => (
           <ChunkCard key={c.id} onPlay={() => {setPlay(true); setProgressState({progress: c.starttimeseconds, fromPlayer: false});}} chunk={c} />

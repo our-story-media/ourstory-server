@@ -3,7 +3,6 @@ import { useState, useEffect, RefObject } from "react";
 import ReactPlayer, { ReactPlayerProps } from "react-player";
 
 // Internal Dependencies
-import useToggle from "../../../hooks/useToggle";
 import useFadeControls from "./useFadeControls";
 import { ProgressState } from "./useVideoPlayerProgress";
 
@@ -88,6 +87,9 @@ const useVideoPlayer = (
   };
 
   useEffect(() => {
+    /** If the change in state wasn't from the ReactPlayer component,
+     *  we need to update the player ourselves
+     */
     if (!progressState.fromPlayer) {
       playerRef.current &&
         isLoaded &&
