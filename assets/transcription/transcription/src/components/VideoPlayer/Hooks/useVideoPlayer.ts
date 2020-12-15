@@ -15,7 +15,7 @@ import useFadeControls from "./useFadeControls";
  * @param playerRef - a reference to the player that this hook controls
  */
 const useVideoPlayer = (
-  progressRef: MutableRefObject<number>,
+  progressState: [progress: number, setProgress: (state: number) => void],
   playerRef: RefObject<ReactPlayer>,
   setDuration: (state: number) => void,
   /** The beginning and end of the clip of the video to play, as a fraction
@@ -34,14 +34,8 @@ const useVideoPlayer = (
   const [dragging, setDragging] = useState(false);
 
   /* State for the progress through the video, as a fraction */
-  const [progress, setProgress] = useState(split.start);
+  const [progress, setProgress] = progressState;
 
-  /* Keep the progress reference up to date with the value of progress */
-  useEffect(() => {
-    if (progressRef)
-      progressRef.current = progress;
-  }, [progress, progressRef]);
-  
   useEffect(() => {
     if (isLoaded && playerRef.current) {
       setDuration(playerRef.current.getDuration());

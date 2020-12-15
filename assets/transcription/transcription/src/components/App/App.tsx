@@ -1,5 +1,5 @@
 // External Dependencies
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
 // Internal Dependencies
 import story_id from "./getId";
@@ -70,8 +70,8 @@ const App: React.FC<{}> = () => {
   // TODO: Use reducer to handle actions here
 
   const handleNewChunk = () => {
-    const enclosingChunk = getEnclosingChunk(chunks, progressRef.current);
-    if (invalidSplit(chunks, progressRef.current)) {
+    const enclosingChunk = getEnclosingChunk(chunks, progress);
+    if (invalidSplit(chunks, progress)) {
       return;
     } else if (enclosingChunk != null) {
       setChunks(
@@ -81,15 +81,15 @@ const App: React.FC<{}> = () => {
             {
               starttimestamp: enclosingChunk.starttimestamp,
               starttimeseconds: enclosingChunk.starttimeseconds,
-              endtimestamp: toTimeStamp(progressRef.current * duration),
-              endtimeseconds: progressRef.current,
+              endtimestamp: toTimeStamp(progress * duration),
+              endtimeseconds: progress,
               creatorid: "test",
               updatedat: new Date(),
               id: (Date.now() + 10).toString(),
             },
             {
-              starttimestamp: toTimeStamp(progressRef.current * duration),
-              starttimeseconds: progressRef.current,
+              starttimestamp: toTimeStamp(progress * duration),
+              starttimeseconds: progress,
               endtimestamp: enclosingChunk.endtimestamp,
               endtimeseconds: enclosingChunk.endtimeseconds,
               creatorid: "test",
@@ -103,9 +103,9 @@ const App: React.FC<{}> = () => {
         chunks.concat([
           {
             starttimestamp: getLastEndTimeStamp(chunks),
-            endtimestamp: toTimeStamp(progressRef.current * duration),
+            endtimestamp: toTimeStamp(progress * duration),
             starttimeseconds: getLastEndTimeSeconds(chunks),
-            endtimeseconds: progressRef.current,
+            endtimeseconds: progress,
             creatorid: "Test",
             updatedat: new Date(),
             id: Date.now().toString(),
@@ -115,7 +115,7 @@ const App: React.FC<{}> = () => {
     }
   };
 
-  const progressRef = useRef<number>(0);
+  const [progress, setProgress] = useState(0);
 
   const [duration, setDuration] = useState(0);
 
@@ -129,7 +129,7 @@ const App: React.FC<{}> = () => {
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer
           setDuration={setDuration}
-          progress={progressRef}
+          progress={[progress, setProgress]}
           url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
         />
       </div>

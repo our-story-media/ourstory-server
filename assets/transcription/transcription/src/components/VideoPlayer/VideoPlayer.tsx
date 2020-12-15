@@ -22,9 +22,9 @@ type VideoPlayerProps = {
    * has requested to play only half of the video, when that half has finished
    * playing, the reference will equal 0.5 (as only half of the video was played)
    */
-  progress: MutableRefObject<number>;
+  progress: [progress: number, setProgress: (state: number) => void]
   /** Once the video has initially loaded, the component will write the duration
-   *  of the video in __ to this variable
+   *  of the video in seconds to this state
    */
   setDuration: (state: number) => void;
   /** The beginning and end time points of the video to play as fractions */
