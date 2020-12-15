@@ -6,6 +6,7 @@ import { PlayArrow, Pause } from "@material-ui/icons";
 
 // Internal Dependencies
 import useVideoPlayer from "./Hooks/useVideoPlayer";
+import { ProgressState } from './Hooks/useVideoPlayerProgress';
 
 // Styles
 import useStyles from "./VideoPlayerStyles";
@@ -22,7 +23,8 @@ type VideoPlayerProps = {
    * has requested to play only half of the video, when that half has finished
    * playing, the reference will equal 0.5 (as only half of the video was played)
    */
-  progress: [progress: number, setProgress: (state: number) => void]
+  progressState: [progressState: ProgressState, setProgressState: (state: ProgressState) => void]
+  playState: [play: boolean, setPlay: React.Dispatch<React.SetStateAction<boolean>>];
   /** Once the video has initially loaded, the component will write the duration
    *  of the video in seconds to this state
    */
@@ -31,7 +33,7 @@ type VideoPlayerProps = {
   split?: { start: number; end: number };
 };
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, progress, setDuration, split = { start: 0, end: 1} }: VideoPlayerProps) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, playState, progressState, setDuration, split = { start: 0, end: 1} }: VideoPlayerProps) => {
   /* A reference to the ReactPlayer component. This is required to fetch the progression of the video */
   const playerRef = useRef<ReactPlayer>(null);
 
@@ -42,7 +44,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, progress, setDuration, s
     showControls,
     isPlaying,
     toggleIsPlaying,
-  ] = useVideoPlayer(progress, playerRef, setDuration, split);
+  ] = useVideoPlayer(progressState, playState, playerRef, setDuration, split);
 
   const play_pause_button_icon = isPlaying ? (
     <Pause fontSize="large" />

@@ -6,6 +6,7 @@ import story_id from "./getId";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import ChunkCard from "../ChunkCard/ChunkCard";
 import { Chunk } from "../../types";
+import { ProgressState } from '../VideoPlayer/Hooks/useVideoPlayerProgress';
 
 // Styles
 import useStyles from "./AppStyles";
@@ -70,8 +71,8 @@ const App: React.FC<{}> = () => {
   // TODO: Use reducer to handle actions here
 
   const handleNewChunk = () => {
-    const enclosingChunk = getEnclosingChunk(chunks, progress);
-    if (invalidSplit(chunks, progress)) {
+    const enclosingChunk = getEnclosingChunk(chunks, progressState.progress);
+    if (invalidSplit(chunks, progressState.progress)) {
       return;
     } else if (enclosingChunk != null) {
       setChunks(
@@ -81,15 +82,15 @@ const App: React.FC<{}> = () => {
             {
               starttimestamp: enclosingChunk.starttimestamp,
               starttimeseconds: enclosingChunk.starttimeseconds,
-              endtimestamp: toTimeStamp(progress * duration),
-              endtimeseconds: progress,
+              endtimestamp: toTimeStamp(progressState.progress * duration),
+              endtimeseconds: progressState.progress,
               creatorid: "test",
               updatedat: new Date(),
               id: (Date.now() + 10).toString(),
             },
             {
-              starttimestamp: toTimeStamp(progress * duration),
-              starttimeseconds: progress,
+              starttimestamp: toTimeStamp(progressState.progress * duration),
+              starttimeseconds: progressState.progress,
               endtimestamp: enclosingChunk.endtimestamp,
               endtimeseconds: enclosingChunk.endtimeseconds,
               creatorid: "test",
@@ -103,9 +104,9 @@ const App: React.FC<{}> = () => {
         chunks.concat([
           {
             starttimestamp: getLastEndTimeStamp(chunks),
-            endtimestamp: toTimeStamp(progress * duration),
+            endtimestamp: toTimeStamp(progressState.progress * duration),
             starttimeseconds: getLastEndTimeSeconds(chunks),
-            endtimeseconds: progress,
+            endtimeseconds: progressState.progress,
             creatorid: "Test",
             updatedat: new Date(),
             id: Date.now().toString(),
@@ -115,7 +116,9 @@ const App: React.FC<{}> = () => {
     }
   };
 
-  const [progress, setProgress] = useState(0);
+  const [progressState, setProgressState] = useState<ProgressState>({progress: 0, fromPlayer: true});
+
+  const [play, setPlay] = useState(false);
 
   const [duration, setDuration] = useState(0);
 
@@ -129,7 +132,8 @@ const App: React.FC<{}> = () => {
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer
           setDuration={setDuration}
-          progress={[progress, setProgress]}
+          progressState={[progressState, setProgressState]}
+          playState={[play, setPlay]}
           url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
         />
       </div>
@@ -138,7 +142,7 @@ const App: React.FC<{}> = () => {
       </Button>
       <div className={classes.chunksContainer}>
         {chunks.map((c) => (
-          <ChunkCard key={c.id} onPlay={() => setProgress(c.starttimeseconds)} chunk={c} />
+          <ChunkCard key={c.id} onPlay={() => {setPlay(true); setProgressState({progress: c.starttimeseconds, fromPlayer: false});}} chunk={c} />
         ))}
       </div>
     </main>

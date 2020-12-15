@@ -5,27 +5,35 @@ import ReactPlayer, { ReactPlayerProps } from "react-player";
 // Internal Dependencies
 import useToggle from "../../../hooks/useToggle";
 import useFadeControls from "./useFadeControls";
+import { ProgressState } from "./useVideoPlayerProgress";
 
 /**
  * This hook maintains the logic for the VideoPlayer component.
- * 
+ *
  * It handles the logic for use intractions with the controls of the video,
  * and the automatic fading for when the video isn't interacted with
- * 
+ *
  * @param playerRef - a reference to the player that this hook controls
  */
 const useVideoPlayer = (
-  progressState: [progress: number, setProgress: (state: number) => void],
+  progressStateIn: [
+    progressState: ProgressState,
+    setProgress: (state: ProgressState) => void,
+  ],
+  playStateIn: [
+    play: boolean,
+    setPlay: React.Dispatch<React.SetStateAction<boolean>>,
+  ],
   playerRef: RefObject<ReactPlayer>,
   setDuration: (state: number) => void,
   /** The beginning and end of the clip of the video to play, as a fraction
    *  If, for example, start is 0 and end is 0.5, only play the first half of
    *  the video
    */
-  split: { start: number, end: number },
+  split: { start: number; end: number }
 ): [ReactPlayerProps, any, boolean, boolean, () => void] => {
-  /* State for whether the video is currently playing */
-  const [isPlaying, toggleIsPlaying, setIsPlaying] = useToggle(false);
+
+  const [isPlaying, setIsPlaying] = playStateIn;
 
   /* State for whether the video source has been loaded */
   const [isLoaded, setIsLoaded] = useState(false);
@@ -34,7 +42,7 @@ const useVideoPlayer = (
   const [dragging, setDragging] = useState(false);
 
   /* State for the progress through the video, as a fraction */
-  const [progress, setProgress] = progressState;
+  const [progressState, setProgressState] = progressStateIn;
 
   useEffect(() => {
     if (isLoaded && playerRef.current) {
@@ -51,11 +59,11 @@ const useVideoPlayer = (
   /* These are the props that will be passed onto the ReactPlayer component */
   const playerProps: ReactPlayerProps = {
     playing:
-      !dragging && /* Don't progress the player if the user is scrolling through the video */
+      !dragging &&
       isPlaying,
     progressInterval: 250,
     onProgress: ({ played /*playedSeconds, loaded, loadedSeconds*/ }) =>
-      setProgress(played),
+      setProgressState({ progress: played, fromPlayer: true }),
     onClick: () => setShowControls((state) => !state),
     onReady: () => setIsLoaded(true),
     onEnded: () => setIsPlaying(false),
@@ -63,13 +71,16 @@ const useVideoPlayer = (
 
   /* These are the props that will be passed onto the Slider component (the slider component is the video progress bar) */
   const progressBarProps = {
-    value: progress * 100,
+    value: progressState.progress * 100,
     min: split.start * 100,
     max: split.end * 100,
     step: 0.0001,
     onChange: (_: any, newVal: number | number[]) => {
       setDragging(true);
-      setProgress((newVal as number) / 100);
+      setProgressState({
+        progress: (newVal as number) / 100,
+        fromPlayer: false,
+      });
     },
     onChangeCommitted: () => {
       setDragging(false);
@@ -77,32 +88,37 @@ const useVideoPlayer = (
   };
 
   useEffect(() => {
-    /** If the video is being dragged or is paused, keep it synced with the progress state
-     */
-    if (dragging || !isPlaying) {
+    if (!progressState.fromPlayer) {
       playerRef.current &&
         isLoaded &&
-        playerRef.current.seekTo(progress, "fraction");
+        playerRef.current.seekTo(progressState.progress, "fraction");
     }
-  }, [progress, dragging, isPlaying, isLoaded, playerRef]);
+  }, [progressState, dragging, isPlaying, isLoaded, playerRef]);
 
   useEffect(() => {
     /** If the video is playing and it has reached the end, stop it from continuing */
-    if (progress > split.end) {
-      setProgress(split.end);
+    if (progressState.progress > split.end) {
+      setProgressState({ progress: split.end, fromPlayer: false });
       setIsPlaying(false);
-    /** If the video's progress is before the start of the split, set it to the start */
-    } else if (progress < split.start) {
-      setProgress(split.start);
+      /** If the video's progress is before the start of the split, set it to the start */
+    } else if (progressState.progress < split.start) {
+      setProgressState({ progress: split.start, fromPlayer: false });
     }
-  }, [progress, setProgress, isPlaying, setIsPlaying, split.end, split.start]);
+  }, [
+    progressState,
+    setProgressState,
+    isPlaying,
+    setIsPlaying,
+    split.end,
+    split.start,
+  ]);
 
   return [
     playerProps,
     progressBarProps,
     showControls,
     isPlaying,
-    toggleIsPlaying,
+    () => setIsPlaying(s => !s),
   ];
 };
 
