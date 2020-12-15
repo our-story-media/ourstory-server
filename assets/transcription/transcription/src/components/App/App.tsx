@@ -138,7 +138,7 @@ const App: React.FC<{}> = () => {
       </Button>
       <div className={classes.chunksContainer}>
         {chunks.map((c) => (
-          <ChunkCard key={c.id} chunk={c} />
+          <ChunkCard key={c.id} onPlay={() => setProgress(c.starttimeseconds)} chunk={c} />
         ))}
       </div>
     </main>

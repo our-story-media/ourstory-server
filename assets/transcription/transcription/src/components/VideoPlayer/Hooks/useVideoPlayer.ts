@@ -1,5 +1,5 @@
 // External Dependencies
-import { useState, useEffect, RefObject, MutableRefObject } from "react";
+import { useState, useEffect, RefObject } from "react";
 import ReactPlayer, { ReactPlayerProps } from "react-player";
 
 // Internal Dependencies
@@ -95,7 +95,7 @@ const useVideoPlayer = (
     } else if (progress < split.start) {
       setProgress(split.start);
     }
-  }, [progress, isPlaying, setIsPlaying, split.end, split.start]);
+  }, [progress, setProgress, isPlaying, setIsPlaying, split.end, split.start]);
 
   return [
     playerProps,
