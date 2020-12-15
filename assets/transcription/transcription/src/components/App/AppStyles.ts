@@ -7,6 +7,10 @@ const useStyles = makeStyles({
         margin: 'auto',
         marginTop: '4vh',
     },
+    chunksContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+    }
 });
 
 export default useStyles;

@@ -43,12 +43,37 @@ const getEnclosingChunk = (chunks: Chunk[], time: number): Chunk | null => {
   return null;
 };
 
+/**
+ * Given a time (as a fraction), and a list of chunks,
+ * returns whether that time is valid as a new split
+ *
+ * A new split is invalid if it is the start/finish time
+ * of a chunk in the list, or if it's 0
+ *
+ * @param chunks
+ * @param time
+ */
+const invalidSplit = (chunks: Chunk[], time: number) => {
+  return (
+    time === 0 ||
+    chunks.reduce(
+      (onBoundary: boolean, chunk) =>
+        onBoundary ||
+        chunk.endtimeseconds === time ||
+        chunk.starttimeseconds === time,
+      false
+    )
+  );
+};
+
 const App: React.FC<{}> = () => {
   // TODO: Use reducer to handle actions here
 
   const handleNewChunk = () => {
     const enclosingChunk = getEnclosingChunk(chunks, progressRef.current);
-    if (enclosingChunk != null) {
+    if (invalidSplit(chunks, progressRef.current)) {
+      return;
+    } else if (enclosingChunk != null) {
       setChunks(
         chunks
           .filter((c) => c.id !== enclosingChunk.id)
@@ -71,7 +96,7 @@ const App: React.FC<{}> = () => {
               updatedat: new Date(),
               id: Date.now().toString(),
             },
-          ])
+          ]).sort((a, b) => a.endtimeseconds - b.endtimeseconds)
       );
     } else {
       setChunks(
@@ -111,11 +136,11 @@ const App: React.FC<{}> = () => {
       <Button variant="contained" color="primary" onClick={handleNewChunk}>
         Create Chunk
       </Button>
-      <br />
-      Duration: {duration}
-      {chunks.map((c) => (
-        <ChunkCard key={c.id} chunk={c} />
-      ))}
+      <div className={classes.chunksContainer}>
+        {chunks.map((c) => (
+          <ChunkCard key={c.id} chunk={c} />
+        ))}
+      </div>
     </main>
   );
 };
