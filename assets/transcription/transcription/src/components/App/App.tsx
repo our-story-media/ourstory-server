@@ -1,8 +1,9 @@
 // External Dependencies
-import React, { useState } from 'react';
+import React from 'react';
 
 // Internal Dependencies
 import ChunkEditor from '../ChunkEditor/ChunkEditor';
+import Header from '../Header/Header';
 
 const App: React.FC<{}> = () => {
   // TODO: Use reducer to handle actions here
@@ -10,7 +11,9 @@ const App: React.FC<{}> = () => {
 
   return (
     <main>
-      <ChunkEditor />
+      <Header>
+        <ChunkEditor />
+      </Header>
     </main>
   );
 };
