@@ -1,6 +1,6 @@
 import { Button } from '@material-ui/core';
 import { PlayArrow } from '@material-ui/icons';
-import { Chunk } from '../../types';
+import { Chunk } from '../../utils/types';
 import useStyles from './ChunkCardStyles';
 
 type ChunkCardProps = {

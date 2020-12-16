@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import ChunkCard from "../ChunkCard/ChunkCard";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useStyles from "./ChunkEditorStyles";
-import { Chunk } from "../../types";
+import { Chunk } from "../../utils/types";
 import { IconButton } from "@material-ui/core";
-import story_id from "../App/getId";
+import story_id from "../../utils/getId";
 import { ProgressState } from "../VideoPlayer/Hooks/useVideoPlayerProgress";
 
 const zeroPad = (value: number) =>
