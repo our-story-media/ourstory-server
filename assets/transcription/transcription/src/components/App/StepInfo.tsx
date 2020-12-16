@@ -8,16 +8,18 @@ import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWi
 import useStyles from "./StepInfoStyles";
 import theme from "../../styles/theme";
 
-type StepInfoProps = {
+export type StepInfoProps = {
   title: string;
   description: string;
   progress: number;
+  onSelect: () => void;
 };
 
 const StepInfo: React.FC<StepInfoProps> = ({
   title,
   description,
   progress,
+  onSelect,
 }) => {
   const classes = useStyles();
   return (
@@ -29,7 +31,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
       <FlatPaper className={classes.paper}>
         {description}
         <br />
-        <ButtonBase className={classes.button}>
+        <ButtonBase onClick={onSelect} className={classes.button}>
           <Typography style={{padding: "6px"}} variant="subtitle1">Perform {title}</Typography>
         </ButtonBase>
       </FlatPaper>
