@@ -18,9 +18,7 @@ const useStyles = makeStyles({
     borderBottomLeftRadius: "0",
   },
   button: {
-    marginTop: "8px",
-    color: "#ffffff",
-    backgroundColor: "#d9534f",
+      marginTop: "16px",
   },
 });
 
