@@ -7,7 +7,7 @@ import {
   GridList,
   GridListTile,
 } from "@material-ui/core";
-import React from "react";
+import React, { useMemo } from "react";
 import StepInfo, { StepInfoProps } from "../App/StepInfo";
 import FlatPaper from "../FlatPaper/FlatPaper";
 import SimpleInputForm from "../SimpleInputForm/SimpleInputForm";
@@ -24,6 +24,49 @@ type DashboardProps = {
   steps: StepInfoProps[];
 };
 
+// Presentation logic for the modal that prompts the user for their name
+const useModal = (
+  name: string | null,
+  setName: (state: string) => void,
+  classes: Record<"input" | "button" | "modalContentBox" | "modal", string>
+) =>
+  useMemo(
+    () => (
+      <Modal
+        disableEnforceFocus
+        disableAutoFocus
+        className={classes.modal}
+        open={!name}
+      >
+        <FlatPaper className={classes.modalContentBox}>
+          <Typography variant="subtitle1">
+            Please enter your name before performing transcription.
+          </Typography>
+          <SimpleInputForm
+            placeholder="my name"
+            buttonText="Perform Transcription"
+            classes={classes}
+            onSubmit={setName}
+          />
+        </FlatPaper>
+      </Modal>
+    ),
+    [classes, setName, name]
+  );
+
+const hello = (name: string | null) =>
+  <Typography style={{ fontWeight: "lighter" }} variant="h5">
+    {name && `Hello ${name}`}
+  </Typography>;
+
+const title = (storyName: string) => 
+  <Typography variant="h3" style={{ color: "gray", fontWeight: "lighter" }}>
+    Field Transcription for{" "}
+    <Box component="span" style={{ color: "black" }}>
+      {storyName}
+    </Box>
+  </Typography>;
+
 const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
   const [name, setName, clearName] = useLocalStorage(name_key);
 
@@ -34,40 +77,11 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
 
   return (
     <Box>
-      <Modal
-        disableEnforceFocus
-        disableAutoFocus
-        className={classes.modal}
-        open={!name}
-      >
-        <Box>
-          <FlatPaper className={classes.modalContentBox}>
-            <Typography variant="subtitle1">
-              Please enter your name before performing transcription.
-            </Typography>
-            <SimpleInputForm
-              placeholder="my name"
-              buttonText="Perform Transcription"
-              classes={classes}
-              onSubmit={setName}
-            />
-          </FlatPaper>
-        </Box>
-      </Modal>
+      {useModal(name, setName, classes)}
       <Container>
         <Container className={classes.introContainer}>
-          <Typography
-            variant="h3"
-            style={{ color: "gray", fontWeight: "lighter" }}
-          >
-            Field Transcription for{" "}
-            <Box component="span" style={{ color: "black" }}>
-              {storyName}
-            </Box>
-          </Typography>
-          <Typography style={{ fontWeight: "lighter" }} variant="h5">
-            {name && `Hello ${name}`}
-          </Typography>
+          {title(storyName)}
+          {hello(name)}
           <Link className={classes.notMeLink} onClick={clearName}>
             <Typography variant="subtitle1">
               {name && "This is not me!"}

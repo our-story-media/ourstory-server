@@ -20,10 +20,18 @@ const App: React.FC<{}> = () => {
       <main>
         <Header>
           {useConditionalRender(view, [
-            [View.Dashboard, <Dashboard steps={steps} storyName={"Test"} />],
-            [View.Chunking, <ChunkEditor />],
-            [View.Transcribing, <div>Transcribing</div>],
-            [View.Reviewing, <div>Reviewing</div>],
+            [View.Dashboard,
+              <Dashboard steps={steps} storyName={"Test"} />
+            ],
+            [View.Chunking,
+              <ChunkEditor />
+            ],
+            [View.Transcribing,
+              <div>Transcribing</div>
+            ],
+            [View.Reviewing,
+              <div>Reviewing</div>
+            ],
           ])}
         </Header>
       </main>
