@@ -92,8 +92,8 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
         performing
         <GridList style={{ marginTop: "24px" }} cols={3}>
           {steps.map((step) => (
-            <GridListTile style={{ padding: "0px 15px 0px 15px" }}>
-              <StepInfo key={step.title} {...step} />
+            <GridListTile key={step.title} style={{ padding: "0px 15px 0px 15px" }}>
+              <StepInfo {...step} />
             </GridListTile>
           ))}
         </GridList>

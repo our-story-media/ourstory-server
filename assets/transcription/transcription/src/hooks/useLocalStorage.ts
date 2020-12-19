@@ -8,7 +8,6 @@ const useLocalStorage = (key: string): [string | null, (state: string) => void, 
   const [fetched, toggleFetched] = useToggle(false);
 
   useEffect(() => {
-    console.log(fetched);
     if (!fetched) {
       const item = window.localStorage.getItem(key);
       toggleFetched();

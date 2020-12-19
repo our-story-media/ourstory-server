@@ -7,7 +7,8 @@ import {
   ThemeProvider,
 } from "@material-ui/core";
 import { ChevronLeft } from "@material-ui/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 // Internal Dependencies
 import theme from "../../styles/theme";
@@ -16,6 +17,9 @@ import Dashboard from "../Dashboard/Dashboard";
 import Header from "../Header/Header";
 import useSteps from "./useSteps";
 import View from "./Views";
+import story_id from "../../utils/getId";
+import api_key from "../../utils/getApiKey";
+import { Chunk } from "../../utils/types";
 
 const useStyles = makeStyles({
   backButton: {
@@ -25,7 +29,7 @@ const useStyles = makeStyles({
   },
 });
 
-const BackButton: React.FC<{action: () => void}> = ({ action }) => {
+const BackButton: React.FC<{ action: () => void }> = ({ action }) => {
   const classes = useStyles();
   return (
     <Box>
@@ -41,15 +45,52 @@ const App: React.FC<{}> = () => {
   const [view, setView] = useState<View>(View.Dashboard);
   const steps = useSteps(setView);
 
+  const [chunks, setChunks] = useState<Chunk[]>([]);
+  const [story, setStory] = useState<any>({title: 'Loading...'});
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8845/api/watch/edit/${story_id}`)
+      .then((r) => {
+        r.data.transcription &&
+          setChunks(
+            r.data.transcription.chunks.map((c: any) => ({
+              starttimestamp: c.starttime,
+              starttimeseconds: c.starttimeseconds,
+              endtimestamp: c.endtime,
+              endtimeseconds: c.endtimeseconds,
+              creatorid: c.creatorid,
+              updatedat: c.updatedat,
+              id: c.id,
+            }))
+          );
+        setStory(r.data);
+      })
+      .catch((error) => console.log(error)); // TODO Handle errors more eloquently
+  }, []);
+
+  useEffect(() => {
+    axios
+      .post(
+        `http://localhost:8845/api/watch/savedit/${story_id}?apikey=${api_key}`,
+        { ...story, transcription: { chunks } }
+      )
+      .then((r) => console.log(r));
+  }, [chunks, story]);
+
   return (
     <ThemeProvider theme={theme}>
       <main>
         <Header>
-          <Container>{view !== View.Dashboard && <BackButton action={() => setView(View.Dashboard)}/>}</Container>
+          <Container>
+            {view !== View.Dashboard && (
+              <BackButton action={() => setView(View.Dashboard)} />
+            )}
+          </Container>
           {view === View.Dashboard ? (
-            <Dashboard steps={steps} storyName={"Test"} />
+            <Dashboard steps={steps} storyName={story.title} />
           ) : view === View.Chunking ? (
-            <ChunkEditor />
+            <ChunkEditor chunksState={[chunks, setChunks]} />
           ) : view === View.Transcribing ? (
             <div>Transcribing</div>
           ) : view === View.Reviewing ? (

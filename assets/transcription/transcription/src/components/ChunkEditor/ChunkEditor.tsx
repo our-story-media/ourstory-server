@@ -1,10 +1,14 @@
-import { Add, ChevronLeft, History } from "@material-ui/icons";
-import React, { useState } from "react";
+// External Dependencies
+import { Add, History } from "@material-ui/icons";
+import React, { useEffect, useState } from "react";
+import { Container, IconButton } from "@material-ui/core";
+import { v4 as uuidv4 } from 'uuid';
+
+// Internal Dependencies
 import ChunkCard from "../ChunkCard/ChunkCard";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useStyles from "./ChunkEditorStyles";
 import { Chunk } from "../../utils/types";
-import { Box, Container, IconButton } from "@material-ui/core";
 import story_id from "../../utils/getId";
 import { ProgressState } from "../VideoPlayer/Hooks/useVideoPlayerProgress";
 
@@ -62,11 +66,16 @@ const invalidSplit = (chunks: Chunk[], time: number) => {
     )
   );
 };
-const ChunkEditor: React.FC<{}> = () => {
+
+type ChunkEditorProps = {
+  chunksState: [Chunk[], (state: Chunk[]) => void];
+};
+
+const ChunkEditor: React.FC<ChunkEditorProps> = (state) => {
   const classes = useStyles();
   const [play, setPlay] = useState(false);
   const [duration, setDuration] = useState(0);
-  const [chunks, setChunks] = useState<Chunk[]>([]);
+  const [chunks, setChunks] = state.chunksState;
   const [progressState, setProgressState] = useState<ProgressState>({
     progress: 0,
     fromPlayer: true,
@@ -88,7 +97,7 @@ const ChunkEditor: React.FC<{}> = () => {
               endtimeseconds: progressState.progress,
               creatorid: "test",
               updatedat: new Date(),
-              id: (Date.now() + 10).toString(),
+              id: uuidv4(),
             },
             {
               starttimestamp: toTimeStamp(progressState.progress * duration),
@@ -97,7 +106,7 @@ const ChunkEditor: React.FC<{}> = () => {
               endtimeseconds: enclosingChunk.endtimeseconds,
               creatorid: "test",
               updatedat: new Date(),
-              id: Date.now().toString(),
+              id: uuidv4(),
             },
           ])
           .sort((a, b) => a.endtimeseconds - b.endtimeseconds)
@@ -112,7 +121,7 @@ const ChunkEditor: React.FC<{}> = () => {
             endtimeseconds: progressState.progress,
             creatorid: "Test",
             updatedat: new Date(),
-            id: Date.now().toString(),
+            id: uuidv4(),
           },
         ])
       );
