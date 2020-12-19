@@ -72,7 +72,7 @@ const App: React.FC<{}> = () => {
 
   useEffect(() => {
     console.log({ ...story, transcription: { chunks } })
-    story && axios
+    chunks.length && story && axios
       .post(
         `http://localhost:8845/api/watch/savedit/${story_id}?apikey=${api_key}`,
         { ...story, transcription: { chunks } }

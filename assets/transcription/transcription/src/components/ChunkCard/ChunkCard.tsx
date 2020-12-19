@@ -17,7 +17,7 @@ const ChunkCard: React.FC<ChunkCardProps> = ({ chunk, onPlay, children }) => {
             <span className={classes.timeStampContainer}>
                {chunk.starttimestamp} - {chunk.endtimestamp}
             </span>
-            <Button onClick={onPlay}><PlayArrow/></Button>
+            <Button style={{margin: "4px", color: "#FFFFFF"}} onClick={onPlay}><PlayArrow/></Button>
             {children}
         </div>
     );

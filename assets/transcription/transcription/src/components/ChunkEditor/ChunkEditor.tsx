@@ -1,8 +1,8 @@
 // External Dependencies
-import { Add, History } from "@material-ui/icons";
-import React, { useEffect, useState } from "react";
-import { Container, IconButton } from "@material-ui/core";
-import { v4 as uuidv4 } from 'uuid';
+import { Add, Delete, History } from "@material-ui/icons";
+import React, { useState } from "react";
+import { Button, Container, IconButton } from "@material-ui/core";
+import { v4 as uuidv4 } from "uuid";
 
 // Internal Dependencies
 import ChunkCard from "../ChunkCard/ChunkCard";
@@ -68,7 +68,7 @@ const invalidSplit = (chunks: Chunk[], time: number) => {
 };
 
 type ChunkEditorProps = {
-  chunksState: [Chunk[], (state: Chunk[]) => void];
+  chunksState: [Chunk[], React.Dispatch<React.SetStateAction<Chunk[]>>];
 };
 
 const ChunkEditor: React.FC<ChunkEditorProps> = (state) => {
@@ -81,12 +81,64 @@ const ChunkEditor: React.FC<ChunkEditorProps> = (state) => {
     fromPlayer: true,
   });
 
+  /* Given an array and a binary function,
+   * Return a new array that is the result of calling the function
+   * on adjacent items in the array
+   */
+  const adjacentMap = <T extends unknown>(
+    arr: T[],
+    func: (a: T, b: T) => T
+  ): T[] =>
+    arr
+      .reduce(
+        (acc: [T, T][], val, ind, input) =>
+          ind + 1 < input.length ? acc.concat([[val, input[ind + 1]]]) : acc,
+        []
+      )
+      .map((pair) => func(pair[0], pair[1]));
+
+  const handleDeleteChunk = (chunk: Chunk) => {
+    // If the start and end don't match, extend the second one back to start at the first one
+    setChunks((chunks) =>
+      adjacentMap(
+        chunks.filter((c) => c.id !== chunk.id),
+        (a: Chunk, b: Chunk) => {
+          if (a.endtimeseconds !== b.starttimeseconds) {
+            return {
+              ...b,
+              starttimeseconds: a.endtimeseconds,
+              starttimestamp: a.endtimestamp,
+              id: uuidv4(),
+              updatedat: new Date(),
+            };
+          }
+          return b;
+        }
+      )
+        .concat(
+          ((first) =>
+            first.starttimeseconds === 0
+              ? [first]
+              : [
+                  {
+                    ...first,
+                    starttimeseconds: 0,
+                    starttimestamp: "00:00:00:00",
+                    id: uuidv4(),
+                    updatedat: new Date(),
+                  },
+                ])(chunks.filter((c) => c.id !== chunk.id)[0])
+        )
+        .sort((a, b) => a.endtimeseconds - b.endtimeseconds)
+    );
+  };
+
   const handleNewChunk = () => {
     const enclosingChunk = getEnclosingChunk(chunks, progressState.progress);
     if (invalidSplit(chunks, progressState.progress)) {
       return;
     } else if (enclosingChunk != null) {
-      setChunks(
+      setChunks((chunks) =>
         chunks
           .filter((c) => c.id !== enclosingChunk.id)
           .concat([
@@ -172,7 +224,15 @@ const ChunkEditor: React.FC<ChunkEditorProps> = (state) => {
               });
             }}
             chunk={c}
-          />
+          >
+            <Button
+              aria-label="Delete Chunk"
+              style={{ margin: "4px", color: "#FFFFFF" }}
+              onClick={() => handleDeleteChunk(c)}
+            >
+              <Delete />
+            </Button>
+          </ChunkCard>
         ))}
       </div>
     </Container>
