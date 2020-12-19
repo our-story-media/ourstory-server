@@ -8,7 +8,7 @@ type ChunkCardProps = {
     onPlay: () => void;
 };
 
-const ChunkCard: React.FC<ChunkCardProps> = ({ chunk, onPlay }) => {
+const ChunkCard: React.FC<ChunkCardProps> = ({ chunk, onPlay, children }) => {
 
     const classes = useStyles();
 
@@ -18,6 +18,7 @@ const ChunkCard: React.FC<ChunkCardProps> = ({ chunk, onPlay }) => {
                {chunk.starttimestamp} - {chunk.endtimestamp}
             </span>
             <Button onClick={onPlay}><PlayArrow/></Button>
+            {children}
         </div>
     );
 }

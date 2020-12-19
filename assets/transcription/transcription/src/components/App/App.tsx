@@ -20,6 +20,7 @@ import View from "./Views";
 import story_id from "../../utils/getId";
 import api_key from "../../utils/getApiKey";
 import { Chunk } from "../../utils/types";
+import Transcriber from "../Transcriber/Transcriber";
 
 const useStyles = makeStyles({
   backButton: {
@@ -46,7 +47,7 @@ const App: React.FC<{}> = () => {
   const steps = useSteps(setView);
 
   const [chunks, setChunks] = useState<Chunk[]>([]);
-  const [story, setStory] = useState<any>({title: 'Loading...'});
+  const [story, setStory] = useState<any>({ title: "Loading..." });
 
   useEffect(() => {
     axios
@@ -55,9 +56,9 @@ const App: React.FC<{}> = () => {
         r.data.transcription &&
           setChunks(
             r.data.transcription.chunks.map((c: any) => ({
-              starttimestamp: c.starttime,
+              starttimestamp: c.starttimestamp,
               starttimeseconds: c.starttimeseconds,
-              endtimestamp: c.endtime,
+              endtimestamp: c.endtimestamp,
               endtimeseconds: c.endtimeseconds,
               creatorid: c.creatorid,
               updatedat: c.updatedat,
@@ -70,12 +71,13 @@ const App: React.FC<{}> = () => {
   }, []);
 
   useEffect(() => {
-    axios
+    console.log({ ...story, transcription: { chunks } })
+    story && axios
       .post(
         `http://localhost:8845/api/watch/savedit/${story_id}?apikey=${api_key}`,
         { ...story, transcription: { chunks } }
       )
-      .then((r) => console.log(r));
+      .catch((error) => console.log(error));
   }, [chunks, story]);
 
   return (
@@ -92,7 +94,7 @@ const App: React.FC<{}> = () => {
           ) : view === View.Chunking ? (
             <ChunkEditor chunksState={[chunks, setChunks]} />
           ) : view === View.Transcribing ? (
-            <div>Transcribing</div>
+            <Transcriber story_id={story_id} chunks={chunks} />
           ) : view === View.Reviewing ? (
             <div>Reviewing</div>
           ) : null}

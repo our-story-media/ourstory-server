@@ -8,4 +8,3 @@ export type Chunk = {
   updatedat: Date,
   id: string,
 };
-
