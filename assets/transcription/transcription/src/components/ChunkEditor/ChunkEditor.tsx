@@ -1,10 +1,10 @@
-import { Add, History } from "@material-ui/icons";
+import { Add, ChevronLeft, History } from "@material-ui/icons";
 import React, { useState } from "react";
 import ChunkCard from "../ChunkCard/ChunkCard";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useStyles from "./ChunkEditorStyles";
 import { Chunk } from "../../utils/types";
-import { IconButton } from "@material-ui/core";
+import { Box, Container, IconButton } from "@material-ui/core";
 import story_id from "../../utils/getId";
 import { ProgressState } from "../VideoPlayer/Hooks/useVideoPlayerProgress";
 
@@ -121,7 +121,7 @@ const ChunkEditor: React.FC<{}> = () => {
 
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
-    <div>
+    <Container>
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer
           setDuration={setDuration}
@@ -132,7 +132,8 @@ const ChunkEditor: React.FC<{}> = () => {
       </div>
       <IconButton
         aria-label="Go Back"
-        color="secondary"
+        style={{ color: "#FFFFFF" }}
+        className={classes.actionButton}
         onClick={() =>
           setProgressState({
             progress: progressState.progress - 5 / duration,
@@ -144,7 +145,8 @@ const ChunkEditor: React.FC<{}> = () => {
       </IconButton>
       <IconButton
         aria-label="New Chunk"
-        color="secondary"
+        style={{ color: "#FFFFFF" }}
+        className={classes.actionButton}
         onClick={handleNewChunk}
       >
         <Add />
@@ -164,7 +166,7 @@ const ChunkEditor: React.FC<{}> = () => {
           />
         ))}
       </div>
-    </div>
+    </Container>
   );
 };
 
