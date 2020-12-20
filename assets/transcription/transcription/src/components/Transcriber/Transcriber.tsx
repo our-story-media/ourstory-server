@@ -1,5 +1,5 @@
 // External Dependencies
-import { Container } from "@material-ui/core";
+import { Box, Container, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 
 // Internal Dependencies
@@ -23,13 +23,25 @@ const Transcriber: React.FC<TranscriberProps> = ({ chunks, story_id }) => {
   const [play, setPlay] = useState(false);
   return (
     <Container>
-      <VideoPlayer
-        setDuration={setDuration}
-        progressState={[progressState, setProgressState]}
-        playState={[play, setPlay]}
-        url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
-      />
-      <ChunkCard chunk={chunks[currentChunk]} onPlay={() => console.log("played")}/>
+      {chunks.length && (
+        <>
+          <VideoPlayer
+            setDuration={setDuration}
+            progressState={[progressState, setProgressState]}
+            playState={[play, setPlay]}
+            url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
+            split={{
+              start: chunks[currentChunk].starttimeseconds,
+              end: chunks[currentChunk].endtimeseconds,
+            }}
+          />
+          <ChunkCard
+            chunk={chunks[currentChunk]}
+          >
+            <TextField style={{ width: "100%" }} label="Transcription"/>
+          </ChunkCard>
+        </>
+      )}
     </Container>
   );
 };

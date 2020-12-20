@@ -1,5 +1,5 @@
 // External Dependencies
-import { Add, Delete, History } from "@material-ui/icons";
+import { Add, Delete, History, PlayArrow } from "@material-ui/icons";
 import React, { useState } from "react";
 import { Button, Container, IconButton } from "@material-ui/core";
 import { v4 as uuidv4 } from "uuid";
@@ -97,7 +97,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = (state) => {
       )
       .map((pair) => func(pair[0], pair[1]));
 
-  const handleDeleteChunk = (chunk: Chunk) => {
+  const handleDeleteChunk = (chunk: Chunk) =>
     // If the start and end don't match, extend the second one back to start at the first one
     setChunks((chunks) =>
       adjacentMap(
@@ -117,21 +117,22 @@ const ChunkEditor: React.FC<ChunkEditorProps> = (state) => {
       )
         .concat(
           ((first) =>
-            first.starttimeseconds === 0
-              ? [first]
-              : [
-                  {
-                    ...first,
-                    starttimeseconds: 0,
-                    starttimestamp: "00:00:00:00",
-                    id: uuidv4(),
-                    updatedat: new Date(),
-                  },
-                ])(chunks.filter((c) => c.id !== chunk.id)[0])
+            first
+              ? first.starttimeseconds === 0
+                ? [first]
+                : [
+                    {
+                      ...first,
+                      starttimeseconds: 0,
+                      starttimestamp: "00:00:00:00",
+                      id: uuidv4(),
+                      updatedat: new Date(),
+                    },
+                  ]
+              : [])(chunks.filter((c) => c.id !== chunk.id)[0])
         )
         .sort((a, b) => a.endtimeseconds - b.endtimeseconds)
     );
-  };
 
   const handleNewChunk = () => {
     const enclosingChunk = getEnclosingChunk(chunks, progressState.progress);
@@ -214,20 +215,22 @@ const ChunkEditor: React.FC<ChunkEditorProps> = (state) => {
       </IconButton>
       <div className={classes.chunksContainer}>
         {chunks.map((c) => (
-          <ChunkCard
-            key={c.id}
-            onPlay={() => {
-              setPlay(true);
-              setProgressState({
-                progress: c.starttimeseconds,
-                fromPlayer: false,
-              });
-            }}
-            chunk={c}
-          >
+          <ChunkCard key={c.id} chunk={c}>
+            <Button
+              style={{ marginRight: "4px", color: "#FFFFFF" }}
+              onClick={() => {
+                setPlay(true);
+                setProgressState({
+                  progress: c.starttimeseconds,
+                  fromPlayer: false,
+                });
+              }}
+            >
+              <PlayArrow />
+            </Button>
             <Button
               aria-label="Delete Chunk"
-              style={{ margin: "4px", color: "#FFFFFF" }}
+              style={{ color: "#FFFFFF" }}
               onClick={() => handleDeleteChunk(c)}
             >
               <Delete />

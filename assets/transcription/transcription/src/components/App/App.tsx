@@ -47,7 +47,7 @@ const App: React.FC<{}> = () => {
   const steps = useSteps(setView);
 
   const [chunks, setChunks] = useState<Chunk[]>([]);
-  const [story, setStory] = useState<any>({ title: "Loading..." });
+  const [story, setStory] = useState<any>({ loading: true });
 
   useEffect(() => {
     axios
@@ -65,19 +65,20 @@ const App: React.FC<{}> = () => {
               id: c.id,
             }))
           );
-        setStory(r.data);
+        setStory({ ...r.data, loading: false });
       })
       .catch((error) => console.log(error)); // TODO Handle errors more eloquently
   }, []);
 
   useEffect(() => {
-    console.log({ ...story, transcription: { chunks } })
-    chunks.length && story && axios
-      .post(
-        `http://localhost:8845/api/watch/savedit/${story_id}?apikey=${api_key}`,
-        { ...story, transcription: { chunks } }
-      )
-      .catch((error) => console.log(error));
+    console.log({ ...story, transcription: { chunks } });
+    !story.loading &&
+      axios
+        .post(
+          `http://localhost:8845/api/watch/savedit/${story_id}?apikey=${api_key}`,
+          { ...story, transcription: { chunks } }
+        )
+        .catch((error) => console.log(error));
   }, [chunks, story]);
 
   return (

@@ -1,16 +1,12 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
-    cardContainer: {
-        border: '#f54414 2px solid',
-        borderRadius: '10px',
-        width: '13rem',
-        height: '80px',
-        margin: '4px',
-    },
-    timeStampContainer: {
-        /** Center the time stamp */
-    }
+  cardContainer: {
+    border: "#f54414 2px solid",
+    borderRadius: "10px",
+    margin: "4px",
+    padding: "8px",
+  },
 });
 
 export default useStyles;
