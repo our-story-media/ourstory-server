@@ -1,6 +1,7 @@
 // External Dependencies
-import { Box, Container, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import { Box, Container, IconButton, TextField } from "@material-ui/core";
+import { NavigateBefore, NavigateNext } from "@material-ui/icons";
+import React, { useEffect, useState } from "react";
 
 // Internal Dependencies
 import { Chunk } from "../../utils/types";
@@ -21,12 +22,16 @@ const Transcriber: React.FC<TranscriberProps> = ({ chunks, story_id }) => {
     fromPlayer: true,
   });
   const [play, setPlay] = useState(false);
+
+  useEffect(() => {
+    setProgressState({ progress: chunks[currentChunk].starttimeseconds, fromPlayer: false })
+  }, [currentChunk]);
   return (
     <Container>
       {chunks.length && (
         <>
           <VideoPlayer
-            setDuration={setDuration}
+            durationState={[duration, setDuration]}
             progressState={[progressState, setProgressState]}
             playState={[play, setPlay]}
             url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
@@ -35,10 +40,25 @@ const Transcriber: React.FC<TranscriberProps> = ({ chunks, story_id }) => {
               end: chunks[currentChunk].endtimeseconds,
             }}
           />
-          <ChunkCard
-            chunk={chunks[currentChunk]}
+          <IconButton
+            aria-label="Previous Chunk"
+            style={{ color: "#FFFFFF" }}
+            disabled={currentChunk <= 0}
+            onClick={() => setCurrentChunk((c) => c - 1)}
           >
-            <TextField style={{ width: "100%" }} label="Transcription"/>
+            <NavigateBefore />
+          </IconButton>
+
+          <IconButton
+            aria-label="Next Chunk"
+            style={{ color: "#FFFFFF" }}
+            disabled={currentChunk >= chunks.length - 1}
+            onClick={() => setCurrentChunk((c) => c + 1)}
+          >
+            <NavigateNext />
+          </IconButton>
+          <ChunkCard chunk={chunks[currentChunk]}>
+            <TextField style={{ width: "100%" }} label="Transcription" />
           </ChunkCard>
         </>
       )}

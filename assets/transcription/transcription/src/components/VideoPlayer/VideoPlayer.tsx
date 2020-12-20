@@ -1,15 +1,16 @@
 // External Dependencies
 import React, { useRef } from "react";
-import { Container, Button, Slider } from "@material-ui/core";
+import { Container, Button, Slider, Typography, Box } from "@material-ui/core";
 import ReactPlayer from "react-player";
 import { PlayArrow, Pause } from "@material-ui/icons";
 
 // Internal Dependencies
 import useVideoPlayer from "./Hooks/useVideoPlayer";
-import { ProgressState } from './Hooks/useVideoPlayerProgress';
+import { ProgressState } from "./Hooks/useVideoPlayerProgress";
 
 // Styles
 import useStyles from "./VideoPlayerStyles";
+import { toShortTimeStamp } from "../../utils/chunkManipulation";
 
 type VideoPlayerProps = {
   /** The url of the video */
@@ -18,24 +19,38 @@ type VideoPlayerProps = {
    *  into the video through this mutable reference.
    *  The VideoPlayer guarantees that the value of this reference will always be
    * the current progress through the video as a fraction.
-   * 
+   *
    * NOTE - This value is a fraction of the entire video. So, even if the parent
    * has requested to play only half of the video, when that half has finished
    * playing, the reference will equal 0.5 (as only half of the video was played)
    */
-  progressState: [progressState: ProgressState, setProgressState: (state: ProgressState) => void]
-  playState: [play: boolean, setPlay: React.Dispatch<React.SetStateAction<boolean>>];
+  progressState: [
+    progressState: ProgressState,
+    setProgressState: (state: ProgressState) => void
+  ];
+  playState: [
+    play: boolean,
+    setPlay: React.Dispatch<React.SetStateAction<boolean>>
+  ];
   /** Once the video has initially loaded, the component will write the duration
    *  of the video in seconds to this state
    */
-  setDuration: (state: number) => void;
+  durationState: [null | number, (state: number) => void];
   /** The beginning and end time points of the video to play as fractions */
   split?: { start: number; end: number };
 };
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, playState, progressState, setDuration, split = { start: 0, end: 1} }: VideoPlayerProps) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({
+  url,
+  playState,
+  progressState,
+  durationState,
+  split = { start: 0, end: 1 },
+}: VideoPlayerProps) => {
   /* A reference to the ReactPlayer component. This is required to fetch the progression of the video */
   const playerRef = useRef<ReactPlayer>(null);
+
+  const [duration, setDuration] = durationState;
 
   /* The useVideoPlayerProps hook maintains the logic for this component */
   const [
@@ -76,7 +91,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, playState, progressState
           </Button>
           <div className={classes.progressBarContainer}>
             {/* Progress Bar */}
-            <Slider classes={{colorPrimary: classes.progressBar, root: classes.rail}} {...progressBarProps} />
+            <Typography
+              variant="caption"
+              style={{ margin: "8px", color: "#FFFFFF" }}
+            >
+              {duration &&
+                `${toShortTimeStamp(
+                  (progressState[0].progress - split.start) * duration
+                )} / ${toShortTimeStamp((split.end - split.start) * duration)}`}
+            </Typography>
+            <Slider
+              classes={{
+                colorPrimary: classes.progressBar,
+                root: classes.rail,
+              }}
+              {...progressBarProps}
+            />
           </div>
         </>
       )}

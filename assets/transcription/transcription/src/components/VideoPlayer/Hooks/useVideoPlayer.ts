@@ -1,5 +1,5 @@
 // External Dependencies
-import { useState, useEffect, RefObject } from "react";
+import { useState, useEffect, RefObject, useMemo } from "react";
 import ReactPlayer, { ReactPlayerProps } from "react-player";
 
 // Internal Dependencies
@@ -56,7 +56,7 @@ const useVideoPlayer = (
   );
 
   /* These are the props that will be passed onto the ReactPlayer component */
-  const playerProps: ReactPlayerProps = {
+  const playerProps: ReactPlayerProps = useMemo(() => ({
     playing:
       !dragging &&
       isPlaying,
@@ -66,10 +66,10 @@ const useVideoPlayer = (
     onClick: () => setShowControls((state) => !state),
     onReady: () => setIsLoaded(true),
     onEnded: () => setIsPlaying(false),
-  };
+  }), [dragging, isPlaying, setShowControls, setIsLoaded, setIsPlaying, setProgressState]);
 
   /* These are the props that will be passed onto the Slider component (the slider component is the video progress bar) */
-  const progressBarProps = {
+  const progressBarProps = useMemo(() => ({
     value: progressState.progress * 100,
     min: split.start * 100,
     max: split.end * 100,
@@ -84,17 +84,16 @@ const useVideoPlayer = (
     onChangeCommitted: () => {
       setDragging(false);
     },
-  };
+  }), [split.start, split.end, progressState.progress, setDragging, setProgressState]);
 
   useEffect(() => {
     /** If the change in state wasn't from the ReactPlayer component,
      *  we need to update the player ourselves
      */
-    if (!progressState.fromPlayer) {
+    !progressState.fromPlayer &&
       playerRef.current &&
         isLoaded &&
         playerRef.current.seekTo(progressState.progress, "fraction");
-    }
   }, [progressState, dragging, isPlaying, isLoaded, playerRef]);
 
   useEffect(() => {

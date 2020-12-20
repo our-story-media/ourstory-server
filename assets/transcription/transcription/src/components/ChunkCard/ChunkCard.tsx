@@ -1,5 +1,4 @@
-import { Button, Divider } from '@material-ui/core';
-import { PlayArrow } from '@material-ui/icons';
+import { Divider } from '@material-ui/core';
 import { Chunk } from '../../utils/types';
 import useStyles from './ChunkCardStyles';
 
@@ -13,7 +12,7 @@ const ChunkCard: React.FC<ChunkCardProps> = ({ chunk, children }) => {
 
     return (
         <div className={classes.cardContainer}>
-            <span className={classes.timeStampContainer}>
+            <span>
                {chunk.starttimestamp} - {chunk.endtimestamp}
             </span>
             <Divider style={{ margin: "4px 0 4px 0" }}/>
