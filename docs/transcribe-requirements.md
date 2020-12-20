@@ -211,3 +211,10 @@ The chunks attribute is an array of 'chunk' objects:
     - Each transcription is accompanied by the name of the author
     - Once a transcription has been selected from the list, it can be edited to
       fix any final errors
+
+13. As a user, I want the system to auto-generate .vtt files for my videos, so
+    that I can watch the video with subtitles
+
+    - Once the Review process is completed, a .vtt file is created for
+      subtitles
+    - Reference: https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API
