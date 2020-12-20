@@ -13,6 +13,7 @@ export type StepInfoProps = {
   description: string;
   progress: number;
   onSelect: () => void;
+  enabled: boolean;
 };
 
 const StepInfo: React.FC<StepInfoProps> = ({
@@ -20,6 +21,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
   description,
   progress,
   onSelect,
+  enabled,
 }) => {
   const classes = useStyles();
   return (
@@ -31,7 +33,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
       <FlatPaper className={classes.paper}>
         {description}
         <br />
-        <ButtonBase onClick={onSelect} className={classes.button}>
+        <ButtonBase disabled={!enabled} onClick={onSelect} className={classes.button}>
           <Typography style={{padding: "6px"}} variant="subtitle1">Perform {title}</Typography>
         </ButtonBase>
       </FlatPaper>

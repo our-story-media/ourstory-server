@@ -35,6 +35,7 @@ const useChunkEditing = (
                 starttimestamp: a.endtimestamp,
                 id: uuidv4(),
                 updatedat: new Date(),
+                transcriptions: []
               };
             }
             return b;
@@ -52,6 +53,7 @@ const useChunkEditing = (
                         starttimestamp: "00:00:00:00",
                         id: uuidv4(),
                         updatedat: new Date(),
+                        transcriptions: []
                       },
                     ]
                 : [])(chunks.filter((c) => c.id !== chunk.id)[0])
@@ -79,6 +81,7 @@ const useChunkEditing = (
                 creatorid: "test",
                 updatedat: new Date(),
                 id: uuidv4(),
+                transcriptions: [],
               },
               {
                 starttimestamp: toTimeStamp(progressState.progress * duration),
@@ -88,6 +91,7 @@ const useChunkEditing = (
                 creatorid: "test",
                 updatedat: new Date(),
                 id: uuidv4(),
+                transcriptions: [],
               },
             ])
             .sort((a, b) => a.endtimeseconds - b.endtimeseconds)
@@ -104,6 +108,7 @@ const useChunkEditing = (
               creatorid: "Test",
               updatedat: new Date(),
               id: uuidv4(),
+              transcriptions: [],
             },
           ])
         );

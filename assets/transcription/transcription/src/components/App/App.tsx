@@ -15,7 +15,7 @@ import theme from "../../styles/theme";
 import ChunkEditor from "../ChunkEditor/ChunkEditor";
 import Dashboard from "../Dashboard/Dashboard";
 import Header from "../Header/Header";
-import useSteps from "./useSteps";
+import useSteps from "./hooks/useSteps";
 import View from "./Views";
 import story_id from "../../utils/getId";
 import api_key from "../../utils/getApiKey";
@@ -44,9 +44,13 @@ const BackButton: React.FC<{ action: () => void }> = ({ action }) => {
 
 const App: React.FC<{}> = () => {
   const [view, setView] = useState<View>(View.Dashboard);
-  const steps = useSteps(setView);
-
   const [chunks, setChunks] = useState<Chunk[]>([]);
+  const steps = useSteps(setView, {
+    step1: true,
+    step2: chunks.length > 0,
+    step3: chunks.length > 0,
+  });
+
   const [story, setStory] = useState<any>({ loading: true });
 
   useEffect(() => {
@@ -63,6 +67,7 @@ const App: React.FC<{}> = () => {
               creatorid: c.creatorid,
               updatedat: c.updatedat,
               id: c.id,
+              transcriptions: c.transcriptions
             }))
           );
         setStory({ ...r.data, loading: false });
@@ -95,7 +100,7 @@ const App: React.FC<{}> = () => {
           ) : view === View.Chunking ? (
             <ChunkEditor chunksState={[chunks, setChunks]} />
           ) : view === View.Transcribing ? (
-            <Transcriber story_id={story_id} chunks={chunks} />
+            <Transcriber story_id={story_id} chunksState={[chunks, setChunks]} />
           ) : view === View.Reviewing ? (
             <div>Reviewing</div>
           ) : null}

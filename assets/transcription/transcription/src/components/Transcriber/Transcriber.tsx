@@ -2,64 +2,105 @@
 import { Box, Container, IconButton, TextField } from "@material-ui/core";
 import { NavigateBefore, NavigateNext } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 // Internal Dependencies
 import { Chunk } from "../../utils/types";
 import ChunkCard from "../ChunkCard/ChunkCard";
-import { ProgressState } from "../VideoPlayer/Hooks/useVideoPlayerProgress";
+import SimpleInputForm from "../SimpleInputForm/SimpleInputForm";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
+import useTranscribe from "./hooks/useTranscribe";
+import useStyles from "./TranscriberStyles";
 
 type TranscriberProps = {
-  chunks: Chunk[];
+  chunksState: [Chunk[], React.Dispatch<React.SetStateAction<Chunk[]>>];
   story_id: string;
 };
 
-const Transcriber: React.FC<TranscriberProps> = ({ chunks, story_id }) => {
+const Transcriber: React.FC<TranscriberProps> = ({ chunksState, story_id }) => {
   const [duration, setDuration] = useState(0);
-  const [currentChunk, setCurrentChunk] = useState(0);
-  const [progressState, setProgressState] = useState<ProgressState>({
-    progress: 0,
-    fromPlayer: true,
-  });
+
+  const [chunks, setChunks] = chunksState;
+
   const [play, setPlay] = useState(false);
 
-  useEffect(() => {
-    setProgressState({ progress: chunks[currentChunk].starttimeseconds, fromPlayer: false })
-  }, [currentChunk]);
+  const [transcription, setTranscription] = useState<null | string>(null);
+
+  const [
+    toNextChunk,
+    toPrevChunk,
+    disableNextChunk,
+    disablePrevChunk,
+    currentChunk,
+    progressState,
+  ] = useTranscribe(chunks);
+
+  const classes = useStyles();
+
+  const handleNewTranscription = (value: string) => {
+    setChunks((chunks) =>
+      chunks.map((c) =>
+        value && c.id === currentChunk.id
+          ? {
+              ...c,
+              transcriptions: c.transcriptions.concat([
+                {
+                  creatorid: "Test",
+                  content: value,
+                  id: uuidv4(),
+                  updatedat: new Date(),
+                },
+              ]),
+            }
+          : c
+      )
+    );
+  };
+
   return (
     <Container>
       {chunks.length && (
         <>
-          <VideoPlayer
-            durationState={[duration, setDuration]}
-            progressState={[progressState, setProgressState]}
-            playState={[play, setPlay]}
-            url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
-            split={{
-              start: chunks[currentChunk].starttimeseconds,
-              end: chunks[currentChunk].endtimeseconds,
-            }}
-          />
-          <IconButton
-            aria-label="Previous Chunk"
-            style={{ color: "#FFFFFF" }}
-            disabled={currentChunk <= 0}
-            onClick={() => setCurrentChunk((c) => c - 1)}
-          >
-            <NavigateBefore />
-          </IconButton>
-
-          <IconButton
-            aria-label="Next Chunk"
-            style={{ color: "#FFFFFF" }}
-            disabled={currentChunk >= chunks.length - 1}
-            onClick={() => setCurrentChunk((c) => c + 1)}
-          >
-            <NavigateNext />
-          </IconButton>
-          <ChunkCard chunk={chunks[currentChunk]}>
-            <TextField style={{ width: "100%" }} label="Transcription" />
-          </ChunkCard>
+          <Box className={classes.videoPlayerContainer}>
+            <VideoPlayer
+              durationState={[duration, setDuration]}
+              progressState={progressState}
+              playState={[play, setPlay]}
+              url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
+              split={{
+                start: currentChunk.starttimeseconds,
+                end: currentChunk.endtimeseconds,
+              }}
+            />
+          </Box>
+          <Box className={classes.transcribeControls}>
+            <IconButton
+              aria-label="Previous Chunk"
+              style={{ color: "#FFFFFF" }}
+              disabled={disablePrevChunk}
+              onClick={toPrevChunk}
+            >
+              <NavigateBefore />
+            </IconButton>
+            <Box className={classes.transcriptionInput}>
+              <ChunkCard chunk={currentChunk}>
+                <SimpleInputForm
+                  placeholder="Transcription"
+                  buttonText="Confirm"
+                  classes={{ input: "", button: "" }}
+                  onSubmit={handleNewTranscription}
+                />
+              </ChunkCard>
+            </Box>
+            <IconButton
+              aria-label="Next Chunk"
+              style={{ color: "#FFFFFF" }}
+              disabled={disableNextChunk}
+              onClick={toNextChunk}
+            >
+              <NavigateNext />
+            </IconButton>
+          </Box>
         </>
       )}
     </Container>

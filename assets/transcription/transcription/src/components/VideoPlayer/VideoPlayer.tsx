@@ -1,6 +1,6 @@
 // External Dependencies
 import React, { useRef } from "react";
-import { Container, Button, Slider, Typography, Box } from "@material-ui/core";
+import { Container, Button, Slider, Typography, } from "@material-ui/core";
 import ReactPlayer from "react-player";
 import { PlayArrow, Pause } from "@material-ui/icons";
 

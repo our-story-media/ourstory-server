@@ -9,6 +9,9 @@ const theme = createMuiTheme({
         color: "#FFFFFF",
         lineHeight: "34px",
         borderRadius: "8px",
+        '&$disabled': {
+          backgroundColor: "gray",
+        }
       },
     },
   },
