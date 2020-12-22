@@ -11,11 +11,11 @@ import {
   toTimeStamp,
 } from "../../..//utils/chunkManipulation";
 import adjacentMap from "../../../utils/adjacentMap";
-import { Chunk } from "../../../utils/types";
+import { Chunk, StateSetter } from "../../../utils/types";
 import { ProgressState } from "../../VideoPlayer/Hooks/useVideoPlayerProgress";
 
 const useChunkEditing = (
-  chunksState: [Chunk[], React.Dispatch<React.SetStateAction<Chunk[]>>],
+  chunksState: [Chunk[], StateSetter<Chunk[]>],
   progressState: ProgressState,
   duration: null | number,
   userName: null | string

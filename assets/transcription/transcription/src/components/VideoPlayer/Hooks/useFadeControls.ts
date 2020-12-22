@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect, SetStateAction } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { StateSetter } from '../../../utils/types';
 
 /**
  * This hook provides state for whether the videos play/pause button should be
@@ -17,7 +18,7 @@ import React, { useState, useRef, useEffect, SetStateAction } from 'react';
 const useFadeControls = (
   doFade: boolean,
   timeUntilFade: number = 1000
-): [boolean, React.Dispatch<SetStateAction<boolean>>] => {
+): [boolean, StateSetter<boolean>] => {
   const [showControls, setShowControls] = useState(true);
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
 

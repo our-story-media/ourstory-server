@@ -30,11 +30,20 @@ const useStyles = makeStyles({
   },
 });
 
-const BackButton: React.FC<{ action: () => void }> = ({ action }) => {
+/**
+ * A back button. When the button is pressed, the actions will be performed in
+ * the order they are passed
+ *
+ * @param actions: the actions that will be performed when the back button is pressed
+ */
+const BackButton: React.FC<{ actions: (() => void)[] }> = ({ actions }) => {
   const classes = useStyles();
   return (
     <Box>
-      <ButtonBase className={classes.backButton} onClick={action}>
+      <ButtonBase
+        className={classes.backButton}
+        onClick={() => actions.forEach((action) => action())}
+      >
         <ChevronLeft />
         Back
       </ButtonBase>
@@ -50,7 +59,7 @@ const App: React.FC<{}> = () => {
     step2: chunks.length > 0,
     step3: chunks.length > 0,
   });
-  
+
   const storyTitle = useOurstoryApi(chunks, setChunks);
 
   return (
@@ -58,19 +67,24 @@ const App: React.FC<{}> = () => {
       <ThemeProvider theme={theme}>
         <main>
           <Header>
-            <Container>
-              {view !== View.Dashboard && (
-                <BackButton action={() => setView(View.Dashboard)} />
-              )}
-            </Container>
             {view === View.Dashboard ? (
               <Dashboard steps={steps} storyName={storyTitle} />
             ) : view === View.Chunking ? (
-              <ChunkEditor chunksState={[chunks, setChunks]} />
+              <ChunkEditor
+                chunksState={[chunks, setChunks]}
+                backButton={
+                  <BackButton actions={[() => setView(View.Dashboard)]} />
+                }
+              />
             ) : view === View.Transcribing ? (
               <Transcriber
                 story_id={story_id}
                 chunksState={[chunks, setChunks]}
+                makeBackButton={(action: () => void) => (
+                  <BackButton
+                    actions={[action, () => setView(View.Dashboard)]}
+                  />
+                )}
               />
             ) : view === View.Reviewing ? (
               <div>Reviewing</div>

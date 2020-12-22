@@ -12,10 +12,7 @@ import StepInfo, { StepInfoProps } from "../App/StepInfo";
 import FlatPaper from "../FlatPaper/FlatPaper";
 import SimpleInputForm from "../SimpleInputForm/SimpleInputForm";
 
-import useLocalStorage from "../../hooks/useLocalStorage";
-
 import useStyles from "./DashboardStyles";
-import { name_key } from "../../utils/localStorageKeys";
 import { UserContext } from "../UserProvider/UserProvider";
 
 type DashboardProps = {

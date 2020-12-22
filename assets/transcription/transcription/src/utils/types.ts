@@ -16,3 +16,5 @@ export type Chunk = {
   id: string,
   transcriptions: Transcription[],
 };
+
+export type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>

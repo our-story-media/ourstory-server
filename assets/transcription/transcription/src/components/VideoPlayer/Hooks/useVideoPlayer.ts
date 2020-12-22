@@ -1,6 +1,7 @@
 // External Dependencies
 import { useState, useEffect, RefObject, useMemo } from "react";
 import ReactPlayer, { ReactPlayerProps } from "react-player";
+import { StateSetter } from "../../../utils/types";
 
 // Internal Dependencies
 import useFadeControls from "./useFadeControls";
@@ -21,7 +22,7 @@ const useVideoPlayer = (
   ],
   playStateIn: [
     play: boolean,
-    setPlay: React.Dispatch<React.SetStateAction<boolean>>,
+    setPlay: StateSetter<boolean>,
   ],
   playerRef: RefObject<ReactPlayer>,
   setDuration: (state: number) => void,

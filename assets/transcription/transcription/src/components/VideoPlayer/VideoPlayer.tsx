@@ -11,6 +11,7 @@ import { ProgressState } from "./Hooks/useVideoPlayerProgress";
 // Styles
 import useStyles from "./VideoPlayerStyles";
 import { toShortTimeStamp } from "../../utils/chunkManipulation";
+import { StateSetter } from "../../utils/types";
 
 type VideoPlayerProps = {
   /** The url of the video */
@@ -30,7 +31,7 @@ type VideoPlayerProps = {
   ];
   playState: [
     play: boolean,
-    setPlay: React.Dispatch<React.SetStateAction<boolean>>
+    setPlay: StateSetter<boolean>
   ];
   /** Once the video has initially loaded, the component will write the duration
    *  of the video in seconds to this state

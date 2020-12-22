@@ -1,13 +1,13 @@
 // External Dependencies
 import { Add, Delete, History, PlayArrow } from "@material-ui/icons";
-import React, { useContext, useState } from "react";
+import React, { ReactNode, useContext, useState } from "react";
 import { Button, Container, IconButton } from "@material-ui/core";
 
 // Internal Dependencies
 import ChunkCard from "../ChunkCard/ChunkCard";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useStyles from "./ChunkEditorStyles";
-import { Chunk } from "../../utils/types";
+import { Chunk, StateSetter } from "../../utils/types";
 import story_id from "../../utils/getId";
 import { ProgressState } from "../VideoPlayer/Hooks/useVideoPlayerProgress";
 import useChunkEditing from "./hooks/useChunkEditing";
@@ -15,10 +15,12 @@ import { UserContext } from "../UserProvider/UserProvider";
 
 type ChunkEditorProps = {
   /** State for the story chunks */
-  chunksState: [Chunk[], React.Dispatch<React.SetStateAction<Chunk[]>>];
+  chunksState: [Chunk[], StateSetter<Chunk[]>];
+  /** Back button component */
+  backButton: ReactNode;
 };
 
-const ChunkEditor: React.FC<ChunkEditorProps> = ({ chunksState }) => {
+const ChunkEditor: React.FC<ChunkEditorProps> = ({ chunksState, backButton }) => {
   const [play, setPlay] = useState(false);
   const [duration, setDuration] = useState<number | null>(null);
   const [chunks, setChunks] = chunksState;
@@ -36,6 +38,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ chunksState }) => {
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Container>
+      {backButton}
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer
           durationState={[duration, setDuration]}

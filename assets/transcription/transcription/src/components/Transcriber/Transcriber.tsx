@@ -1,32 +1,27 @@
 // External Dependencies
 import { Box, Container, IconButton, TextField } from "@material-ui/core";
 import { NavigateBefore, NavigateNext } from "@material-ui/icons";
-import React, { useCallback, useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import React, { ReactNode, useState } from "react";
 
 // Internal Dependencies
-import { Chunk } from "../../utils/types";
+import { Chunk, StateSetter } from "../../utils/types";
 import ChunkCard from "../ChunkCard/ChunkCard";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useTranscribe from "./hooks/useTranscribe";
 import useStyles from "./TranscriberStyles";
 
 type TranscriberProps = {
-  chunksState: [Chunk[], React.Dispatch<React.SetStateAction<Chunk[]>>];
+  chunksState: [Chunk[], StateSetter<Chunk[]>];
   story_id: string;
+  makeBackButton: (action: () => void) => ReactNode
 };
 
-const Transcriber: React.FC<TranscriberProps> = ({ chunksState, story_id }) => {
+const Transcriber: React.FC<TranscriberProps> = ({ chunksState, story_id, makeBackButton }) => {
   const [duration, setDuration] = useState(0);
 
-  const [chunks, setChunks] = chunksState;
+  const [chunks] = chunksState;
 
   const [play, setPlay] = useState(false);
-
-  // State for what is in the Input field
-  const [transcription, setTranscription] = useState<null | string>(null);
-
-  const currentUserId = "Test";
 
   const [
     toNextChunk,
@@ -35,40 +30,19 @@ const Transcriber: React.FC<TranscriberProps> = ({ chunksState, story_id }) => {
     disablePrevChunk,
     currentChunk,
     progressState,
-  ] = useTranscribe(chunks);
-
-  useEffect(() => {
-    currentChunk.transcriptions.filter((el) => el.creatorid != currentUserId);
-  }, [currentChunk]);
+    transcriptionState,
+    updateChunk
+  ] = useTranscribe(chunksState);
+  
+  const backButton = makeBackButton(updateChunk);
 
   const classes = useStyles();
 
-  const updateChunk = useCallback(() => {
-    setChunks((chunks) =>
-      chunks.map((c) =>
-        transcription && c.id === currentChunk.id
-          ? {
-              ...c,
-              transcriptions: c.transcriptions.concat([
-                {
-                  creatorid: "Test",
-                  content: transcription,
-                  id: uuidv4(),
-                  updatedat: new Date(),
-                },
-              ]),
-            }
-          : c
-      )
-    );
-  }, [transcription, setChunks, currentChunk.id]);
-
-  useEffect(() => {
-    return updateChunk;
-  }, [updateChunk, currentChunk]);
+  const [transcription, setTranscription] = transcriptionState;
 
   return (
     <Container>
+      {backButton}
       {chunks.length && (
         <>
           <Box className={classes.videoPlayerContainer}>
@@ -101,6 +75,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ chunksState, story_id }) => {
                   rows={3}
                   label="Transcription"
                   value={transcription}
+                  onChange={(e) => setTranscription(e.target.value)}
                 />
               </ChunkCard>
             </Box>
