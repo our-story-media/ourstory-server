@@ -15,6 +15,9 @@ const useStyles = makeStyles({
   transcriptionInput: {
     flexGrow: 4,
   },
+  inputField: {
+    width: "100%",
+  },
 });
 
 export default useStyles;

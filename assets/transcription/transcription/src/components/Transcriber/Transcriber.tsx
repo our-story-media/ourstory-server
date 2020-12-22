@@ -1,13 +1,12 @@
 // External Dependencies
 import { Box, Container, IconButton, TextField } from "@material-ui/core";
 import { NavigateBefore, NavigateNext } from "@material-ui/icons";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 // Internal Dependencies
 import { Chunk } from "../../utils/types";
 import ChunkCard from "../ChunkCard/ChunkCard";
-import SimpleInputForm from "../SimpleInputForm/SimpleInputForm";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useTranscribe from "./hooks/useTranscribe";
 import useStyles from "./TranscriberStyles";
@@ -24,7 +23,10 @@ const Transcriber: React.FC<TranscriberProps> = ({ chunksState, story_id }) => {
 
   const [play, setPlay] = useState(false);
 
+  // State for what is in the Input field
   const [transcription, setTranscription] = useState<null | string>(null);
+
+  const currentUserId = "Test";
 
   const [
     toNextChunk,
@@ -35,18 +37,22 @@ const Transcriber: React.FC<TranscriberProps> = ({ chunksState, story_id }) => {
     progressState,
   ] = useTranscribe(chunks);
 
+  useEffect(() => {
+    currentChunk.transcriptions.filter((el) => el.creatorid != currentUserId);
+  }, [currentChunk]);
+
   const classes = useStyles();
 
-  const handleNewTranscription = (value: string) => {
+  const updateChunk = useCallback(() => {
     setChunks((chunks) =>
       chunks.map((c) =>
-        value && c.id === currentChunk.id
+        transcription && c.id === currentChunk.id
           ? {
               ...c,
               transcriptions: c.transcriptions.concat([
                 {
                   creatorid: "Test",
-                  content: value,
+                  content: transcription,
                   id: uuidv4(),
                   updatedat: new Date(),
                 },
@@ -55,7 +61,11 @@ const Transcriber: React.FC<TranscriberProps> = ({ chunksState, story_id }) => {
           : c
       )
     );
-  };
+  }, [transcription, setChunks, currentChunk.id]);
+
+  useEffect(() => {
+    return updateChunk;
+  }, [updateChunk, currentChunk]);
 
   return (
     <Container>
@@ -84,11 +94,13 @@ const Transcriber: React.FC<TranscriberProps> = ({ chunksState, story_id }) => {
             </IconButton>
             <Box className={classes.transcriptionInput}>
               <ChunkCard chunk={currentChunk}>
-                <SimpleInputForm
-                  placeholder="Transcription"
-                  buttonText="Confirm"
-                  classes={{ input: "", button: "" }}
-                  onSubmit={handleNewTranscription}
+                <TextField
+                  multiline
+                  className={classes.inputField}
+                  variant="outlined"
+                  rows={3}
+                  label="Transcription"
+                  value={transcription}
                 />
               </ChunkCard>
             </Box>

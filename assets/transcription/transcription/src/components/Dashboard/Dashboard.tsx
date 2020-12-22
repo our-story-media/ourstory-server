@@ -7,7 +7,7 @@ import {
   GridList,
   GridListTile,
 } from "@material-ui/core";
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import StepInfo, { StepInfoProps } from "../App/StepInfo";
 import FlatPaper from "../FlatPaper/FlatPaper";
 import SimpleInputForm from "../SimpleInputForm/SimpleInputForm";
@@ -16,6 +16,7 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 
 import useStyles from "./DashboardStyles";
 import { name_key } from "../../utils/localStorageKeys";
+import { UserContext } from "../UserProvider/UserProvider";
 
 type DashboardProps = {
   /** The name of the story being transcribed */
@@ -68,7 +69,7 @@ const title = (storyName: string) =>
   </Typography>;
 
 const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
-  const [name, setName, clearName] = useLocalStorage(name_key);
+  const { userName, setName, clearName}  = useContext(UserContext);
 
   // TODO: Consider breaking down this component into smaller ones,
   // the JSX is quite bloated
@@ -77,14 +78,14 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
 
   return (
     <Box>
-      {useModal(name, setName, classes)}
+      {useModal(userName, setName, classes)}
       <Container>
         <Container className={classes.introContainer}>
           {title(storyName)}
-          {hello(name)}
+          {hello(userName)}
           <Link className={classes.notMeLink} onClick={clearName}>
             <Typography variant="subtitle1">
-              {name && "This is not me!"}
+              {userName && "This is not me!"}
             </Typography>
           </Link>
         </Container>

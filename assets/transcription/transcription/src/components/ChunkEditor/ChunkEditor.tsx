@@ -1,6 +1,6 @@
 // External Dependencies
 import { Add, Delete, History, PlayArrow } from "@material-ui/icons";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Container, IconButton } from "@material-ui/core";
 
 // Internal Dependencies
@@ -11,6 +11,7 @@ import { Chunk } from "../../utils/types";
 import story_id from "../../utils/getId";
 import { ProgressState } from "../VideoPlayer/Hooks/useVideoPlayerProgress";
 import useChunkEditing from "./hooks/useChunkEditing";
+import { UserContext } from "../UserProvider/UserProvider";
 
 type ChunkEditorProps = {
   /** State for the story chunks */
@@ -25,8 +26,10 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ chunksState }) => {
     progress: 0,
     fromPlayer: true,
   });
+  
+  const { userName } = useContext(UserContext);
 
-  const [handleNewChunk, handleDeleteChunk] = useChunkEditing([chunks, setChunks], progressState, duration);
+  const [handleNewChunk, handleDeleteChunk] = useChunkEditing([chunks, setChunks], progressState, duration, userName);
   
   const classes = useStyles();
 
