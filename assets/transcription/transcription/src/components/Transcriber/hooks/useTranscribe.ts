@@ -1,97 +1,103 @@
 // External Dependencies
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import { useEffect, useReducer, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import oneSatisfies from "../../../utils/oneSatisfies";
 
 // Internal Dependencies
 import { Chunk, StateSetter } from "../../../utils/types";
-import { UserContext } from "../../UserProvider/UserProvider";
 import { ProgressState } from "../../VideoPlayer/Hooks/useVideoPlayerProgress";
 
-enum ChunkIndexAction {
+enum ChunkIndexActionType {
   NextChunk,
   PreviousChunk,
 }
 
+type ChunkIndexReducerAction = {
+  type: ChunkIndexActionType;
+  payload: { newTranscription: string; userName: string };
+};
+
 const chunkIndexReducer = (
-  updateFunction: (currentChunkIndex: number) => void
-) => (state: number, action: ChunkIndexAction): number => {
-  updateFunction(state);
-  switch (action) {
-    case ChunkIndexAction.NextChunk:
+  updateFunction: (
+    currentChunkIndex: number,
+    newTranscription: string,
+    userName: string
+  ) => void
+) => (state: number, action: ChunkIndexReducerAction): number => {
+  updateFunction(
+    state,
+    action.payload.newTranscription,
+    action.payload.userName
+  );
+  switch (action.type) {
+    case ChunkIndexActionType.NextChunk:
       return state + 1;
-    case ChunkIndexAction.PreviousChunk:
+    case ChunkIndexActionType.PreviousChunk:
       return state - 1;
   }
 };
 
 const useTranscribe = (
-  chunksState: [Chunk[], StateSetter<Chunk[]>]
-): [
-  // toNextChunk Function
-  () => void,
-  // toPrevChunk Function
-  () => void,
-  // Disable next chunk button
-  boolean,
-  // Disable prev chunk button
-  boolean,
-  // Current Chunk
-  Chunk,
-  // Progress of the video
-  [ProgressState, StateSetter<ProgressState>],
-  // Transcription text
-  [string, StateSetter<string>],
-  // Update the current chunks transcription
-  () => void
-] => {
+  chunksState: [Chunk[], StateSetter<Chunk[]>],
+  userName: string | null
+): {
+  toNextChunk: () => void;
+  toPrevChunk: () => void;
+  disableNextChunk: boolean;
+  disablePrevChunk: boolean;
+  currentChunk: Chunk;
+  progressState: [ProgressState, StateSetter<ProgressState>];
+  transcriptionState: [string, StateSetter<string>];
+  updateChunk: () => void;
+} => {
   const [chunks, setChunks] = chunksState;
   const [progressState, setProgressState] = useState<ProgressState>({
     progress: 0,
     fromPlayer: true,
   });
-  const { userName } = useContext(UserContext);
   // State for what is in the Input field
   const [transcription, setTranscription] = useState<string>("");
 
-  const updateChunk = useCallback(
-    (currentChunkIndex: number) => {
-      userName &&
-        setChunks((chunks) =>
-          chunks.map((c) =>
-            c.id === chunks[currentChunkIndex].id
-              ? {
-                  ...c,
-                  transcriptions: oneSatisfies(
-                    c.transcriptions,
-                    (t) => t.creatorid === userName
+  /**
+   * This function updates the chunks state, based on the current
+   * state of currentChunkIndex and transcription.
+   */
+  const updateChunk = (
+    currentChunkIndex: number,
+    newTranscription: string,
+    userName: string
+  ) => {
+    setChunks((chunks) =>
+      chunks.map((c) =>
+        c.id === chunks[currentChunkIndex].id
+          ? {
+              ...c,
+              /* This call to oneSatisfies checks if the current user has
+               * already made a transcription for this chunk (in that case,
+               * update that chunk instead of creating a new one)
+               */
+              transcriptions: oneSatisfies(
+                c.transcriptions,
+                (t) => t.creatorid === userName
+              )
+                ? c.transcriptions.map((t) =>
+                    t.creatorid === userName
+                      ? { ...t, content: newTranscription }
+                      : t
                   )
-                    ? c.transcriptions.map((t) =>
-                        t.creatorid === userName
-                          ? { ...t, content: transcription }
-                          : t
-                      )
-                    : c.transcriptions.concat([
-                        {
-                          creatorid: userName,
-                          content: transcription,
-                          id: uuidv4(),
-                          updatedat: new Date(),
-                        },
-                      ]),
-                }
-              : c
-          )
-        );
-    },
-    [transcription, setChunks, userName]
-  );
+                : c.transcriptions.concat([
+                    {
+                      creatorid: userName,
+                      content: newTranscription,
+                      id: uuidv4(),
+                      updatedat: new Date(),
+                    },
+                  ]),
+            }
+          : c
+      )
+    );
+  };
 
   const [currentChunkIndex, dispatchChunkIndex] = useReducer(
     chunkIndexReducer(updateChunk),
@@ -117,18 +123,29 @@ const useTranscribe = (
         : setTranscription(""))(
       currentChunk.transcriptions.filter((el) => el.creatorid === userName)
     );
-  }, [currentChunk]);
+  }, [currentChunk, userName]);
 
-  return [
-    () => dispatchChunkIndex(ChunkIndexAction.NextChunk),
-    () => dispatchChunkIndex(ChunkIndexAction.PreviousChunk),
+  return {
+    toNextChunk: () =>
+      userName &&
+      dispatchChunkIndex({
+        type: ChunkIndexActionType.NextChunk,
+        payload: { newTranscription: transcription, userName },
+      }),
+    toPrevChunk: () =>
+      userName &&
+      dispatchChunkIndex({
+        type: ChunkIndexActionType.PreviousChunk,
+        payload: { newTranscription: transcription, userName },
+      }),
     disableNextChunk,
     disablePrevChunk,
     currentChunk,
-    [progressState, setProgressState],
-    [transcription, setTranscription],
-    () => updateChunk(currentChunkIndex),
-  ];
+    progressState: [progressState, setProgressState],
+    transcriptionState: [transcription, setTranscription],
+    updateChunk: () =>
+      userName && updateChunk(currentChunkIndex, transcription, userName),
+  };
 };
 
 export default useTranscribe;

@@ -1,11 +1,12 @@
 // External Dependencies
 import { Box, Container, IconButton, TextField } from "@material-ui/core";
 import { NavigateBefore, NavigateNext } from "@material-ui/icons";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useContext, useState } from "react";
 
 // Internal Dependencies
 import { Chunk, StateSetter } from "../../utils/types";
 import ChunkCard from "../ChunkCard/ChunkCard";
+import { UserContext } from "../UserProvider/UserProvider";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useTranscribe from "./hooks/useTranscribe";
 import useStyles from "./TranscriberStyles";
@@ -13,17 +14,23 @@ import useStyles from "./TranscriberStyles";
 type TranscriberProps = {
   chunksState: [Chunk[], StateSetter<Chunk[]>];
   story_id: string;
-  makeBackButton: (action: () => void) => ReactNode
+  makeBackButton: (action: () => void) => ReactNode;
 };
 
-const Transcriber: React.FC<TranscriberProps> = ({ chunksState, story_id, makeBackButton }) => {
+const Transcriber: React.FC<TranscriberProps> = ({
+  chunksState,
+  story_id,
+  makeBackButton,
+}) => {
   const [duration, setDuration] = useState(0);
 
   const [chunks] = chunksState;
 
   const [play, setPlay] = useState(false);
 
-  const [
+  const { userName } = useContext(UserContext);
+
+  const {
     toNextChunk,
     toPrevChunk,
     disableNextChunk,
@@ -31,9 +38,9 @@ const Transcriber: React.FC<TranscriberProps> = ({ chunksState, story_id, makeBa
     currentChunk,
     progressState,
     transcriptionState,
-    updateChunk
-  ] = useTranscribe(chunksState);
-  
+    updateChunk,
+  } = useTranscribe(chunksState, userName);
+
   const backButton = makeBackButton(updateChunk);
 
   const classes = useStyles();
