@@ -1,17 +1,17 @@
 // External Dependencies
 import { Add, Delete, History, PlayArrow } from "@material-ui/icons";
-import React, { ReactNode, useContext, useState } from "react";
+import React, { ReactNode, useContext } from "react";
 import { Button, Container, IconButton } from "@material-ui/core";
 
 // Internal Dependencies
 import ChunkCard from "../ChunkCard/ChunkCard";
-import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useStyles from "./ChunkEditorStyles";
 import { Chunk, StateSetter } from "../../utils/types";
 import story_id from "../../utils/getId";
-import { ProgressState } from "../VideoPlayer/Hooks/useVideoPlayerProgress";
 import useChunkEditing from "./hooks/useChunkEditing";
 import { UserContext } from "../UserProvider/UserProvider";
+import VideoPlayer from "../VideoPlayer/VideoPlayer";
+import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 
 type ChunkEditorProps = {
   /** State for the story chunks */
@@ -20,19 +20,30 @@ type ChunkEditorProps = {
   backButton: ReactNode;
 };
 
-const ChunkEditor: React.FC<ChunkEditorProps> = ({ chunksState, backButton }) => {
-  const [play, setPlay] = useState(false);
-  const [duration, setDuration] = useState<number | null>(null);
+const ChunkEditor: React.FC<ChunkEditorProps> = ({
+  chunksState,
+  backButton,
+}) => {
   const [chunks, setChunks] = chunksState;
-  const [progressState, setProgressState] = useState<ProgressState>({
-    progress: 0,
-    fromPlayer: true,
-  });
-  
+
+  const {
+    progressState: [progress, setProgress],
+    playingState,
+    duration,
+    controller: videoPlayerController,
+  } = useVideoPlayerController();
+
   const { userName } = useContext(UserContext);
 
-  const [handleNewChunk, handleDeleteChunk] = useChunkEditing([chunks, setChunks], progressState, duration, userName);
-  
+  const [, setPlay] = playingState;
+
+  const [handleNewChunk, handleDeleteChunk] = useChunkEditing(
+    [chunks, setChunks],
+    progress,
+    duration,
+    userName
+  );
+
   const classes = useStyles();
 
   return (
@@ -41,9 +52,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ chunksState, backButton }) =>
       {backButton}
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer
-          durationState={[duration, setDuration]}
-          progressState={[progressState, setProgressState]}
-          playState={[play, setPlay]}
+          controller={videoPlayerController}
           url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
         />
       </div>
@@ -51,12 +60,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ chunksState, backButton }) =>
         aria-label="Go Back"
         style={{ color: "#FFFFFF" }}
         className={classes.actionButton}
-        onClick={() =>
-          duration && setProgressState({
-            progress: progressState.progress - 5 / duration,
-            fromPlayer: false,
-          })
-        }
+        onClick={() => duration && setProgress(progress - 5 / duration)}
       >
         <History />
       </IconButton>
@@ -75,10 +79,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ chunksState, backButton }) =>
               style={{ marginRight: "4px", color: "#FFFFFF" }}
               onClick={() => {
                 setPlay(true);
-                setProgressState({
-                  progress: c.starttimeseconds,
-                  fromPlayer: false,
-                });
+                setProgress(c.starttimeseconds);
               }}
             >
               <PlayArrow />

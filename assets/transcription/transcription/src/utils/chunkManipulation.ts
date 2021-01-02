@@ -36,7 +36,7 @@ export const toTimeStamp = (seconds: number) =>
  * 
  * @param seconds 
  */
-export const toShortTimeStamp = (seconds: number) => (seconds > 60 * 60) ? toTimeStamp(seconds) : toTimeStamp(seconds).substring(3);
+export const toShortTimeStamp = (seconds: number) => (seconds > 60 * 60) ? toTimeStamp(seconds).substring(0, 8) : toTimeStamp(seconds).substring(3, 8);
 
 /**
  * Given a list of chunks, get the end of the last time stamp.

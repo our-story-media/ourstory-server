@@ -12,11 +12,11 @@ import {
 } from "../../..//utils/chunkManipulation";
 import adjacentMap from "../../../utils/adjacentMap";
 import { Chunk, StateSetter } from "../../../utils/types";
-import { ProgressState } from "../../VideoPlayer/Hooks/useVideoPlayerProgress";
+import { ProgressState } from "../../VideoPlayer/Hooks/useVideoPlayerState";
 
 const useChunkEditing = (
   chunksState: [Chunk[], StateSetter<Chunk[]>],
-  progressState: ProgressState,
+  progress: number,
   duration: null | number,
   userName: null | string
 ): [() => void, (chunk: Chunk) => void] => {
@@ -65,8 +65,8 @@ const useChunkEditing = (
   );
 
   const handleNewChunk = useCallback(() => {
-    const enclosingChunk = getEnclosingChunk(chunks, progressState.progress);
-    if (invalidSplit(chunks, progressState.progress)) {
+    const enclosingChunk = getEnclosingChunk(chunks, progress);
+    if (invalidSplit(chunks, progress)) {
       return;
     } else if (enclosingChunk != null) {
       duration &&
@@ -78,16 +78,16 @@ const useChunkEditing = (
               {
                 starttimestamp: enclosingChunk.starttimestamp,
                 starttimeseconds: enclosingChunk.starttimeseconds,
-                endtimestamp: toTimeStamp(progressState.progress * duration),
-                endtimeseconds: progressState.progress,
+                endtimestamp: toTimeStamp(progress * duration),
+                endtimeseconds: progress,
                 creatorid: userName,
                 updatedat: new Date(),
                 id: uuidv4(),
                 transcriptions: [],
               },
               {
-                starttimestamp: toTimeStamp(progressState.progress * duration),
-                starttimeseconds: progressState.progress,
+                starttimestamp: toTimeStamp(progress * duration),
+                starttimeseconds: progress,
                 endtimestamp: enclosingChunk.endtimestamp,
                 endtimeseconds: enclosingChunk.endtimeseconds,
                 creatorid: userName,
@@ -105,9 +105,9 @@ const useChunkEditing = (
           chunks.concat([
             {
               starttimestamp: getLastEndTimeStamp(chunks),
-              endtimestamp: toTimeStamp(progressState.progress * duration),
+              endtimestamp: toTimeStamp(progress * duration),
               starttimeseconds: getLastEndTimeSeconds(chunks),
-              endtimeseconds: progressState.progress,
+              endtimeseconds: progress,
               creatorid: userName,
               updatedat: new Date(),
               id: uuidv4(),
@@ -116,7 +116,7 @@ const useChunkEditing = (
           ])
         );
     }
-  }, [setChunks, userName, chunks, progressState.progress, duration]);
+  }, [setChunks, userName, chunks, progress, duration]);
 
   return [handleNewChunk, handleDeleteChunk];
 };

@@ -18,3 +18,5 @@ export type Chunk = {
 };
 
 export type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>
+
+export type State<T> = [T, StateSetter<T>];

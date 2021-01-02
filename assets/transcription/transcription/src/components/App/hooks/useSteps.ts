@@ -2,10 +2,12 @@ import { useMemo } from "react";
 import { StepInfoProps } from "../StepInfo";
 import View from "../Views";
 
+type Three<T> = [T, T, T];
+
 const useSteps = (
   setView: (view: View) => void,
-  enabled: { step1: boolean; step2: boolean; step3: boolean }
-): StepInfoProps[] =>
+  state: Three<Pick<StepInfoProps, "progress" | "enabled">>
+): Three<StepInfoProps> =>
   useMemo(
     () => [
       {
@@ -14,7 +16,7 @@ const useSteps = (
           "We need to know when people are talking in the story, so that we can transcribe them.",
         progress: 10,
         onSelect: () => setView(View.Chunking),
-        enabled: enabled.step1,
+        enabled: state[0].enabled,
       },
       {
         title: "Transcription",
@@ -22,7 +24,7 @@ const useSteps = (
           "Writing down exactly what is said in each chunk of the story.",
         progress: 10,
         onSelect: () => setView(View.Transcribing),
-        enabled: enabled.step2,
+        enabled: state[1].enabled,
       },
       {
         title: "Review",
@@ -30,10 +32,10 @@ const useSteps = (
           "Reviewing content is key to making sure we represent participants authentically.",
         progress: 10,
         onSelect: () => setView(View.Reviewing),
-        enabled: enabled.step3,
+        enabled: state[2].enabled,
       },
     ],
-    [setView, enabled.step1, enabled.step2, enabled.step3]
+    [setView, state[0].enabled, state[1].enabled, state[2].enabled]
   );
 
 export default useSteps;
