@@ -12,7 +12,6 @@ import {
 } from "../../..//utils/chunkManipulation";
 import adjacentMap from "../../../utils/adjacentMap";
 import { Chunk, StateSetter } from "../../../utils/types";
-import { ProgressState } from "../../VideoPlayer/Hooks/useVideoPlayerState";
 
 const useChunkEditing = (
   chunksState: [Chunk[], StateSetter<Chunk[]>],

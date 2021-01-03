@@ -4,6 +4,7 @@ const useStyles = makeStyles({
   videoPlayerContainer: {
     margin: "auto",
     marginTop: "4vh",
+    position: "relative",
   },
   transcribeControls: {
     display: "flex",
