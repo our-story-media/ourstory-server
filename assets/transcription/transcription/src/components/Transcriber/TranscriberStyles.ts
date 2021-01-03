@@ -5,6 +5,7 @@ const useStyles = makeStyles({
     margin: "auto",
     marginTop: "4vh",
     position: "relative",
+    overflow: "hidden",
   },
   transcribeControls: {
     display: "flex",

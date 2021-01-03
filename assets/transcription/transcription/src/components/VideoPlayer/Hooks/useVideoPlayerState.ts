@@ -9,6 +9,13 @@ export type ProgressState = {
   fromPlayer: boolean;
 };
 
+export type SplitState = {
+  /** The start of the video split as a fraction */
+  start: number;
+  /** The end of the video split as a fraction */
+  end: number;
+}
+
 export type VideoPlayerExternalState = {
   progressState: State<number>;
   playState: State<boolean>;

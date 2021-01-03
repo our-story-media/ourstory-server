@@ -3,11 +3,9 @@ import { Box, Container, IconButton, TextField } from "@material-ui/core";
 import { NavigateBefore, NavigateNext } from "@material-ui/icons";
 import { v4 as uuidv4 } from "uuid";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
-import { Frame } from "framer";
 import { motion, useAnimation } from "framer-motion";
 
 // Internal Dependencies
-import useListIndexController from "../../hooks/useListIndexController";
 import oneSatisfies from "../../utils/oneSatisfies";
 import { Chunk, StateSetter } from "../../utils/types";
 import ChunkCard from "../ChunkCard/ChunkCard";
@@ -15,6 +13,7 @@ import { UserContext } from "../UserProvider/UserProvider";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useStyles from "./TranscriberStyles";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
+import useSlideshow from "../../hooks/useSlideshow";
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
@@ -75,10 +74,10 @@ const Transcriber: React.FC<TranscriberProps> = ({
 }) => {
   const [chunks, setChunks] = chunksState;
 
-  const [split, setSplit] = useState({ start: 0, end: 1 });
-
   const {
-    progressState: [, setProgress], controller
+    progressState: [, setProgress],
+    splitState: [, setSplit],
+    controller,
   } = useVideoPlayerController();
 
   const videoTwoAnimationControls = useAnimation();
@@ -92,41 +91,55 @@ const Transcriber: React.FC<TranscriberProps> = ({
   const animateVideoChange = (change: VideoChange) => {
     videoOneAnimationControls.stop();
     videoTwoAnimationControls.stop();
-    (activeVideo === "one" ? videoTwoAnimationControls : videoOneAnimationControls).set({ x: change === "left" ? "-100vw" : "100vw" });
-    (activeVideo === "one" ? videoOneAnimationControls : videoTwoAnimationControls).set({ x: 0 });
-    (activeVideo === "one" ? videoTwoAnimationControls : videoOneAnimationControls).start({ x: 0, transition: { ease: ease } });
-    (activeVideo === "one" ? videoOneAnimationControls : videoTwoAnimationControls).start({ x: change === "left" ? "100vw" : "-100vw", transition: { ease: ease } }).then(toggleActiveVideo);
+
+    (activeVideo === "one"
+      ? videoTwoAnimationControls
+      : videoOneAnimationControls
+    ).set({ x: change === "left" ? "-100vw" : "100vw" });
+
+    (activeVideo === "one"
+      ? videoOneAnimationControls
+      : videoTwoAnimationControls
+    ).set({ x: 0 });
+
+    (activeVideo === "one"
+      ? videoTwoAnimationControls
+      : videoOneAnimationControls
+    ).start({ x: 0, transition: { ease: ease } });
+
+    (activeVideo === "one"
+      ? videoOneAnimationControls
+      : videoTwoAnimationControls
+    )
+      .start({
+        x: change === "left" ? "100vw" : "-100vw",
+        transition: { ease: ease },
+      })
+      .then(toggleActiveVideo);
   };
 
   const { userName } = useContext(UserContext);
 
   const [transcription, setTranscription] = useState("");
 
-  const {
-    currentValue: currentChunk,
-    currentIndex: currentChunkIndex,
-    nextIndexPossible: enableNextChunk,
-    prevIndexPossible: enablePrevChunk,
-    nextIndex: toNextChunk,
-    prevIndex: toPrevChunk,
-  } = useListIndexController(chunks);
+  const {page, direction, goTo} = useSlideshow(chunks);
 
   useEffect(() => {
     userName &&
       setTranscription(
-        getUsersTranscription(chunks[currentChunkIndex], userName)
+        getUsersTranscription(chunks[page], userName)
       );
     setSplit({
-      start: chunks[currentChunkIndex].starttimeseconds,
-      end: chunks[currentChunkIndex].endtimeseconds,
+      start: chunks[page].starttimeseconds,
+      end: chunks[page].endtimeseconds,
     });
-    setProgress(chunks[currentChunkIndex].starttimeseconds);
-  }, [chunks, currentChunkIndex, userName]);
+    setProgress(chunks[page].starttimeseconds);
+  }, [chunks, page, userName]);
 
   const backButton = makeBackButton(
     () =>
       userName &&
-      updateChunk(currentChunkIndex, transcription, userName, setChunks)
+      updateChunk(page, transcription, userName, setChunks)
   );
 
   const classes = useStyles();
@@ -164,23 +177,23 @@ const Transcriber: React.FC<TranscriberProps> = ({
             <IconButton
               aria-label="Previous Chunk"
               style={{ color: "#FFFFFF" }}
-              disabled={!enablePrevChunk}
+              disabled={page === 0}
               onClick={() => {
                 animateVideoChange("left");
                 userName &&
                   updateChunk(
-                    currentChunkIndex,
+                    page,
                     transcription,
                     userName,
                     setChunks
                   );
-                toPrevChunk();
+                goTo("prev");
               }}
             >
               <NavigateBefore />
             </IconButton>
             <Box className={classes.transcriptionInput}>
-              <ChunkCard chunk={currentChunk}>
+              <ChunkCard chunk={chunks[page]}>
                 <TextField
                   multiline
                   className={classes.inputField}
@@ -195,17 +208,17 @@ const Transcriber: React.FC<TranscriberProps> = ({
             <IconButton
               aria-label="Next Chunk"
               style={{ color: "#FFFFFF" }}
-              disabled={!enableNextChunk}
+              disabled={page === chunks.length - 1}
               onClick={() => {
                 animateVideoChange("right");
                 userName &&
                   updateChunk(
-                    currentChunkIndex,
+                    page,
                     transcription,
                     userName,
                     setChunks
                   );
-                toNextChunk();
+                goTo("next");
               }}
             >
               <NavigateNext />
