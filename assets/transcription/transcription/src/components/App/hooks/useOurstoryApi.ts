@@ -1,11 +1,11 @@
 // External Dependencies
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 // Internal Dependencies
 import api_key from "../../../utils/getApiKey";
 import story_id from "../../../utils/getId";
-import { Chunk, Story } from "../../../utils/types";
+import { Chunk, State, Story } from "../../../utils/types";
 
 type ServerData = {
   data: Story
@@ -18,8 +18,9 @@ type ServerData = {
  * @param chunks - the chunks state to synchonise to the api
  * @param setChunks - setter for the chunks
  */
-const useOurstoryApi = (chunks: Chunk[], setChunks: (state: Chunk[]) => void): string | undefined => {
+const useOurstoryApi = (): { storyTitle: string | undefined, chunksState: State<Chunk[]> }  => {
   const [story, setStory] = useState<Story | undefined>(undefined);
+  const [chunks, setChunks] = useState<Chunk[]>([]);
 
   useEffect(() => {
     axios.request<Story>({
@@ -58,7 +59,9 @@ const useOurstoryApi = (chunks: Chunk[], setChunks: (state: Chunk[]) => void): s
   //       .catch((error) => console.log(error));
   // }, []);
 
-  return story && story.title;
+  const memoChunks = useMemo<State<Chunk[]>>(() => [chunks, setChunks], [chunks]);
+
+  return { storyTitle: story && story.title, chunksState: memoChunks };
 };
 
 export default useOurstoryApi;

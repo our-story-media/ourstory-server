@@ -48,16 +48,16 @@ const BackButton: React.FC<{ actions: (() => void)[] }> = ({ actions }) => {
 
 const App: React.FC<{}> = () => {
   const [view, setView] = useState<View>(View.Dashboard);
-  const [chunks, setChunks] = useState<Chunk[]>([]);
   const steps = useSteps(setView, [
     { progress: 0, enabled: true },
     { progress: 0, enabled: true },
     { progress: 0, enabled: true },
   ]);
 
-  const storyTitle = useOurstoryApi(chunks, setChunks);
-
-  console.log(chunks);
+  const {
+    storyTitle,
+    chunksState: [chunks, setChunks],
+  } = useOurstoryApi();
 
   return (
     <UserProvider>

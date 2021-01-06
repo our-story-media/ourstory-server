@@ -47,8 +47,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
 
   const classes = useStyles();
 
-  console.log(chunks);
-
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Container>
