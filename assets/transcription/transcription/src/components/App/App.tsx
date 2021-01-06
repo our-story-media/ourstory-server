@@ -1,10 +1,5 @@
 // External Dependencies
-import {
-  Box,
-  ButtonBase,
-  makeStyles,
-  ThemeProvider,
-} from "@material-ui/core";
+import { Box, ButtonBase, makeStyles, ThemeProvider } from "@material-ui/core";
 import { ChevronLeft } from "@material-ui/icons";
 import React, { useState } from "react";
 
@@ -20,6 +15,7 @@ import { Chunk } from "../../utils/types";
 import Transcriber from "../Transcriber/Transcriber";
 import UserProvider from "../UserProvider/UserProvider";
 import useOurstoryApi from "./hooks/useOurstoryApi";
+import { Reviewer } from "../Reviewer/Reviewer";
 
 const useStyles = makeStyles({
   backButton: {
@@ -53,9 +49,15 @@ const BackButton: React.FC<{ actions: (() => void)[] }> = ({ actions }) => {
 const App: React.FC<{}> = () => {
   const [view, setView] = useState<View>(View.Dashboard);
   const [chunks, setChunks] = useState<Chunk[]>([]);
-  const steps = useSteps(setView, [{progress: 0, enabled: true}, {progress: 0, enabled: true}, {progress: 0, enabled: true}]);
+  const steps = useSteps(setView, [
+    { progress: 0, enabled: true },
+    { progress: 0, enabled: true },
+    { progress: 0, enabled: true },
+  ]);
 
   const storyTitle = useOurstoryApi(chunks, setChunks);
+
+  console.log(chunks);
 
   return (
     <UserProvider>
@@ -63,7 +65,10 @@ const App: React.FC<{}> = () => {
         <main>
           <Header>
             {view === View.Dashboard ? (
-              <Dashboard steps={steps} storyName={storyTitle} />
+              <Dashboard
+                steps={steps}
+                storyName={storyTitle ? storyTitle : "Loading"}
+              />
             ) : view === View.Chunking ? (
               <ChunkEditor
                 chunksState={[chunks, setChunks]}
@@ -82,7 +87,13 @@ const App: React.FC<{}> = () => {
                 )}
               />
             ) : view === View.Reviewing ? (
-              <div>Reviewing</div>
+              <Reviewer
+                backButton={
+                  <BackButton actions={[() => setView(View.Dashboard)]} />
+                }
+                story_id={story_id}
+                chunksState={[chunks, setChunks]}
+              />
             ) : null}
           </Header>
         </main>

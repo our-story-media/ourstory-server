@@ -12,6 +12,7 @@ import useChunkEditing from "./hooks/useChunkEditing";
 import { UserContext } from "../UserProvider/UserProvider";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
+import ReactPlayer from "react-player";
 
 type ChunkEditorProps = {
   /** State for the story chunks */
@@ -45,6 +46,8 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
   );
 
   const classes = useStyles();
+
+  console.log(chunks);
 
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
