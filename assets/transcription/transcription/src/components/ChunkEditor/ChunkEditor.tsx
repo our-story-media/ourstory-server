@@ -4,7 +4,7 @@ import React, { ReactNode, useContext } from "react";
 import { Button, Container, IconButton } from "@material-ui/core";
 
 // Internal Dependencies
-import ChunkCard from "../ChunkCard/ChunkCard";
+import ChunkCard from "../SimpleCard/ChunkCard";
 import useStyles from "./ChunkEditorStyles";
 import story_id from "../../utils/getId";
 import { UserContext } from "../UserProvider/UserProvider";

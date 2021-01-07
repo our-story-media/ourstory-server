@@ -9,7 +9,8 @@ import { Done } from "@material-ui/icons";
 import React, { ReactNode, useMemo } from "react";
 import useSlideshow from "../../hooks/useSlideshow";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
-import ChunkCard from "../ChunkCard/ChunkCard";
+import ChunkCard from "../SimpleCard/ChunkCard";
+import SimpleCard from "../SimpleCard/SimpleCard";
 import Slideshow from "../Slideshow/Slideshow";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
@@ -23,6 +24,10 @@ const useStyles = makeStyles({
   doneButton: {
     backgroundColor: "green",
     color: "white",
+  },
+  cardContainer: {
+    marginTop: "8px",
+    marginBottom: "8px",
   },
 });
 
@@ -62,12 +67,12 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
         numberOfPages={chunks.length}
       >
         <ChunkCard key={currentChunk.id} chunk={currentChunk}>
-          <Checkbox style={{ backgroundColor: "initial" }} />
           {currentChunk.transcriptions.map((transcription) => (
-            <Box key={transcription.id}>
-              {transcription.creatorid}
-              <br />
-              {transcription.content}
+            <Box className={classes.cardContainer}>
+              <SimpleCard title={<h5 style={{margin: "0"}}>{transcription.creatorid}</h5>}>
+                <Checkbox style={{ backgroundColor: "initial" }} />
+                {transcription.content}
+              </SimpleCard>
             </Box>
           ))}
         </ChunkCard>

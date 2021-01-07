@@ -6,7 +6,7 @@ import { motion, useAnimation } from "framer-motion";
 // Internal Dependencies
 import oneSatisfies from "../../utils/oneSatisfies";
 import { Chunk } from "../../utils/types";
-import ChunkCard from "../ChunkCard/ChunkCard";
+import ChunkCard from "../SimpleCard/ChunkCard";
 import { UserContext } from "../UserProvider/UserProvider";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useStyles from "./TranscriberStyles";
