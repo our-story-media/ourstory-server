@@ -6,7 +6,7 @@ import { motion, useAnimation } from "framer-motion";
 
 // Internal Dependencies
 import oneSatisfies from "../../utils/oneSatisfies";
-import { Chunk, StateSetter } from "../../utils/types";
+import { Chunk } from "../../utils/types";
 import ChunkCard from "../ChunkCard/ChunkCard";
 import { UserContext } from "../UserProvider/UserProvider";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
@@ -80,7 +80,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
 
   const [transcription, setTranscription] = useState("");
 
-  const {page, direction, goTo} = useSlideshow(chunks);
+  const {page, goTo} = useSlideshow(chunks);
 
   useEffect(() => {
     userName &&

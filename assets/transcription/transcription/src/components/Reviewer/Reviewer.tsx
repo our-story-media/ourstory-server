@@ -1,9 +1,6 @@
-import { Box, Checkbox, Container, IconButton, makeStyles } from "@material-ui/core";
-import { Done } from "@material-ui/icons";
+import { Box, Container } from "@material-ui/core";
 import React, { ReactNode } from "react";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
-import { Chunk, State } from "../../utils/types";
-import ChunkCard from "../ChunkCard/ChunkCard";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
@@ -12,12 +9,12 @@ interface ReviewerProps {
   story_id: string;
 }
 
-const useStyles = makeStyles({
-  doneButton: {
-    backgroundColor: "green",
-    color: "white",
-  },
-});
+// const useStyles = makeStyles({
+//   doneButton: {
+//     backgroundColor: "green",
+//     color: "white",
+//   },
+// });
 
 export const Reviewer: React.FC<ReviewerProps> = ({
   backButton,
@@ -25,9 +22,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({
 }) => {
   const { controller: playerController } = useVideoPlayerController();
 
-  const classes = useStyles();
-
-  const [chunks, setChunks] = chunksContext.useChunksState();
+  const [chunks] = chunksContext.useChunksState();
 
   /*
    * Move Chunks to Context and use reducers
