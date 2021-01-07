@@ -1,4 +1,4 @@
-import { Button, Container, Slider, Typography } from "@material-ui/core";
+import { Box, Button, Container, Slider, Typography } from "@material-ui/core";
 import { Pause, PlayArrow } from "@material-ui/icons";
 import React, { useRef } from "react";
 import ReactPlayer from "react-player";
@@ -44,10 +44,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, controller }) => {
     controller ? controller.playingState : null,
     false
   );
-  const [split] = useDefaultState(
-    controller ? controller.splitState : null,
-    { start: 0, end: 1 }
-  );
+  const [split] = useDefaultState(controller ? controller.splitState : null, {
+    start: 0,
+    end: 1,
+  });
 
   const {
     playerProps,
@@ -64,49 +64,51 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, controller }) => {
   );
 
   return (
-    <Container className={classes.videoPlayerContainer} maxWidth="xl">
-      <ReactPlayer
-        url={url}
-        ref={playerRef}
-        width="100%"
-        height="100%"
-        {...playerProps}
-      />
-      {showControls && (
-        <>
-          {/* Play/Pause Button */}
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.videoPlayerPlayButton}
-            onClick={toggleIsPlaying}
-          >
-            {(isPlaying && <Pause fontSize="large" />) || (
-              <PlayArrow fontSize="large" />
-            )}
-          </Button>
-          <div className={classes.progressBarContainer}>
-            {/* Progress Bar */}
-            <Typography
-              variant="caption"
-              style={{ margin: "8px", color: "#FFFFFF" }}
+    <Box className={classes.videoPlayerContainer}>
+        <ReactPlayer
+          url={url}
+          ref={playerRef}
+          width="100%"
+          height="100%"
+          {...playerProps}
+        />
+        {showControls && (
+          <>
+            {/* Play/Pause Button */}
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.videoPlayerPlayButton}
+              onClick={toggleIsPlaying}
             >
-              {duration &&
-                `${toShortTimeStamp(
-                  (progress.progress - split.start) * duration
-                )} / ${toShortTimeStamp((split.end - split.start) * duration)}`}
-            </Typography>
-            <Slider
-              classes={{
-                colorPrimary: classes.progressBar,
-                root: classes.rail,
-              }}
-              {...progressBarProps}
-            />
-          </div>
-        </>
-      )}
-    </Container>
+              {(isPlaying && <Pause fontSize="large" />) || (
+                <PlayArrow fontSize="large" />
+              )}
+            </Button>
+            <div className={classes.progressBarContainer}>
+              {/* Progress Bar */}
+              <Typography
+                variant="caption"
+                style={{ margin: "8px", color: "#FFFFFF" }}
+              >
+                {duration &&
+                  `${toShortTimeStamp(
+                    (progress.progress - split.start) * duration
+                  )} / ${toShortTimeStamp(
+                    (split.end - split.start) * duration
+                  )}`}
+              </Typography>
+              <Slider
+                classes={{
+                  colorPrimary: classes.progressBar,
+                  root: classes.rail,
+                }}
+                {...progressBarProps}
+              />
+            </div>
+          </>
+        )}
+    </Box>
   );
 };
 

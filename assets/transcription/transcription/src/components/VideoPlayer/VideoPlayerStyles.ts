@@ -10,10 +10,16 @@ const useStyles = makeStyles({
   },
   videoPlayerContainer: {
     position: "relative",
+    bottom: 0,
+    top: 0,
+    right: 0,
+    left: 0,
+    padding: "20px",
   },
   progressBarContainer: {
     left: "0",
     bottom: "0",
+    marginBottom: "-39px",
     transform: "translateY(-100%)",
   },
   progressBar: {
