@@ -4,8 +4,8 @@ import React from "react";
 import useStyles from "./SlideshowStyles";
 
 type SlideshowProps = {
-  onNavBack: () => void;
-  onNavForward: () => void;
+  onNavBack?: () => void;
+  onNavForward?: () => void;
   currentPage: number;
   numberOfPages: number;
 };
@@ -25,7 +25,7 @@ const Slideshow: React.FC<SlideshowProps> = ({
         aria-label="Previous Chunk"
         style={{ color: "#FFFFFF" }}
         disabled={currentPage === 0}
-        onClick={onNavBack}
+        onClick={() => onNavBack && onNavBack()}
       >
         <NavigateBefore />
       </IconButton>
@@ -34,7 +34,7 @@ const Slideshow: React.FC<SlideshowProps> = ({
         aria-label="Next Chunk"
         style={{ color: "#FFFFFF" }}
         disabled={currentPage === numberOfPages - 1}
-        onClick={onNavForward}
+        onClick={() => onNavForward && onNavForward()}
       >
         <NavigateNext />
       </IconButton>

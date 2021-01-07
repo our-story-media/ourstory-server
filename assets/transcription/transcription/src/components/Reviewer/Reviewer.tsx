@@ -1,8 +1,16 @@
-import { Box, Checkbox, Container, IconButton, makeStyles } from "@material-ui/core";
+import {
+  Box,
+  Checkbox,
+  Container,
+  IconButton,
+  makeStyles,
+} from "@material-ui/core";
 import { Done } from "@material-ui/icons";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useMemo } from "react";
+import useSlideshow from "../../hooks/useSlideshow";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 import ChunkCard from "../ChunkCard/ChunkCard";
+import Slideshow from "../Slideshow/Slideshow";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
@@ -34,6 +42,10 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
   // const selectTranscript = (chunk: Chunk) => ()
   const classes = useStyles();
 
+  const { page, goTo } = useSlideshow(chunks);
+
+  const currentChunk = useMemo(() => chunks[page], [page, chunks]);
+
   return (
     <Container>
       {backButton}
@@ -43,14 +55,23 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
           controller={playerController}
         />
       </Box>
-      {chunks.map((c) => (
-        <ChunkCard key={c.id} chunk={c}>
-          <IconButton className={classes.doneButton}>
-            <Done />
-          </IconButton>
+      <Slideshow
+        currentPage={page}
+        onNavForward={() => goTo("next")}
+        onNavBack={() => goTo("prev")}
+        numberOfPages={chunks.length}
+      >
+        <ChunkCard key={currentChunk.id} chunk={currentChunk}>
           <Checkbox style={{ backgroundColor: "initial" }} />
+          {currentChunk.transcriptions.map((transcription) => (
+            <Box key={transcription.id}>
+              {transcription.creatorid}
+              <br />
+              {transcription.content}
+            </Box>
+          ))}
         </ChunkCard>
-      ))}
+      </Slideshow>
     </Container>
   );
 };
