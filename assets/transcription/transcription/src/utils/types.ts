@@ -29,6 +29,12 @@ export type Transcription = {
   updatedat: Date,
 };
 
+export type Review = {
+  reviewedat: Date,
+  selectedtranscription: string,
+  reviewedby: string,
+}
+
 export type Chunk = {
   starttimestamp: string,
   endtimestamp: string,
@@ -38,6 +44,7 @@ export type Chunk = {
   updatedat: Date,
   id: string,
   transcriptions: Transcription[],
+  review?: Review
 };
 
 export type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>

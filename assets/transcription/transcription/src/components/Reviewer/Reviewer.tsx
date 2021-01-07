@@ -2,16 +2,16 @@ import {
   Box,
   Checkbox,
   Container,
-  IconButton,
   makeStyles,
 } from "@material-ui/core";
-import { Done } from "@material-ui/icons";
-import React, { ReactNode, useMemo } from "react";
+import React, { ReactNode, useMemo, useContext } from "react";
 import useSlideshow from "../../hooks/useSlideshow";
+import { useUpdateReview } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 import ChunkCard from "../SimpleCard/ChunkCard";
 import SimpleCard from "../SimpleCard/SimpleCard";
 import Slideshow from "../Slideshow/Slideshow";
+import { UserContext } from "../UserProvider/UserProvider";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
@@ -51,6 +51,10 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
 
   const currentChunk = useMemo(() => chunks[page], [page, chunks]);
 
+  const updateReview = useUpdateReview();
+
+  const { userName } = useContext(UserContext);
+
   return (
     <Container>
       {backButton}
@@ -70,7 +74,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
           {currentChunk.transcriptions.map((transcription) => (
             <Box className={classes.cardContainer}>
               <SimpleCard title={<h5 style={{margin: "0"}}>{transcription.creatorid}</h5>}>
-                <Checkbox style={{ backgroundColor: "initial" }} />
+                <Checkbox checked={currentChunk.review?.selectedtranscription === transcription.id} onChange={(_, checked) => checked && userName ? updateReview(currentChunk, transcription, userName) : null} style={{ backgroundColor: "initial" }} />
                 {transcription.content}
               </SimpleCard>
             </Box>

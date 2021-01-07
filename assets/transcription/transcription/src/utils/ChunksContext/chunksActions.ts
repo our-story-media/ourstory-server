@@ -11,17 +11,17 @@ import {
   toTimeStamp,
 } from "../chunkManipulation";
 import oneSatisfies from "../oneSatisfies";
-import { Chunk } from "../types";
+import { Chunk, Review, Transcription } from "../types";
 import chunksContext from "./chunksContext";
 
 /**
- * Using the ChunkContext, get a function for deleting chunks
+ * Using the ChunksContext, get a function for deleting chunks
  */
 export const useDeleteChunk = () => {
   const [, setChunks] = chunksContext.useChunksState();
 
   /**
-   * Delete a chunk from the chunks in the ChunkContext
+   * Delete a chunk from the chunks in the ChunksContext
    *
    * @param toDelete - the chunk to delete
    */
@@ -77,7 +77,7 @@ export const useDeleteChunk = () => {
 };
 
 /**
- * Using the ChunkContext, get a function for creating new chunks
+ * Using the ChunksContext, get a function for creating new chunks
  */
 export const useNewChunk = () => {
   const [chunks, setChunks] = chunksContext.useChunksState();
@@ -143,7 +143,7 @@ export const useNewChunk = () => {
 };
 
 /**
- * Using the ChunkContext, get a function for updating a chunks transcription
+ * Using the ChunksContext, get a function for updating a chunks transcription
  * list
  */
 export const useUpdateTranscription = () => {
@@ -177,6 +177,44 @@ export const useUpdateTranscription = () => {
                     },
                   ]),
             }
+          : chunk
+      )
+    );
+  };
+};
+
+/**
+ * Using the ChunksContext, get a function for updating the Review of a Chunk
+ */
+export const useUpdateReview = () => {
+  const [, setChunks] = chunksContext.useChunksState();
+
+  return (
+    toUpdate: Chunk,
+    selectedTranscription: Transcription,
+    userName: string
+  ) => {
+    setChunks((chunks) =>
+      chunks.map((chunk) =>
+        chunk.id === toUpdate.id
+        /*
+         * This call to oneSatisfies simply checks if the
+         * selectedTranscription exists on the Chunk
+         * (if it doesn't, don't update the chunk)
+         */
+          ? oneSatisfies(
+              chunk.transcriptions,
+              (a) => a.id === selectedTranscription.id
+            )
+            ? {
+                ...chunk,
+                review: {
+                  reviewedat: new Date(),
+                  selectedtranscription: selectedTranscription.id,
+                  reviewedby: userName,
+                },
+              }
+            : chunk
           : chunk
       )
     );
