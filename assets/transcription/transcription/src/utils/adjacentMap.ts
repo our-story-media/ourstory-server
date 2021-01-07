@@ -1,4 +1,5 @@
-/* Given an array and a binary function,
+/**
+ * Given an array and a binary function,
  * Return a new array that is the result of calling the function
  * on adjacent items in the array
  */

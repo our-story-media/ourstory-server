@@ -60,9 +60,14 @@ export const getLastEndTimeSeconds = (chunks: Chunk[]): number =>
  * Given a list of chunks and a time (as a fraction),
  * if there exists a chunk that that time is within,
  * return the chunk, else, return null
+ * 
+ * For example, if this is called with time = 0.5,
+ * and in the list of chunks there exists chunk 'A' that
+ * has start and end times 0.3 and 0.51 respectively, then
+ * chunk 'A' will be returned
  *
- * @param chunks
- * @param time
+ * @param chunks - the list of chunks to find the enclosing chunk in
+ * @param time - the time to find enclosed
  */
 export const getEnclosingChunk = (chunks: Chunk[], time: number): Chunk | null => {
   for (var i = 0; i < chunks.length; i++) {
@@ -77,14 +82,17 @@ export const getEnclosingChunk = (chunks: Chunk[], time: number): Chunk | null =
  * returns whether that time is valid as a new split
  *
  * A new split is invalid if it is the start/finish time
- * of a chunk in the list, or if it's 0
+ * of a chunk in the list, if it's 0, or if it is greater
+ * than the duration of the video
  *
- * @param chunks
- * @param time
+ * @param chunks - the chunks that are being added to
+ * @param time - the time stamp of the new chunk
+ * @param storyDuration - the duration of the video being chunked
  */
-export const invalidSplit = (chunks: Chunk[], time: number) => {
+export const invalidSplit = (chunks: Chunk[], time: number, storyDuration: number) => {
   return (
     time === 0 ||
+    time > storyDuration ||
     chunks.reduce(
       (onBoundary: boolean, chunk) =>
         onBoundary ||

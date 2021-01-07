@@ -15,7 +15,7 @@ import Transcriber from "../Transcriber/Transcriber";
 import UserProvider from "../UserProvider/UserProvider";
 import useOurstoryApi from "./hooks/useOurstoryApi";
 import { Reviewer } from "../Reviewer/Reviewer";
-import store from "../../utils/ChunkContext/store";
+import chunksContext from "../../utils/ChunksContext/chunksContext";
 
 const useStyles = makeStyles({
   backButton: {
@@ -56,13 +56,13 @@ const App: React.FC<{}> = () => {
 
   const {
     storyTitle,
-    chunksState: [chunks, setChunks],
+    chunksState,
   } = useOurstoryApi();
 
-  const { ChunkProvider } = store;
+  const { ChunksProvider } = chunksContext;
 
   return (
-    <ChunkProvider state={[chunks, setChunks]}>
+    <ChunksProvider state={chunksState}>
       <UserProvider>
         <ThemeProvider theme={theme}>
           <main>
@@ -81,7 +81,6 @@ const App: React.FC<{}> = () => {
               ) : view === View.Transcribing ? (
                 <Transcriber
                   story_id={story_id}
-                  chunksState={[chunks, setChunks]}
                   makeBackButton={(action: () => void) => (
                     <BackButton
                       actions={[action, () => setView(View.Dashboard)]}
@@ -94,14 +93,13 @@ const App: React.FC<{}> = () => {
                     <BackButton actions={[() => setView(View.Dashboard)]} />
                   }
                   story_id={story_id}
-                  chunksState={[chunks, setChunks]}
                 />
               ) : null}
             </Header>
           </main>
         </ThemeProvider>
       </UserProvider>
-    </ChunkProvider>
+    </ChunksProvider>
   );
 };
 

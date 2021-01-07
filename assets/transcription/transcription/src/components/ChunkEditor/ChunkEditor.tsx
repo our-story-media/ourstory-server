@@ -6,14 +6,12 @@ import { Button, Container, IconButton } from "@material-ui/core";
 // Internal Dependencies
 import ChunkCard from "../ChunkCard/ChunkCard";
 import useStyles from "./ChunkEditorStyles";
-import { Chunk, StateSetter } from "../../utils/types";
 import story_id from "../../utils/getId";
 import { UserContext } from "../UserProvider/UserProvider";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
-import ReactPlayer from "react-player";
-import { useDeleteChunk, useNewChunk } from "../../utils/ChunkContext/chunkActions";
-import store from "../../utils/ChunkContext/store";
+import { useDeleteChunk, useNewChunk } from "../../utils/ChunksContext/chunksActions";
+import chunksContext from "../../utils/ChunksContext/chunksContext";
 
 type ChunkEditorProps = {
   /** Back button component */
@@ -23,7 +21,7 @@ type ChunkEditorProps = {
 const ChunkEditor: React.FC<ChunkEditorProps> = ({
   backButton,
 }) => {
-  const [chunks] = store.useStore();
+  const [chunks] = chunksContext.useChunksState();
 
   const {
     progressState: [progress, setProgress],
@@ -63,7 +61,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
         aria-label="New Chunk"
         style={{ color: "#FFFFFF" }}
         className={classes.actionButton}
-        onClick={() => newChunk(progress, duration, userName)}
+        onClick={() => userName && newChunk(progress, duration, userName)}
       >
         <Add />
       </IconButton>

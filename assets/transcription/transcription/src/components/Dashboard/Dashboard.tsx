@@ -14,7 +14,7 @@ import SimpleInputForm from "../SimpleInputForm/SimpleInputForm";
 
 import useStyles from "./DashboardStyles";
 import { UserContext } from "../UserProvider/UserProvider";
-import store from "../../utils/ChunkContext/store";
+import chunksContext from "../../utils/ChunksContext/chunksContext";
 
 type DashboardProps = {
   /** The name of the story being transcribed */

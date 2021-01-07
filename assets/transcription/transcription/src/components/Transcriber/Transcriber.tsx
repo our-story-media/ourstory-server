@@ -1,7 +1,6 @@
 // External Dependencies
 import { Box, Container, IconButton, TextField } from "@material-ui/core";
 import { NavigateBefore, NavigateNext } from "@material-ui/icons";
-import { v4 as uuidv4 } from "uuid";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 
@@ -14,65 +13,24 @@ import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useStyles from "./TranscriberStyles";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 import useSlideshow from "../../hooks/useSlideshow";
+import { useUpdateTranscription } from "../../utils/ChunksContext/chunksActions";
+import chunksContext from "../../utils/ChunksContext/chunksContext";
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
     ? chunk.transcriptions.filter((t) => t.creatorid === userName)[0].content
     : "";
-/**
- * This function updates the chunks state, based on the current
- * state of currentChunkIndex and transcription.
- */
-const updateChunk = (
-  currentChunkIndex: number,
-  newTranscription: string,
-  userName: string,
-  setChunks: StateSetter<Chunk[]>
-) => {
-  userName &&
-    setChunks((chunks) =>
-      chunks.map((c) =>
-        c.id === chunks[currentChunkIndex].id
-          ? {
-              ...c,
-              /* This call to oneSatisfies checks if the current user has
-               * already made a transcription for this chunk (in that case,
-               * update that chunk instead of creating a new one)
-               */
-              transcriptions: oneSatisfies(
-                c.transcriptions,
-                (t) => t.creatorid === userName
-              )
-                ? c.transcriptions.map((t) =>
-                    t.creatorid === userName
-                      ? { ...t, content: newTranscription }
-                      : t
-                  )
-                : c.transcriptions.concat([
-                    {
-                      creatorid: userName,
-                      content: newTranscription,
-                      id: uuidv4(),
-                      updatedat: new Date(),
-                    },
-                  ]),
-            }
-          : c
-      )
-    );
-};
+
 type TranscriberProps = {
-  chunksState: [Chunk[], StateSetter<Chunk[]>];
   story_id: string;
   makeBackButton: (action: () => void) => ReactNode;
 };
 
 const Transcriber: React.FC<TranscriberProps> = ({
-  chunksState,
   story_id,
   makeBackButton,
 }) => {
-  const [chunks, setChunks] = chunksState;
+  const [chunks] = chunksContext.useChunksState();
 
   const {
     progressState: [, setProgress],
@@ -136,10 +94,12 @@ const Transcriber: React.FC<TranscriberProps> = ({
     setProgress(chunks[page].starttimeseconds);
   }, [chunks, page, userName]);
 
+  const updateTranscription = useUpdateTranscription();
+
   const backButton = makeBackButton(
     () =>
       userName &&
-      updateChunk(page, transcription, userName, setChunks)
+      updateTranscription(chunks[page], transcription, userName)
   );
 
   const classes = useStyles();
@@ -181,11 +141,10 @@ const Transcriber: React.FC<TranscriberProps> = ({
               onClick={() => {
                 animateVideoChange("left");
                 userName &&
-                  updateChunk(
-                    page,
+                  updateTranscription(
+                    chunks[page],
                     transcription,
                     userName,
-                    setChunks
                   );
                 goTo("prev");
               }}
@@ -212,11 +171,10 @@ const Transcriber: React.FC<TranscriberProps> = ({
               onClick={() => {
                 animateVideoChange("right");
                 userName &&
-                  updateChunk(
-                    page,
+                  updateTranscription(
+                    chunks[page],
                     transcription,
                     userName,
-                    setChunks
                   );
                 goTo("next");
               }}
