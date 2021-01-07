@@ -14,6 +14,7 @@ import SimpleInputForm from "../SimpleInputForm/SimpleInputForm";
 
 import useStyles from "./DashboardStyles";
 import { UserContext } from "../UserProvider/UserProvider";
+import store from "../../utils/ChunkContext/store";
 
 type DashboardProps = {
   /** The name of the story being transcribed */
@@ -67,9 +68,6 @@ const title = (storyName: string) =>
 
 const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
   const { userName, setName, clearName}  = useContext(UserContext);
-
-  // TODO: Consider breaking down this component into smaller ones,
-  // the JSX is quite bloated
 
   const classes = useStyles();
 

@@ -11,11 +11,11 @@ import Header from "../Header/Header";
 import useSteps from "./hooks/useSteps";
 import View from "./Views";
 import story_id from "../../utils/getId";
-import { Chunk } from "../../utils/types";
 import Transcriber from "../Transcriber/Transcriber";
 import UserProvider from "../UserProvider/UserProvider";
 import useOurstoryApi from "./hooks/useOurstoryApi";
 import { Reviewer } from "../Reviewer/Reviewer";
+import store from "../../utils/ChunkContext/store";
 
 const useStyles = makeStyles({
   backButton: {
@@ -59,46 +59,49 @@ const App: React.FC<{}> = () => {
     chunksState: [chunks, setChunks],
   } = useOurstoryApi();
 
+  const { ChunkProvider } = store;
+
   return (
-    <UserProvider>
-      <ThemeProvider theme={theme}>
-        <main>
-          <Header>
-            {view === View.Dashboard ? (
-              <Dashboard
-                steps={steps}
-                storyName={storyTitle ? storyTitle : "Loading"}
-              />
-            ) : view === View.Chunking ? (
-              <ChunkEditor
-                chunksState={[chunks, setChunks]}
-                backButton={
-                  <BackButton actions={[() => setView(View.Dashboard)]} />
-                }
-              />
-            ) : view === View.Transcribing ? (
-              <Transcriber
-                story_id={story_id}
-                chunksState={[chunks, setChunks]}
-                makeBackButton={(action: () => void) => (
-                  <BackButton
-                    actions={[action, () => setView(View.Dashboard)]}
-                  />
-                )}
-              />
-            ) : view === View.Reviewing ? (
-              <Reviewer
-                backButton={
-                  <BackButton actions={[() => setView(View.Dashboard)]} />
-                }
-                story_id={story_id}
-                chunksState={[chunks, setChunks]}
-              />
-            ) : null}
-          </Header>
-        </main>
-      </ThemeProvider>
-    </UserProvider>
+    <ChunkProvider state={[chunks, setChunks]}>
+      <UserProvider>
+        <ThemeProvider theme={theme}>
+          <main>
+            <Header>
+              {view === View.Dashboard ? (
+                <Dashboard
+                  steps={steps}
+                  storyName={storyTitle ? storyTitle : "Loading"}
+                />
+              ) : view === View.Chunking ? (
+                <ChunkEditor
+                  backButton={
+                    <BackButton actions={[() => setView(View.Dashboard)]} />
+                  }
+                />
+              ) : view === View.Transcribing ? (
+                <Transcriber
+                  story_id={story_id}
+                  chunksState={[chunks, setChunks]}
+                  makeBackButton={(action: () => void) => (
+                    <BackButton
+                      actions={[action, () => setView(View.Dashboard)]}
+                    />
+                  )}
+                />
+              ) : view === View.Reviewing ? (
+                <Reviewer
+                  backButton={
+                    <BackButton actions={[() => setView(View.Dashboard)]} />
+                  }
+                  story_id={story_id}
+                  chunksState={[chunks, setChunks]}
+                />
+              ) : null}
+            </Header>
+          </main>
+        </ThemeProvider>
+      </UserProvider>
+    </ChunkProvider>
   );
 };
 

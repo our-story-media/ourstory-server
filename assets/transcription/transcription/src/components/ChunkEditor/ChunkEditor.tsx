@@ -8,24 +8,22 @@ import ChunkCard from "../ChunkCard/ChunkCard";
 import useStyles from "./ChunkEditorStyles";
 import { Chunk, StateSetter } from "../../utils/types";
 import story_id from "../../utils/getId";
-import useChunkEditing from "./hooks/useChunkEditing";
 import { UserContext } from "../UserProvider/UserProvider";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 import ReactPlayer from "react-player";
+import { useDeleteChunk, useNewChunk } from "../../utils/ChunkContext/chunkActions";
+import store from "../../utils/ChunkContext/store";
 
 type ChunkEditorProps = {
-  /** State for the story chunks */
-  chunksState: [Chunk[], StateSetter<Chunk[]>];
   /** Back button component */
   backButton: ReactNode;
 };
 
 const ChunkEditor: React.FC<ChunkEditorProps> = ({
-  chunksState,
   backButton,
 }) => {
-  const [chunks, setChunks] = chunksState;
+  const [chunks] = store.useStore();
 
   const {
     progressState: [progress, setProgress],
@@ -38,12 +36,8 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
 
   const [, setPlay] = playingState;
 
-  const [handleNewChunk, handleDeleteChunk] = useChunkEditing(
-    [chunks, setChunks],
-    progress,
-    duration,
-    userName
-  );
+  const deleteChunk = useDeleteChunk();
+  const newChunk = useNewChunk();
 
   const classes = useStyles();
 
@@ -69,7 +63,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
         aria-label="New Chunk"
         style={{ color: "#FFFFFF" }}
         className={classes.actionButton}
-        onClick={handleNewChunk}
+        onClick={() => newChunk(progress, duration, userName)}
       >
         <Add />
       </IconButton>
@@ -88,7 +82,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
             <Button
               aria-label="Delete Chunk"
               style={{ color: "#FFFFFF" }}
-              onClick={() => handleDeleteChunk(c)}
+              onClick={() => deleteChunk(c)}
             >
               <Delete />
             </Button>
