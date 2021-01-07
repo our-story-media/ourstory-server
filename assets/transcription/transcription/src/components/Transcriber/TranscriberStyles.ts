@@ -7,16 +7,6 @@ const useStyles = makeStyles({
     position: "relative",
     overflow: "hidden",
   },
-  transcribeControls: {
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-  },
-  transcriptionInput: {
-    flexGrow: 4,
-  },
   inputField: {
     width: "100%",
   },

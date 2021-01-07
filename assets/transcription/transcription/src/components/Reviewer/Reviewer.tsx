@@ -1,6 +1,8 @@
-import { Box, Container } from "@material-ui/core";
+import { Box, Checkbox, Container, IconButton, makeStyles } from "@material-ui/core";
+import { Done } from "@material-ui/icons";
 import React, { ReactNode } from "react";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
+import ChunkCard from "../ChunkCard/ChunkCard";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
@@ -9,17 +11,14 @@ interface ReviewerProps {
   story_id: string;
 }
 
-// const useStyles = makeStyles({
-//   doneButton: {
-//     backgroundColor: "green",
-//     color: "white",
-//   },
-// });
+const useStyles = makeStyles({
+  doneButton: {
+    backgroundColor: "green",
+    color: "white",
+  },
+});
 
-export const Reviewer: React.FC<ReviewerProps> = ({
-  backButton,
-  story_id,
-}) => {
+export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
   const { controller: playerController } = useVideoPlayerController();
 
   const [chunks] = chunksContext.useChunksState();
@@ -33,6 +32,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({
    */
 
   // const selectTranscript = (chunk: Chunk) => ()
+  const classes = useStyles();
 
   return (
     <Container>
@@ -43,15 +43,14 @@ export const Reviewer: React.FC<ReviewerProps> = ({
           controller={playerController}
         />
       </Box>
-      {chunks.toString()}
-      {/* {chunks.map((c) => (
-        <ChunkCard chunk={c}>
+      {chunks.map((c) => (
+        <ChunkCard key={c.id} chunk={c}>
           <IconButton className={classes.doneButton}>
             <Done />
           </IconButton>
-          <Checkbox style={{backgroundColor: "initial"}} />
+          <Checkbox style={{ backgroundColor: "initial" }} />
         </ChunkCard>
-      ))} */}
+      ))}
     </Container>
   );
 };

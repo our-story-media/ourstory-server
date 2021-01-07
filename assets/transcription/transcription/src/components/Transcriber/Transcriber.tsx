@@ -1,6 +1,5 @@
 // External Dependencies
-import { Box, Container, IconButton, TextField } from "@material-ui/core";
-import { NavigateBefore, NavigateNext } from "@material-ui/icons";
+import { Box, Container, TextField } from "@material-ui/core";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 
@@ -15,6 +14,7 @@ import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerControl
 import useSlideshow from "../../hooks/useSlideshow";
 import { useUpdateTranscription } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
+import Slideshow from "../Slideshow/Slideshow";
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
@@ -80,13 +80,10 @@ const Transcriber: React.FC<TranscriberProps> = ({
 
   const [transcription, setTranscription] = useState("");
 
-  const {page, goTo} = useSlideshow(chunks);
+  const { page, goTo } = useSlideshow(chunks);
 
   useEffect(() => {
-    userName &&
-      setTranscription(
-        getUsersTranscription(chunks[page], userName)
-      );
+    userName && setTranscription(getUsersTranscription(chunks[page], userName));
     setSplit({
       start: chunks[page].starttimeseconds,
       end: chunks[page].endtimeseconds,
@@ -97,9 +94,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
   const updateTranscription = useUpdateTranscription();
 
   const backButton = makeBackButton(
-    () =>
-      userName &&
-      updateTranscription(chunks[page], transcription, userName)
+    () => userName && updateTranscription(chunks[page], transcription, userName)
   );
 
   const classes = useStyles();
@@ -133,55 +128,34 @@ const Transcriber: React.FC<TranscriberProps> = ({
               />
             </motion.div>
           </Box>
-          <Box className={classes.transcribeControls}>
-            <IconButton
-              aria-label="Previous Chunk"
-              style={{ color: "#FFFFFF" }}
-              disabled={page === 0}
-              onClick={() => {
-                animateVideoChange("left");
-                userName &&
-                  updateTranscription(
-                    chunks[page],
-                    transcription,
-                    userName,
-                  );
-                goTo("prev");
-              }}
-            >
-              <NavigateBefore />
-            </IconButton>
-            <Box className={classes.transcriptionInput}>
-              <ChunkCard chunk={chunks[page]}>
-                <TextField
-                  multiline
-                  className={classes.inputField}
-                  variant="outlined"
-                  rows={3}
-                  label="Transcription"
-                  value={transcription}
-                  onChange={(e) => setTranscription(e.target.value)}
-                />
-              </ChunkCard>
-            </Box>
-            <IconButton
-              aria-label="Next Chunk"
-              style={{ color: "#FFFFFF" }}
-              disabled={page === chunks.length - 1}
-              onClick={() => {
-                animateVideoChange("right");
-                userName &&
-                  updateTranscription(
-                    chunks[page],
-                    transcription,
-                    userName,
-                  );
-                goTo("next");
-              }}
-            >
-              <NavigateNext />
-            </IconButton>
-          </Box>
+          <Slideshow
+            onNavBack={() => {
+              animateVideoChange("left");
+              userName &&
+                updateTranscription(chunks[page], transcription, userName);
+              goTo("prev");
+            }}
+            onNavForward={() => {
+              animateVideoChange("right");
+              userName &&
+                updateTranscription(chunks[page], transcription, userName);
+              goTo("next");
+            }}
+            currentPage={page}
+            numberOfPages={chunks.length}
+          >
+            <ChunkCard chunk={chunks[page]}>
+              <TextField
+                multiline
+                className={classes.inputField}
+                variant="outlined"
+                rows={3}
+                label="Transcription"
+                value={transcription}
+                onChange={(e) => setTranscription(e.target.value)}
+              />
+            </ChunkCard>
+          </Slideshow>
         </>
       )}
     </Container>
