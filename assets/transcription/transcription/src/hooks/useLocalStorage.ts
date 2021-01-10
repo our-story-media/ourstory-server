@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { StateSetter } from "../utils/types";
 import useToggle from "./useToggle";
 
-const useLocalStorage = (key: string): [string | null, (state: string) => void, () => void] => {
+const useLocalStorage = (key: string): [string | null, StateSetter<string | null>, () => void] => {
   // This is the state for the value in the local storage
   const [state, setState] = useState<string | null>(null);
   // State for whether the initial fetch from local storage has been attempted

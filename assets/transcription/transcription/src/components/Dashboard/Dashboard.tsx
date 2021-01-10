@@ -9,11 +9,10 @@ import {
 } from "@material-ui/core";
 import React, { useContext, useMemo } from "react";
 import StepInfo, { StepInfoProps } from "../App/StepInfo";
-import FlatPaper from "../FlatPaper/FlatPaper";
-import SimpleInputForm from "../SimpleInputForm/SimpleInputForm";
 
 import useStyles from "./DashboardStyles";
 import { UserContext } from "../UserProvider/UserProvider";
+import NameModal from '../NameModal/NameModal';
 
 type DashboardProps = {
   /** The name of the story being transcribed */
@@ -21,36 +20,6 @@ type DashboardProps = {
   /** The transcription steps and their progress */
   steps: StepInfoProps[];
 };
-
-// Presentation logic for the modal that prompts the user for their name
-const useModal = (
-  name: string | null,
-  setName: (state: string) => void,
-  classes: Record<"input" | "button" | "modalContentBox" | "modal", string>
-) =>
-  useMemo(
-    () => (
-      <Modal
-        disableEnforceFocus
-        disableAutoFocus
-        className={classes.modal}
-        open={!name}
-      >
-        <FlatPaper className={classes.modalContentBox}>
-          <Typography variant="subtitle1">
-            Please enter your name before performing transcription.
-          </Typography>
-          <SimpleInputForm
-            placeholder="my name"
-            buttonText="Perform Transcription"
-            classes={classes}
-            onSubmit={setName}
-          />
-        </FlatPaper>
-      </Modal>
-    ),
-    [classes, setName, name]
-  );
 
 const hello = (name: string | null) =>
   <Typography style={{ fontWeight: "lighter" }} variant="h5">
@@ -72,7 +41,7 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
 
   return (
     <Box>
-      {useModal(userName, setName, classes)}
+      <NameModal setName={setName} show={!userName} />
       <Container>
         <Container className={classes.introContainer}>
           {title(storyName)}

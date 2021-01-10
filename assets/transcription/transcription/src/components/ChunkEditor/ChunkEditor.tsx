@@ -1,7 +1,7 @@
 // External Dependencies
 import { Add, Delete, History, PlayArrow } from "@material-ui/icons";
 import React, { ReactNode, useContext } from "react";
-import { Button, Container, IconButton } from "@material-ui/core";
+import { Box, Button, Container, IconButton } from "@material-ui/core";
 
 // Internal Dependencies
 import ChunkCard from "../SimpleCard/ChunkCard";
@@ -10,7 +10,10 @@ import story_id from "../../utils/getId";
 import { UserContext } from "../UserProvider/UserProvider";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
-import { useDeleteChunk, useNewChunk } from "../../utils/ChunksContext/chunksActions";
+import {
+  useDeleteChunk,
+  useNewChunk,
+} from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 
 type ChunkEditorProps = {
@@ -18,9 +21,7 @@ type ChunkEditorProps = {
   backButton: ReactNode;
 };
 
-const ChunkEditor: React.FC<ChunkEditorProps> = ({
-  backButton,
-}) => {
+const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
   const [chunks] = chunksContext.useChunksState();
 
   const {
@@ -41,53 +42,55 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
 
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
-    <Container>
-      {backButton}
+    <Box>
+      <Container><div>{backButton}</div></Container>
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer
           controller={videoPlayerController}
           url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
         />
       </div>
-      <IconButton
-        aria-label="Go Back"
-        style={{ color: "#FFFFFF" }}
-        className={classes.actionButton}
-        onClick={() => duration && setProgress(progress - 5 / duration)}
-      >
-        <History />
-      </IconButton>
-      <IconButton
-        aria-label="New Chunk"
-        style={{ color: "#FFFFFF" }}
-        className={classes.actionButton}
-        onClick={() => userName && newChunk(progress, duration, userName)}
-      >
-        <Add />
-      </IconButton>
-      <div className={classes.chunksContainer}>
-        {chunks.map((c) => (
-          <ChunkCard key={c.id} chunk={c}>
-            <Button
-              style={{ marginRight: "4px", color: "#FFFFFF" }}
-              onClick={() => {
-                setPlay(true);
-                setProgress(c.starttimeseconds);
-              }}
-            >
-              <PlayArrow />
-            </Button>
-            <Button
-              aria-label="Delete Chunk"
-              style={{ color: "#FFFFFF" }}
-              onClick={() => deleteChunk(c)}
-            >
-              <Delete />
-            </Button>
-          </ChunkCard>
-        ))}
-      </div>
-    </Container>
+      <Container>
+        <IconButton
+          aria-label="Go Back"
+          style={{ color: "#FFFFFF" }}
+          className={classes.actionButton}
+          onClick={() => duration && setProgress(progress - 5 / duration)}
+        >
+          <History />
+        </IconButton>
+        <IconButton
+          aria-label="New Chunk"
+          style={{ color: "#FFFFFF" }}
+          className={classes.actionButton}
+          onClick={() => userName && newChunk(progress, duration, userName)}
+        >
+          <Add />
+        </IconButton>
+        <div className={classes.chunksContainer}>
+          {chunks.map((c) => (
+            <ChunkCard key={c.id} chunk={c}>
+              <Button
+                style={{ marginRight: "4px", color: "#FFFFFF" }}
+                onClick={() => {
+                  setPlay(true);
+                  setProgress(c.starttimeseconds);
+                }}
+              >
+                <PlayArrow />
+              </Button>
+              <Button
+                aria-label="Delete Chunk"
+                style={{ color: "#FFFFFF" }}
+                onClick={() => deleteChunk(c)}
+              >
+                <Delete />
+              </Button>
+            </ChunkCard>
+          ))}
+        </div>
+      </Container>
+    </Box>
   );
 };
 

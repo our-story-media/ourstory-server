@@ -1,10 +1,11 @@
 import { createContext, } from "react";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { name_key } from "../../utils/localStorageKeys";
+import { StateSetter } from "../../utils/types";
 
 type UserContextType = {
   userName: string | null,
-  setName: (state: string) => void,
+  setName: StateSetter<string | null>,
   clearName: () => void
 }
 

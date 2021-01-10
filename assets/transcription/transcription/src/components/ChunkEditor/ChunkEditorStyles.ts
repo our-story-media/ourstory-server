@@ -2,9 +2,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   videoPlayerContainer: {
-    width: "80vw",
+    width: "90%",
     margin: "auto",
-    marginTop: "4vh",
   },
   chunksContainer: {
     display: "flex",

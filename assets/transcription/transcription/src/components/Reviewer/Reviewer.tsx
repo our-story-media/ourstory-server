@@ -5,7 +5,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import React, { ReactNode, useMemo, useContext, useEffect } from "react";
+import React, { ReactNode, useMemo, useContext, useEffect, useState } from "react";
 import useSlideshow from "../../hooks/useSlideshow";
 import {
   useDeleteReview,
@@ -50,13 +50,17 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
 
   const currentChunk = useMemo(() => chunks[page], [page, chunks]);
 
+  const [noTranscriptionsForCurrentChunk, setNoTranscriptionsForCurrentChunk] = useState(false);
+
   useEffect(() => {
     setSplit({
       start: currentChunk.starttimeseconds,
       end: currentChunk.endtimeseconds,
     });
     setProgress(currentChunk.starttimeseconds);
-  }, [currentChunk]);
+    const noTranscriptions = currentChunk.transcriptions.reduce((acc, el) => acc ? el.content.length === 0 : acc, true)
+    setNoTranscriptionsForCurrentChunk(noTranscriptions);
+  }, [page]);
 
   const updateReview = useUpdateReview();
   const deleteReview = useDeleteReview();
@@ -78,9 +82,10 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
         onNavBack={() => goTo("prev")}
         numberOfPages={chunks.length}
       >
-        <ChunkCard key={currentChunk.id} chunk={currentChunk}>
-          {currentChunk.transcriptions.map((transcription) => (
-            <Box
+        <ChunkCard chunk={currentChunk}>
+          {(noTranscriptionsForCurrentChunk && "No Transcriptions for this chunk yet") || currentChunk.transcriptions.map((transcription) => (
+            transcription.content && <Box
+              key={transcription.id}
               className={classes.cardContainer}
               onClick={() =>
                 userName &&
@@ -91,7 +96,9 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
             >
               <SimpleCard
                 title={
-                  <h5 style={{ margin: "0" }}>{`${transcription.creatorid}'s Transcription`}</h5>
+                  <h5
+                    style={{ margin: "0" }}
+                  >{`${transcription.creatorid}'s Transcription`}</h5>
                 }
               >
                 <div style={{ display: "flex", flexDirection: "row" }}>
