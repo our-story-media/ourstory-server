@@ -1,18 +1,17 @@
 import {
   Box,
-  Modal,
   Typography,
   Container,
   Link,
   GridList,
   GridListTile,
 } from "@material-ui/core";
-import React, { useContext, useMemo } from "react";
+import React, { useContext } from "react";
 import StepInfo, { StepInfoProps } from "../App/StepInfo";
 
 import useStyles from "./DashboardStyles";
 import { UserContext } from "../UserProvider/UserProvider";
-import NameModal from '../NameModal/NameModal';
+import NameModal from "../NameModal/NameModal";
 
 type DashboardProps = {
   /** The name of the story being transcribed */
@@ -21,21 +20,23 @@ type DashboardProps = {
   steps: StepInfoProps[];
 };
 
-const hello = (name: string | null) =>
+const Greeting: React.FC<{ name: string | null }> = ({ name }) => (
   <Typography style={{ fontWeight: "lighter" }} variant="h5">
     {name && `Hello ${name}`}
-  </Typography>;
+  </Typography>
+);
 
-const title = (storyName: string) => 
+const Title: React.FC<{ storyName: string }> = ({ storyName }) => (
   <Typography variant="h3" style={{ color: "gray", fontWeight: "lighter" }}>
     Field Transcription for{" "}
     <Box component="span" style={{ color: "black" }}>
       {storyName}
     </Box>
-  </Typography>;
+  </Typography>
+);
 
 const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
-  const { userName, setName, clearName}  = useContext(UserContext);
+  const { userName, setName, clearName } = useContext(UserContext);
 
   const classes = useStyles();
 
@@ -44,8 +45,8 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
       <NameModal setName={setName} show={!userName} />
       <Container>
         <Container className={classes.introContainer}>
-          {title(storyName)}
-          {hello(userName)}
+          <Title storyName={storyName} />
+          <Greeting name={userName} />
           <Link className={classes.notMeLink} onClick={clearName}>
             <Typography variant="subtitle1">
               {userName && "This is not me!"}
@@ -54,13 +55,15 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
         </Container>
         There are 3 stages to transcribing, select which stage you are
         performing
-        <GridList style={{ marginTop: "24px" }} cols={3}>
-          {steps.map((step) => (
-            <GridListTile key={step.title} style={{ padding: "0px 15px 0px 15px" }}>
-              <StepInfo {...step} />
-            </GridListTile>
-          ))}
-        </GridList>
+        <Box>
+          <GridList cols={3} cellHeight="auto" spacing={20}>
+            {steps.map((step) => (
+              <GridListTile key={step.title}>
+                <StepInfo {...step} />
+              </GridListTile>
+            ))}
+          </GridList>
+        </Box>
       </Container>
     </Box>
   );
