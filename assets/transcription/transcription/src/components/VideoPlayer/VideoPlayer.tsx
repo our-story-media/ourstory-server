@@ -16,7 +16,7 @@ export type VideoPlayerControllerType = {
   splitState: State<SplitState>;
 };
 
-type VideoPlayerProps = {
+export type VideoPlayerProps = {
   /**
    * The user of the VideoPlayer component has the option to control the
    * player, to do so, they need to provide a controller object which has

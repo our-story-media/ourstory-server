@@ -220,3 +220,14 @@ export const useUpdateReview = () => {
     );
   };
 };
+
+/**
+ * Using the ChunksContext, get a function for deleting the Review of a Chunk
+ */
+export const useDeleteReview = () => {
+  const [, setChunks] = chunksContext.useChunksState();
+
+  return (toDelete: Chunk) => {
+    setChunks((chunks) => chunks.map((chunk) => chunk.id === toDelete.id ? { ...chunk, review: undefined } : chunk));
+  };
+}

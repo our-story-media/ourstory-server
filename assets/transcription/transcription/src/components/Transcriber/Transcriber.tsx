@@ -15,6 +15,7 @@ import useSlideshow from "../../hooks/useSlideshow";
 import { useUpdateTranscription } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 import Slideshow from "../Slideshow/Slideshow";
+import AnimateVideoPlayerTransitions from "../VideoPlayer/AnimateVideoPlayerTransitions";
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
@@ -80,7 +81,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
 
   const [transcription, setTranscription] = useState("");
 
-  const { page, goTo } = useSlideshow(chunks);
+  const { page, goTo, direction } = useSlideshow(chunks);
 
   useEffect(() => {
     userName && setTranscription(getUsersTranscription(chunks[page], userName));
@@ -105,28 +106,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
       {chunks.length && (
         <>
           <Box className={classes.videoPlayerContainer}>
-            <motion.div animate={videoOneAnimationControls}>
-              <VideoPlayer
-                url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
-                controller={controller}
-              />
-            </motion.div>
-            <motion.div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                transform: "translateX(-100vw)",
-              }}
-              animate={videoTwoAnimationControls}
-            >
-              <VideoPlayer
-                url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
-                controller={controller}
-              />
-            </motion.div>
+            <VideoPlayer url={`http://localhost:8845/api/watch/getvideo/${story_id}`} controller={controller}/>
           </Box>
           <Slideshow
             onNavBack={() => {

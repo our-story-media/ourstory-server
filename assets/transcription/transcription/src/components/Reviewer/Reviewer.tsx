@@ -3,10 +3,14 @@ import {
   Checkbox,
   Container,
   makeStyles,
+  Typography,
 } from "@material-ui/core";
-import React, { ReactNode, useMemo, useContext } from "react";
+import React, { ReactNode, useMemo, useContext, useEffect } from "react";
 import useSlideshow from "../../hooks/useSlideshow";
-import { useUpdateReview } from "../../utils/ChunksContext/chunksActions";
+import {
+  useDeleteReview,
+  useUpdateReview,
+} from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 import ChunkCard from "../SimpleCard/ChunkCard";
 import SimpleCard from "../SimpleCard/SimpleCard";
@@ -32,26 +36,30 @@ const useStyles = makeStyles({
 });
 
 export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
-  const { controller: playerController } = useVideoPlayerController();
+  const {
+    progressState: [, setProgress],
+    splitState: [, setSplit],
+    controller: playerController,
+  } = useVideoPlayerController();
 
   const [chunks] = chunksContext.useChunksState();
 
-  /*
-   * Move Chunks to Context and use reducers
-   *
-   * Implement a reducer for updating the selected transcription on a chunk.
-   * In this reducer, ensure that the newly ticked transcription is the only
-   * ticked transcription
-   */
-
-  // const selectTranscript = (chunk: Chunk) => ()
   const classes = useStyles();
 
   const { page, goTo } = useSlideshow(chunks);
 
   const currentChunk = useMemo(() => chunks[page], [page, chunks]);
 
+  useEffect(() => {
+    setSplit({
+      start: currentChunk.starttimeseconds,
+      end: currentChunk.endtimeseconds,
+    });
+    setProgress(currentChunk.starttimeseconds);
+  }, [currentChunk]);
+
   const updateReview = useUpdateReview();
+  const deleteReview = useDeleteReview();
 
   const { userName } = useContext(UserContext);
 
@@ -72,10 +80,38 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
       >
         <ChunkCard key={currentChunk.id} chunk={currentChunk}>
           {currentChunk.transcriptions.map((transcription) => (
-            <Box className={classes.cardContainer}>
-              <SimpleCard title={<h5 style={{margin: "0"}}>{transcription.creatorid}</h5>}>
-                <Checkbox checked={currentChunk.review?.selectedtranscription === transcription.id} onChange={(_, checked) => checked && userName ? updateReview(currentChunk, transcription, userName) : null} style={{ backgroundColor: "initial" }} />
-                {transcription.content}
+            <Box
+              className={classes.cardContainer}
+              onClick={() =>
+                userName &&
+                (currentChunk.review?.selectedtranscription !== transcription.id
+                  ? updateReview(currentChunk, transcription, userName)
+                  : deleteReview(currentChunk))
+              }
+            >
+              <SimpleCard
+                title={
+                  <h5 style={{ margin: "0" }}>{`${transcription.creatorid}'s Transcription`}</h5>
+                }
+              >
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                  <Checkbox
+                    checked={
+                      currentChunk.review?.selectedtranscription ===
+                      transcription.id
+                    }
+                    onChange={(_, checked) =>
+                      userName &&
+                      (checked
+                        ? updateReview(currentChunk, transcription, userName)
+                        : deleteReview(currentChunk))
+                    }
+                    style={{ backgroundColor: "initial" }}
+                  />
+                  <Typography style={{ padding: "8px" }}>
+                    {transcription.content}
+                  </Typography>
+                </div>
               </SimpleCard>
             </Box>
           ))}
