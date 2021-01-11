@@ -67,11 +67,11 @@ const App: React.FC<{}> = () => {
   const steps = useSteps(setView, [
     { progress: chunkingProgress * 100, enabled: true },
     {
-      progress: transcriptionProgress * chunkingProgress * 100,
+      progress: transcriptionProgress * 100,
       enabled: chunkingProgress > 0,
     },
     {
-      progress: reviewProgress * chunkingProgress * 100,
+      progress: reviewProgress * 100,
       enabled: transcriptionProgress > 0,
     },
   ]);

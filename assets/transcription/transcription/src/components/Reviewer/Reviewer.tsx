@@ -7,6 +7,7 @@ import {
 } from "@material-ui/core";
 import React, { ReactNode, useMemo, useContext, useEffect, useState } from "react";
 import useSlideshow from "../../hooks/useSlideshow";
+import { hasTranscription } from "../../utils/chunkManipulation";
 import {
   useDeleteReview,
   useUpdateReview,
@@ -47,9 +48,11 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
 
   const classes = useStyles();
 
-  const { page, goTo } = useSlideshow(chunks);
+  const chunksToReview = chunks.filter(hasTranscription);
 
-  const currentChunk = useMemo(() => chunks[page], [page, chunks]);
+  const { page, goTo } = useSlideshow(chunksToReview);
+
+  const currentChunk = useMemo(() => chunksToReview[page], [page, chunksToReview]);
 
   const [noTranscriptionsForCurrentChunk, setNoTranscriptionsForCurrentChunk] = useState(false);
 
@@ -81,7 +84,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
         currentPage={page}
         onNavForward={() => goTo("next")}
         onNavBack={() => goTo("prev")}
-        numberOfPages={chunks.length}
+        numberOfPages={chunksToReview.length}
       >
         <ChunkCard chunk={currentChunk} duration={duration}>
           {(noTranscriptionsForCurrentChunk && "No Transcriptions for this chunk yet") || currentChunk.transcriptions.map((transcription) => (
