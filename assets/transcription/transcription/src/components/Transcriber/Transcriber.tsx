@@ -1,7 +1,7 @@
 // External Dependencies
 import { Box, Container, TextField } from "@material-ui/core";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { useAnimation } from "framer-motion";
 
 // Internal Dependencies
 import oneSatisfies from "../../utils/oneSatisfies";
@@ -15,7 +15,6 @@ import useSlideshow from "../../hooks/useSlideshow";
 import { useUpdateTranscription } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 import Slideshow from "../Slideshow/Slideshow";
-import AnimateVideoPlayerTransitions from "../VideoPlayer/AnimateVideoPlayerTransitions";
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
@@ -36,6 +35,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
   const {
     progressState: [, setProgress],
     splitState: [, setSplit],
+    duration,
     controller,
   } = useVideoPlayerController();
 
@@ -81,7 +81,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
 
   const [transcription, setTranscription] = useState("");
 
-  const { page, goTo, direction } = useSlideshow(chunks);
+  const { page, goTo } = useSlideshow(chunks);
 
   useEffect(() => {
     userName && setTranscription(getUsersTranscription(chunks[page], userName));
@@ -124,7 +124,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
             currentPage={page}
             numberOfPages={chunks.length}
           >
-            <ChunkCard chunk={chunks[page]}>
+            <ChunkCard chunk={chunks[page]} duration={duration}>
               <TextField
                 multiline
                 className={classes.inputField}

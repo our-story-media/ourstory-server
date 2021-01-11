@@ -1,7 +1,12 @@
 // External Dependencies
 import { Add, Delete, History, PlayArrow } from "@material-ui/icons";
 import React, { ReactNode, useContext } from "react";
-import { Box, Button, Container, IconButton } from "@material-ui/core";
+import {
+  Box,
+  Container,
+  GridList,
+  GridListTile,
+} from "@material-ui/core";
 
 // Internal Dependencies
 import ChunkCard from "../SimpleCard/ChunkCard";
@@ -15,6 +20,7 @@ import {
   useNewChunk,
 } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
+import IndabaButton from "../IndabaButton/IndabaButton";
 
 type ChunkEditorProps = {
   /** Back button component */
@@ -43,7 +49,9 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
-      <Container><div>{backButton}</div></Container>
+      <Container>
+        <div>{backButton}</div>
+      </Container>
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer
           controller={videoPlayerController}
@@ -51,44 +59,49 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
         />
       </div>
       <Container>
-        <IconButton
+        <IndabaButton
+          round
           aria-label="Go Back"
-          style={{ color: "#FFFFFF" }}
-          className={classes.actionButton}
+          style={{margin: "8px"}}
           onClick={() => duration && setProgress(progress - 5 / duration)}
         >
           <History />
-        </IconButton>
-        <IconButton
+        </IndabaButton>
+        <IndabaButton
+          round
           aria-label="New Chunk"
-          style={{ color: "#FFFFFF" }}
-          className={classes.actionButton}
+          style={{margin: "8px"}}
           onClick={() => userName && newChunk(progress, duration, userName)}
         >
           <Add />
-        </IconButton>
-        <div className={classes.chunksContainer}>
+        </IndabaButton>
+        <GridList className={classes.chunksList} cellHeight="auto" cols={3.5}>
           {chunks.map((c) => (
-            <ChunkCard key={c.id} chunk={c}>
-              <Button
-                style={{ marginRight: "4px", color: "#FFFFFF" }}
-                onClick={() => {
-                  setPlay(true);
-                  setProgress(c.starttimeseconds);
-                }}
-              >
-                <PlayArrow />
-              </Button>
-              <Button
-                aria-label="Delete Chunk"
-                style={{ color: "#FFFFFF" }}
-                onClick={() => deleteChunk(c)}
-              >
-                <Delete />
-              </Button>
-            </ChunkCard>
+            <GridListTile key={c.id}>
+              <ChunkCard chunk={c} duration={duration}>
+                <IndabaButton
+                  round
+                  color="primary"
+                  style={{ marginRight: "4px", color: "#FFFFFF" }}
+                  onClick={() => {
+                    setPlay(true);
+                    setProgress(c.starttimeseconds);
+                  }}
+                >
+                  <PlayArrow />
+                </IndabaButton>
+                <IndabaButton
+                  round
+                  aria-label="Delete Chunk"
+                  style={{ color: "#FFFFFF" }}
+                  onClick={() => deleteChunk(c)}
+                >
+                  <Delete />
+                </IndabaButton>
+              </ChunkCard>
+            </GridListTile>
           ))}
-        </div>
+        </GridList>
       </Container>
     </Box>
   );

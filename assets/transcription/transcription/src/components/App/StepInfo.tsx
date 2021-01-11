@@ -1,12 +1,12 @@
 // External Dependencies
 import React from "react";
-import { Typography, ThemeProvider, ButtonBase } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import FlatPaper from "../FlatPaper/FlatPaper";
 
 // Internal Dependencies
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import useStyles from "./StepInfoStyles";
-import theme from "../../styles/theme";
+import IndabaButton from "../IndabaButton/IndabaButton";
 
 export type StepInfoProps = {
   title: string;
@@ -25,7 +25,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
 }) => {
   const classes = useStyles();
   return (
-    <ThemeProvider theme={theme}>
+    <div>
       <FlatPaper className={classes.stepHeader}>
         <Typography variant="subtitle1">{title}</Typography>
         <LinearProgressWithLabel value={progress} />
@@ -33,11 +33,13 @@ const StepInfo: React.FC<StepInfoProps> = ({
       <FlatPaper className={classes.paper}>
         {description}
         <br />
-        <ButtonBase disabled={!enabled} onClick={onSelect} className={classes.button}>
-          <Typography style={{padding: "6px"}} variant="subtitle1">Perform {title}</Typography>
-        </ButtonBase>
+        <Box style={{marginTop: "8px"}}>
+          <IndabaButton disabled={!enabled} onClick={onSelect}>
+            <Typography style={{ padding: "6px" }}>Perform {title}</Typography>
+          </IndabaButton>
+        </Box>
       </FlatPaper>
-    </ThemeProvider>
+    </div>
   );
 };
 

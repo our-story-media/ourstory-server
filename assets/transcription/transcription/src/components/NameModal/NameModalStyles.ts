@@ -18,10 +18,6 @@ const useStyles = makeStyles({
     paddingLeft: "8px",
     borderRadius: "8px 0px 0px 8px",
   },
-  button: {
-    height: "3rem",
-    borderRadius: "0px 8px 8px 0px",
-  },
 });
 
 export default useStyles;

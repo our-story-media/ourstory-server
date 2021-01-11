@@ -40,6 +40,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
     progressState: [, setProgress],
     splitState: [, setSplit],
     controller: playerController,
+    duration
   } = useVideoPlayerController();
 
   const [chunks] = chunksContext.useChunksState();
@@ -82,7 +83,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
         onNavBack={() => goTo("prev")}
         numberOfPages={chunks.length}
       >
-        <ChunkCard chunk={currentChunk}>
+        <ChunkCard chunk={currentChunk} duration={duration}>
           {(noTranscriptionsForCurrentChunk && "No Transcriptions for this chunk yet") || currentChunk.transcriptions.map((transcription) => (
             transcription.content && <Box
               key={transcription.id}

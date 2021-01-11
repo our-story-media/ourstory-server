@@ -5,14 +5,13 @@ const useStyles = makeStyles({
     width: "90%",
     margin: "auto",
   },
-  chunksContainer: {
-    display: "flex",
-    flexDirection: "row",
-  },
   actionButton: {
     '&:hover': {
         background: "#d9534f",
      },
+  },
+  chunksList: {
+    flexWrap: "nowrap",
   }
 });
 

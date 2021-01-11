@@ -14,7 +14,7 @@ const useSteps = (
         title: "Chunking",
         description:
           "We need to know when people are talking in the story, so that we can transcribe them.",
-        progress: 10,
+        progress: state[0].progress,
         onSelect: () => setView(View.Chunking),
         enabled: state[0].enabled,
       },
@@ -22,7 +22,7 @@ const useSteps = (
         title: "Transcription",
         description:
           "Writing down exactly what is said in each chunk of the story.",
-        progress: 10,
+        progress: state[1].progress,
         onSelect: () => setView(View.Transcribing),
         enabled: state[1].enabled,
       },
@@ -30,12 +30,12 @@ const useSteps = (
         title: "Review",
         description:
           "Reviewing content is key to making sure we represent participants authentically.",
-        progress: 10,
+        progress: state[2].progress,
         onSelect: () => setView(View.Reviewing),
         enabled: state[2].enabled,
       },
     ],
-    [setView, state[0].enabled, state[1].enabled, state[2].enabled]
+    [setView, state]
   );
 
 export default useSteps;

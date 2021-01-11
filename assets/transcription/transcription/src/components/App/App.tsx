@@ -1,10 +1,9 @@
 // External Dependencies
-import { Box, ButtonBase, makeStyles, ThemeProvider } from "@material-ui/core";
+import { Box, ButtonBase, makeStyles } from "@material-ui/core";
 import { ChevronLeft } from "@material-ui/icons";
 import React, { useState } from "react";
 
 // Internal Dependencies
-import theme from "../../styles/theme";
 import ChunkEditor from "../ChunkEditor/ChunkEditor";
 import Dashboard from "../Dashboard/Dashboard";
 import Header from "../Header/Header";
@@ -16,6 +15,11 @@ import UserProvider from "../UserProvider/UserProvider";
 import useOurstoryApi from "./hooks/useOurstoryApi";
 import { Reviewer } from "../Reviewer/Reviewer";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
+import {
+  countChunksWithTranscription,
+  countReviewedChunks,
+  getLastEndTimeSeconds,
+} from "../../utils/chunkManipulation";
 
 const useStyles = makeStyles({
   backButton: {
@@ -48,56 +52,65 @@ const BackButton: React.FC<{ actions: (() => void)[] }> = ({ actions }) => {
 
 const App: React.FC<{}> = () => {
   const [view, setView] = useState<View>(View.Dashboard);
-  const steps = useSteps(setView, [
-    { progress: 0, enabled: true },
-    { progress: 0, enabled: true },
-    { progress: 0, enabled: true },
-  ]);
-
-  const {
-    storyTitle,
-    chunksState,
-  } = useOurstoryApi();
 
   const { ChunksProvider } = chunksContext;
+
+  const { storyTitle, chunksState } = useOurstoryApi();
+
+  const chunks = chunksState[0];
+
+  const chunkingProgress = getLastEndTimeSeconds(chunks);
+  const transcriptionProgress =
+    countChunksWithTranscription(chunks) / chunks.length;
+  const reviewProgress = countReviewedChunks(chunks) / chunks.length;
+
+  const steps = useSteps(setView, [
+    { progress: chunkingProgress * 100, enabled: true },
+    {
+      progress: transcriptionProgress * chunkingProgress * 100,
+      enabled: chunkingProgress > 0,
+    },
+    {
+      progress: reviewProgress * chunkingProgress * 100,
+      enabled: transcriptionProgress > 0,
+    },
+  ]);
 
   return (
     <ChunksProvider state={chunksState}>
       <UserProvider>
-        <ThemeProvider theme={theme}>
-          <main>
-            <Header>
-              {view === View.Dashboard ? (
-                <Dashboard
-                  steps={steps}
-                  storyName={storyTitle ? storyTitle : "Loading"}
-                />
-              ) : view === View.Chunking ? (
-                <ChunkEditor
-                  backButton={
-                    <BackButton actions={[() => setView(View.Dashboard)]} />
-                  }
-                />
-              ) : view === View.Transcribing ? (
-                <Transcriber
-                  story_id={story_id}
-                  makeBackButton={(action: () => void) => (
-                    <BackButton
-                      actions={[action, () => setView(View.Dashboard)]}
-                    />
-                  )}
-                />
-              ) : view === View.Reviewing ? (
-                <Reviewer
-                  backButton={
-                    <BackButton actions={[() => setView(View.Dashboard)]} />
-                  }
-                  story_id={story_id}
-                />
-              ) : null}
-            </Header>
-          </main>
-        </ThemeProvider>
+        <main>
+          <Header>
+            {view === View.Dashboard ? (
+              <Dashboard
+                steps={steps}
+                storyName={storyTitle ? storyTitle : "Loading"}
+              />
+            ) : view === View.Chunking ? (
+              <ChunkEditor
+                backButton={
+                  <BackButton actions={[() => setView(View.Dashboard)]} />
+                }
+              />
+            ) : view === View.Transcribing ? (
+              <Transcriber
+                story_id={story_id}
+                makeBackButton={(action: () => void) => (
+                  <BackButton
+                    actions={[action, () => setView(View.Dashboard)]}
+                  />
+                )}
+              />
+            ) : view === View.Reviewing ? (
+              <Reviewer
+                backButton={
+                  <BackButton actions={[() => setView(View.Dashboard)]} />
+                }
+                story_id={story_id}
+              />
+            ) : null}
+          </Header>
+        </main>
       </UserProvider>
     </ChunksProvider>
   );

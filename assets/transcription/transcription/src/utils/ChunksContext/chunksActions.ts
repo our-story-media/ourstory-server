@@ -11,7 +11,7 @@ import {
   toTimeStamp,
 } from "../chunkManipulation";
 import oneSatisfies from "../oneSatisfies";
-import { Chunk, Review, Transcription } from "../types";
+import { Chunk, Transcription } from "../types";
 import chunksContext from "./chunksContext";
 
 /**
