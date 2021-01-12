@@ -54,7 +54,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
         />
       </div>
       <Container>
-        <GridList className={classes.chunksList} cellHeight="auto" cols={3.5}>
+        <GridList className={classes.chunksList} cellHeight="auto" cols={2.5}>
           {chunks.map((c) => (
             <GridListTile key={c.id}>
               <ChunkCard chunk={c} duration={duration}>

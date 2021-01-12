@@ -4,7 +4,11 @@ import React from "react";
 import useStyles from "./HeaderStyles";
 import Logo from "../../assets/images/logo_web.svg";
 
-const Header: React.FC<{}> = ({ children }) => {
+type HeaderProps = {
+  title: string
+}
+
+const Header: React.FC<HeaderProps> = ({ children, title }) => {
   const classes = useStyles();
 
   return (
@@ -16,7 +20,7 @@ const Header: React.FC<{}> = ({ children }) => {
             <span className={classes.buildVersion}>TITAN</span>
           </div>
           <div className={classes.titleContainer}>
-            <div className={classes.titleWrapper}>Transcribing</div>
+            <div className={classes.titleWrapper}>{title}</div>
           </div>
         </div>
         <Divider />

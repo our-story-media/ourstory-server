@@ -80,7 +80,7 @@ const App: React.FC<{}> = () => {
     <ChunksProvider state={chunksState}>
       <UserProvider>
         <main>
-          <Header>
+          <Header title={View[view]}>
             {view === View.Dashboard ? (
               <Dashboard
                 steps={steps}
