@@ -53,8 +53,10 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
             </Typography>
           </Link>
         </Container>
-        There are 3 stages to transcribing, select which stage you are
-        performing
+        <div style={{marginBottom: "16px"}}>
+          There are 3 stages to transcribing, select which stage you are
+          performing
+        </div>
         <Box>
           <GridList cols={3} cellHeight="auto" spacing={20}>
             {steps.map((step) => (

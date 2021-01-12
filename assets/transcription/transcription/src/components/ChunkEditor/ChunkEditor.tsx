@@ -1,12 +1,7 @@
 // External Dependencies
 import { Add, Delete, History, PlayArrow } from "@material-ui/icons";
 import React, { ReactNode, useContext } from "react";
-import {
-  Box,
-  Container,
-  GridList,
-  GridListTile,
-} from "@material-ui/core";
+import { Box, Container, GridList, GridListTile } from "@material-ui/core";
 
 // Internal Dependencies
 import ChunkCard from "../SimpleCard/ChunkCard";
@@ -59,22 +54,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
         />
       </div>
       <Container>
-        <IndabaButton
-          round
-          aria-label="Go Back"
-          style={{margin: "8px"}}
-          onClick={() => duration && setProgress(progress - 5 / duration)}
-        >
-          <History />
-        </IndabaButton>
-        <IndabaButton
-          round
-          aria-label="New Chunk"
-          style={{margin: "8px"}}
-          onClick={() => userName && newChunk(progress, duration, userName)}
-        >
-          <Add />
-        </IndabaButton>
         <GridList className={classes.chunksList} cellHeight="auto" cols={3.5}>
           {chunks.map((c) => (
             <GridListTile key={c.id}>
@@ -102,6 +81,22 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
             </GridListTile>
           ))}
         </GridList>
+        <IndabaButton
+          round
+          aria-label="Go Back"
+          style={{ position: "absolute", left: 0, bottom: 0, margin: "16px 16px 40px 16px" }}
+          onClick={() => duration && setProgress(progress - 5 / duration)}
+        >
+          <History />
+        </IndabaButton>
+        <IndabaButton
+          round
+          aria-label="New Chunk"
+          style={{ position: "absolute", right: 0, bottom: 0, margin: "16px 16px 40px 16px" }}
+          onClick={() => userName && newChunk(progress, duration, userName)}
+        >
+          <Add />
+        </IndabaButton>
       </Container>
     </Box>
   );
