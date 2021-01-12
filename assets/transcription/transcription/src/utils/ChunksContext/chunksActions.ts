@@ -124,7 +124,7 @@ export const useNewChunk = () => {
           .sort((a, b) => a.endtimeseconds - b.endtimeseconds)
       );
     } else {
-      setChunks(
+      setChunks((chunks) =>
         chunks.concat([
           {
             starttimestamp: getLastEndTimeStamp(chunks),
@@ -197,12 +197,12 @@ export const useUpdateReview = () => {
     setChunks((chunks) =>
       chunks.map((chunk) =>
         chunk.id === toUpdate.id
-        /*
-         * This call to oneSatisfies simply checks if the
-         * selectedTranscription exists on the Chunk
-         * (if it doesn't, don't update the chunk)
-         */
-          ? oneSatisfies(
+          ? /*
+             * This call to oneSatisfies simply checks if the
+             * selectedTranscription exists on the Chunk
+             * (if it doesn't, don't update the chunk)
+             */
+            oneSatisfies(
               chunk.transcriptions,
               (a) => a.id === selectedTranscription.id
             )
@@ -228,6 +228,10 @@ export const useDeleteReview = () => {
   const [, setChunks] = chunksContext.useChunksState();
 
   return (toDelete: Chunk) => {
-    setChunks((chunks) => chunks.map((chunk) => chunk.id === toDelete.id ? { ...chunk, review: undefined } : chunk));
+    setChunks((chunks) =>
+      chunks.map((chunk) =>
+        chunk.id === toDelete.id ? { ...chunk, review: undefined } : chunk
+      )
+    );
   };
-}
+};

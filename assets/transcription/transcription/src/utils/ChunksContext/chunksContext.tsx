@@ -1,10 +1,24 @@
 import { createContext, useContext } from "react";
-import { Chunk, State } from "../types";
+import { Chunk } from "../types";
 
-const ChunksContext = createContext<State<Chunk[]>>([[], () => null]);
+type StateType = [Chunk[], (setter: (newState: Chunk[]) => Chunk[]) => void]
 
-const makeChunksContext = () => {
-  const ChunksProvider: React.FC<{ state: State<Chunk[]> }> = ({
+const ChunksContext = createContext<
+  StateType
+>([[], () => null]);
+
+type ChunksContextType = React.FC<{
+  state: StateType;
+}>;
+
+const makeChunksContext = (): {
+  ChunksProvider: ChunksContextType;
+  useChunksState: () => [
+    Chunk[],
+    (setter: (newState: Chunk[]) => Chunk[]) => void
+  ];
+} => {
+  const ChunksProvider: React.FC<{ state: StateType }> = ({
     state,
     children,
   }) => {
