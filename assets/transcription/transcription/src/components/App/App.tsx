@@ -61,8 +61,8 @@ const App: React.FC<{}> = () => {
 
   const chunkingProgress = getLastEndTimeSeconds(chunks);
   const transcriptionProgress =
-    countChunksWithTranscription(chunks) / chunks.length;
-  const reviewProgress = countReviewedChunks(chunks) / chunks.length;
+    chunks.length ? countChunksWithTranscription(chunks) / chunks.length : 0;
+  const reviewProgress = chunks.length ? countReviewedChunks(chunks) / chunks.length : 0;
 
   const steps = useSteps(setView, [
     { progress: chunkingProgress * 100, enabled: true },
