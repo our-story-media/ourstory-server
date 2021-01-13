@@ -54,23 +54,30 @@ const ContributerListModal: React.FC<{
   exit: () => void;
   contributers: [string, Contribution[]][];
 }> = ({ show, exit, contributers }) => {
-  const prettyTime = (time: Time, pretty: string): string =>
+  /**
+   * Helper function to get a nicely formatted time
+   * 
+   * @param time the time to get a well formatted string for
+   * @param format the current formatted string, this is just for passing down
+   * recursively
+   */
+  const formatTime = (time: Time, format: string): string =>
     time.hours
-      ? prettyTime({ ...time, hours: 0 }, `${time.hours}hrs `)
+      ? formatTime({ ...time, hours: 0 }, `${time.hours}hrs `)
       : time.minutes
-      ? prettyTime({ ...time, minutes: 0 }, `${pretty} ${time.minutes}mins `)
+      ? formatTime({ ...time, minutes: 0 }, `${format} ${time.minutes}mins `)
       : time.seconds
-      ? prettyTime({ ...time, seconds: 0 }, `${pretty} ${time.seconds}secs`)
-      : pretty === ""
+      ? formatTime({ ...time, seconds: 0 }, `${format} ${time.seconds}secs`)
+      : format === ""
       ? "0secs"
-      : pretty;
+      : format;
 
   const contributionDescription = (
     type: "chunk" | "transcription" | "review",
     chunk: Chunk
   ) => {
     const startEnd = parseTimeStamps(chunk);
-    const chunkDescription = prettyTime(startEnd.start, "");
+    const chunkDescription = formatTime(startEnd.start, "");
     switch (type) {
       case "chunk":
         return `Created the chunk that starts at ${chunkDescription}`;
@@ -198,7 +205,7 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
           }}
           onClick={toggleShowContributers}
         >
-          View transcribers
+          View contributions
         </IndabaButton>
       </Container>
     </Box>

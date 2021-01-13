@@ -83,7 +83,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
             currentPage={page}
             numberOfPages={chunks.length}
           >
-            <ChunkCard chunk={chunks[page]} duration={duration}>
+            <ChunkCard chunk={chunks[page]}>
               <TextField
                 multiline
                 className={classes.inputField}

@@ -86,7 +86,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
         onNavBack={() => goTo("prev")}
         numberOfPages={chunksToReview.length}
       >
-        <ChunkCard chunk={currentChunk} duration={duration}>
+        <ChunkCard chunk={currentChunk} >
           {(noTranscriptionsForCurrentChunk && "No Transcriptions for this chunk yet") || currentChunk.transcriptions.map((transcription) => (
             transcription.content && <Box
               key={transcription.id}

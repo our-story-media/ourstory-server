@@ -200,7 +200,7 @@ export type Time = {
 
 /**
  * Given a chunk return a start and end Time object
- * 
+ *
  * @param chunk the chunk to parse the timestamps of
  */
 export const parseTimeStamps = (chunk: Chunk): { start: Time; end: Time } => {
