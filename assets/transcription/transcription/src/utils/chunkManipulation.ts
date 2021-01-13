@@ -145,3 +145,39 @@ export const countChunksWithTranscription = (chunks: Chunk[]): number =>
  */
 export const countReviewedChunks = (chunks: Chunk[]): number =>
   chunks.reduce((acc, chunk) => acc + (chunk.review ? 1 : 0), 0);
+
+/**
+ * Given a list of chunks, fetches the list of all contributers
+ * i.e. the list of all creators of chunks, transcribers and reviewers
+ *
+ * @param chunks the chunks to extract contributers from
+ */
+export const listContributers = (chunks: Chunk[]) =>
+  /**
+   * We get the list of all contributers and then create a Set from it
+   * to remove duplicates. We then create a array from that set.
+   */
+  Array.from(
+    new Set(
+      chunks
+        .map((chunk) => chunk.creatorid)
+        .concat(
+          chunks.reduce(
+            (acc, chunk) =>
+              acc.concat(
+                chunk.transcriptions.map(
+                  (transcription) => transcription.creatorid
+                )
+              ),
+            [] as string[]
+          )
+        )
+        .concat(
+          chunks.reduce(
+            (acc, chunk) =>
+              chunk.review ? acc.concat([chunk.review.reviewedby]) : acc,
+            [] as string[]
+          )
+        )
+    )
+  );
