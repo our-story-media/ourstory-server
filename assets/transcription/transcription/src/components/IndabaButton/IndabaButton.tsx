@@ -1,5 +1,4 @@
-import { Button, ButtonProps, createStyles, makeStyles, Theme } from "@material-ui/core";
-import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import { Button, ButtonProps, makeStyles } from "@material-ui/core";
 
 const useButtonStyles = makeStyles({
   button: (round) => ({

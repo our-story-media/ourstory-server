@@ -1,12 +1,8 @@
 import { Paper } from '@material-ui/core';
 
-type FlatPaperProps = {
-    className?: string;
-}
-
-const FlatPaper: React.FC<FlatPaperProps> = ({ children, className }) => {
+const FlatPaper: React.FC<{}> = ({ children }) => {
     return (
-        <Paper className={className} elevation={0}>
+        <Paper elevation={0}>
             {children}
         </Paper>
     );

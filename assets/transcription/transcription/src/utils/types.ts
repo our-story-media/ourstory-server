@@ -50,3 +50,9 @@ export type Chunk = {
 export type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>
 
 export type State<T> = [T, StateSetter<T>];
+
+export type Contribution = {
+  name: string,
+  for: "chunk" | "transcription" | "review";
+  chunk: Chunk,
+}

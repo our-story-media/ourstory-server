@@ -1,4 +1,4 @@
-import { Chunk } from "./types";
+import { Chunk, Contribution } from "./types";
 
 /**
  * Given an integer return a string representation of that integer
@@ -147,37 +147,71 @@ export const countReviewedChunks = (chunks: Chunk[]): number =>
   chunks.reduce((acc, chunk) => acc + (chunk.review ? 1 : 0), 0);
 
 /**
- * Given a list of chunks, fetches the list of all contributers
- * i.e. the list of all creators of chunks, transcribers and reviewers
+ * Given a list of chunks, fetches the list of all contributions
  *
  * @param chunks the chunks to extract contributers from
  */
-export const listContributers = (chunks: Chunk[]) =>
+export const listContributions = (chunks: Chunk[]): Contribution[] =>
   /**
    * We get the list of all contributers and then create a Set from it
    * to remove duplicates. We then create a array from that set.
    */
-  Array.from(
-    new Set(
-      chunks
-        .map((chunk) => chunk.creatorid)
-        .concat(
-          chunks.reduce(
-            (acc, chunk) =>
-              acc.concat(
-                chunk.transcriptions.map(
-                  (transcription) => transcription.creatorid
-                )
-              ),
-            [] as string[]
-          )
-        )
-        .concat(
-          chunks.reduce(
-            (acc, chunk) =>
-              chunk.review ? acc.concat([chunk.review.reviewedby]) : acc,
-            [] as string[]
-          )
-        )
+  chunks
+    .map<Contribution>((chunk) => ({
+      name: chunk.creatorid,
+      for: "chunk" as const,
+      chunk,
+    }))
+    .concat(
+      chunks.reduce(
+        (acc, chunk) =>
+          acc.concat(
+            chunk.transcriptions.map((transcription) => ({
+              name: transcription.creatorid,
+              for: "transcription" as const,
+              chunk,
+            }))
+          ),
+        [] as Contribution[]
+      )
     )
-  );
+    .concat(
+      chunks.reduce(
+        (acc, chunk) =>
+          chunk.review
+            ? acc.concat([
+                {
+                  name: chunk.review.reviewedby,
+                  for: "review" as const,
+                  chunk,
+                },
+              ])
+            : acc,
+        [] as Contribution[]
+      )
+    );
+
+export type Time = {
+  hours: number;
+  minutes: number;
+  seconds: number;
+  milliseconds: number;
+};
+
+/**
+ * Given a chunk return a start and end Time object
+ * 
+ * @param chunk the chunk to parse the timestamps of
+ */
+export const parseTimeStamps = (chunk: Chunk): { start: Time; end: Time } => {
+  const parseTimeStamp = (stamp: string) => ({
+    hours: Number(stamp.slice(0, 2)),
+    minutes: Number(stamp.slice(3, 5)),
+    seconds: Number(stamp.slice(6, 8)),
+    milliseconds: Number(stamp.slice(9, 11)),
+  });
+  return {
+    start: parseTimeStamp(chunk.starttimestamp),
+    end: parseTimeStamp(chunk.endtimestamp),
+  };
+};

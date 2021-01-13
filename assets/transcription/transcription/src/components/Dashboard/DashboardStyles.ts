@@ -4,10 +4,10 @@ const useStyles = makeStyles({
   introContainer: {
     textAlign: "center",
   },
-  notMeLink: {
-    color: "#d9534f",
-    cursor: "pointer",
-  },
+  transcriberModal: {
+    display: "flex",
+    flexDirection: "column"
+  }
 });
 
 export default useStyles;

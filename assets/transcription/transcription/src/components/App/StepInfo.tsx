@@ -26,18 +26,24 @@ const StepInfo: React.FC<StepInfoProps> = ({
   const classes = useStyles();
   return (
     <div>
-      <FlatPaper className={classes.stepHeader}>
-        <Typography variant="subtitle1">{title}</Typography>
-        <LinearProgressWithLabel value={progress} />
+      <FlatPaper>
+        <div className={classes.stepHeader}>
+          <Typography variant="subtitle1">{title}</Typography>
+          <LinearProgressWithLabel value={progress} />
+        </div>
       </FlatPaper>
-      <FlatPaper className={classes.paper}>
-        {description}
-        <br />
-        <Box style={{marginTop: "8px"}}>
-          <IndabaButton disabled={!enabled} onClick={onSelect}>
-            <Typography style={{ padding: "6px" }}>Perform {title}</Typography>
-          </IndabaButton>
-        </Box>
+      <FlatPaper>
+        <div className={classes.paper}>
+          {description}
+          <br />
+          <Box style={{ marginTop: "8px" }}>
+            <IndabaButton disabled={!enabled} onClick={onSelect}>
+              <Typography style={{ padding: "6px" }}>
+                Perform {title}
+              </Typography>
+            </IndabaButton>
+          </Box>
+        </div>
       </FlatPaper>
     </div>
   );
