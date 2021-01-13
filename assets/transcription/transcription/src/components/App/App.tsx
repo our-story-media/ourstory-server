@@ -20,6 +20,9 @@ import {
   countReviewedChunks,
   getLastEndTimeSeconds,
 } from "../../utils/chunkManipulation";
+import IndabaButton from "../IndabaButton/IndabaButton";
+import useToggle from "../../hooks/useToggle";
+import ContributerListModal from "../ContributersModal/ContributersModal";
 
 const useStyles = makeStyles({
   backButton: {
@@ -60,9 +63,12 @@ const App: React.FC<{}> = () => {
   const chunks = chunksState[0];
 
   const chunkingProgress = getLastEndTimeSeconds(chunks);
-  const transcriptionProgress =
-    chunks.length ? countChunksWithTranscription(chunks) / chunks.length : 0;
-  const reviewProgress = chunks.length ? countReviewedChunks(chunks) / chunks.length : 0;
+  const transcriptionProgress = chunks.length
+    ? countChunksWithTranscription(chunks) / chunks.length
+    : 0;
+  const reviewProgress = chunks.length
+    ? countReviewedChunks(chunks) / chunks.length
+    : 0;
 
   const steps = useSteps(setView, [
     { progress: chunkingProgress * 100, enabled: true },
@@ -76,11 +82,25 @@ const App: React.FC<{}> = () => {
     },
   ]);
 
+  const [showContributers, toggleShowContributers] = useToggle(false);
+
   return (
     <ChunksProvider state={chunksState}>
       <UserProvider>
         <main>
-          <Header title={View[view]}>
+          <ContributerListModal
+            chunks={chunks}
+            show={showContributers}
+            exit={toggleShowContributers}
+          />
+          <Header
+            title={View[view]}
+            contextMenu={
+              <IndabaButton onClick={toggleShowContributers} style={{ backgroundColor: "gray", height: "40px" }}>
+                Show Contributers
+              </IndabaButton>
+            }
+          >
             {view === View.Dashboard ? (
               <Dashboard
                 steps={steps}

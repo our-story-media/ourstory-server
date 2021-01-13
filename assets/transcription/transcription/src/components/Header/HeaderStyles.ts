@@ -15,15 +15,18 @@ const useStyles = makeStyles({
     marginTop: "5px",
     display: "flex",
     flexDirection: "row",
-    height: "36px",
+    height: "48px",
+    position: "relative",
   },
   logoContainer: {
     position: "relative",
+    paddingTop: "6px",
     width: "25%",
   },
   titleContainer: {
     width: "50%",
-    height: "30px",
+    height: "48px",
+    marginTop: "10px",
     paddingLeft: "15px",
     paddingRight: "15px",
     textAlign: "center",
@@ -32,6 +35,10 @@ const useStyles = makeStyles({
     fontSize: "13pt",
     margin: "3px",
     display: "inline-block",
+  },
+  contextMenuButton: {
+    position: "absolute",
+    right: 0,
   },
 });
 
