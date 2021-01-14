@@ -7,6 +7,7 @@ import { toShortTimeStamp } from "../../utils/chunkManipulation";
 import { State } from "../../utils/types";
 import useVideoPlayerProps from "./Hooks/useVideoPlayerProps";
 import { ProgressState, SplitState } from "./Hooks/useVideoPlayerState";
+import ProgressBarLabel from "./ProgressBarLabel";
 import useStyles from "./VideoPlayerStyles";
 
 export type VideoPlayerControllerType = {
@@ -110,6 +111,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
                 thumb: classes.progressBarThumb,
                 mark: classes.progressBarMark
               }}
+              valueLabelDisplay="auto"
+              valueLabelFormat={(progress) => toShortTimeStamp(progress / 100 * duration)}
+              ValueLabelComponent={ProgressBarLabel}
               marks={sliderMarks ? sliderMarks : []}
               {...progressBarProps}
             />

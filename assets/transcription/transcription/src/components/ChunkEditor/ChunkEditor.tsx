@@ -1,6 +1,6 @@
 // External Dependencies
 import { Add, Delete, History, PlayArrow } from "@material-ui/icons";
-import React, { ReactNode, useContext } from "react";
+import React, { ReactNode, useContext, useMemo } from "react";
 import {
   Box,
   Container,
@@ -60,15 +60,12 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
   /**
    * TODO
    * =======
-   * - Move the slider so it's more visible
-   * - Add marks to the slider for where the chunks splits are
    * - Modify play chunk behaviour so that it stops when the chunk ends
    * - Modify play chunk behaviour so that the chunk play button reflects the
    *   state of the player
-   * - Add the time stamp to scrobbling the slider
    */
 
-  const marks = getMarks(chunks);
+  const marks = useMemo(() => getMarks(chunks), [chunks]);
 
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
