@@ -215,3 +215,11 @@ export const parseTimeStamps = (chunk: Chunk): { start: Time; end: Time } => {
     end: parseTimeStamp(chunk.endtimestamp),
   };
 };
+
+/**
+ * Given a time object, return the number of seconds, in that time
+ * object, excluding the milliseconds
+ * 
+ * @param time the time to get the seconds for
+ */
+export const secondsOf = (time: Time) => time.hours * 60 * 60 + time.minutes * 60 + time.seconds

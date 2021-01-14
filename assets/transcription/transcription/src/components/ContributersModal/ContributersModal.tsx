@@ -47,20 +47,28 @@ const ContributerListModal: React.FC<{
       ? "0secs"
       : format;
 
-  const contributionDescription = (
-    type: "chunk" | "transcription" | "review",
-    chunk: Chunk
-  ) => {
+  const ContributionDescription: React.FC<{
+    chunk: Chunk;
+    type: "chunk" | "transcription" | "review";
+  }> = ({ type, chunk }) => {
     const startEnd = parseTimeStamps(chunk);
     const chunkDescription = formatTime(startEnd.start, "");
-    switch (type) {
-      case "chunk":
-        return `Created the chunk that starts at ${chunkDescription}`;
-      case "transcription":
-        return `Transcribed the chunk that starts at ${chunkDescription}`;
-      case "review":
-        return `Reviewed the chunk that starts at ${chunkDescription}`;
-    }
+    const typeDescription = (type: "chunk" | "transcription" | "review") => {
+      switch (type) {
+        case "chunk":
+          return "Created ";
+        case "transcription":
+          return "Transcribed ";
+        case "review":
+          return "Reviewed ";
+      }
+    };
+    return (
+      <span>
+        <span style={{ fontWeight: "bold" }}>{typeDescription(type)}</span>the
+        chunk that starts at {chunkDescription}
+      </span>
+    );
   };
 
   const contributers = useMemo(
@@ -82,54 +90,59 @@ const ContributerListModal: React.FC<{
 
   return (
     <CentralModal open={show}>
-      <Container  style={{ height: "80vh", width: "90vw" }}>
-        <FlatPaper>
-          <Box>
+      <FlatPaper>
+        <Container>
+          {" "}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
             <div
               style={{
                 display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignContent: "center",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignContent: "center",
-                }}
-              >
-                <Typography variant="h3" style={{ fontWeight: "lighter" }}>
-                  Contributers
-                </Typography>
-              </div>
-              <IndabaButton onClick={exit}>
-                <Close />
-              </IndabaButton>
+              <Typography variant="h3" style={{ fontWeight: "lighter" }}>
+                Contributers
+              </Typography>
             </div>
-            <Divider style={{ margin: "12px 0px 12px 0px" }} />
-            <GridList cols={1} cellHeight="auto">
-              {contributers.map((contributer) => (
-                <GridListTile key={contributer[0]}>
-                  <SimpleCard title={contributer[0]}>
-                    <List>
-                      {contributer[1].map((contribution) => (
-                        <ListItem key={`${contribution.chunk.id}${contribution.for}`}>
-                          {contributionDescription(
-                            contribution.for,
-                            contribution.chunk
-                          )}
-                        </ListItem>
-                      ))}
-                    </List>
-                  </SimpleCard>
-                </GridListTile>
-              ))}
-            </GridList>
-          </Box>
-        </FlatPaper>
-      </Container>
+            <IndabaButton onClick={exit}>
+              <Close />
+            </IndabaButton>
+          </div>
+        </Container>
+        <Divider style={{ margin: "12px 0px 12px 0px" }} />
+        <Container
+          style={{ height: "80vh", width: "90vw", overflow: "scroll" }}
+        >
+          <GridList cols={1} cellHeight="auto">
+            {contributers.map((contributer) => (
+              <GridListTile key={contributer[0]}>
+                <SimpleCard title={contributer[0]}>
+                  <List>
+                    {contributer[1].map((contribution) => (
+                      <ListItem
+                        key={`${contribution.chunk.id}${contribution.for}`}
+                      >
+                        <ContributionDescription
+                          chunk={contribution.chunk}
+                          type={contribution.for}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </SimpleCard>
+              </GridListTile>
+            ))}
+          </GridList>
+        </Container>
+      </FlatPaper>
     </CentralModal>
   );
 };
