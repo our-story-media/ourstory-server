@@ -1,6 +1,12 @@
 // External Dependencies
-import { Add, Delete, History, PlayArrow } from "@material-ui/icons";
-import React, { ReactNode, useContext, useMemo } from "react";
+import { Add, Delete, History, Pause, PlayArrow } from "@material-ui/icons";
+import React, {
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   Box,
   Container,
@@ -67,6 +73,17 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
 
   const marks = useMemo(() => getMarks(chunks), [chunks]);
 
+  const [playingChunk, setPlayingChunk] = useState<undefined | number>(
+    undefined
+  );
+
+  useEffect(() => {
+    if (playingChunk && progress > chunks[playingChunk].endtimeseconds) {
+      setPlayingChunk(undefined);
+      setPlay(false);
+    }
+  }, [progress, playingChunk, chunks]);
+
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
@@ -78,11 +95,12 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
           controller={videoPlayerController}
           url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
           sliderMarks={marks}
+          onProgressDrag={() => setPlayingChunk(undefined)}
         />
       </div>
       <Container>
         <GridList className={classes.chunksList} cellHeight="auto" cols={2.5}>
-          {chunks.map((c) => (
+          {chunks.map((c, idx) => (
             <GridListTile key={c.id}>
               <ChunkCard chunk={c}>
                 <IndabaButton
@@ -90,11 +108,20 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
                   color="primary"
                   style={{ marginRight: "4px", color: "#FFFFFF" }}
                   onClick={() => {
-                    setPlay(true);
-                    setProgress(c.starttimeseconds);
+                    if (playingChunk === idx && playingState) {
+                      setPlay(false);
+                    } else {
+                      setPlay(true);
+                      setPlayingChunk(idx);
+                      setProgress(c.starttimeseconds);
+                    }
                   }}
                 >
-                  <PlayArrow />
+                  {playingChunk === idx && playingState ? (
+                    <Pause />
+                  ) : (
+                    <PlayArrow />
+                  )}
                 </IndabaButton>
                 <IndabaButton
                   round

@@ -29,12 +29,14 @@ export type VideoPlayerProps = {
    */
   url: string;
   sliderMarks?: Mark[];
+  onProgressDrag?: () => void;
 };
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
   url,
   controller,
   sliderMarks,
+  onProgressDrag
 }) => {
   const classes = useStyles();
   const playerRef = useRef<ReactPlayer>(null);
@@ -66,7 +68,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     playState,
     playerRef,
     setDuration,
-    split
+    split,
+    onProgressDrag
   );
 
   return (

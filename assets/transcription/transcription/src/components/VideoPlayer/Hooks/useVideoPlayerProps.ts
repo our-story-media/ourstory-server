@@ -27,7 +27,8 @@ const useVideoPlayerProps = (
    *  If, for example, start is 0 and end is 0.5, only play the first half of
    *  the video
    */
-  split: { start: number; end: number }
+  split: { start: number; end: number },
+  onProgressDrag?: () => void,
 ): {
   playerProps: ReactPlayerProps;
   progressBarProps: any;
@@ -87,6 +88,7 @@ const useVideoPlayerProps = (
       max: split.end * 100,
       step: 0.0001,
       onChange: (_: any, newVal: number | number[]) => {
+        onProgressDrag && onProgressDrag();
         setDragging(true);
         setProgressState({
           progress: (newVal as number) / 100,
@@ -103,6 +105,7 @@ const useVideoPlayerProps = (
       progressState.progress,
       setDragging,
       setProgressState,
+      onProgressDrag,
     ]
   );
 
