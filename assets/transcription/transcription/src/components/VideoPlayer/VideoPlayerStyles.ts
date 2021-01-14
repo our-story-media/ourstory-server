@@ -20,13 +20,15 @@ const useStyles = makeStyles({
     left: "0",
     bottom: "0",
     marginBottom: "-39px",
-    transform: "translateY(-100%)",
+    transform: "translateY(calc(-100% - 16px))",
   },
   progressBar: {
     color: "#f54414",
   },
   rail: {
     padding: "0px",
+    width: "98%",
+    transform: "translateX(1%)"
   },
 });
 

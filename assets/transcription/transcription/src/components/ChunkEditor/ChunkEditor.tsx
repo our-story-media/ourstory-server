@@ -41,6 +41,17 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
 
   const classes = useStyles();
 
+  /**
+   * TODO
+   * =======
+   * - Move the slider so it's more visible
+   * - Add marks to the slider for where the chunks splits are
+   * - Modify play chunk behaviour so that it stops when the chunk ends
+   * - Modify play chunk behaviour so that the chunk play button reflects the 
+   *   state of the player
+   * - Add the time stamp to scrobbling the slider
+   */
+
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
