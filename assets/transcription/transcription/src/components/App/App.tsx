@@ -20,7 +20,6 @@ import {
   countReviewedChunks,
   getLastEndTimeSeconds,
 } from "../../utils/chunkManipulation";
-import IndabaButton from "../IndabaButton/IndabaButton";
 import useToggle from "../../hooks/useToggle";
 import ContributerListModal from "../ContributersModal/ContributersModal";
 
@@ -55,12 +54,8 @@ const BackButton: React.FC<{ actions: (() => void)[] }> = ({ actions }) => {
 
 const App: React.FC<{}> = () => {
   const [view, setView] = useState<View>(View.Dashboard);
-
   const { ChunksProvider } = chunksContext;
-
-  const { storyTitle, chunksState } = useOurstoryApi();
-
-  const chunks = chunksState[0];
+  const { storyTitle, chunksState: [chunks, setChunks] } = useOurstoryApi();
 
   const chunkingProgress = getLastEndTimeSeconds(chunks);
   const transcriptionProgress = chunks.length
@@ -85,7 +80,7 @@ const App: React.FC<{}> = () => {
   const [showContributers, toggleShowContributers] = useToggle(false);
 
   return (
-    <ChunksProvider state={chunksState}>
+    <ChunksProvider state={[chunks, setChunks]}>
       <UserProvider>
         <main>
           <ContributerListModal

@@ -47,9 +47,9 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
         <Container className={classes.introContainer}>
           <Title storyName={storyName} />
           <Greeting name={userName} />
-          <IndabaLink onClick={clearName}>
-            <div>{userName && "This is not me!"}</div>
-          </IndabaLink>
+          {userName && (
+            <IndabaLink onClick={clearName}>This is not me!</IndabaLink>
+          )}
         </Container>
         <div style={{ marginBottom: "16px" }}>
           There are 3 stages to transcribing, select which stage you are

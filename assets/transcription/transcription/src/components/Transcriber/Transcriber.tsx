@@ -34,7 +34,6 @@ const Transcriber: React.FC<TranscriberProps> = ({
   const {
     progressState: [, setProgress],
     splitState: [, setSplit],
-    duration,
     controller,
   } = useVideoPlayerController();
 

@@ -1,5 +1,10 @@
-import { Container, Divider, IconButton } from "@material-ui/core";
-import React, { ReactNode, useCallback, useEffect, useRef } from "react";
+import {
+  ClickAwayListener,
+  Container,
+  Divider,
+  IconButton,
+} from "@material-ui/core";
+import React, { ReactNode, useRef } from "react";
 
 import useStyles from "./HeaderStyles";
 import Logo from "../../assets/images/logo_web.svg";
@@ -9,28 +14,21 @@ import IndabaMenu from "../IndabaMenu/IndabaMenu";
 
 type HeaderProps = {
   title: string;
-  contextMenuItems: {content: ReactNode, handler: () => void}[];
+  contextMenuItems: { content: ReactNode; handler: () => void }[];
 };
 
-const Header: React.FC<HeaderProps> = ({ children, title, contextMenuItems }) => {
+const Header: React.FC<HeaderProps> = ({
+  children,
+  title,
+  contextMenuItems,
+}) => {
   const classes = useStyles();
 
-  const [showContextMenu, toggleShowContextMenu] = useToggle(false);
-
   const contextMenuButtonRef = useRef(null);
-  const contextMenuContentRef = useRef(null);
 
-  const memoToggleShowContextMenu = useCallback((e: MouseEvent) => {
-    if (!(contextMenuButtonRef.current ? contextMenuButtonRef.current as any : { contains: true} as any).contains(e.target)) {
-      toggleShowContextMenu();
-    }
-  }, []);
+  const [showContextMenu, toggleShowContextMenu, setShowContextMenu] = useToggle(false);
 
-  useEffect(() => {
-    showContextMenu
-      ? document.addEventListener("mousedown", memoToggleShowContextMenu)
-      : document.removeEventListener("mousedown", memoToggleShowContextMenu);
-  }, [showContextMenu]);
+  const hideContextMenu = () => setShowContextMenu(false);
 
   return (
     <>
@@ -43,18 +41,19 @@ const Header: React.FC<HeaderProps> = ({ children, title, contextMenuItems }) =>
           <div className={classes.titleContainer}>
             <div className={classes.titleWrapper}>{title}</div>
           </div>
-          <IconButton
-            className={classes.contextMenuButton}
-            onClick={toggleShowContextMenu}
-            ref={contextMenuButtonRef}
-          >
-            <MoreVert />
-          </IconButton>
+          <ClickAwayListener onClickAway={hideContextMenu}>
+            <IconButton
+              className={classes.contextMenuButton}
+              onClick={toggleShowContextMenu}
+              ref={contextMenuButtonRef}
+            >
+              <MoreVert />
+            </IconButton>
+          </ClickAwayListener>
           <IndabaMenu
             show={showContextMenu}
             anchor={contextMenuButtonRef.current!}
             menuItems={contextMenuItems}
-            ref={contextMenuContentRef}
           />
         </div>
         <Divider />

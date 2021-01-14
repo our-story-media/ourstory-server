@@ -11,6 +11,8 @@ import { Chunk, Story } from "../../../utils/types";
  * This hook synchronizes the chunks being created and edited in the user
  * interface with the ourstory backend
  *
+ * setChunks refetches the chunks from the server everytime it is called
+ *
  * @param chunks - the chunks state to synchonise to the api
  * @param setChunks - setter for the chunks
  */

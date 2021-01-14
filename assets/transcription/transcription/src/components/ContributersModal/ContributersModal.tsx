@@ -114,8 +114,8 @@ const ContributerListModal: React.FC<{
               <Close />
             </IndabaButton>
           </div>
+          <Divider style={{ margin: "12px 0px 12px 0px" }} />
         </Container>
-        <Divider style={{ margin: "12px 0px 12px 0px" }} />
         <Container
           style={{ height: "80vh", width: "90vw", overflow: "scroll" }}
         >
