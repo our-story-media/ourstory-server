@@ -6,6 +6,8 @@ import {
   Divider,
   GridList,
   GridListTile,
+  List,
+  ListItem,
 } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import React, { useMemo } from "react";
@@ -111,16 +113,16 @@ const ContributerListModal: React.FC<{
               {contributers.map((contributer) => (
                 <GridListTile key={contributer[0]}>
                   <SimpleCard title={contributer[0]}>
-                    <ul>
+                    <List>
                       {contributer[1].map((contribution) => (
-                        <li key={`${contribution.chunk.id}${contribution.for}`}>
+                        <ListItem key={`${contribution.chunk.id}${contribution.for}`}>
                           {contributionDescription(
                             contribution.for,
                             contribution.chunk
                           )}
-                        </li>
+                        </ListItem>
                       ))}
-                    </ul>
+                    </List>
                   </SimpleCard>
                 </GridListTile>
               ))}
