@@ -2,6 +2,7 @@
 import { Add, Delete, History, Pause, PlayArrow } from "@material-ui/icons";
 import React, {
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -84,6 +85,19 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
     }
   }, [progress, playingChunk, chunks]);
 
+  const handleChunkPlayButtonClick = useCallback(
+    (chunkIdx: number, playingChunk: number | undefined) => {
+      if (playingChunk === chunkIdx && playingState) {
+        setPlay(false);
+      } else {
+        setPlay(true);
+        setPlayingChunk(chunkIdx);
+        setProgress(chunks[chunkIdx].starttimeseconds);
+      }
+    },
+    [chunks]
+  );
+
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
@@ -107,15 +121,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
                   round
                   color="primary"
                   style={{ marginRight: "4px", color: "#FFFFFF" }}
-                  onClick={() => {
-                    if (playingChunk === idx && playingState) {
-                      setPlay(false);
-                    } else {
-                      setPlay(true);
-                      setPlayingChunk(idx);
-                      setProgress(c.starttimeseconds);
-                    }
-                  }}
+                  onClick={() => handleChunkPlayButtonClick(idx, playingChunk)}
                 >
                   {playingChunk === idx && playingState ? (
                     <Pause />
