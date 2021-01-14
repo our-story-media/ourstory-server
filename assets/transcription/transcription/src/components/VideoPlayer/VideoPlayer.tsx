@@ -103,8 +103,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             </Typography>
             <Slider
               classes={{
-                colorPrimary: classes.progressBar,
-                root: classes.rail,
+                colorPrimary: classes.progressBarColor,
+                root: classes.progressBarRoot,
+                rail: classes.progressBarRail,
+                track: classes.progressBarTrack,
+                thumb: classes.progressBarThumb,
+                mark: classes.progressBarMark
               }}
               marks={sliderMarks ? sliderMarks : []}
               {...progressBarProps}

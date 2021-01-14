@@ -22,14 +22,29 @@ const useStyles = makeStyles({
     marginBottom: "-39px",
     transform: "translateY(calc(-100% - 16px))",
   },
-  progressBar: {
+  progressBarColor: {
     color: "#f54414",
   },
-  rail: {
+  progressBarRoot: {
     padding: "0px",
-    width: "98%",
-    transform: "translateX(1%)"
+    width: "96%",
+    transform: "translateX(2%)",
+    height: 4,
   },
+  progressBarRail: {
+    height: 4
+  },
+  progressBarTrack: {
+    height: 4
+  },
+  progressBarThumb: {
+    height: 12,
+    marginTop: -4
+  },
+  progressBarMark: {
+    height: 10,
+    marginTop: -3
+  }
 });
 
 export default useStyles;

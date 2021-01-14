@@ -1,7 +1,13 @@
 // External Dependencies
 import { Add, Delete, History, PlayArrow } from "@material-ui/icons";
 import React, { ReactNode, useContext } from "react";
-import { Box, Container, GridList, GridListTile } from "@material-ui/core";
+import {
+  Box,
+  Container,
+  GridList,
+  GridListTile,
+  Mark,
+} from "@material-ui/core";
 
 // Internal Dependencies
 import ChunkCard from "../SimpleCard/ChunkCard";
@@ -16,11 +22,21 @@ import {
 } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 import IndabaButton from "../IndabaButton/IndabaButton";
+import { Chunk } from "../../utils/types";
 
 type ChunkEditorProps = {
   /** Back button component */
   backButton: ReactNode;
 };
+
+/**
+ * Helper function that converts a list of chunks
+ * to a list of marks
+ *
+ * @param chunks the chunks to get the marks for
+ */
+const getMarks = (chunks: Chunk[]): Mark[] =>
+  chunks.map((chunk) => ({ value: chunk.endtimeseconds * 100 }));
 
 const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
   const [chunks] = chunksContext.useChunksState();
@@ -47,10 +63,12 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
    * - Move the slider so it's more visible
    * - Add marks to the slider for where the chunks splits are
    * - Modify play chunk behaviour so that it stops when the chunk ends
-   * - Modify play chunk behaviour so that the chunk play button reflects the 
+   * - Modify play chunk behaviour so that the chunk play button reflects the
    *   state of the player
    * - Add the time stamp to scrobbling the slider
    */
+
+  const marks = getMarks(chunks);
 
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
@@ -62,6 +80,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
         <VideoPlayer
           controller={videoPlayerController}
           url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
+          sliderMarks={marks}
         />
       </div>
       <Container>
@@ -95,7 +114,12 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
         <IndabaButton
           round
           aria-label="Go Back"
-          style={{ position: "absolute", left: 0, bottom: 0, margin: "16px 16px 40px 16px" }}
+          style={{
+            position: "absolute",
+            left: 0,
+            bottom: 0,
+            margin: "16px 16px 40px 16px",
+          }}
           onClick={() => duration && setProgress(progress - 5 / duration)}
         >
           <History />
@@ -103,7 +127,12 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
         <IndabaButton
           round
           aria-label="New Chunk"
-          style={{ position: "absolute", right: 0, bottom: 0, margin: "16px 16px 40px 16px" }}
+          style={{
+            position: "absolute",
+            right: 0,
+            bottom: 0,
+            margin: "16px 16px 40px 16px",
+          }}
           onClick={() => userName && newChunk(progress, duration, userName)}
         >
           <Add />
