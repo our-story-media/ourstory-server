@@ -11,11 +11,7 @@ import StepInfo, { StepInfoProps } from "../App/StepInfo";
 import useStyles from "./DashboardStyles";
 import { UserContext } from "../UserProvider/UserProvider";
 import NameModal from "../NameModal/NameModal";
-import IndabaButton from "../IndabaButton/IndabaButton";
-import useToggle from "../../hooks/useToggle";
 import IndabaLink from "../../IndabaLink/IndabaLink";
-import chunksContext from "../../utils/ChunksContext/chunksContext";
-import ContributerListModal from "../ContributersModal/ContributersModal";
 
 type DashboardProps = {
   /** The name of the story being transcribed */
@@ -52,7 +48,7 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
           <Title storyName={storyName} />
           <Greeting name={userName} />
           <IndabaLink onClick={clearName}>
-            {userName && "This is not me!"}
+            <div>{userName && "This is not me!"}</div>
           </IndabaLink>
         </Container>
         <div style={{ marginBottom: "16px" }}>

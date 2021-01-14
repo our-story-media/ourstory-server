@@ -11,7 +11,11 @@ import { Close } from "@material-ui/icons";
 import React, { useMemo } from "react";
 
 // Internal Dependencies
-import { Time, parseTimeStamps, listContributions } from "../../utils/chunkManipulation";
+import {
+  Time,
+  parseTimeStamps,
+  listContributions,
+} from "../../utils/chunkManipulation";
 import { Contribution, Chunk } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
 import FlatPaper from "../FlatPaper/FlatPaper";
@@ -21,7 +25,7 @@ import SimpleCard from "../SimpleCard/SimpleCard";
 const ContributerListModal: React.FC<{
   show: boolean;
   exit: () => void;
-  chunks: Chunk[]
+  chunks: Chunk[];
 }> = ({ show, exit, chunks }) => {
   /**
    * Helper function to get a nicely formatted time
@@ -76,9 +80,9 @@ const ContributerListModal: React.FC<{
 
   return (
     <CentralModal open={show}>
-      <Container>
+      <Container  style={{ height: "80vh", width: "90vw" }}>
         <FlatPaper>
-          <Box style={{ height: "80vw" }}>
+          <Box>
             <div
               style={{
                 display: "flex",
@@ -107,14 +111,16 @@ const ContributerListModal: React.FC<{
               {contributers.map((contributer) => (
                 <GridListTile key={contributer[0]}>
                   <SimpleCard title={contributer[0]}>
-                    {contributer[1].map((contribution) => (
-                      <div key={`${contribution.chunk.id}${contribution.for}`}>
-                        {contributionDescription(
-                          contribution.for,
-                          contribution.chunk
-                        )}
-                      </div>
-                    ))}
+                    <ul>
+                      {contributer[1].map((contribution) => (
+                        <li key={`${contribution.chunk.id}${contribution.for}`}>
+                          {contributionDescription(
+                            contribution.for,
+                            contribution.chunk
+                          )}
+                        </li>
+                      ))}
+                    </ul>
                   </SimpleCard>
                 </GridListTile>
               ))}

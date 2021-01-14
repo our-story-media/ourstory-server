@@ -13,15 +13,15 @@ type SimpleInputFormProps = {
   onSubmit: (value: string) => void;
 };
 
-const SimpleInputForm: React.FC<SimpleInputFormProps> = ({
+const SimpleInputForm: React.FC<SimpleInputFormProps> = React.forwardRef<HTMLDivElement, SimpleInputFormProps>(({
   placeholder,
   buttonText,
   classes,
   onSubmit,
-}) => {
+}, ref) => {
   const [input, setInput] = useState<string | null>(null);
   return (
-    <Box>
+    <div ref={ref}>
       <InputBase
         className={classes.input}
         onChange={(e) => setInput(e.target.value)}
@@ -33,8 +33,8 @@ const SimpleInputForm: React.FC<SimpleInputFormProps> = ({
       >
         <Typography variant="subtitle1">{buttonText}</Typography>
       </IndabaButton>
-    </Box>
+    </div>
   );
-};
+});
 
 export default SimpleInputForm;

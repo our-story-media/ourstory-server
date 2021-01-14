@@ -95,11 +95,12 @@ const App: React.FC<{}> = () => {
           />
           <Header
             title={View[view]}
-            contextMenu={
-              <IndabaButton onClick={toggleShowContributers} style={{ backgroundColor: "gray", height: "40px" }}>
-                Show Contributers
-              </IndabaButton>
-            }
+            contextMenuItems={[
+              {
+                content: "Show Contributers",
+                handler: toggleShowContributers,
+              },
+            ]}
           >
             {view === View.Dashboard ? (
               <Dashboard

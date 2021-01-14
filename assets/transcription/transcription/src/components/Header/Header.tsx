@@ -5,13 +5,14 @@ import useStyles from "./HeaderStyles";
 import Logo from "../../assets/images/logo_web.svg";
 import { MoreVert } from "@material-ui/icons";
 import useToggle from "../../hooks/useToggle";
+import IndabaMenu from "../IndabaMenu/IndabaMenu";
 
 type HeaderProps = {
   title: string;
-  contextMenu: ReactNode;
+  contextMenuItems: {content: ReactNode, handler: () => void}[];
 };
 
-const Header: React.FC<HeaderProps> = ({ children, title, contextMenu }) => {
+const Header: React.FC<HeaderProps> = ({ children, title, contextMenuItems }) => {
   const classes = useStyles();
 
   const [showContextMenu, toggleShowContextMenu] = useToggle(false);
@@ -20,12 +21,10 @@ const Header: React.FC<HeaderProps> = ({ children, title, contextMenu }) => {
   const contextMenuContentRef = useRef(null);
 
   const memoToggleShowContextMenu = useCallback((e: MouseEvent) => {
-    if (!(contextMenuButtonRef.current! as any).contains(e.target) && !(contextMenuContentRef.current! as any).contains(e.target)) {
+    if (!(contextMenuButtonRef.current ? contextMenuButtonRef.current as any : { contains: true} as any).contains(e.target)) {
       toggleShowContextMenu();
     }
   }, []);
-
-  console.log(showContextMenu);
 
   useEffect(() => {
     showContextMenu
@@ -51,9 +50,12 @@ const Header: React.FC<HeaderProps> = ({ children, title, contextMenu }) => {
           >
             <MoreVert />
           </IconButton>
-          <div ref={contextMenuContentRef} style={{ position: "absolute", right: 0, top: 34 }}>
-            {showContextMenu && contextMenu}
-          </div>
+          <IndabaMenu
+            show={showContextMenu}
+            anchor={contextMenuButtonRef.current!}
+            menuItems={contextMenuItems}
+            ref={contextMenuContentRef}
+          />
         </div>
         <Divider />
       </Container>

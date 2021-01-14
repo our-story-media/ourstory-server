@@ -8,9 +8,9 @@ const useStyles = makeStyles({
   },
 });
 
-const IndabaLink: React.FC<any> = ({ ...props }) => {
+const IndabaLink: React.FC<any> = React.forwardRef(({ children, ...props }, ref) => {
   const classes = useStyles();
-  return <Link className={classes.indabaLink} {...props} ></Link>;
-};
+  return <Link ref={ref} className={classes.indabaLink} {...props} >{children}</Link>;
+});
 
 export default IndabaLink;

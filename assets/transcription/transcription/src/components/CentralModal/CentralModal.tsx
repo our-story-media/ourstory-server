@@ -1,4 +1,4 @@
-import { makeStyles, Modal, ModalProps } from "@material-ui/core";
+import { DialogContent, makeStyles, Modal, ModalProps } from "@material-ui/core";
 import React from "react";
 import FlatPaper from "../FlatPaper/FlatPaper";
 
@@ -21,9 +21,11 @@ const CentralModal: React.FC<CentralModalProps> = ({ children, ...props }) => {
 
   return (
     <Modal className={classes.modal} {...props}>
-      <FlatPaper>
-        <div className={classes.modalContentBox}>{children}</div>
-      </FlatPaper>
+      <DialogContent style={{outline: "none"}}>
+        <FlatPaper>
+          <div className={classes.modalContentBox}>{children}</div>
+        </FlatPaper>
+      </DialogContent>
     </Modal>
   );
 };
