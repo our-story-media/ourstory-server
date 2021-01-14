@@ -1,6 +1,6 @@
 // External Dependencies
 import { Box, Container, TextField } from "@material-ui/core";
-import React, { ReactNode, useContext, useEffect, useState } from "react";
+import React, { ReactNode, useContext, useEffect, useRef, useState } from "react";
 
 // Internal Dependencies
 import oneSatisfies from "../../utils/oneSatisfies";
@@ -61,13 +61,22 @@ const Transcriber: React.FC<TranscriberProps> = ({
 
   const classes = useStyles();
 
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    (inputRef.current ? inputRef.current as any : { focus: () => null }).focus()
+  }, [page]);
+
   return (
     <Container>
       {backButton}
       {chunks.length && (
         <>
           <Box className={classes.videoPlayerContainer}>
-            <VideoPlayer url={`http://localhost:8845/api/watch/getvideo/${story_id}`} controller={controller}/>
+            <VideoPlayer
+              url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
+              controller={controller}
+            />
           </Box>
           <Slideshow
             onNavBack={() => {
@@ -85,7 +94,9 @@ const Transcriber: React.FC<TranscriberProps> = ({
           >
             <ChunkCard chunk={chunks[page]}>
               <TextField
+                autoFocus
                 multiline
+                inputRef={inputRef}
                 className={classes.inputField}
                 variant="outlined"
                 rows={3}

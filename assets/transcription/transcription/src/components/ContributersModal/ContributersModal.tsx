@@ -1,7 +1,6 @@
 // External Dependencies
 import {
   Container,
-  Box,
   Typography,
   Divider,
   GridList,
@@ -92,7 +91,6 @@ const ContributerListModal: React.FC<{
     <CentralModal open={show}>
       <FlatPaper>
         <Container>
-          {" "}
           <div
             style={{
               display: "flex",
