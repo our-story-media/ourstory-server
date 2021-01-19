@@ -53,10 +53,27 @@ type ChunkEditorProps = {
 const CropContext = createContext<[number, number]>([0, 0]);
 
 const CropThumbComponent: React.FC<{}> = (props) => {
-  console.log(props);
   return (
-    <span {...props} style={{...(props as any).style, transform: (props as any)["data-index"] === 1 ? '0' : 'translateY(-14px)'}} >
-      {(props as any)["data-index"] !== 1 ? <div style={{ height: '14px', width: '4px', transform: "translateY(9px)", backgroundColor: "red"}} /> : null}
+    <span
+      {...props}
+      style={{
+        ...(props as any).style,
+        transform:
+          (props as any)["data-index"] === 1 ? "0" : "translateY(14px)",
+        backgroundColor:
+          (props as any)["data-index"] !== 1 ? "#f77965" : "#d9534f",
+      }}
+    >
+      {(props as any)["data-index"] !== 1 ? (
+        <div
+          style={{
+            height: "14px",
+            width: "4px",
+            transform: "translateY(-9px)",
+            backgroundColor: "#f77965",
+          }}
+        />
+      ) : null}
     </span>
   );
 };
