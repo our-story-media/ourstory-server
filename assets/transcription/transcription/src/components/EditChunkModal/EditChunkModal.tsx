@@ -31,7 +31,7 @@ const EditChunkModal: React.FC<{
   const [name, setName] = useState("");
 
   useEffect(() => {
-    chunk && chunk.name && setName(chunk.name);
+    chunk && setName(chunk.name ? chunk.name : "");
   }, [chunk]);
 
   const saveName = useRenameChunk();

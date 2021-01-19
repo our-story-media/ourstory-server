@@ -16,6 +16,10 @@ import {
   Time,
   parseChunkTimeStamps,
   listContributions,
+  getNameOf,
+  toShortTimeStamp,
+  parseTimeStamp,
+  secondsOf,
 } from "../../utils/chunkManipulation";
 import { Contribution, Chunk } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
@@ -65,7 +69,13 @@ const ContributerListModal: React.FC<{
     return (
       <span>
         <span style={{ fontWeight: "bold" }}>{typeDescription(type)}</span>the
-        chunk that starts at {chunkDescription}
+        chunk "{getNameOf(chunk)}" (
+        {`${toShortTimeStamp(
+          secondsOf(parseTimeStamp(chunk.starttimestamp))
+        )} - ${toShortTimeStamp(
+          secondsOf(parseTimeStamp(chunk.endtimestamp))
+        )}`}
+        )
       </span>
     );
   };
