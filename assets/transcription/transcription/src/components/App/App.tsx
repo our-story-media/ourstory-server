@@ -1,3 +1,20 @@
+/**
+ * TODO - 
+ *  - Update chunk names
+ *  - Autoscroll to the new chunk
+ *  - Animate in new chunk (or a snack bar when a new chunk is created)
+ *  - Colorize Chunks
+ *  - When trying to delete a chunk, check if it has a transcription and warn before deletion
+ *  - Add a way to rename chunks
+ * 
+ *  - Add a done/complete/finish transaction to each step
+ *  - Consider locking Transcription step until done with chunking
+ * 
+ *  - List all other people's transcriptions below your transcription
+ *  - Add ability to duplicate/copy other people's transcriptions
+ */
+
+
 // External Dependencies
 import { Box, ButtonBase, makeStyles } from "@material-ui/core";
 import { ChevronLeft } from "@material-ui/icons";

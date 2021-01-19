@@ -164,19 +164,27 @@ export const useUpdateTranscription = () => {
                 chunk.transcriptions,
                 (t) => t.creatorid === userName
               )
-                ? chunk.transcriptions.map((t) =>
-                    t.creatorid === userName
-                      ? { ...t, content: updatedTranscription }
-                      : t
-                  )
-                : chunk.transcriptions.concat([
-                    {
-                      creatorid: userName,
-                      content: updatedTranscription,
-                      id: uuidv4(),
-                      updatedat: new Date(),
-                    },
-                  ]),
+                ? /* The ternary here is to delete a transcription if a user has a transcription but is now transcribing an empty string */
+                  updatedTranscription === ""
+                  ? chunk.transcriptions.filter((t) => t.creatorid !== userName)
+                  : chunk.transcriptions.map((t) =>
+                      t.creatorid === userName
+                        ? { ...t, content: updatedTranscription }
+                        : t
+                    )
+                : /* The ternary here is to avoid adding empty transcriptions */
+                  chunk.transcriptions.concat(
+                    updatedTranscription === ""
+                      ? []
+                      : [
+                          {
+                            creatorid: userName,
+                            content: updatedTranscription,
+                            id: uuidv4(),
+                            updatedat: new Date(),
+                          },
+                        ]
+                  ),
             }
           : chunk
       )
@@ -248,51 +256,57 @@ export const useCropChunk = () => {
   ) => {
     setChunks((chunks) => {
       const neighbouringChunks = getAdjacentChunks(toUpdate, chunks);
-      return chunks
-        .map((chunk) =>
-          chunk.id === toUpdate.id
-            ? {
-                ...chunk,
-                starttimeseconds: newSplit[0],
-                starttimestamp: toTimeStamp(newSplit[0] * storyDuration),
-                endtimeseconds: newSplit[1],
-                endtimestamp: toTimeStamp(newSplit[1] * storyDuration),
-                updatedat: new Date(),
-              }
-            : chunk.id === neighbouringChunks.next?.id
-            ? {
-                ...chunk,
-                starttimeseconds: newSplit[1],
-                starttimestamp: toTimeStamp(newSplit[1] * storyDuration),
-                updatedat: new Date(),
-              }
-            : chunk.id === neighbouringChunks.prev?.id
-            ? {
-                ...chunk,
-                endtimeseconds: newSplit[0],
-                endtimestamp: toTimeStamp(newSplit[0] * storyDuration),
-                updatedat: new Date(),
-              }
-            : chunk
-        )
-        /*
-         * This is the case where the chunk the user is editing is the first
-         * chunk, and they are editing it so that it doesn't start at the very
-         * start. In this case, we need a new chunk to cover this gap
-         */
-        .concat(!neighbouringChunks.prev && newSplit[0] !== 0 ? [
-          {
-            starttimestamp: toTimeStamp(0),
-            starttimeseconds: 0,
-            endtimestamp: toTimeStamp(newSplit[0] * storyDuration),
-            endtimeseconds: newSplit[0],
-            creatorid: userName,
-            updatedat: new Date(),
-            id: uuidv4(),
-            transcriptions: [],
-          }
-        ] : [])
-        .sort((a, b) => a.endtimeseconds - b.endtimeseconds)
+      return (
+        chunks
+          .map((chunk) =>
+            chunk.id === toUpdate.id
+              ? {
+                  ...chunk,
+                  starttimeseconds: newSplit[0],
+                  starttimestamp: toTimeStamp(newSplit[0] * storyDuration),
+                  endtimeseconds: newSplit[1],
+                  endtimestamp: toTimeStamp(newSplit[1] * storyDuration),
+                  updatedat: new Date(),
+                }
+              : chunk.id === neighbouringChunks.next?.id
+              ? {
+                  ...chunk,
+                  starttimeseconds: newSplit[1],
+                  starttimestamp: toTimeStamp(newSplit[1] * storyDuration),
+                  updatedat: new Date(),
+                }
+              : chunk.id === neighbouringChunks.prev?.id
+              ? {
+                  ...chunk,
+                  endtimeseconds: newSplit[0],
+                  endtimestamp: toTimeStamp(newSplit[0] * storyDuration),
+                  updatedat: new Date(),
+                }
+              : chunk
+          )
+          /*
+           * This is the case where the chunk the user is editing is the first
+           * chunk, and they are editing it so that it doesn't start at the very
+           * start. In this case, we need a new chunk to cover this gap
+           */
+          .concat(
+            !neighbouringChunks.prev && newSplit[0] !== 0
+              ? [
+                  {
+                    starttimestamp: toTimeStamp(0),
+                    starttimeseconds: 0,
+                    endtimestamp: toTimeStamp(newSplit[0] * storyDuration),
+                    endtimeseconds: newSplit[0],
+                    creatorid: userName,
+                    updatedat: new Date(),
+                    id: uuidv4(),
+                    transcriptions: [],
+                  },
+                ]
+              : []
+          )
+          .sort((a, b) => a.endtimeseconds - b.endtimeseconds)
+      );
     });
   };
 };

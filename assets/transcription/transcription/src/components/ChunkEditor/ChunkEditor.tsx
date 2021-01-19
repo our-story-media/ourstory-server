@@ -1,17 +1,14 @@
 // External Dependencies
 import {
   Add,
-  Close,
   Delete,
   Edit,
-  History,
+  Forward5,
   Pause,
   PlayArrow,
+  Replay5,
 } from "@material-ui/icons";
 import React, {
-  ChangeEvent,
-  createContext,
-  FormEvent,
   ReactNode,
   useCallback,
   useContext,
@@ -35,7 +32,6 @@ import { UserContext } from "../UserProvider/UserProvider";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 import {
-  useCropChunk,
   useDeleteChunk,
   useNewChunk,
 } from "../../utils/ChunksContext/chunksActions";
@@ -43,116 +39,11 @@ import chunksContext from "../../utils/ChunksContext/chunksContext";
 import IndabaButton from "../IndabaButton/IndabaButton";
 import { Chunk } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
-import IndabaSlider from "../IndabaSlider/IndabaSlider";
+import ChunkCropper from "./ChunkCropper";
 
 type ChunkEditorProps = {
   /** Back button component */
   backButton: ReactNode;
-};
-
-const CropContext = createContext<[number, number]>([0, 0]);
-
-const CropThumbComponent: React.FC<{}> = (props) => {
-  return (
-    <span
-      {...props}
-      style={{
-        ...(props as any).style,
-        transform:
-          (props as any)["data-index"] === 1 ? "0" : "translateY(14px)",
-        backgroundColor:
-          (props as any)["data-index"] !== 1 ? "#f77965" : "#d9534f",
-      }}
-    >
-      {(props as any)["data-index"] !== 1 ? (
-        <div
-          style={{
-            height: "14px",
-            width: "4px",
-            transform: "translateY(-9px)",
-            backgroundColor: "#f77965",
-          }}
-        />
-      ) : null}
-    </span>
-  );
-};
-
-type ChunkCropperProps = {
-  chunk: Chunk;
-  exit: () => void;
-  storyDuration: number;
-};
-
-const ChunkCropper: React.FC<ChunkCropperProps> = ({
-  chunk,
-  exit,
-  storyDuration,
-}) => {
-  const {
-    progressState: [cropPlayerProgress, setCropPlayerProgress],
-    controller: cropPlayerController,
-  } = useVideoPlayerController();
-
-  const [videoSplit, setVideoSplit] = useState([0, 0] as [number, number]);
-  const [croppedSplit, setCroppedSplit] = useState([0, 0] as [number, number]);
-
-  /* Set initial state based on props  */
-  useEffect(() => {
-    setCropPlayerProgress(chunk.starttimeseconds);
-    const start = chunk.starttimeseconds - 2 / storyDuration;
-    const end = chunk.endtimeseconds + 2 / storyDuration;
-    setVideoSplit([start < 0 ? 0 : start, end > 1 ? 1 : end]);
-    setCroppedSplit([chunk.starttimeseconds, chunk.endtimeseconds]);
-  }, [chunk.starttimeseconds, chunk.endtimeseconds, storyDuration]);
-
-  const { userName } = useContext(UserContext);
-  const cropChunk = useCropChunk();
-
-  return (
-    <div>
-      <IndabaButton
-        onClick={() => {
-          userName && cropChunk(chunk, storyDuration, croppedSplit, userName);
-          exit();
-        }}
-      >
-        <Close />
-      </IndabaButton>
-      <VideoPlayer
-        url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
-        controller={cropPlayerController}
-        slider={
-          <CropContext.Provider value={croppedSplit}>
-            <IndabaSlider
-              value={[
-                croppedSplit[0] * 100,
-                cropPlayerProgress * 100,
-                croppedSplit[1] * 100,
-              ]}
-              min={videoSplit[0] * 100}
-              max={videoSplit[1] * 100}
-              step={0.0001}
-              ThumbComponent={CropThumbComponent}
-              onChange={
-                ((_: any, newValue: number | number[]) => {
-                  setCroppedSplit([
-                    (newValue as number[])[0] / 100,
-                    (newValue as number[])[2] / 100,
-                  ]);
-                  setCropPlayerProgress((newValue as number[])[1] / 100);
-                }) as ((
-                  event: ChangeEvent<{}>,
-                  value: number | number[]
-                ) => void) &
-                  ((event: FormEvent<HTMLSpanElement>) => void)
-              }
-            />
-          </CropContext.Provider>
-        }
-      />
-    </div>
-  );
 };
 
 /**
@@ -285,19 +176,32 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
             </GridListTile>
           ))}
         </GridList>
-        <IndabaButton
-          round
-          aria-label="Go Back"
+        <div
           style={{
             position: "absolute",
             left: 0,
             bottom: 0,
-            margin: "16px 16px 40px 16px",
+            margin: "16px 16px 32px 16px",
+            display: "flex",
           }}
-          onClick={() => duration && setProgress(progress - 5 / duration)}
         >
-          <History />
-        </IndabaButton>
+          <IndabaButton
+            round
+            aria-label="Go Back"
+            style={{margin: "8px"}}
+            onClick={() => duration && setProgress(progress - 5 / duration)}
+          >
+            <Replay5 />
+          </IndabaButton>
+          <IndabaButton
+            round
+            aria-label="Go Forward"
+            style={{margin: "8px"}}
+            onClick={() => duration && setProgress(progress + 5 / duration)}
+          >
+            <Forward5 />
+          </IndabaButton>
+        </div>
         <IndabaButton
           round
           aria-label="New Chunk"
