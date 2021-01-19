@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 // Internal Dependencies
 import adjacentMap from "../adjacentMap";
 import {
+  getAdjacentChunks,
   getEnclosingChunk,
   getLastEndTimeSeconds,
   getLastEndTimeStamp,
@@ -233,5 +234,65 @@ export const useDeleteReview = () => {
         chunk.id === toDelete.id ? { ...chunk, review: undefined } : chunk
       )
     );
+  };
+};
+
+export const useCropChunk = () => {
+  const [, setChunks] = chunksContext.useChunksState();
+
+  return (
+    toUpdate: Chunk,
+    storyDuration: number,
+    newSplit: [number, number],
+    userName: string
+  ) => {
+    setChunks((chunks) => {
+      const neighbouringChunks = getAdjacentChunks(toUpdate, chunks);
+      return chunks
+        .map((chunk) =>
+          chunk.id === toUpdate.id
+            ? {
+                ...chunk,
+                starttimeseconds: newSplit[0],
+                starttimestamp: toTimeStamp(newSplit[0] * storyDuration),
+                endtimeseconds: newSplit[1],
+                endtimestamp: toTimeStamp(newSplit[1] * storyDuration),
+                updatedat: new Date(),
+              }
+            : chunk.id === neighbouringChunks.next?.id
+            ? {
+                ...chunk,
+                starttimeseconds: newSplit[1],
+                starttimestamp: toTimeStamp(newSplit[1] * storyDuration),
+                updatedat: new Date(),
+              }
+            : chunk.id === neighbouringChunks.prev?.id
+            ? {
+                ...chunk,
+                endtimeseconds: newSplit[0],
+                endtimestamp: toTimeStamp(newSplit[0] * storyDuration),
+                updatedat: new Date(),
+              }
+            : chunk
+        )
+        /*
+         * This is the case where the chunk the user is editing is the first
+         * chunk, and they are editing it so that it doesn't start at the very
+         * start. In this case, we need a new chunk to cover this gap
+         */
+        .concat(!neighbouringChunks.prev && newSplit[0] !== 0 ? [
+          {
+            starttimestamp: toTimeStamp(0),
+            starttimeseconds: 0,
+            endtimestamp: toTimeStamp(newSplit[0] * storyDuration),
+            endtimeseconds: newSplit[0],
+            creatorid: userName,
+            updatedat: new Date(),
+            id: uuidv4(),
+            transcriptions: [],
+          }
+        ] : [])
+        .sort((a, b) => a.endtimeseconds - b.endtimeseconds)
+    });
   };
 };

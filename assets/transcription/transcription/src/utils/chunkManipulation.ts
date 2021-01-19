@@ -191,6 +191,18 @@ export const listContributions = (chunks: Chunk[]): Contribution[] =>
       )
     );
 
+export const getAdjacentChunks = (
+  chunk: Chunk,
+  allChunks: Chunk[]
+): { prev: Chunk | undefined; next: Chunk | undefined } =>
+  allChunks.reduce<{ prev: Chunk | undefined; next: Chunk | undefined }>(
+    (acc, el, idx) =>
+      el.id === chunk.id
+        ? { prev: allChunks[idx - 1], next: allChunks[idx + 1] }
+        : acc,
+    { prev: undefined, next: undefined }
+  );
+
 export type Time = {
   hours: number;
   minutes: number;

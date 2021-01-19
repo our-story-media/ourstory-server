@@ -1,10 +1,18 @@
-import { Box, Button, Mark, Slider, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Mark,
+  Slider,
+  SliderProps,
+  Typography,
+} from "@material-ui/core";
 import { Pause, PlayArrow } from "@material-ui/icons";
 import React, { useRef } from "react";
 import ReactPlayer from "react-player";
 import useDefaultState from "../../hooks/useDefaultState";
 import { toShortTimeStamp } from "../../utils/chunkManipulation";
 import { State } from "../../utils/types";
+import IndabaSlider from "../IndabaSlider/IndabaSlider";
 import useVideoPlayerProps from "./Hooks/useVideoPlayerProps";
 import { ProgressState, SplitState } from "./Hooks/useVideoPlayerState";
 import ProgressBarLabel from "./ProgressBarLabel";
@@ -30,13 +38,15 @@ export type VideoPlayerProps = {
   url: string;
   sliderMarks?: Mark[];
   onProgressDrag?: () => void;
+  slider?: React.ReactElement<SliderProps>;
 };
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
   url,
   controller,
   sliderMarks,
-  onProgressDrag
+  onProgressDrag,
+  slider,
 }) => {
   const classes = useStyles();
   const playerRef = useRef<ReactPlayer>(null);
@@ -94,33 +104,31 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               <PlayArrow fontSize="large" />
             )}
           </Button>
-          <div className={classes.progressBarContainer}>
-            {/* Progress Bar */}
-            <Typography
-              variant="caption"
-              style={{ margin: "8px", color: "#FFFFFF" }}
-            >
-              {duration &&
-                `${toShortTimeStamp(
-                  (progress.progress - split.start) * duration
-                )} / ${toShortTimeStamp((split.end - split.start) * duration)}`}
-            </Typography>
-            <Slider
-              classes={{
-                colorPrimary: classes.progressBarColor,
-                root: classes.progressBarRoot,
-                rail: classes.progressBarRail,
-                track: classes.progressBarTrack,
-                thumb: classes.progressBarThumb,
-                mark: classes.progressBarMark
-              }}
-              valueLabelDisplay="auto"
-              valueLabelFormat={(progress) => toShortTimeStamp(progress / 100 * duration)}
-              ValueLabelComponent={ProgressBarLabel}
-              marks={sliderMarks ? sliderMarks : []}
-              {...progressBarProps}
-            />
-          </div>
+          {slider || (
+            <div className={classes.progressBarContainer}>
+              {/* Progress Bar */}
+              <Typography
+                variant="caption"
+                style={{ margin: "8px", color: "#FFFFFF" }}
+              >
+                {duration &&
+                  `${toShortTimeStamp(
+                    (progress.progress - split.start) * duration
+                  )} / ${toShortTimeStamp(
+                    (split.end - split.start) * duration
+                  )}`}
+              </Typography>
+              <IndabaSlider
+                valueLabelDisplay="auto"
+                valueLabelFormat={(progress) =>
+                  toShortTimeStamp((progress / 100) * duration)
+                }
+                ValueLabelComponent={ProgressBarLabel}
+                marks={sliderMarks ? sliderMarks : []}
+                {...progressBarProps}
+              />
+            </div>
+          )}
         </>
       )}
     </Box>
