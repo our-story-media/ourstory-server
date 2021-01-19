@@ -88,34 +88,16 @@ const ContributerListModal: React.FC<{
   );
 
   return (
-    <CentralModal open={show}>
+    <CentralModal
+      header={
+        <Typography variant="h3" style={{ fontWeight: "lighter" }}>
+          Contributers
+        </Typography>
+      }
+      open={show}
+      exit={exit}
+    >
       <FlatPaper>
-        <Container>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignContent: "center",
-              }}
-            >
-              <Typography variant="h3" style={{ fontWeight: "lighter" }}>
-                Contributers
-              </Typography>
-            </div>
-            <IndabaButton onClick={exit}>
-              <Close />
-            </IndabaButton>
-          </div>
-          <Divider style={{ margin: "12px 0px 12px 0px" }} />
-        </Container>
         <Container
           style={{ height: "80vh", width: "90vw", overflow: "scroll" }}
         >

@@ -310,3 +310,19 @@ export const useCropChunk = () => {
     });
   };
 };
+
+export const useRenameChunk = () => {
+  const [, setChunks] = chunksContext.useChunksState();
+
+  return (toUpdate: Chunk, newName: string) => {
+    setChunks((chunks) =>
+      chunks.map((chunk) =>
+        chunk.id === toUpdate.id
+          ? newName !== ""
+            ? { ...chunk, name: newName }
+            : { ...chunk, name: undefined }
+          : chunk
+      )
+    );
+  };
+};

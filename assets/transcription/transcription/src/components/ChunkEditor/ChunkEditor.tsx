@@ -22,6 +22,7 @@ import {
   GridList,
   GridListTile,
   Mark,
+  TextField,
 } from "@material-ui/core";
 
 // Internal Dependencies
@@ -37,9 +38,11 @@ import {
 } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 import IndabaButton from "../IndabaButton/IndabaButton";
-import { Chunk } from "../../utils/types";
+import { Chunk, State } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
 import ChunkCropper from "./ChunkCropper";
+import { getNameOf } from "../../utils/chunkManipulation";
+import EditChunkModal from "../EditChunkModal/EditChunkModal";
 
 type ChunkEditorProps = {
   /** Back button component */
@@ -117,15 +120,12 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
       <Container>
         <div>{backButton}</div>
       </Container>
-      <CentralModal open={croppingChunk !== undefined}>
-        <div>
-          <ChunkCropper
-            exit={() => setCroppingChunk(undefined)}
-            storyDuration={duration}
-            chunk={chunks[croppingChunk ? croppingChunk : 0]}
-          />
-        </div>
-      </CentralModal>
+      <EditChunkModal
+        shown={croppingChunk !== undefined}
+        chunk={chunks[croppingChunk ? croppingChunk : 0]}
+        exit={() => setCroppingChunk(undefined)}
+        storyDuration={duration}
+      />
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer
           controller={videoPlayerController}
@@ -188,7 +188,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
           <IndabaButton
             round
             aria-label="Go Back"
-            style={{margin: "8px"}}
+            style={{ margin: "8px" }}
             onClick={() => duration && setProgress(progress - 5 / duration)}
           >
             <Replay5 />
@@ -196,7 +196,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
           <IndabaButton
             round
             aria-label="Go Forward"
-            style={{margin: "8px"}}
+            style={{ margin: "8px" }}
             onClick={() => duration && setProgress(progress + 5 / duration)}
           >
             <Forward5 />

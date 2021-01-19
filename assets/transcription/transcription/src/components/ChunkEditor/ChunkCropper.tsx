@@ -1,11 +1,13 @@
-import { Close } from "@material-ui/icons";
-import React, { useState, useEffect, useContext, ChangeEvent, FormEvent } from "react";
-import { useCropChunk } from "../../utils/ChunksContext/chunksActions";
+import { Container } from "@material-ui/core";
+import React, {
+  useState,
+  useEffect,
+  ChangeEvent,
+  FormEvent,
+} from "react";
 import story_id from "../../utils/getId";
 import { Chunk } from "../../utils/types";
-import IndabaButton from "../IndabaButton/IndabaButton";
 import IndabaSlider from "../IndabaSlider/IndabaSlider";
-import { UserContext } from "../UserProvider/UserProvider";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
@@ -16,10 +18,8 @@ const CropThumbComponent: React.FC<{}> = (props) => {
       {...props}
       style={{
         ...(props as any).style,
-        transform:
-          isProgressThumb ? "0" : "translateY(14px)",
-        backgroundColor:
-          !isProgressThumb ? "#f77965" : "#d9534f",
+        transform: isProgressThumb ? "0" : "translateY(14px)",
+        backgroundColor: !isProgressThumb ? "#f77965" : "#d9534f",
       }}
     >
       {!isProgressThumb ? (
@@ -38,13 +38,11 @@ const CropThumbComponent: React.FC<{}> = (props) => {
 
 type ChunkCropperProps = {
   chunk: Chunk;
-  exit: () => void;
   storyDuration: number;
 };
 
 const ChunkCropper: React.FC<ChunkCropperProps> = ({
   chunk,
-  exit,
   storyDuration,
 }) => {
   const {
@@ -64,19 +62,9 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
     setCroppedSplit([chunk.starttimeseconds, chunk.endtimeseconds]);
   }, [chunk.starttimeseconds, chunk.endtimeseconds, storyDuration]);
 
-  const { userName } = useContext(UserContext);
-  const cropChunk = useCropChunk();
-
   return (
     <div>
-      <IndabaButton
-        onClick={() => {
-          userName && cropChunk(chunk, storyDuration, croppedSplit, userName);
-          exit();
-        }}
-      >
-        <Close />
-      </IndabaButton>
+      <Container><h2 style={{margin: 0}}>Cropping:</h2></Container>
       <VideoPlayer
         url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
         controller={cropPlayerController}
