@@ -311,6 +311,12 @@ export const useCropChunk = () => {
   };
 };
 
+/**
+ * Hook to get a function for renaming chunks
+ *
+ * If the newName parameter is an empty string, the name
+ * will be set to undefined
+ */
 export const useRenameChunk = () => {
   const [, setChunks] = chunksContext.useChunksState();
 
@@ -324,5 +330,21 @@ export const useRenameChunk = () => {
           : chunk
       )
     );
+  };
+};
+
+/**
+ * Hook to get a function that accepts a function
+ * and calls that function with the latest chunks
+ * according to the server
+ */
+export const useDoWithChunks = () => {
+  const [, setChunks] = chunksContext.useChunksState();
+
+  return (doWith: (chunks: Chunk[]) => void) => {
+    setChunks((chunks) => {
+      doWith(chunks);
+      return chunks;
+    });
   };
 };

@@ -1,6 +1,5 @@
 /**
  * TODO - 
- *  - Update chunk names
  *  - Autoscroll to the new chunk
  *  - Animate in new chunk (or a snack bar when a new chunk is created)
  *  - Colorize Chunks

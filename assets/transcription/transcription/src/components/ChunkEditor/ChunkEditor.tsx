@@ -34,6 +34,7 @@ import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 import {
   useDeleteChunk,
+  useDoWithChunks,
   useNewChunk,
 } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
@@ -41,7 +42,7 @@ import IndabaButton from "../IndabaButton/IndabaButton";
 import { Chunk, State } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
 import ChunkCropper from "./ChunkCropper";
-import { getNameOf } from "../../utils/chunkManipulation";
+import { getNameOf, hasTranscription } from "../../utils/chunkManipulation";
 import EditChunkModal from "../EditChunkModal/EditChunkModal";
 
 type ChunkEditorProps = {
@@ -114,6 +115,12 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
     undefined
   );
 
+  const doWithChunks = useDoWithChunks();
+
+  const [attemptingToDeleteChunk, setAttemptingToDeleteChunk] = useState<
+    Chunk | undefined
+  >(undefined);
+
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
@@ -126,6 +133,18 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
         exit={() => setCroppingChunk(undefined)}
         storyDuration={duration}
       />
+      <CentralModal
+        open={attemptingToDeleteChunk !== undefined}
+        exit={() => setAttemptingToDeleteChunk(undefined)}
+        header={
+          <div>
+            Attempting to delete chunk
+            {attemptingToDeleteChunk && getNameOf(attemptingToDeleteChunk)}
+          </div>
+        }
+      >
+        <div>Warning! This Chunk has a transcription</div>
+      </CentralModal>
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer
           controller={videoPlayerController}
@@ -161,7 +180,17 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
                   round
                   aria-label="Delete Chunk"
                   style={{ marginRight: "4px" }}
-                  onClick={() => deleteChunk(c)}
+                  onClick={() => {
+                    console.log(hasTranscription(c));
+                    doWithChunks((chunks: Chunk[]) => {
+                      chunks.forEach(
+                        (chunk) =>
+                          chunk.id === c.id &&
+                          (hasTranscription(chunk) ?
+                          setAttemptingToDeleteChunk(chunk) : deleteChunk(chunk))
+                      );
+                    });
+                  }}
                 >
                   <Delete />
                 </IndabaButton>
