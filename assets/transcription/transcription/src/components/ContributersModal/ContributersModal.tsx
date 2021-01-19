@@ -14,7 +14,7 @@ import React, { useMemo } from "react";
 // Internal Dependencies
 import {
   Time,
-  parseTimeStamps,
+  parseChunkTimeStamps,
   listContributions,
 } from "../../utils/chunkManipulation";
 import { Contribution, Chunk } from "../../utils/types";
@@ -50,7 +50,7 @@ const ContributerListModal: React.FC<{
     chunk: Chunk;
     type: "chunk" | "transcription" | "review";
   }> = ({ type, chunk }) => {
-    const startEnd = parseTimeStamps(chunk);
+    const startEnd = parseChunkTimeStamps(chunk);
     const chunkDescription = formatTime(startEnd.start, "");
     const typeDescription = (type: "chunk" | "transcription" | "review") => {
       switch (type) {

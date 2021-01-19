@@ -51,7 +51,7 @@ export const getLastEndTimeStamp = (chunks: Chunk[]): string =>
   chunks.length > 0 ? chunks[chunks.length - 1].endtimestamp : "00:00:00:00";
 
 /**
- * Given a list of chunks, get the end of the last time seconds.
+ * Given a list of chunks, get the endtimeseconds of the last chunk.
  * If the list is empty, return the start of the video (zero seconds)
  *
  * @param chunks the chunks to extract the last time from
@@ -210,23 +210,24 @@ export type Time = {
   milliseconds: number;
 };
 
+export const parseTimeStamp = (stamp: string) => ({
+  hours: Number(stamp.slice(0, 2)),
+  minutes: Number(stamp.slice(3, 5)),
+  seconds: Number(stamp.slice(6, 8)),
+  milliseconds: Number(stamp.slice(9, 11)),
+});
+
 /**
  * Given a chunk return a start and end Time object
  *
  * @param chunk the chunk to parse the timestamps of
  */
-export const parseTimeStamps = (chunk: Chunk): { start: Time; end: Time } => {
-  const parseTimeStamp = (stamp: string) => ({
-    hours: Number(stamp.slice(0, 2)),
-    minutes: Number(stamp.slice(3, 5)),
-    seconds: Number(stamp.slice(6, 8)),
-    milliseconds: Number(stamp.slice(9, 11)),
-  });
-  return {
-    start: parseTimeStamp(chunk.starttimestamp),
-    end: parseTimeStamp(chunk.endtimestamp),
-  };
-};
+export const parseChunkTimeStamps = (
+  chunk: Chunk
+): { start: Time; end: Time } => ({
+  start: parseTimeStamp(chunk.starttimestamp),
+  end: parseTimeStamp(chunk.endtimestamp),
+});
 
 /**
  * Given a time object, return the number of seconds, in that time
@@ -236,3 +237,11 @@ export const parseTimeStamps = (chunk: Chunk): { start: Time; end: Time } => {
  */
 export const secondsOf = (time: Time) =>
   time.hours * 60 * 60 + time.minutes * 60 + time.seconds;
+
+export const getNameOf = (chunk: Chunk) =>
+  chunk.name
+    ? chunk.name
+    : `${
+        secondsOf(parseTimeStamp(chunk.endtimestamp)) -
+        secondsOf(parseTimeStamp(chunk.starttimestamp))
+      } second chunk`;

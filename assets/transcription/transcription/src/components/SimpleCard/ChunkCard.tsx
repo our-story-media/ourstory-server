@@ -1,8 +1,8 @@
 import { makeStyles } from "@material-ui/core";
-import { secondsOf, toShortTimeStamp } from "../../utils/chunkManipulation";
+import { getNameOf, secondsOf, toShortTimeStamp } from "../../utils/chunkManipulation";
 import { Chunk } from "../../utils/types";
 import SimpleCard from "./SimpleCard";
-import { parseTimeStamps } from "../../utils/chunkManipulation";
+import { parseChunkTimeStamps } from "../../utils/chunkManipulation";
 
 const useStyles = makeStyles({
   titleContainer: {
@@ -12,19 +12,18 @@ const useStyles = makeStyles({
 
 const ChunkCard: React.FC<{ chunk: Chunk }> = ({ chunk, children }) => {
   const classes = useStyles();
-  const startEnd = parseTimeStamps(chunk);
+  const startEnd = parseChunkTimeStamps(chunk);
 
   const endSeconds = secondsOf(startEnd.end);
   const startSeconds = secondsOf(startEnd.start);
-
-  const lengthSeconds = endSeconds - startSeconds;
 
   return (
     <SimpleCard
       title={
         <span className={classes.titleContainer}>
-          {`${lengthSeconds}
-           second chunk starting at ${toShortTimeStamp(startSeconds)}`}
+          <span style={{fontWeight: 600}}>{getNameOf(chunk)}</span>
+          <br />
+          {`${toShortTimeStamp(startSeconds)} - ${toShortTimeStamp(endSeconds)}`}
         </span>
       }
     >

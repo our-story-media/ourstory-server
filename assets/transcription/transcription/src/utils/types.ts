@@ -44,7 +44,8 @@ export type Chunk = {
   updatedat: Date,
   id: string,
   transcriptions: Transcription[],
-  review?: Review
+  review?: Review,
+  name?: string
 };
 
 export type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>
