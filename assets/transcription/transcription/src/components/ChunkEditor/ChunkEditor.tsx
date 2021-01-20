@@ -7,6 +7,7 @@ import {
   Pause,
   PlayArrow,
   Replay5,
+  Warning,
 } from "@material-ui/icons";
 import React, {
   ReactNode,
@@ -23,9 +24,8 @@ import {
   GridList,
   GridListTile,
   Mark,
-  Snackbar,
+  Typography,
 } from "@material-ui/core";
-import { Element as ScrollElement, scroller } from "react-scroll";
 
 // Internal Dependencies
 import ChunkCard from "../SimpleCard/ChunkCard";
@@ -41,7 +41,7 @@ import {
 } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 import IndabaButton from "../IndabaButton/IndabaButton";
-import { Chunk, State } from "../../utils/types";
+import { Chunk } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
 import { getNameOf, hasTranscription } from "../../utils/chunkManipulation";
 import EditChunkModal from "../EditChunkModal/EditChunkModal";
@@ -175,9 +175,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
-      <Snackbar open={false} autoHideDuration={3000}>
-        <div>Hello From Snack</div>
-      </Snackbar>
       <Container>
         <div>{backButton}</div>
       </Container>
@@ -191,13 +188,34 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
         open={attemptingToDeleteChunk !== undefined}
         exit={() => setAttemptingToDeleteChunk(undefined)}
         header={
-          <div>
-            Attempting to delete chunk
-            {attemptingToDeleteChunk && getNameOf(attemptingToDeleteChunk)}
-          </div>
+          <h2 style={{ margin: 0 }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Warning style={{ marginRight: "8px" }} fontSize="large" /> This
+              Chunk has a transcription
+            </div>
+          </h2>
         }
       >
-        <div>Warning! This Chunk has a transcription</div>
+        <div>
+          Attempting to delete chunk
+          {attemptingToDeleteChunk &&
+            ` "${getNameOf(attemptingToDeleteChunk)}"`}
+          , which has a transcription saved to it. Are you sure you want to
+          delete it?
+          <br />
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <IndabaButton
+              style={{ marginTop: "8px" }}
+              onClick={() => {
+                attemptingToDeleteChunk && deleteChunk(attemptingToDeleteChunk);
+                setAttemptingToDeleteChunk(undefined);
+              }}
+            >
+              <Delete fontSize="large" style={{ marginRight: "8px" }} />
+              <Typography variant="subtitle1">Confirm</Typography>
+            </IndabaButton>
+          </div>
+        </div>
       </CentralModal>
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer
@@ -235,7 +253,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
                   aria-label="Delete Chunk"
                   style={{ marginRight: "4px" }}
                   onClick={() => {
-                    console.log(hasTranscription(c));
                     doWithChunks((chunks: Chunk[]) => {
                       chunks.forEach(
                         (chunk) =>
