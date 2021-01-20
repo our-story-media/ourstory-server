@@ -14,6 +14,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import {
@@ -22,8 +23,9 @@ import {
   GridList,
   GridListTile,
   Mark,
-  TextField,
+  Snackbar,
 } from "@material-ui/core";
+import { Element as ScrollElement, scroller } from "react-scroll";
 
 // Internal Dependencies
 import ChunkCard from "../SimpleCard/ChunkCard";
@@ -41,9 +43,33 @@ import chunksContext from "../../utils/ChunksContext/chunksContext";
 import IndabaButton from "../IndabaButton/IndabaButton";
 import { Chunk, State } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
-import ChunkCropper from "./ChunkCropper";
 import { getNameOf, hasTranscription } from "../../utils/chunkManipulation";
 import EditChunkModal from "../EditChunkModal/EditChunkModal";
+
+/* Given a stateful list of elements,
+ * watches for new elements and calls
+ * the callback everytime there's a
+ * new element
+ */
+const useWatchForNewElements = <T extends unknown>(
+  elements: T[],
+  identifier: (elOne: T, elTwo: T) => boolean,
+  action: (newElements: T[]) => void
+) => {
+  const [prevElements, setPrevElements] = useState([] as T[]);
+
+  useEffect(() => {
+    setPrevElements(elements);
+  }, []);
+
+  useEffect(() => {
+    const newElements = elements.filter(
+      (el) => !prevElements.find((prevEl) => identifier(prevEl, el))
+    );
+    action(newElements);
+    setPrevElements(elements);
+  }, [elements]);
+};
 
 type ChunkEditorProps = {
   /** Back button component */
@@ -115,15 +141,43 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
     undefined
   );
 
+  const [newEl, setNewEl] = useState("");
+  const newElRef = useRef<any>();
+
+  useWatchForNewElements(
+    chunks,
+    (a, b) => a.id === b.id,
+    (newChunks) => {
+      setNewEl(newChunks[newChunks.length - 1]?.id);
+    }
+  );
+
   const doWithChunks = useDoWithChunks();
 
   const [attemptingToDeleteChunk, setAttemptingToDeleteChunk] = useState<
     Chunk | undefined
   >(undefined);
 
+  const handleNewChunk = () => {
+    if (userName) {
+      newChunk(progress, duration, userName);
+    }
+  };
+
+  useEffect(() => {
+    newElRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+      inline: "nearest",
+    });
+  }, [newEl]);
+
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
+      <Snackbar open={false} autoHideDuration={3000}>
+        <div>Hello From Snack</div>
+      </Snackbar>
       <Container>
         <div>{backButton}</div>
       </Container>
@@ -156,7 +210,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
       <Container>
         <GridList className={classes.chunksList} cellHeight="auto" cols={2.5}>
           {chunks.map((c, idx) => (
-            <GridListTile key={c.id}>
+            <GridListTile key={c.id} ref={c.id === newEl ? newElRef : null}>
               <ChunkCard chunk={c}>
                 <IndabaButton
                   round
@@ -186,8 +240,9 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
                       chunks.forEach(
                         (chunk) =>
                           chunk.id === c.id &&
-                          (hasTranscription(chunk) ?
-                          setAttemptingToDeleteChunk(chunk) : deleteChunk(chunk))
+                          (hasTranscription(chunk)
+                            ? setAttemptingToDeleteChunk(chunk)
+                            : deleteChunk(chunk))
                       );
                     });
                   }}
@@ -240,7 +295,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
             bottom: 0,
             margin: "16px 16px 40px 16px",
           }}
-          onClick={() => userName && newChunk(progress, duration, userName)}
+          onClick={handleNewChunk}
         >
           <Add />
         </IndabaButton>

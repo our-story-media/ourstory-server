@@ -11,7 +11,7 @@ import StepInfo, { StepInfoProps } from "../App/StepInfo";
 import useStyles from "./DashboardStyles";
 import { UserContext } from "../UserProvider/UserProvider";
 import NameModal from "../NameModal/NameModal";
-import IndabaLink from "../../IndabaLink/IndabaLink";
+import IndabaLink from "../IndabaLink/IndabaLink";
 
 type DashboardProps = {
   /** The name of the story being transcribed */

@@ -11,6 +11,8 @@
  * 
  *  - List all other people's transcriptions below your transcription
  *  - Add ability to duplicate/copy other people's transcriptions
+ * 
+ *  - Add ability to edit during Review
  */
 
 

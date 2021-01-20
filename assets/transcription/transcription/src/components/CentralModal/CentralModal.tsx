@@ -5,7 +5,6 @@ import {
   makeStyles,
   Modal,
   ModalProps,
-  Typography,
 } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import React, { ReactElement } from "react";
@@ -41,7 +40,7 @@ const CentralModal: React.FC<CentralModalProps> = ({
     <Modal className={classes.modal} {...props}>
       <DialogContent style={{ outline: "none" }}>
         <FlatPaper>
-          <Container>
+          {header && <Container>
             <div
               style={{
                 display: "flex",
@@ -65,7 +64,7 @@ const CentralModal: React.FC<CentralModalProps> = ({
               </IndabaButton>
             </div>
             <Divider style={{ margin: "12px 0px 12px 0px" }} />
-          </Container>
+          </Container>}
           <div className={classes.modalContentBox}>{children}</div>
         </FlatPaper>
       </DialogContent>
