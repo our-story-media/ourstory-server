@@ -1,4 +1,4 @@
-import { Box, Typography, InputBase } from "@material-ui/core";
+import { Typography, InputBase } from "@material-ui/core";
 import React, { useState } from "react";
 import IndabaButton from "../IndabaButton/IndabaButton";
 

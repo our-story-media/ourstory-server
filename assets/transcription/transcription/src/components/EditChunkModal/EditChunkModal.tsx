@@ -1,7 +1,7 @@
 // External Dependencies
 import { TextField } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
-import { useCropChunk, useRenameChunk } from "../../utils/ChunksContext/chunksActions";
+import { useCropChunk } from "../../utils/ChunksContext/chunksActions";
 
 // Internal Dependencies
 import { Chunk, State } from "../../utils/types";

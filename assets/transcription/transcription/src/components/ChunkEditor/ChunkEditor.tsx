@@ -1,16 +1,15 @@
 // External Dependencies
 import {
   Add,
+  Check,
   Delete,
   Edit,
   Forward5,
   Pause,
   PlayArrow,
   Replay5,
-  Warning,
 } from "@material-ui/icons";
 import React, {
-  ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -20,7 +19,6 @@ import React, {
 } from "react";
 import {
   Box,
-  Container,
   GridList,
   GridListTile,
   Mark,
@@ -43,10 +41,15 @@ import chunksContext from "../../utils/ChunksContext/chunksContext";
 import IndabaButton from "../IndabaButton/IndabaButton";
 import { Chunk } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
-import { getNameOf, hasTranscription } from "../../utils/chunkManipulation";
+import {
+  getLastEndTimeSeconds,
+  getNameOf,
+  hasTranscription,
+} from "../../utils/chunkManipulation";
 import EditChunkModal from "../EditChunkModal/EditChunkModal";
 import VideoThumbnail from "../VideoPlayer/VideoThumbnail";
 import WarningMessage from "../WarningMessage/WarningMessage";
+import BackButton from "../BackButton/BackButton";
 
 /* Given a stateful list of elements,
  * watches for new elements and calls
@@ -74,8 +77,8 @@ const useWatchForNewElements = <T extends unknown>(
 };
 
 type ChunkEditorProps = {
-  /** Back button component */
-  backButton: ReactNode;
+  /** Action to do when back button is pressed */
+  atExit: () => void;
 };
 
 /**
@@ -85,9 +88,11 @@ type ChunkEditorProps = {
  * @param chunks the chunks to get the marks for
  */
 const getMarks = (chunks: Chunk[]): Mark[] =>
-  chunks.map((chunk) => ({ value: chunk.endtimeseconds * 100 }));
+  chunks.map((chunk) => ({
+    value: chunk.endtimeseconds * 100,
+  }));
 
-const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
+const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
   const [chunks] = chunksContext.useChunksState();
 
   const {
@@ -157,6 +162,13 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
     }
   );
 
+  const handleCompleteChunking = () => {
+    getLastEndTimeSeconds(chunks) !== 1 &&
+      userName &&
+      newChunk(1, duration, userName);
+    atExit();
+  };
+
   const doWithChunks = useDoWithChunks();
 
   const [attemptingToDeleteChunk, setAttemptingToDeleteChunk] = useState<
@@ -180,7 +192,9 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
-      <div>{backButton}</div>
+      <div style={{ marginTop: "4px" }}>
+        <BackButton action={atExit} />
+      </div>
       <EditChunkModal
         shown={croppingChunk !== undefined}
         chunk={chunks[croppingChunk ? croppingChunk : 0]}
@@ -277,45 +291,71 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
           </GridListTile>
         ))}
       </GridList>
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          bottom: 0,
-          margin: "16px 16px 32px 16px",
-          display: "flex",
-        }}
-      >
-        <IndabaButton
-          round
-          aria-label="Go Back"
-          style={{ margin: "8px" }}
-          onClick={() => duration && setProgress(progress - 5 / duration)}
+      <div>
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            bottom: 0,
+            margin: "16px 16px 32px 16px",
+            display: "flex",
+          }}
         >
-          <Replay5 />
-        </IndabaButton>
-        <IndabaButton
-          round
-          aria-label="Go Forward"
-          style={{ margin: "8px" }}
-          onClick={() => duration && setProgress(progress + 5 / duration)}
+          <IndabaButton
+            round
+            aria-label="Go Back"
+            style={{ margin: "8px" }}
+            onClick={() => duration && setProgress(progress - 5 / duration)}
+          >
+            <Replay5 />
+          </IndabaButton>
+          <IndabaButton
+            round
+            aria-label="Go Forward"
+            style={{ margin: "8px" }}
+            onClick={() => duration && setProgress(progress + 5 / duration)}
+          >
+            <Forward5 />
+          </IndabaButton>
+        </div>
+        <div
+          style={{
+            margin: "16px 16px 32px 16px",
+            position: "absolute",
+            bottom: 0,
+            left: "50vw",
+            transform: "translate(-50%)",
+          }}
         >
-          <Forward5 />
-        </IndabaButton>
+          <IndabaButton
+            onClick={handleCompleteChunking}
+            style={{ margin: "8px", backgroundColor: "#40bf11" }}
+          >
+            <Check />
+            <span style={{ marginLeft: "4px", fontSize: "1.05rem" }}>
+              Complete
+            </span>
+          </IndabaButton>
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            right: 0,
+            bottom: 0,
+            margin: "16px 16px 32px 16px",
+            display: "flex",
+          }}
+        >
+          <IndabaButton
+            round
+            aria-label="New Chunk"
+            style={{ margin: "8px" }}
+            onClick={handleNewChunk}
+          >
+            <Add />
+          </IndabaButton>
+        </div>
       </div>
-      <IndabaButton
-        round
-        aria-label="New Chunk"
-        style={{
-          position: "absolute",
-          right: 0,
-          bottom: 0,
-          margin: "16px 16px 40px 16px",
-        }}
-        onClick={handleNewChunk}
-      >
-        <Add />
-      </IndabaButton>
     </Box>
   );
 };

@@ -1,20 +1,18 @@
 /**
- * TODO - 
- * 
+ * TODO -
+ *
  *  - Colorize Chunks - only if adding the thumbnail isn't enough to identify each chunk
  *  - Add some sort of indicator to chunk cards if they have a transcription associated
  *    with them
- * 
+ *
  *  - Add a done/complete/finish transaction to each step
  *  - Consider locking Transcription step until done with chunking
- * 
+ *
  *  - Add ability to edit during Review
  */
 
-
 // External Dependencies
-import { Box, ButtonBase, makeStyles } from "@material-ui/core";
-import { ChevronLeft } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 
 // Internal Dependencies
@@ -37,39 +35,13 @@ import {
 import useToggle from "../../hooks/useToggle";
 import ContributerListModal from "../ContributersModal/ContributersModal";
 
-const useStyles = makeStyles({
-  backButton: {
-    background: "transparent",
-    color: "black",
-    fontSize: "16px",
-  },
-});
-
-/**
- * A back button. When the button is pressed, the actions will be performed in
- * the order they are passed
- *
- * @param actions: the actions that will be performed when the back button is pressed
- */
-const BackButton: React.FC<{ actions: (() => void)[] }> = ({ actions }) => {
-  const classes = useStyles();
-  return (
-    <Box>
-      <ButtonBase
-        className={classes.backButton}
-        onClick={() => actions.forEach((action) => action())}
-      >
-        <ChevronLeft />
-        Back
-      </ButtonBase>
-    </Box>
-  );
-};
-
 const App: React.FC<{}> = () => {
   const [view, setView] = useState<View>(View.Dashboard);
   const { ChunksProvider } = chunksContext;
-  const { storyTitle, chunksState: [chunks, setChunks] } = useOurstoryApi();
+  const {
+    storyTitle,
+    chunksState: [chunks, setChunks],
+  } = useOurstoryApi();
 
   const chunkingProgress = getLastEndTimeSeconds(chunks);
   const transcriptionProgress = chunks.length
@@ -117,25 +89,15 @@ const App: React.FC<{}> = () => {
                 storyName={storyTitle ? storyTitle : "Loading"}
               />
             ) : view === View.Chunking ? (
-              <ChunkEditor
-                backButton={
-                  <BackButton actions={[() => setView(View.Dashboard)]} />
-                }
-              />
+              <ChunkEditor atExit={() => setView(View.Dashboard)} />
             ) : view === View.Transcribing ? (
               <Transcriber
                 story_id={story_id}
-                makeBackButton={(action: () => void) => (
-                  <BackButton
-                    actions={[action, () => setView(View.Dashboard)]}
-                  />
-                )}
+                atExit={() => setView(View.Dashboard)}
               />
             ) : view === View.Reviewing ? (
               <Reviewer
-                backButton={
-                  <BackButton actions={[() => setView(View.Dashboard)]} />
-                }
+                atExit={() => setView(View.Dashboard)}
                 story_id={story_id}
               />
             ) : null}

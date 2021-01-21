@@ -1,7 +1,6 @@
 // External Dependencies
 import { Box, TextField, Typography } from "@material-ui/core";
 import React, {
-  ReactNode,
   useContext,
   useEffect,
   useRef,
@@ -25,6 +24,7 @@ import IndabaButton from "../IndabaButton/IndabaButton";
 import { FileCopy } from "@material-ui/icons";
 import CentralModal from "../CentralModal/CentralModal";
 import WarningMessage from "../WarningMessage/WarningMessage";
+import BackButton from "../BackButton/BackButton";
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
@@ -33,13 +33,10 @@ const getUsersTranscription = (chunk: Chunk, userName: string): string =>
 
 type TranscriberProps = {
   story_id: string;
-  makeBackButton: (action: () => void) => ReactNode;
+  atExit: () => void;
 };
 
-const Transcriber: React.FC<TranscriberProps> = ({
-  story_id,
-  makeBackButton,
-}) => {
+const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
   const [chunks] = chunksContext.useChunksState();
 
   const {
@@ -65,10 +62,6 @@ const Transcriber: React.FC<TranscriberProps> = ({
 
   const updateTranscription = useUpdateTranscription();
 
-  const backButton = makeBackButton(
-    () => userName && updateTranscription(chunks[page], transcription, userName)
-  );
-
   const classes = useStyles();
 
   const inputRef = useRef(null);
@@ -91,7 +84,15 @@ const Transcriber: React.FC<TranscriberProps> = ({
 
   return (
     <div>
-      {backButton}
+      <div style={{marginTop: "4px"}}>
+        <BackButton
+          action={() => {
+            userName &&
+              updateTranscription(chunks[page], transcription, userName);
+            atExit();
+          }}
+        />
+      </div>
       {chunks.length && (
         <>
           <CentralModal
@@ -140,6 +141,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
               }}
               currentPage={page}
               numberOfPages={chunks.length}
+              onComplete={atExit}
             >
               <ChunkCard chunk={chunks[page]}>
                 <TextField

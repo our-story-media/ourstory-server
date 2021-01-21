@@ -6,13 +6,18 @@ const useStyles = makeStyles({
     margin: "auto",
   },
   actionButton: {
-    '&:hover': {
-        background: "#d9534f",
-     },
+    "&:hover": {
+      background: "#d9534f",
+    },
   },
   chunksList: {
     flexWrap: "nowrap",
-  }
+  },
+  backButton: {
+    background: "transparent",
+    color: "black",
+    fontSize: "16px",
+  },
 });
 
 export default useStyles;

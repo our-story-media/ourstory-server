@@ -24,6 +24,9 @@ const useStyles = makeStyles({
     height: 10,
     marginTop: -3,
   },
+  markedSlider: {
+    margin: 0,
+  }
 });
 
 const IndabaSlider: React.FC<SliderProps & { styles?: any }> = ({
@@ -41,6 +44,7 @@ const IndabaSlider: React.FC<SliderProps & { styles?: any }> = ({
           track: classes.progressBarTrack,
           thumb: classes.progressBarThumb,
           mark: classes.progressBarMark,
+          marked: classes.markedSlider,
         }}
         {...props}
       />
