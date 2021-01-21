@@ -50,6 +50,7 @@ import EditChunkModal from "../EditChunkModal/EditChunkModal";
 import VideoThumbnail from "../VideoPlayer/VideoThumbnail";
 import WarningMessage from "../WarningMessage/WarningMessage";
 import BackButton from "../BackButton/BackButton";
+import useConfirmBeforeAction from "../../hooks/useConfirmBeforeAction";
 
 /* Given a stateful list of elements,
  * watches for new elements and calls
@@ -171,10 +172,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
 
   const doWithChunks = useDoWithChunks();
 
-  const [attemptingToDeleteChunk, setAttemptingToDeleteChunk] = useState<
-    Chunk | undefined
-  >(undefined);
-
   const handleNewChunk = () => {
     if (userName) {
       newChunk(progress, duration, userName);
@@ -189,6 +186,22 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
     });
   }, [newEl]);
 
+  const {
+    attemptAction: attemptToDeleteChunk,
+    cancelAction: cancelDeletAttempt,
+    attemptingActionWith: chunkAttemptingToDeleteArray,
+    confirmAction: confirmDeletion,
+  } = useConfirmBeforeAction(deleteChunk, (chunk) => hasTranscription(chunk));
+
+  /**
+   * This unpacks the chunk from the list of parameters attemptToDeleteChunk
+   * was called with, for convenience
+   */
+  const chunkAttemptingToDelete = useMemo(
+    () => chunkAttemptingToDeleteArray && chunkAttemptingToDeleteArray[0],
+    [chunkAttemptingToDeleteArray]
+  );
+
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
@@ -202,24 +215,21 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
         storyDuration={duration}
       />
       <CentralModal
-        open={attemptingToDeleteChunk !== undefined}
-        exit={() => setAttemptingToDeleteChunk(undefined)}
+        open={chunkAttemptingToDelete !== undefined}
+        exit={() => cancelDeletAttempt()}
         header={<WarningMessage message="This Chunk has a transcription" />}
       >
         <div>
           Attempting to delete chunk
-          {attemptingToDeleteChunk &&
-            ` "${getNameOf(attemptingToDeleteChunk)}"`}
+          {chunkAttemptingToDelete &&
+            ` "${getNameOf(chunkAttemptingToDelete)}"`}
           , which has a transcription saved to it. Are you sure you want to
           delete it?
           <br />
           <div style={{ display: "flex", justifyContent: "center" }}>
             <IndabaButton
               style={{ marginTop: "8px" }}
-              onClick={() => {
-                attemptingToDeleteChunk && deleteChunk(attemptingToDeleteChunk);
-                setAttemptingToDeleteChunk(undefined);
-              }}
+              onClick={confirmDeletion}
             >
               <Delete fontSize="large" style={{ marginRight: "8px" }} />
               <Typography variant="subtitle1">Confirm</Typography>
@@ -270,10 +280,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
                   doWithChunks((chunks: Chunk[]) => {
                     chunks.forEach(
                       (chunk) =>
-                        chunk.id === c.id &&
-                        (hasTranscription(chunk)
-                          ? setAttemptingToDeleteChunk(chunk)
-                          : deleteChunk(chunk))
+                        chunk.id === c.id && attemptToDeleteChunk(chunk)
                     );
                   });
                 }}

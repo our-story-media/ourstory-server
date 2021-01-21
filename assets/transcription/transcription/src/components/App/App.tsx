@@ -5,14 +5,12 @@
  *  - Add some sort of indicator to chunk cards if they have a transcription associated
  *    with them
  *
- *  - Add a done/complete/finish transaction to each step
  *  - Consider locking Transcription step until done with chunking
  *
  *  - Add ability to edit during Review
  */
 
 // External Dependencies
-import { makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 
 // Internal Dependencies
