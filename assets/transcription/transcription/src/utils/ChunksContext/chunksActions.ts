@@ -143,6 +143,13 @@ export const useNewChunk = () => {
   };
 };
 
+const removeReview = (chunk: Chunk) => ({ ...chunk, review: undefined });
+
+const getTranscriptionByCreator = (chunk: Chunk, userName: string) =>
+  chunk.transcriptions.filter(
+    (transcription) => transcription.creatorid === userName
+  )[0];
+
 /**
  * Using the ChunksContext, get a function for updating a chunks transcription
  * list
@@ -155,7 +162,11 @@ export const useUpdateTranscription = () => {
       chunks.map((chunk) =>
         chunk.id === toUpdate.id
           ? {
-              ...chunk,
+              ...(chunk.review?.selectedtranscription ===
+                getTranscriptionByCreator(chunk, userName)?.id &&
+              updatedTranscription === ""
+                ? removeReview(chunk)
+                : chunk),
               /* This call to oneSatisfies checks if the current user has
                * already made a transcription for this chunk (in that case,
                * update that chunk instead of creating a new one)
@@ -250,11 +261,11 @@ const renameChunk = (newName: string, chunk: Chunk): Chunk =>
 
 /**
  * Hook for getting a function for cropping a chunk
- * 
+ *
  * This involves modifying the start and end times
  * of the cropped chunk as well as the chunks on either
  * side of the chunk.
- * 
+ *
  * The user may also, optionally, rename the chunk using
  * this action
  */
@@ -266,7 +277,7 @@ export const useCropChunk = () => {
     storyDuration: number,
     newSplit: [number, number],
     userName: string,
-    newName?: string,
+    newName?: string
   ) => {
     setChunks((chunks) => {
       const neighbouringChunks = getAdjacentChunks(toUpdate, chunks);
