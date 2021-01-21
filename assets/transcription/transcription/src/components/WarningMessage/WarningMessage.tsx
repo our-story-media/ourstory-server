@@ -1,8 +1,8 @@
 import { Warning } from "@material-ui/icons";
-import React from "react";
+import React, { ReactNode } from "react";
 
 type WarningMessageProps = {
-  message: string;
+  message: string | ReactNode;
 }
 
 const WarningMessage: React.FC<WarningMessageProps> = ({ message }) => {

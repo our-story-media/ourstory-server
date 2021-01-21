@@ -1,11 +1,10 @@
 // External Dependencies
-import { Box, TextField, Typography } from "@material-ui/core";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { Box, Typography } from "@material-ui/core";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 
 // Internal Dependencies
 import oneSatisfies from "../../utils/oneSatisfies";
 import { Chunk } from "../../utils/types";
-import ChunkCard from "../SimpleCard/ChunkCard";
 import { UserContext } from "../UserProvider/UserProvider";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useStyles from "./TranscriberStyles";
@@ -22,6 +21,7 @@ import WarningMessage from "../WarningMessage/WarningMessage";
 import BackButton from "../BackButton/BackButton";
 import useConfirmBeforeAction from "../../hooks/useConfirmBeforeAction";
 import useFirstRender from "../../hooks/useFirstRender";
+import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
@@ -64,13 +64,23 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
       );
   }, [page, direction]);
 
+  const currentChunk = useMemo(() => chunks[page], [chunks, page]);
+
+  const otherUsersTranscriptions = useMemo(
+    () =>
+      currentChunk.transcriptions.filter(
+        (transcription) => transcription.creatorid !== userName
+      ),
+    [currentChunk]
+  );
+
   useEffect(() => {
-    userName && setTranscription(getUsersTranscription(chunks[page], userName));
+    userName && setTranscription(getUsersTranscription(currentChunk, userName));
     setSplit({
-      start: chunks[page].starttimeseconds,
-      end: chunks[page].endtimeseconds,
+      start: currentChunk.starttimeseconds,
+      end: currentChunk.endtimeseconds,
     });
-    setProgress(chunks[page].starttimeseconds);
+    setProgress(currentChunk.starttimeseconds);
   }, [chunks, page, userName]);
 
   const updateTranscription = useUpdateTranscription();
@@ -98,7 +108,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
   );
 
   const exitHandler = () => {
-    userName && updateTranscription(chunks[page], transcription, userName);
+    userName && updateTranscription(currentChunk, transcription, userName);
     atExit();
   };
 
@@ -145,56 +155,43 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
               numberOfPages={chunks.length}
               onComplete={exitHandler}
             >
-              <ChunkCard chunk={chunks[page]}>
-                <TextField
-                  autoFocus
-                  multiline
-                  inputRef={inputRef}
-                  className={classes.inputField}
-                  variant="outlined"
-                  label="Transcription"
-                  value={transcription}
-                  onChange={(e) => setTranscription(e.target.value)}
-                />
-              </ChunkCard>
+              <EditTranscriptionCard inputRef={inputRef} chunk={currentChunk} transcriptionState={[transcription, setTranscription]} />
             </Slideshow>
             <div>
-              {chunks[page].transcriptions
-                .filter((transcription) => transcription.creatorid !== userName)
-                .map((t) => (
-                  <SimpleCard
-                    key={t.creatorid}
-                    title={
-                      <div
+              {otherUsersTranscriptions.map((t) => (
+                <SimpleCard
+                  key={t.creatorid}
+                  title={
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div style={{ fontSize: "1.2rem" }}>
+                        <span style={{ fontWeight: "bold" }}>Author:</span>
+                        {` ${t.creatorid}`}
+                      </div>
+                      <IndabaButton
+                        onClick={() =>
+                          tryCopyTranscription(transcription, t.content)
+                        }
                         style={{
-                          display: "flex",
-                          justifyContent: "space-between",
+                          padding: "0px",
+                          height: "32px",
+                          width: "32px",
+                          minWidth: "32px",
                         }}
                       >
-                        <div style={{ fontSize: "1.2rem" }}>
-                          <span style={{ fontWeight: "bold" }}>Author:</span>
-                          {t.creatorid}
-                        </div>
-                        <IndabaButton
-                          onClick={() =>
-                            tryCopyTranscription(transcription, t.content)
-                          }
-                          style={{
-                            padding: "0px",
-                            height: "32px",
-                            width: "32px",
-                            minWidth: "32px",
-                          }}
-                        >
-                          <FileCopy fontSize="small" />
-                        </IndabaButton>
-                      </div>
-                    }
-                    style={{ margin: "16px 0 16px 0" }}
-                  >
-                    {t.content}
-                  </SimpleCard>
-                ))}
+                        <FileCopy fontSize="small" />
+                      </IndabaButton>
+                    </div>
+                  }
+                  style={{ margin: "16px 0 16px 0" }}
+                >
+                  {t.content}
+                </SimpleCard>
+              ))}
             </div>
           </div>
         </>
