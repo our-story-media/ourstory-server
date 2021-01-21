@@ -45,7 +45,7 @@ const useConfirmBeforeAction = <T extends any[]>(
   >(undefined);
 
   const confirmAction = useCallback(() => {
-    if (attemptingActionWith) {
+    if (attemptingActionWith !== undefined) {
       action(...attemptingActionWith);
       setAttemptingActionWith(undefined);
     }

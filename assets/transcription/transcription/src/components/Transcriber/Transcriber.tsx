@@ -25,6 +25,7 @@ import { FileCopy } from "@material-ui/icons";
 import CentralModal from "../CentralModal/CentralModal";
 import WarningMessage from "../WarningMessage/WarningMessage";
 import BackButton from "../BackButton/BackButton";
+import useConfirmBeforeAction from "../../hooks/useConfirmBeforeAction";
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
@@ -73,14 +74,14 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     ).focus();
   }, [page]);
 
-  // This is the state for the transcription copy confirmation modal
-  const [contentAttemptingToCopy, setContentAttemptingToCopy] = useState("");
+  const overrideTranscription = (oldTranscription: string, newTranscription: string) => setTranscription(newTranscription);
 
-  const handleAttemptCopy = (toCopy: string) => {
-    transcription === ""
-      ? setTranscription(toCopy)
-      : setContentAttemptingToCopy(toCopy);
-  };
+  const {
+    attemptingActionWith: attemptingTranscriptionChangeWith,
+    attemptAction: tryCopyTranscription,
+    cancelAction: cancelCopyTranscription,
+    confirmAction: confirmCopyTranscription
+  } = useConfirmBeforeAction(overrideTranscription, (oldTranscription) => oldTranscription !== "");
 
   return (
     <div>
@@ -96,11 +97,11 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
       {chunks.length && (
         <>
           <CentralModal
-            exit={() => setContentAttemptingToCopy("")}
+            exit={cancelCopyTranscription}
             header={
               <WarningMessage message={"You Will Lose Your Transcription"} />
             }
-            open={contentAttemptingToCopy !== ""}
+            open={attemptingTranscriptionChangeWith !== undefined}
           >
             <div>
               Duplicating this transcription will discard your current
@@ -110,10 +111,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <IndabaButton
                   style={{ marginTop: "8px" }}
-                  onClick={() => {
-                    setTranscription(contentAttemptingToCopy);
-                    setContentAttemptingToCopy("");
-                  }}
+                  onClick={confirmCopyTranscription}
                 >
                   <FileCopy fontSize="large" style={{ marginRight: "8px" }} />
                   <Typography variant="subtitle1">Confirm</Typography>
@@ -160,9 +158,9 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
             <div>
               {chunks[page].transcriptions
                 .filter((transcription) => transcription.creatorid !== userName)
-                .map((transcription) => (
+                .map((t) => (
                   <SimpleCard
-                    key={transcription.creatorid}
+                    key={t.creatorid}
                     title={
                       <div
                         style={{
@@ -172,11 +170,11 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
                       >
                         <div style={{ fontSize: "1.2rem" }}>
                           <span style={{ fontWeight: "bold" }}>Author:</span>
-                          {transcription.creatorid}
+                          {t.creatorid}
                         </div>
                         <IndabaButton
                           onClick={() =>
-                            handleAttemptCopy(transcription.content)
+                            tryCopyTranscription(transcription, t.content)
                           }
                           style={{
                             padding: "0px",
@@ -191,7 +189,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
                     }
                     style={{ margin: "16px 0 16px 0" }}
                   >
-                    {transcription.content}
+                    {t.content}
                   </SimpleCard>
                 ))}
             </div>
