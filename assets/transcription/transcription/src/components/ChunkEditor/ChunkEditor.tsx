@@ -249,7 +249,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
         {chunks.map((c, idx) => (
           <GridListTile key={c.id} ref={c.id === newEl ? newElRef : null}>
             <ChunkCard chunk={c}>
-              <div style={{ margin: "4px" }}>
+              <div style={{ marginTop: "8px" }}>
                 <VideoThumbnail
                   url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
                   time={

@@ -55,7 +55,8 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
    */
   const firstRender = useFirstRender();
   useEffect(() => {
-    !firstRender && userName &&
+    !firstRender &&
+      userName &&
       updateTranscription(
         chunks[page + (direction === "next" ? -1 : 1)],
         transcription,
@@ -85,18 +86,14 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     ).focus();
   }, [page]);
 
-  const overrideTranscription = (
-    oldTranscription: string,
-    newTranscription: string
-  ) => setTranscription(newTranscription);
-
   const {
     attemptingActionWith: attemptingTranscriptionChangeWith,
     attemptAction: tryCopyTranscription,
     cancelAction: cancelCopyTranscription,
     confirmAction: confirmCopyTranscription,
   } = useConfirmBeforeAction(
-    overrideTranscription,
+    (oldTranscription: string, newTranscription: string) =>
+      setTranscription(newTranscription),
     (oldTranscription) => oldTranscription !== ""
   );
 
@@ -155,7 +152,6 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
                   inputRef={inputRef}
                   className={classes.inputField}
                   variant="outlined"
-                  rows={3}
                   label="Transcription"
                   value={transcription}
                   onChange={(e) => setTranscription(e.target.value)}
