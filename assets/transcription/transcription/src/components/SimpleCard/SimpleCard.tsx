@@ -4,14 +4,15 @@ import useStyles from './SimpleCardStyles';
 
 type SimpleCardProps = {
     title: ReactNode;
+    style?: any
 };
 
-const SimpleCard: React.FC<SimpleCardProps> = ({ title, children }) => {
+const SimpleCard: React.FC<SimpleCardProps> = ({ title, children, style }) => {
 
     const classes = useStyles();
 
     return (
-        <div className={classes.cardContainer}>
+        <div className={classes.cardContainer} style={style}>
             <span>
                {title}
             </span>

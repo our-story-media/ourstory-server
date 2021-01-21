@@ -1,8 +1,8 @@
 /**
  * TODO - 
- *  - Add a thumbnail to each chunk
  *  - Colorize Chunks - only if adding the thumbnail isn't enough to identify each chunk
- *  - When trying to delete a chunk, check if it has a transcription and warn before deletion
+ *  - Add some sort of indicator to chunk cards if they have a transcription associated
+ *    with them
  * 
  *  - Add a done/complete/finish transaction to each step
  *  - Consider locking Transcription step until done with chunking

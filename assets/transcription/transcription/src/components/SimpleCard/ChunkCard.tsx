@@ -10,7 +10,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ChunkCard: React.FC<{ chunk: Chunk }> = ({ chunk, children }) => {
+const ChunkCard: React.FC<{ chunk: Chunk, style?: any }> = ({ chunk, children, style }) => {
   const classes = useStyles();
   const startEnd = parseChunkTimeStamps(chunk);
 
@@ -26,6 +26,7 @@ const ChunkCard: React.FC<{ chunk: Chunk }> = ({ chunk, children }) => {
           {`${toShortTimeStamp(startSeconds)} - ${toShortTimeStamp(endSeconds)}`}
         </span>
       }
+      style={style}
     >
       {children}
     </SimpleCard>

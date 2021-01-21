@@ -72,7 +72,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
   const { userName } = useContext(UserContext);
 
   return (
-    <Container>
+    <div>
       {backButton}
       <Box>
         <VideoPlayer
@@ -128,6 +128,6 @@ export const Reviewer: React.FC<ReviewerProps> = ({ backButton, story_id }) => {
           ))}
         </ChunkCard>
       </Slideshow>
-    </Container>
+    </div>
   );
 };

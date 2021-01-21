@@ -9,6 +9,7 @@ type SlideshowProps = {
   onNavForward?: () => void;
   currentPage: number;
   numberOfPages: number;
+  style?: any,
 };
 
 const Slideshow: React.FC<SlideshowProps> = ({
@@ -17,15 +18,16 @@ const Slideshow: React.FC<SlideshowProps> = ({
   currentPage,
   numberOfPages,
   children,
+  style,
 }) => {
   const classes = useStyles();
 
   return (
-    <Box className={classes.slideshowContainer}>
+    <div className={classes.slideshowContainer} style={style}>
       <IndabaButton
         round
         aria-label="Previous Chunk"
-        style={{ color: "#FFFFFF" }}
+        style={{ color: "#FFFFFF", alignSelf: "flex-start", marginTop: "32px" }}
         disabled={currentPage === 0}
         onClick={() => onNavBack && onNavBack()}
       >
@@ -35,13 +37,13 @@ const Slideshow: React.FC<SlideshowProps> = ({
       <IndabaButton
         round
         aria-label="Next Chunk"
-        style={{ color: "#FFFFFF" }}
+        style={{ color: "#FFFFFF", alignSelf: "flex-start", marginTop: "32px" }}
         disabled={currentPage === numberOfPages - 1}
         onClick={() => onNavForward && onNavForward()}
       >
         <NavigateNext />
       </IndabaButton>
-    </Box>
+    </div>
   );
 };
 

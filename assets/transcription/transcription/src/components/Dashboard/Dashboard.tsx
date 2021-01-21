@@ -43,28 +43,26 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
   return (
     <Box>
       <NameModal setName={setName} show={!userName} />
-      <Container>
-        <Container className={classes.introContainer}>
-          <Title storyName={storyName} />
-          <Greeting name={userName} />
-          {userName && (
-            <IndabaLink onClick={clearName}>This is not me!</IndabaLink>
-          )}
-        </Container>
-        <div style={{ marginBottom: "16px" }}>
-          There are 3 stages to transcribing, select which stage you are
-          performing
-        </div>
-        <Box>
-          <GridList cols={3} cellHeight="auto" spacing={20}>
-            {steps.map((step) => (
-              <GridListTile key={step.title}>
-                <StepInfo {...step} />
-              </GridListTile>
-            ))}
-          </GridList>
-        </Box>
+      <Container className={classes.introContainer}>
+        <Title storyName={storyName} />
+        <Greeting name={userName} />
+        {userName && (
+          <IndabaLink onClick={clearName}>This is not me!</IndabaLink>
+        )}
       </Container>
+      <div style={{ marginBottom: "16px" }}>
+        There are 3 stages to transcribing, select which stage you are
+        performing
+      </div>
+      <Box>
+        <GridList cols={3} cellHeight="auto" spacing={20}>
+          {steps.map((step) => (
+            <GridListTile key={step.title}>
+              <StepInfo {...step} />
+            </GridListTile>
+          ))}
+        </GridList>
+      </Box>
     </Box>
   );
 };

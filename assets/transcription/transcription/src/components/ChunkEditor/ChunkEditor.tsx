@@ -179,9 +179,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
-      <Container>
-        <div>{backButton}</div>
-      </Container>
+      <div>{backButton}</div>
       <EditChunkModal
         shown={croppingChunk !== undefined}
         chunk={chunks[croppingChunk ? croppingChunk : 0]}
@@ -229,107 +227,101 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
           onProgressDrag={() => setPlayingChunk(undefined)}
         />
       </div>
-      <Container>
-        <GridList className={classes.chunksList} cellHeight="auto" cols={2.5}>
-          {chunks.map((c, idx) => (
-            <GridListTile key={c.id} ref={c.id === newEl ? newElRef : null}>
-              <ChunkCard chunk={c}>
-                <div style={{margin: "4px"}}>
-                  <VideoThumbnail
-                    url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
-                    time={
-                      c.starttimeseconds +
-                      (c.endtimeseconds - c.starttimeseconds) / 2
-                    }
-                  />
-                </div>{" "}
-                <IndabaButton
-                  round
-                  color="primary"
-                  style={{ marginRight: "4px" }}
-                  onClick={() =>
-                    handleChunkPlayButtonClick(
-                      idx,
-                      playingChunk,
-                      playingState[0]
-                    )
+      <GridList className={classes.chunksList} cellHeight="auto" cols={2.5}>
+        {chunks.map((c, idx) => (
+          <GridListTile key={c.id} ref={c.id === newEl ? newElRef : null}>
+            <ChunkCard chunk={c}>
+              <div style={{ margin: "4px" }}>
+                <VideoThumbnail
+                  url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
+                  time={
+                    c.starttimeseconds +
+                    (c.endtimeseconds - c.starttimeseconds) / 2
                   }
-                >
-                  {playingChunk === idx && playingState[0] ? (
-                    <Pause />
-                  ) : (
-                    <PlayArrow />
-                  )}
-                </IndabaButton>
-                <IndabaButton
-                  round
-                  aria-label="Delete Chunk"
-                  style={{ marginRight: "4px" }}
-                  onClick={() => {
-                    doWithChunks((chunks: Chunk[]) => {
-                      chunks.forEach(
-                        (chunk) =>
-                          chunk.id === c.id &&
-                          (hasTranscription(chunk)
-                            ? setAttemptingToDeleteChunk(chunk)
-                            : deleteChunk(chunk))
-                      );
-                    });
-                  }}
-                >
-                  <Delete />
-                </IndabaButton>
-                <IndabaButton
-                  round
-                  aria-label="Edit Chunk"
-                  onClick={() => setCroppingChunk(idx)}
-                >
-                  <Edit />
-                </IndabaButton>
-              </ChunkCard>
-            </GridListTile>
-          ))}
-        </GridList>
-        <div
-          style={{
-            position: "absolute",
-            left: 0,
-            bottom: 0,
-            margin: "16px 16px 32px 16px",
-            display: "flex",
-          }}
-        >
-          <IndabaButton
-            round
-            aria-label="Go Back"
-            style={{ margin: "8px" }}
-            onClick={() => duration && setProgress(progress - 5 / duration)}
-          >
-            <Replay5 />
-          </IndabaButton>
-          <IndabaButton
-            round
-            aria-label="Go Forward"
-            style={{ margin: "8px" }}
-            onClick={() => duration && setProgress(progress + 5 / duration)}
-          >
-            <Forward5 />
-          </IndabaButton>
-        </div>
+                />
+              </div>
+              <IndabaButton
+                round
+                color="primary"
+                style={{ marginRight: "4px" }}
+                onClick={() =>
+                  handleChunkPlayButtonClick(idx, playingChunk, playingState[0])
+                }
+              >
+                {playingChunk === idx && playingState[0] ? (
+                  <Pause />
+                ) : (
+                  <PlayArrow />
+                )}
+              </IndabaButton>
+              <IndabaButton
+                round
+                aria-label="Delete Chunk"
+                style={{ marginRight: "4px" }}
+                onClick={() => {
+                  doWithChunks((chunks: Chunk[]) => {
+                    chunks.forEach(
+                      (chunk) =>
+                        chunk.id === c.id &&
+                        (hasTranscription(chunk)
+                          ? setAttemptingToDeleteChunk(chunk)
+                          : deleteChunk(chunk))
+                    );
+                  });
+                }}
+              >
+                <Delete />
+              </IndabaButton>
+              <IndabaButton
+                round
+                aria-label="Edit Chunk"
+                onClick={() => setCroppingChunk(idx)}
+              >
+                <Edit />
+              </IndabaButton>
+            </ChunkCard>
+          </GridListTile>
+        ))}
+      </GridList>
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          bottom: 0,
+          margin: "16px 16px 32px 16px",
+          display: "flex",
+        }}
+      >
         <IndabaButton
           round
-          aria-label="New Chunk"
-          style={{
-            position: "absolute",
-            right: 0,
-            bottom: 0,
-            margin: "16px 16px 40px 16px",
-          }}
-          onClick={handleNewChunk}
+          aria-label="Go Back"
+          style={{ margin: "8px" }}
+          onClick={() => duration && setProgress(progress - 5 / duration)}
         >
-          <Add />
+          <Replay5 />
         </IndabaButton>
-      </Container>
+        <IndabaButton
+          round
+          aria-label="Go Forward"
+          style={{ margin: "8px" }}
+          onClick={() => duration && setProgress(progress + 5 / duration)}
+        >
+          <Forward5 />
+        </IndabaButton>
+      </div>
+      <IndabaButton
+        round
+        aria-label="New Chunk"
+        style={{
+          position: "absolute",
+          right: 0,
+          bottom: 0,
+          margin: "16px 16px 40px 16px",
+        }}
+        onClick={handleNewChunk}
+      >
+        <Add />
+      </IndabaButton>
     </Box>
   );
 };

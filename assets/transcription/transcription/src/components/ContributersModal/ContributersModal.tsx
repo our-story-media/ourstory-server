@@ -11,8 +11,6 @@ import React, { useMemo } from "react";
 
 // Internal Dependencies
 import {
-  Time,
-  parseChunkTimeStamps,
   listContributions,
   getNameOf,
   toShortTimeStamp,
@@ -29,29 +27,10 @@ const ContributerListModal: React.FC<{
   exit: () => void;
   chunks: Chunk[];
 }> = ({ show, exit, chunks }) => {
-  /**
-   * Helper function to get a nicely formatted time
-   *
-   * @param time the time to get a well formatted string for
-   * @param format the current formatted string, this is just for passing down
-   * recursively
-   */
-  const formatTime = (time: Time, format: string): string =>
-    time.hours
-      ? formatTime({ ...time, hours: 0 }, `${time.hours}hrs `)
-      : time.minutes
-      ? formatTime({ ...time, minutes: 0 }, `${format} ${time.minutes}mins `)
-      : time.seconds
-      ? formatTime({ ...time, seconds: 0 }, `${format} ${time.seconds}secs`)
-      : format === ""
-      ? "0secs"
-      : format;
-
   const ContributionDescription: React.FC<{
     chunk: Chunk;
     type: "chunk" | "transcription" | "review";
   }> = ({ type, chunk }) => {
-    const startEnd = parseChunkTimeStamps(chunk);
     const typeDescription = (type: "chunk" | "transcription" | "review") => {
       switch (type) {
         case "chunk":

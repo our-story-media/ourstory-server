@@ -1,6 +1,12 @@
 // External Dependencies
 import { Box, Container, TextField } from "@material-ui/core";
-import React, { ReactNode, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 // Internal Dependencies
 import oneSatisfies from "../../utils/oneSatisfies";
@@ -14,6 +20,9 @@ import useSlideshow from "../../hooks/useSlideshow";
 import { useUpdateTranscription } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 import Slideshow from "../Slideshow/Slideshow";
+import SimpleCard from "../SimpleCard/SimpleCard";
+import IndabaButton from "../IndabaButton/IndabaButton";
+import { FileCopy } from "@material-ui/icons";
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
@@ -63,11 +72,14 @@ const Transcriber: React.FC<TranscriberProps> = ({
   const inputRef = useRef(null);
 
   useEffect(() => {
-    (inputRef.current ? inputRef.current as any : { focus: () => null }).focus()
+    (inputRef.current
+      ? (inputRef.current as any)
+      : { focus: () => null }
+    ).focus();
   }, [page]);
 
   return (
-    <Container>
+    <div>
       {backButton}
       {chunks.length && (
         <>
@@ -77,37 +89,62 @@ const Transcriber: React.FC<TranscriberProps> = ({
               controller={controller}
             />
           </Box>
-          <Slideshow
-            onNavBack={() => {
-              userName &&
-                updateTranscription(chunks[page], transcription, userName);
-              goTo("prev");
-            }}
-            onNavForward={() => {
-              userName &&
-                updateTranscription(chunks[page], transcription, userName);
-              goTo("next");
-            }}
-            currentPage={page}
-            numberOfPages={chunks.length}
-          >
-            <ChunkCard chunk={chunks[page]}>
-              <TextField
-                autoFocus
-                multiline
-                inputRef={inputRef}
-                className={classes.inputField}
-                variant="outlined"
-                rows={3}
-                label="Transcription"
-                value={transcription}
-                onChange={(e) => setTranscription(e.target.value)}
-              />
-            </ChunkCard>
-          </Slideshow>
+          <div>
+            <Slideshow
+              onNavBack={() => {
+                userName &&
+                  updateTranscription(chunks[page], transcription, userName);
+                goTo("prev");
+              }}
+              onNavForward={() => {
+                userName &&
+                  updateTranscription(chunks[page], transcription, userName);
+                goTo("next");
+              }}
+              currentPage={page}
+              numberOfPages={chunks.length}
+            >
+              <ChunkCard chunk={chunks[page]}>
+                <TextField
+                  autoFocus
+                  multiline
+                  inputRef={inputRef}
+                  className={classes.inputField}
+                  variant="outlined"
+                  rows={3}
+                  label="Transcription"
+                  value={transcription}
+                  onChange={(e) => setTranscription(e.target.value)}
+                />
+              </ChunkCard>
+            </Slideshow>
+            <div>
+              {chunks[page].transcriptions
+                .filter((transcription) => transcription.creatorid !== userName)
+                .map((transcription) => (
+                  <SimpleCard
+                    key={transcription.creatorid}
+                    title={
+                      <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div style={{ fontSize: "1.2rem" }}>
+                          <span style={{ fontWeight: "bold" }}>Author:</span>
+                          {transcription.creatorid}
+                        </div>
+                        <IndabaButton style={{padding: "0px", height: "32px", width: "32px", minWidth: "32px"}}>
+                          <FileCopy fontSize="small" />
+                        </IndabaButton>
+                      </div>
+                    }
+                    style={{ margin: "16px 0 16px 0" }}
+                  >
+                    {transcription.content}
+                  </SimpleCard>
+                ))}
+            </div>
+          </div>
         </>
       )}
-    </Container>
+    </div>
   );
 };
 

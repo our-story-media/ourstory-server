@@ -26,13 +26,17 @@ const Header: React.FC<HeaderProps> = ({
 
   const contextMenuButtonRef = useRef(null);
 
-  const [showContextMenu, toggleShowContextMenu, setShowContextMenu] = useToggle(false);
+  const [
+    showContextMenu,
+    toggleShowContextMenu,
+    setShowContextMenu,
+  ] = useToggle(false);
 
   const hideContextMenu = () => setShowContextMenu(false);
 
   return (
     <>
-      <Container>
+      <Container style={{ height: "calc(100vh - 5px)", marginTop: "5px", display: "flex", flexDirection: "column" }}>
         <div className={classes.titleRow}>
           <div className={classes.logoContainer}>
             <img src={Logo} alt="logo" width="120px" height="36px" />
@@ -57,8 +61,8 @@ const Header: React.FC<HeaderProps> = ({
           />
         </div>
         <Divider />
+        {children}
       </Container>
-      {children}
     </>
   );
 };
