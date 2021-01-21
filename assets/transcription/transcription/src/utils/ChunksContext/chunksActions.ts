@@ -245,6 +245,19 @@ export const useDeleteReview = () => {
   };
 };
 
+const renameChunk = (newName: string, chunk: Chunk): Chunk =>
+  newName !== "" ? { ...chunk, name: newName } : { ...chunk, name: undefined };
+
+/**
+ * Hook for getting a function for cropping a chunk
+ * 
+ * This involves modifying the start and end times
+ * of the cropped chunk as well as the chunks on either
+ * side of the chunk.
+ * 
+ * The user may also, optionally, rename the chunk using
+ * this action
+ */
 export const useCropChunk = () => {
   const [, setChunks] = chunksContext.useChunksState();
 
@@ -252,7 +265,8 @@ export const useCropChunk = () => {
     toUpdate: Chunk,
     storyDuration: number,
     newSplit: [number, number],
-    userName: string
+    userName: string,
+    newName?: string,
   ) => {
     setChunks((chunks) => {
       const neighbouringChunks = getAdjacentChunks(toUpdate, chunks);
@@ -261,7 +275,7 @@ export const useCropChunk = () => {
           .map((chunk) =>
             chunk.id === toUpdate.id
               ? {
-                  ...chunk,
+                  ...(newName ? renameChunk(newName, chunk) : chunk),
                   starttimeseconds: newSplit[0],
                   starttimestamp: toTimeStamp(newSplit[0] * storyDuration),
                   endtimeseconds: newSplit[1],
@@ -323,11 +337,7 @@ export const useRenameChunk = () => {
   return (toUpdate: Chunk, newName: string) => {
     setChunks((chunks) =>
       chunks.map((chunk) =>
-        chunk.id === toUpdate.id
-          ? newName !== ""
-            ? { ...chunk, name: newName }
-            : { ...chunk, name: undefined }
-          : chunk
+        chunk.id === toUpdate.id ? renameChunk(newName, chunk) : chunk
       )
     );
   };

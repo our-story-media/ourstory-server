@@ -1,12 +1,7 @@
 import { Container } from "@material-ui/core";
-import React, {
-  useState,
-  useEffect,
-  ChangeEvent,
-  FormEvent,
-} from "react";
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import story_id from "../../utils/getId";
-import { Chunk } from "../../utils/types";
+import { Chunk, State } from "../../utils/types";
 import IndabaSlider from "../IndabaSlider/IndabaSlider";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
@@ -39,11 +34,13 @@ const CropThumbComponent: React.FC<{}> = (props) => {
 type ChunkCropperProps = {
   chunk: Chunk;
   storyDuration: number;
+  croppedSplitState: State<[number, number]>;
 };
 
 const ChunkCropper: React.FC<ChunkCropperProps> = ({
   chunk,
   storyDuration,
+  croppedSplitState,
 }) => {
   const {
     progressState: [cropPlayerProgress, setCropPlayerProgress],
@@ -51,7 +48,7 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
   } = useVideoPlayerController();
 
   const [videoSplit, setVideoSplit] = useState([0, 0] as [number, number]);
-  const [croppedSplit, setCroppedSplit] = useState([0, 0] as [number, number]);
+  const [croppedSplit, setCroppedSplit] = croppedSplitState;
 
   /* Set initial state based on props  */
   useEffect(() => {
@@ -64,7 +61,9 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
 
   return (
     <div>
-      <Container><h2 style={{margin: 0}}>Cropping:</h2></Container>
+      <Container>
+        <h2 style={{ margin: 0 }}>Cropping:</h2>
+      </Container>
       <VideoPlayer
         url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
         controller={cropPlayerController}

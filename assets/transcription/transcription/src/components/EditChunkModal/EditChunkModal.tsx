@@ -1,12 +1,13 @@
 // External Dependencies
 import { TextField } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { useRenameChunk } from "../../utils/ChunksContext/chunksActions";
+import React, { useContext, useEffect, useState } from "react";
+import { useCropChunk, useRenameChunk } from "../../utils/ChunksContext/chunksActions";
 
 // Internal Dependencies
 import { Chunk, State } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
 import ChunkCropper from "../ChunkEditor/ChunkCropper";
+import { UserContext } from "../UserProvider/UserProvider";
 
 const ChunkNameEditor: React.FC<{ nameState: State<string> }> = ({
   nameState: [name, setName],
@@ -34,19 +35,23 @@ const EditChunkModal: React.FC<{
     chunk && setName(chunk.name ? chunk.name : "");
   }, [chunk]);
 
-  const saveName = useRenameChunk();
+  const cropChunk = useCropChunk();
+
+  const [newCropSplit, setNewCropSplit] = useState<[number, number]>([0, 0]);
+
+  const { userName } = useContext(UserContext);
 
   return (
     <CentralModal
       exit={() => {
-        chunk && saveName(chunk, name);
+        chunk && userName && cropChunk(chunk, storyDuration, newCropSplit, userName, name);
         exit();
       }}
       open={shown}
       header={<ChunkNameEditor nameState={[name, setName]} />}
     >
       <div>
-        {chunk && <ChunkCropper storyDuration={storyDuration} chunk={chunk} />}
+        {chunk && <ChunkCropper croppedSplitState={[newCropSplit, setNewCropSplit]} storyDuration={storyDuration} chunk={chunk} />}
       </div>
     </CentralModal>
   );

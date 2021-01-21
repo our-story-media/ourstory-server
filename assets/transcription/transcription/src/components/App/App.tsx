@@ -1,14 +1,12 @@
 /**
  * TODO - 
+ * 
  *  - Colorize Chunks - only if adding the thumbnail isn't enough to identify each chunk
  *  - Add some sort of indicator to chunk cards if they have a transcription associated
  *    with them
  * 
  *  - Add a done/complete/finish transaction to each step
  *  - Consider locking Transcription step until done with chunking
- * 
- *  - List all other people's transcriptions below your transcription
- *  - Add ability to duplicate/copy other people's transcriptions
  * 
  *  - Add ability to edit during Review
  */
