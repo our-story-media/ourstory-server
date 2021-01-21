@@ -1,11 +1,6 @@
 // External Dependencies
 import { Box, TextField, Typography } from "@material-ui/core";
-import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 // Internal Dependencies
 import oneSatisfies from "../../utils/oneSatisfies";
@@ -26,6 +21,7 @@ import CentralModal from "../CentralModal/CentralModal";
 import WarningMessage from "../WarningMessage/WarningMessage";
 import BackButton from "../BackButton/BackButton";
 import useConfirmBeforeAction from "../../hooks/useConfirmBeforeAction";
+import useFirstRender from "../../hooks/useFirstRender";
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
@@ -50,7 +46,22 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
 
   const [transcription, setTranscription] = useState("");
 
-  const { page, goTo } = useSlideshow(chunks);
+  const { page, direction, goTo } = useSlideshow(chunks);
+
+  /*
+   * firstRender and this effect are used to update
+   * the transcription of the page everytime the page changes.
+   * (we don't want to do the effect on the first render)
+   */
+  const firstRender = useFirstRender();
+  useEffect(() => {
+    !firstRender && userName &&
+      updateTranscription(
+        chunks[page + (direction === "next" ? -1 : 1)],
+        transcription,
+        userName
+      );
+  }, [page, direction]);
 
   useEffect(() => {
     userName && setTranscription(getUsersTranscription(chunks[page], userName));
@@ -74,25 +85,30 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     ).focus();
   }, [page]);
 
-  const overrideTranscription = (oldTranscription: string, newTranscription: string) => setTranscription(newTranscription);
+  const overrideTranscription = (
+    oldTranscription: string,
+    newTranscription: string
+  ) => setTranscription(newTranscription);
 
   const {
     attemptingActionWith: attemptingTranscriptionChangeWith,
     attemptAction: tryCopyTranscription,
     cancelAction: cancelCopyTranscription,
-    confirmAction: confirmCopyTranscription
-  } = useConfirmBeforeAction(overrideTranscription, (oldTranscription) => oldTranscription !== "");
+    confirmAction: confirmCopyTranscription,
+  } = useConfirmBeforeAction(
+    overrideTranscription,
+    (oldTranscription) => oldTranscription !== ""
+  );
+
+  const exitHandler = () => {
+    userName && updateTranscription(chunks[page], transcription, userName);
+    atExit();
+  };
 
   return (
     <div>
-      <div style={{marginTop: "4px"}}>
-        <BackButton
-          action={() => {
-            userName &&
-              updateTranscription(chunks[page], transcription, userName);
-            atExit();
-          }}
-        />
+      <div style={{ marginTop: "4px" }}>
+        <BackButton action={exitHandler} />
       </div>
       {chunks.length && (
         <>
@@ -127,19 +143,10 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
           </Box>
           <div>
             <Slideshow
-              onNavBack={() => {
-                userName &&
-                  updateTranscription(chunks[page], transcription, userName);
-                goTo("prev");
-              }}
-              onNavForward={() => {
-                userName &&
-                  updateTranscription(chunks[page], transcription, userName);
-                goTo("next");
-              }}
+              onNavigate={goTo}
               currentPage={page}
               numberOfPages={chunks.length}
-              onComplete={atExit}
+              onComplete={exitHandler}
             >
               <ChunkCard chunk={chunks[page]}>
                 <TextField

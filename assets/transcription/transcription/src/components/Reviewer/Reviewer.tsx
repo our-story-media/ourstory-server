@@ -93,8 +93,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
       </Box>
       <Slideshow
         currentPage={page}
-        onNavForward={() => goTo("next")}
-        onNavBack={() => goTo("prev")}
+        onNavigate={goTo}
         numberOfPages={chunksToReview.length}
         onComplete={atExit}
       >

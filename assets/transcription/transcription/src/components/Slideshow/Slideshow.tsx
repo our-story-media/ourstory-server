@@ -5,8 +5,7 @@ import IndabaButton from "../IndabaButton/IndabaButton";
 import useStyles from "./SlideshowStyles";
 
 type SlideshowProps = {
-  onNavBack?: () => void;
-  onNavForward?: () => void;
+  onNavigate: (direction: "next" | "prev") => void;
   currentPage: number;
   numberOfPages: number;
   style?: any;
@@ -14,8 +13,7 @@ type SlideshowProps = {
 };
 
 const Slideshow: React.FC<SlideshowProps> = ({
-  onNavBack,
-  onNavForward,
+  onNavigate,
   onComplete,
   currentPage,
   numberOfPages,
@@ -31,12 +29,12 @@ const Slideshow: React.FC<SlideshowProps> = ({
         aria-label="Previous"
         style={{ color: "#FFFFFF", alignSelf: "flex-start", marginTop: "32px" }}
         disabled={currentPage === 0}
-        onClick={() => onNavBack && onNavBack()}
+        onClick={() => onNavigate("prev")}
       >
         <NavigateBefore />
       </IndabaButton>
       <Box className={classes.slideshowContentContainer}>{children}</Box>
-      {(onComplete && currentPage === numberOfPages - 1) ? (
+      {onComplete && currentPage === numberOfPages - 1 ? (
         <IndabaButton
           round
           aria-label="Complete"
@@ -60,7 +58,7 @@ const Slideshow: React.FC<SlideshowProps> = ({
             marginTop: "32px",
           }}
           disabled={currentPage === numberOfPages - 1}
-          onClick={() => onNavForward && onNavForward()}
+          onClick={() => onNavigate("next")}
         >
           <NavigateNext />
         </IndabaButton>
