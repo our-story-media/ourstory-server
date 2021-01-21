@@ -1,5 +1,5 @@
 // External Dependencies
-import { Box, Container, TextField } from "@material-ui/core";
+import { Box, TextField, Typography } from "@material-ui/core";
 import React, {
   ReactNode,
   useContext,
@@ -23,6 +23,8 @@ import Slideshow from "../Slideshow/Slideshow";
 import SimpleCard from "../SimpleCard/SimpleCard";
 import IndabaButton from "../IndabaButton/IndabaButton";
 import { FileCopy } from "@material-ui/icons";
+import CentralModal from "../CentralModal/CentralModal";
+import WarningMessage from "../WarningMessage/WarningMessage";
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
@@ -78,11 +80,46 @@ const Transcriber: React.FC<TranscriberProps> = ({
     ).focus();
   }, [page]);
 
+  // This is the state for the transcription copy confirmation modal
+  const [contentAttemptingToCopy, setContentAttemptingToCopy] = useState("");
+
+  const handleAttemptCopy = (toCopy: string) => {
+    transcription === ""
+      ? setTranscription(toCopy)
+      : setContentAttemptingToCopy(toCopy);
+  };
+
   return (
     <div>
       {backButton}
       {chunks.length && (
         <>
+          <CentralModal
+            exit={() => setContentAttemptingToCopy("")}
+            header={
+              <WarningMessage message={"You Will Lose Your Transcription"} />
+            }
+            open={contentAttemptingToCopy !== ""}
+          >
+            <div>
+              Duplicating this transcription will discard your current
+              transcription! Are you sure you want to discard your
+              transcription?
+              <br />
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <IndabaButton
+                  style={{ marginTop: "8px" }}
+                  onClick={() => {
+                    setTranscription(contentAttemptingToCopy);
+                    setContentAttemptingToCopy("");
+                  }}
+                >
+                  <FileCopy fontSize="large" style={{ marginRight: "8px" }} />
+                  <Typography variant="subtitle1">Confirm</Typography>
+                </IndabaButton>
+              </div>
+            </div>
+          </CentralModal>
           <Box className={classes.videoPlayerContainer}>
             <VideoPlayer
               url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
@@ -125,12 +162,27 @@ const Transcriber: React.FC<TranscriberProps> = ({
                   <SimpleCard
                     key={transcription.creatorid}
                     title={
-                      <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
                         <div style={{ fontSize: "1.2rem" }}>
                           <span style={{ fontWeight: "bold" }}>Author:</span>
                           {transcription.creatorid}
                         </div>
-                        <IndabaButton style={{padding: "0px", height: "32px", width: "32px", minWidth: "32px"}}>
+                        <IndabaButton
+                          onClick={() =>
+                            handleAttemptCopy(transcription.content)
+                          }
+                          style={{
+                            padding: "0px",
+                            height: "32px",
+                            width: "32px",
+                            minWidth: "32px",
+                          }}
+                        >
                           <FileCopy fontSize="small" />
                         </IndabaButton>
                       </div>

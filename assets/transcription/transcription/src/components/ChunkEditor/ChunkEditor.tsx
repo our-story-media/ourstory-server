@@ -46,6 +46,7 @@ import CentralModal from "../CentralModal/CentralModal";
 import { getNameOf, hasTranscription } from "../../utils/chunkManipulation";
 import EditChunkModal from "../EditChunkModal/EditChunkModal";
 import VideoThumbnail from "../VideoPlayer/VideoThumbnail";
+import WarningMessage from "../WarningMessage/WarningMessage";
 
 /* Given a stateful list of elements,
  * watches for new elements and calls
@@ -189,14 +190,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
       <CentralModal
         open={attemptingToDeleteChunk !== undefined}
         exit={() => setAttemptingToDeleteChunk(undefined)}
-        header={
-          <h2 style={{ margin: 0 }}>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Warning style={{ marginRight: "8px" }} fontSize="large" /> This
-              Chunk has a transcription
-            </div>
-          </h2>
-        }
+        header={<WarningMessage message="This Chunk has a transcription" />}
       >
         <div>
           Attempting to delete chunk
