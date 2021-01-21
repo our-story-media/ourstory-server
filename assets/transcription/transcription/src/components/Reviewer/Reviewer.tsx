@@ -1,6 +1,6 @@
 import { Box, Checkbox, makeStyles, Typography } from "@material-ui/core";
 import { Done, Edit } from "@material-ui/icons";
-import React, { useMemo, useContext, useEffect, useState, useRef } from "react";
+import React, { useMemo, useContext, useEffect, useState } from "react";
 import useSlideshow from "../../hooks/useSlideshow";
 import { hasTranscription } from "../../utils/chunkManipulation";
 import {
@@ -53,15 +53,21 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
 
   const { page, goTo } = useSlideshow(chunksToReview);
 
-  const currentChunk = useMemo(() => chunksToReview[page], [
-    page,
-    chunksToReview,
-  ]);
+  const currentChunk = useMemo(
+    /**
+     * Here, if the chunks to review array is empty, we use a dummy chunk,
+     * as we are about to exit, and if we set it to undefined we will crash
+     */
+    () => (chunksToReview.length === 0 ? chunks[0] : chunksToReview[page]),
+    [page, chunksToReview, chunks]
+  );
 
-  const [
-    noTranscriptionsForCurrentChunk,
-    setNoTranscriptionsForCurrentChunk,
-  ] = useState(false);
+  /** If the chunks to review array is empty, exit */
+  useEffect(() => {
+    if (chunksToReview.length === 0) {
+      atExit();
+    }
+  }, [chunksToReview, atExit]);
 
   useEffect(() => {
     setSplit({
@@ -69,12 +75,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
       end: currentChunk.endtimeseconds,
     });
     setProgress(currentChunk.starttimeseconds);
-    const noTranscriptions = currentChunk.transcriptions.reduce(
-      (acc, el) => (acc ? el.content.length === 0 : acc),
-      true
-    );
-    setNoTranscriptionsForCurrentChunk(noTranscriptions);
-  }, [page]);
+  }, [page, chunks, currentChunk]);
 
   const updateReview = useUpdateReview();
   const deleteReview = useDeleteReview();
@@ -124,7 +125,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
             chunk={currentChunk}
             transcriptionState={[transcriptionEdit, setTranscriptionEdit]}
           />
-          <div style={{display: "flex", justifyContent: "center"}}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
             <IndabaButton
               onClick={() => {
                 editingTranscription &&
@@ -164,45 +165,54 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
         onComplete={atExit}
       >
         <ChunkCard chunk={currentChunk}>
-          {(noTranscriptionsForCurrentChunk &&
-            "No Transcriptions for this chunk yet") ||
-            currentChunk.transcriptions.map(
-              (transcription) =>
-                transcription.content && (
-                  <Box key={transcription.id} className={classes.cardContainer}>
-                    <SimpleCard
-                      title={
-                        <div
+          {currentChunk.transcriptions.map(
+            (transcription) =>
+              transcription.content && (
+                <Box key={transcription.id} className={classes.cardContainer}>
+                  <SimpleCard
+                    title={
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <div style={{ fontSize: "1.2rem" }}>
+                          <span style={{ fontWeight: "bold" }}>Author:</span>
+                          {` ${transcription.creatorid}`}
+                        </div>
+                        <IndabaButton
+                          onClick={() => setEditingTranscription(transcription)}
                           style={{
-                            display: "flex",
-                            justifyContent: "space-between",
+                            padding: "0px",
+                            height: "32px",
+                            width: "32px",
+                            minWidth: "32px",
                           }}
                         >
-                          <div style={{ fontSize: "1.2rem" }}>
-                            <span style={{ fontWeight: "bold" }}>Author:</span>
-                            {` ${transcription.creatorid}`}
-                          </div>
-                          <IndabaButton
-                            onClick={() =>
-                              setEditingTranscription(transcription)
-                            }
-                            style={{
-                              padding: "0px",
-                              height: "32px",
-                              width: "32px",
-                              minWidth: "32px",
-                            }}
-                          >
-                            <Edit fontSize="small" />
-                          </IndabaButton>
-                        </div>
+                          <Edit fontSize="small" />
+                        </IndabaButton>
+                      </div>
+                    }
+                  >
+                    <div
+                      onClick={() =>
+                        userName &&
+                        (currentChunk.review?.selectedtranscription !==
+                        transcription.id
+                          ? updateReview(currentChunk, transcription, userName)
+                          : deleteReview(currentChunk))
                       }
+                      style={{ display: "flex", flexDirection: "row" }}
                     >
-                      <div
-                        onClick={() =>
-                          userName &&
-                          (currentChunk.review?.selectedtranscription !==
+                      <Checkbox
+                        checked={
+                          currentChunk.review?.selectedtranscription ===
                           transcription.id
+                        }
+                        onChange={(_, checked) =>
+                          userName &&
+                          (checked
                             ? updateReview(
                                 currentChunk,
                                 transcription,
@@ -210,33 +220,16 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
                               )
                             : deleteReview(currentChunk))
                         }
-                        style={{ display: "flex", flexDirection: "row" }}
-                      >
-                        <Checkbox
-                          checked={
-                            currentChunk.review?.selectedtranscription ===
-                            transcription.id
-                          }
-                          onChange={(_, checked) =>
-                            userName &&
-                            (checked
-                              ? updateReview(
-                                  currentChunk,
-                                  transcription,
-                                  userName
-                                )
-                              : deleteReview(currentChunk))
-                          }
-                          style={{ backgroundColor: "initial" }}
-                        />
-                        <Typography style={{ padding: "8px" }}>
-                          {transcription.content}
-                        </Typography>
-                      </div>
-                    </SimpleCard>
-                  </Box>
-                )
-            )}
+                        style={{ backgroundColor: "initial" }}
+                      />
+                      <Typography style={{ padding: "8px" }}>
+                        {transcription.content}
+                      </Typography>
+                    </div>
+                  </SimpleCard>
+                </Box>
+              )
+          )}
         </ChunkCard>
       </Slideshow>
     </div>
