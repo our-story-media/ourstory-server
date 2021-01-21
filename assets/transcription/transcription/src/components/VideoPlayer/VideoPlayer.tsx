@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Mark,
-  Slider,
   SliderProps,
   Typography,
 } from "@material-ui/core";

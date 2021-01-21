@@ -2,13 +2,11 @@
 import {
   Container,
   Typography,
-  Divider,
   GridList,
   GridListTile,
   List,
   ListItem,
 } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
 import React, { useMemo } from "react";
 
 // Internal Dependencies
@@ -24,7 +22,6 @@ import {
 import { Contribution, Chunk } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
 import FlatPaper from "../FlatPaper/FlatPaper";
-import IndabaButton from "../IndabaButton/IndabaButton";
 import SimpleCard from "../SimpleCard/SimpleCard";
 
 const ContributerListModal: React.FC<{
@@ -55,7 +52,6 @@ const ContributerListModal: React.FC<{
     type: "chunk" | "transcription" | "review";
   }> = ({ type, chunk }) => {
     const startEnd = parseChunkTimeStamps(chunk);
-    const chunkDescription = formatTime(startEnd.start, "");
     const typeDescription = (type: "chunk" | "transcription" | "review") => {
       switch (type) {
         case "chunk":

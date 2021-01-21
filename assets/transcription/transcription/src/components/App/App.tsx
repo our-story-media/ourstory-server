@@ -1,7 +1,7 @@
 /**
  * TODO - 
- *  - Animate in new chunk (or a snack bar when a new chunk is created)
- *  - Colorize Chunks
+ *  - Add a thumbnail to each chunk
+ *  - Colorize Chunks - only if adding the thumbnail isn't enough to identify each chunk
  *  - When trying to delete a chunk, check if it has a transcription and warn before deletion
  * 
  *  - Add a done/complete/finish transaction to each step

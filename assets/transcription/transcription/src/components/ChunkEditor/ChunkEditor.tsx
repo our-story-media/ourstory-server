@@ -45,6 +45,7 @@ import { Chunk } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
 import { getNameOf, hasTranscription } from "../../utils/chunkManipulation";
 import EditChunkModal from "../EditChunkModal/EditChunkModal";
+import VideoThumbnail from "../VideoPlayer/VideoThumbnail";
 
 /* Given a stateful list of elements,
  * watches for new elements and calls
@@ -141,6 +142,9 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
     undefined
   );
 
+  /* We use these for auto scrolling to the new chunks,
+   * as they are created
+   */
   const [newEl, setNewEl] = useState("");
   const newElRef = useRef<any>();
 
@@ -230,6 +234,15 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ backButton }) => {
           {chunks.map((c, idx) => (
             <GridListTile key={c.id} ref={c.id === newEl ? newElRef : null}>
               <ChunkCard chunk={c}>
+                <div style={{margin: "4px"}}>
+                  <VideoThumbnail
+                    url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
+                    time={
+                      c.starttimeseconds +
+                      (c.endtimeseconds - c.starttimeseconds) / 2
+                    }
+                  />
+                </div>{" "}
                 <IndabaButton
                   round
                   color="primary"
