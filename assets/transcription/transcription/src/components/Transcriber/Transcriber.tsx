@@ -19,9 +19,12 @@ import { FileCopy } from "@material-ui/icons";
 import CentralModal from "../CentralModal/CentralModal";
 import WarningMessage from "../WarningMessage/WarningMessage";
 import BackButton from "../BackButton/BackButton";
-import useConfirmBeforeAction, { NotAttemptingAction } from "../../hooks/useConfirmBeforeAction";
+import useConfirmBeforeAction, {
+  NotAttemptingAction,
+} from "../../hooks/useConfirmBeforeAction";
 import useFirstRender from "../../hooks/useFirstRender";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
+import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
@@ -39,6 +42,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
   const {
     progressState: [, setProgress],
     splitState: [, setSplit],
+    duration,
     controller,
   } = useVideoPlayerController();
 
@@ -124,7 +128,9 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
             header={
               <WarningMessage message={"You Will Lose Your Transcription"} />
             }
-            open={attemptingTranscriptionChangeWith !== NotAttemptingAction.True}
+            open={
+              attemptingTranscriptionChangeWith !== NotAttemptingAction.True
+            }
           >
             <div>
               Duplicating this transcription will discard your current
@@ -155,7 +161,11 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
               numberOfPages={chunks.length}
               onComplete={exitHandler}
             >
-              <EditTranscriptionCard inputRef={inputRef} chunk={currentChunk} transcriptionState={[transcription, setTranscription]} />
+              <EditTranscriptionCard
+                inputRef={inputRef}
+                chunk={currentChunk}
+                transcriptionState={[transcription, setTranscription]}
+              />
             </Slideshow>
             <div>
               {otherUsersTranscriptions.map((t) => (
@@ -196,6 +206,22 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
           </div>
         </>
       )}
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          bottom: 0,
+        }}
+      >
+        <SkipForwardBackButtons
+          skipForward={() =>
+            duration && setProgress((progress) => progress + 5 / duration)
+          }
+          skipBackward={() =>
+            duration && setProgress((progress) => progress - 5 / duration)
+          }
+        />
+      </div>
     </div>
   );
 };

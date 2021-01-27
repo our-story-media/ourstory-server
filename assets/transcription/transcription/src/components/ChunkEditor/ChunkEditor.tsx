@@ -4,11 +4,9 @@ import {
   Check,
   Delete,
   Edit,
-  Forward5,
   Pause,
   PlayArrow,
   Receipt,
-  Replay5,
 } from "@material-ui/icons";
 import React, {
   useCallback,
@@ -48,6 +46,7 @@ import useConfirmBeforeAction from "../../hooks/useConfirmBeforeAction";
 import useWatchForNewElements from "../../hooks/useWatchForNewElements";
 import ConfirmIntentModal from "../ConfirmIntentModal/ConfirmIntentModal";
 import TranscriptionsModal from "../TranscriptionsModal/TranscriptionsModal";
+import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
 
 type ChunkEditorProps = {
   /** Action to do when back button is pressed */
@@ -304,26 +303,14 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
             position: "absolute",
             left: 0,
             bottom: 0,
-            margin: "16px 16px 32px 16px",
-            display: "flex",
           }}
         >
-          <IndabaButton
-            round
-            aria-label="Go Back"
-            style={{ margin: "8px" }}
-            onClick={() => duration && setProgress(progress - 5 / duration)}
-          >
-            <Replay5 />
-          </IndabaButton>
-          <IndabaButton
-            round
-            aria-label="Go Forward"
-            style={{ margin: "8px" }}
-            onClick={() => duration && setProgress(progress + 5 / duration)}
-          >
-            <Forward5 />
-          </IndabaButton>
+          <SkipForwardBackButtons
+            skipForward={() => duration && setProgress((progress) => progress + 5 / duration)}
+            skipBackward={() =>
+              duration && setProgress((progress) => progress - 5 / duration)
+            }
+          />
         </div>
         <div
           style={{

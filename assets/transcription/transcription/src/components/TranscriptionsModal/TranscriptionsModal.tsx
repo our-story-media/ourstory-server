@@ -26,7 +26,7 @@ const TranscriptionsModal: React.FC<TranscriptionsModalProps> = ({ chunk, exit }
       <div>
         {chunk &&
           chunk.transcriptions.map((transcription) => (
-            <SimpleCard title={<b>{transcription.creatorid}</b>}>
+            <SimpleCard key={transcription.id} title={<b>{transcription.creatorid}</b>}>
               {transcription.content}
             </SimpleCard>
           ))}
