@@ -17,7 +17,7 @@ const NameModal: React.FC<NameModalProps> = ({ show, setName }) => {
     <CentralModal open={show}>
       <div>
         <Typography variant="subtitle1">
-          Please enter your name before performing transcription.
+          Please enter your name before performing transcription:
         </Typography>
         <SimpleInputForm
           placeholder="my name"

@@ -1,8 +1,14 @@
 import { makeStyles } from "@material-ui/core";
-import { getNameOf, secondsOf, toShortTimeStamp } from "../../utils/chunkManipulation";
+import {
+  getNameOf,
+  secondsOf,
+  toShortTimeStamp,
+} from "../../utils/chunkManipulation";
 import { Chunk } from "../../utils/types";
 import SimpleCard from "./SimpleCard";
 import { parseChunkTimeStamps } from "../../utils/chunkManipulation";
+import React from "react";
+import { Receipt } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   titleContainer: {
@@ -10,7 +16,11 @@ const useStyles = makeStyles({
   },
 });
 
-const ChunkCard: React.FC<{ chunk: Chunk, style?: any }> = ({ chunk, children, style }) => {
+const ChunkCard: React.FC<{ chunk: Chunk; style?: any }> = ({
+  chunk,
+  children,
+  style,
+}) => {
   const classes = useStyles();
   const startEnd = parseChunkTimeStamps(chunk);
 
@@ -21,9 +31,15 @@ const ChunkCard: React.FC<{ chunk: Chunk, style?: any }> = ({ chunk, children, s
     <SimpleCard
       title={
         <span className={classes.titleContainer}>
-          <span style={{fontWeight: 600}}>{getNameOf(chunk)}</span>
+          {chunk.transcriptions.length !== 0 ? (
+            <Receipt style={{ position: "absolute", top: 0, right: 0, margin: "8px" }} />
+          ) : undefined}
           <br />
-          {`${toShortTimeStamp(startSeconds)} - ${toShortTimeStamp(endSeconds)}`}
+          <span style={{ fontWeight: 600 }}>{getNameOf(chunk)}</span>
+          <br />
+          {`${toShortTimeStamp(startSeconds)} - ${toShortTimeStamp(
+            endSeconds
+          )}`}
         </span>
       }
       style={style}

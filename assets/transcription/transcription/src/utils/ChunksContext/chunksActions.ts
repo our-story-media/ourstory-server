@@ -96,7 +96,7 @@ export const useNewChunk = () => {
       return;
     }
     const enclosingChunk = getEnclosingChunk(chunks, splitAt);
-    if (enclosingChunk != null) {
+    if (enclosingChunk !== undefined) {
       setChunks((chunks) =>
         chunks
           .filter((c) => c.id !== enclosingChunk.id)

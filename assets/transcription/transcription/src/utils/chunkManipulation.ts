@@ -75,12 +75,12 @@ export const getLastEndTimeSeconds = (chunks: Chunk[]): number =>
 export const getEnclosingChunk = (
   chunks: Chunk[],
   time: number
-): Chunk | null => {
+): Chunk | undefined => {
   for (var i = 0; i < chunks.length; i++) {
     if (time > chunks[i].starttimeseconds && time < chunks[i].endtimeseconds)
       return chunks[i];
   }
-  return null;
+  return undefined;
 };
 
 /**

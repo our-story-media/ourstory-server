@@ -1,5 +1,7 @@
 import { useState, useCallback } from "react";
 
+export enum NotAttemptingAction { True }
+
 /**
  * This hook allows the caller to insert some functionality before an
  * action is performed. It's main use case is to allow a confirmation
@@ -24,7 +26,7 @@ const useConfirmBeforeAction = <T extends any[]>(
    * attempted - any time the action has been attempted, this won't be
    * undefined (unless the action was attempted with undefined)
    */
-  attemptingActionWith: undefined | T;
+  attemptingActionWith: NotAttemptingAction | T;
   /**
    * Cancel the action - effectively making the original call to
    * attemptAction() a no-op
@@ -41,19 +43,19 @@ const useConfirmBeforeAction = <T extends any[]>(
   confirmAction: () => void;
 } => {
   const [attemptingActionWith, setAttemptingActionWith] = useState<
-    undefined | T
-  >(undefined);
+    NotAttemptingAction | T
+  >(NotAttemptingAction.True);
 
   const confirmAction = useCallback(() => {
-    if (attemptingActionWith !== undefined) {
+    if (attemptingActionWith !== NotAttemptingAction.True) {
       action(...attemptingActionWith);
-      setAttemptingActionWith(undefined);
+      setAttemptingActionWith(NotAttemptingAction.True);
     }
   }, [attemptingActionWith, action]);
 
   return {
     attemptingActionWith,
-    cancelAction: () => setAttemptingActionWith(undefined),
+    cancelAction: () => setAttemptingActionWith(NotAttemptingAction.True),
     attemptAction: (...args: T) =>
       condition(...args) ? setAttemptingActionWith(args) : action(...args),
     confirmAction,

@@ -42,6 +42,7 @@ import IndabaButton from "../IndabaButton/IndabaButton";
 import { Chunk } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
 import {
+  getEnclosingChunk,
   getLastEndTimeSeconds,
   getNameOf,
   hasTranscription,
@@ -50,7 +51,7 @@ import EditChunkModal from "../EditChunkModal/EditChunkModal";
 import VideoThumbnail from "../VideoPlayer/VideoThumbnail";
 import WarningMessage from "../WarningMessage/WarningMessage";
 import BackButton from "../BackButton/BackButton";
-import useConfirmBeforeAction from "../../hooks/useConfirmBeforeAction";
+import useConfirmBeforeAction, { NotAttemptingAction } from "../../hooks/useConfirmBeforeAction";
 
 /* Given a stateful list of elements,
  * watches for new elements and calls
@@ -172,9 +173,26 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
 
   const doWithChunks = useDoWithChunks();
 
+  const createNewChunk = (
+    chunks: Chunk[],
+    splitAt: number,
+    storyDuration: number,
+    userName: string
+  ) => newChunk(splitAt, storyDuration, userName);
+
+  const {
+    attemptAction: attemptNewChunk,
+    cancelAction: cancelAttemptNewChunk,
+    attemptingActionWith: attemptNewChunkArgs,
+    confirmAction: confirmNewChunk,
+  } = useConfirmBeforeAction(createNewChunk, (chunks, time) => {
+    const enclosingChunk = getEnclosingChunk(chunks, time);
+    return enclosingChunk !== undefined && hasTranscription(enclosingChunk);
+  });
+
   const handleNewChunk = () => {
     if (userName) {
-      newChunk(progress, duration, userName);
+      attemptNewChunk(chunks, progress, duration, userName);
     }
   };
 
@@ -188,11 +206,10 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
 
   const {
     attemptAction: attemptToDeleteChunk,
-    cancelAction: cancelDeletAttempt,
+    cancelAction: cancelDeleteAttempt,
     attemptingActionWith: chunkAttemptingToDeleteArray,
     confirmAction: confirmDeletion,
   } = useConfirmBeforeAction(deleteChunk, (chunk) => hasTranscription(chunk));
-
   /**
    * This unpacks the chunk from the list of parameters attemptToDeleteChunk
    * was called with, for convenience
@@ -215,8 +232,8 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
         storyDuration={duration}
       />
       <CentralModal
-        open={chunkAttemptingToDelete !== undefined}
-        exit={() => cancelDeletAttempt()}
+        open={chunkAttemptingToDelete !== NotAttemptingAction.True}
+        exit={cancelDeleteAttempt}
         header={<WarningMessage message="This Chunk has a transcription" />}
       >
         <div>
@@ -230,6 +247,26 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
             <IndabaButton
               style={{ marginTop: "8px" }}
               onClick={confirmDeletion}
+            >
+              <Delete fontSize="large" style={{ marginRight: "8px" }} />
+              <Typography variant="subtitle1">Confirm</Typography>
+            </IndabaButton>
+          </div>
+        </div>
+      </CentralModal>
+      <CentralModal
+        open={attemptNewChunkArgs !== NotAttemptingAction.True}
+        exit={cancelAttemptNewChunk}
+        header={<WarningMessage message="The enclosing chunks has a transcription" />}
+      >
+        <div>
+          Creating a new chunk here will delete the transcriptions on the
+          enclosing chunk, "{attemptNewChunkArgs && getNameOf(getEnclosingChunk(attemptNewChunkArgs[0], attemptNewChunkArgs[1]) ?? attemptNewChunkArgs[0][0])}". Are you sure you want to discard these
+          transcriptions?
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <IndabaButton
+              style={{ marginTop: "8px" }}
+              onClick={confirmNewChunk}
             >
               <Delete fontSize="large" style={{ marginRight: "8px" }} />
               <Typography variant="subtitle1">Confirm</Typography>
