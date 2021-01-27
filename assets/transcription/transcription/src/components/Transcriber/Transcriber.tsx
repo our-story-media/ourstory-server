@@ -154,7 +154,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
               controller={controller}
             />
           </Box>
-          <div>
+          <div style={{height: "50vh", overflow: "scroll"}}>
             <Slideshow
               onNavigate={goTo}
               currentPage={page}
@@ -199,7 +199,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
                   }
                   style={{ margin: "16px 0 16px 0" }}
                 >
-                  {t.content}
+                  <div style={{whiteSpace: "pre"}}>{t.content}</div>
                 </SimpleCard>
               ))}
             </div>

@@ -9,10 +9,13 @@ type TranscriptionsModalProps = {
    * When this is undefined, don't show the modal
    */
   chunk: Chunk | undefined;
-  exit: () => void
+  exit: () => void;
 };
 
-const TranscriptionsModal: React.FC<TranscriptionsModalProps> = ({ chunk, exit }) => {
+const TranscriptionsModal: React.FC<TranscriptionsModalProps> = ({
+  chunk,
+  exit,
+}) => {
   return (
     <CentralModal
       open={chunk !== undefined}
@@ -23,10 +26,14 @@ const TranscriptionsModal: React.FC<TranscriptionsModalProps> = ({ chunk, exit }
       }
       exit={exit}
     >
-      <div>
+      <div style={{height: "80vh", overflow: "scroll"}}>
         {chunk &&
           chunk.transcriptions.map((transcription) => (
-            <SimpleCard key={transcription.id} title={<b>{transcription.creatorid}</b>}>
+            <SimpleCard
+              key={transcription.id}
+              title={<b>{transcription.creatorid}</b>}
+              style={{ whiteSpace: "pre" }}
+            >
               {transcription.content}
             </SimpleCard>
           ))}
