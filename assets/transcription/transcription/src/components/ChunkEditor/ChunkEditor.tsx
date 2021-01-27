@@ -18,12 +18,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  Box,
-  GridList,
-  GridListTile,
-  Mark,
-} from "@material-ui/core";
+import { Box, GridList, GridListTile, Mark } from "@material-ui/core";
 
 // Internal Dependencies
 import ChunkCard from "../SimpleCard/ChunkCard";
@@ -40,7 +35,6 @@ import {
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 import IndabaButton from "../IndabaButton/IndabaButton";
 import { Chunk } from "../../utils/types";
-import CentralModal from "../CentralModal/CentralModal";
 import {
   getEnclosingChunk,
   getLastEndTimeSeconds,
@@ -51,9 +45,9 @@ import EditChunkModal from "../EditChunkModal/EditChunkModal";
 import VideoThumbnail from "../VideoPlayer/VideoThumbnail";
 import BackButton from "../BackButton/BackButton";
 import useConfirmBeforeAction from "../../hooks/useConfirmBeforeAction";
-import SimpleCard from "../SimpleCard/SimpleCard";
 import useWatchForNewElements from "../../hooks/useWatchForNewElements";
 import ConfirmIntentModal from "../ConfirmIntentModal/ConfirmIntentModal";
+import TranscriptionsModal from "../TranscriptionsModal/TranscriptionsModal";
 
 type ChunkEditorProps = {
   /** Action to do when back button is pressed */
@@ -81,16 +75,17 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
     controller: videoPlayerController,
   } = useVideoPlayerController();
 
-  const { userName } = useContext(UserContext);
-
   const [, setPlay] = playingState;
 
+  const marks = useMemo(() => getMarks(chunks), [chunks]);
+
+  const { userName } = useContext(UserContext);
+
+  const doWithChunks = useDoWithChunks();
   const deleteChunk = useDeleteChunk();
   const newChunk = useNewChunk();
 
   const classes = useStyles();
-
-  const marks = useMemo(() => getMarks(chunks), [chunks]);
 
   const [playingChunk, setPlayingChunk] = useState<undefined | number>(
     undefined
@@ -141,6 +136,14 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
     }
   );
 
+  useEffect(() => {
+    newElRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+      inline: "nearest",
+    });
+  }, [newEl]);
+
   const handleCompleteChunking = () => {
     getLastEndTimeSeconds(chunks) !== 1 &&
       userName &&
@@ -148,10 +151,8 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
     atExit();
   };
 
-  const doWithChunks = useDoWithChunks();
-
   const createNewChunk = (
-    chunks: Chunk[],
+    _: Chunk[],
     splitAt: number,
     storyDuration: number,
     userName: string
@@ -170,14 +171,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
       attemptNewChunk(chunks, progress, duration, userName);
     }
   };
-
-  useEffect(() => {
-    newElRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "end",
-      inline: "nearest",
-    });
-  }, [newEl]);
 
   const {
     attemptAction: attemptToDeleteChunk,
@@ -207,8 +200,8 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
         {(...args) => (
           <div>
             Attempting to delete chunk
-            {args[0] && ` "${getNameOf(args[0])}"`}, which has a
-            transcription saved to it. Are you sure you want to delete it?
+            {args[0] && ` "${getNameOf(args[0])}"`}, which has a transcription
+            saved to it. Are you sure you want to delete it?
           </div>
         )}
       </ConfirmIntentModal>
@@ -225,24 +218,10 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
           </div>
         )}
       </ConfirmIntentModal>
-      <CentralModal
-        open={showTranscriptionsFor !== undefined}
-        header={
-          <h2 style={{ margin: 0 }}>{`Transcriptions for "${
-            showTranscriptionsFor && getNameOf(showTranscriptionsFor)
-          }"`}</h2>
-        }
+      <TranscriptionsModal
+        chunk={showTranscriptionsFor}
         exit={() => setShowTranscriptionsFor(undefined)}
-      >
-        <div>
-          {showTranscriptionsFor &&
-            showTranscriptionsFor.transcriptions.map((transcription) => (
-              <SimpleCard title={<b>{transcription.creatorid}</b>}>
-                {transcription.content}
-              </SimpleCard>
-            ))}
-        </div>
-      </CentralModal>
+      />
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer
           controller={videoPlayerController}
