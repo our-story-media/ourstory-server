@@ -1,15 +1,3 @@
-/**
- * TODO -
- *
- *  - Colorize Chunks - only if adding the thumbnail isn't enough to identify each chunk
- *  - Add some sort of indicator to chunk cards if they have a transcription associated
- *    with them
- *
- *  - Consider locking Transcription step until done with chunking
- *
- *  - Add ability to edit during Review
- */
-
 // External Dependencies
 import React, { useState } from "react";
 

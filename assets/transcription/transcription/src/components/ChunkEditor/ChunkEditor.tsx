@@ -7,6 +7,7 @@ import {
   Forward5,
   Pause,
   PlayArrow,
+  Receipt,
   Replay5,
 } from "@material-ui/icons";
 import React, {
@@ -51,32 +52,11 @@ import EditChunkModal from "../EditChunkModal/EditChunkModal";
 import VideoThumbnail from "../VideoPlayer/VideoThumbnail";
 import WarningMessage from "../WarningMessage/WarningMessage";
 import BackButton from "../BackButton/BackButton";
-import useConfirmBeforeAction, { NotAttemptingAction } from "../../hooks/useConfirmBeforeAction";
-
-/* Given a stateful list of elements,
- * watches for new elements and calls
- * the callback everytime there's a
- * new element
- */
-const useWatchForNewElements = <T extends unknown>(
-  elements: T[],
-  identifier: (elOne: T, elTwo: T) => boolean,
-  action: (newElements: T[]) => void
-) => {
-  const [prevElements, setPrevElements] = useState([] as T[]);
-
-  useEffect(() => {
-    setPrevElements(elements);
-  }, []);
-
-  useEffect(() => {
-    const newElements = elements.filter(
-      (el) => !prevElements.find((prevEl) => identifier(prevEl, el))
-    );
-    action(newElements);
-    setPrevElements(elements);
-  }, [elements]);
-};
+import useConfirmBeforeAction, {
+  NotAttemptingAction,
+} from "../../hooks/useConfirmBeforeAction";
+import SimpleCard from "../SimpleCard/SimpleCard";
+import useWatchForNewElements from "../../hooks/useWatchForNewElements";
 
 type ChunkEditorProps = {
   /** Action to do when back button is pressed */
@@ -219,6 +199,8 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
     [chunkAttemptingToDeleteArray]
   );
 
+  const [showTranscriptionsFor, setShowTranscriptionsFor] = useState<Chunk | undefined>(undefined);
+
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
@@ -257,12 +239,21 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
       <CentralModal
         open={attemptNewChunkArgs !== NotAttemptingAction.True}
         exit={cancelAttemptNewChunk}
-        header={<WarningMessage message="The enclosing chunks has a transcription" />}
+        header={
+          <WarningMessage message="The enclosing chunks has a transcription" />
+        }
       >
         <div>
           Creating a new chunk here will delete the transcriptions on the
-          enclosing chunk, "{attemptNewChunkArgs && getNameOf(getEnclosingChunk(attemptNewChunkArgs[0], attemptNewChunkArgs[1]) ?? attemptNewChunkArgs[0][0])}". Are you sure you want to discard these
-          transcriptions?
+          enclosing chunk, "
+          {attemptNewChunkArgs &&
+            getNameOf(
+              getEnclosingChunk(
+                attemptNewChunkArgs[0],
+                attemptNewChunkArgs[1]
+              ) ?? attemptNewChunkArgs[0][0]
+            )}
+          ". Are you sure you want to discard these transcriptions?
           <div style={{ display: "flex", justifyContent: "center" }}>
             <IndabaButton
               style={{ marginTop: "8px" }}
@@ -272,6 +263,15 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
               <Typography variant="subtitle1">Confirm</Typography>
             </IndabaButton>
           </div>
+        </div>
+      </CentralModal>
+      <CentralModal open={showTranscriptionsFor !== undefined} header={<h2 style={{margin: 0}}>{`Transcriptions for "${showTranscriptionsFor && getNameOf(showTranscriptionsFor)}"`}</h2>} exit={() => setShowTranscriptionsFor(undefined)}>
+        <div>
+          {showTranscriptionsFor && showTranscriptionsFor.transcriptions.map((transcription) => (
+            <SimpleCard title={<b>{transcription.creatorid}</b>}>
+              {transcription.content}
+            </SimpleCard>
+          ))}
         </div>
       </CentralModal>
       <div className={classes.videoPlayerContainer}>
@@ -285,7 +285,24 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
       <GridList className={classes.chunksList} cellHeight="auto" cols={2.5}>
         {chunks.map((c, idx) => (
           <GridListTile key={c.id} ref={c.id === newEl ? newElRef : null}>
-            <ChunkCard chunk={c}>
+            <ChunkCard
+              chunk={c}
+              transcriptionIcon={
+                c.transcriptions.length === 0 ? undefined : (
+                  <Receipt
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      margin: "6px",
+                    }}
+                    onClick={
+                      () => setShowTranscriptionsFor(c)
+                    }
+                  />
+                )
+              }
+            >
               <div style={{ marginTop: "8px" }}>
                 <VideoThumbnail
                   url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
