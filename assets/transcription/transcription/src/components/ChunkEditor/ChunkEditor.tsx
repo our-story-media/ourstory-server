@@ -23,7 +23,6 @@ import {
   GridList,
   GridListTile,
   Mark,
-  Typography,
 } from "@material-ui/core";
 
 // Internal Dependencies
@@ -50,13 +49,11 @@ import {
 } from "../../utils/chunkManipulation";
 import EditChunkModal from "../EditChunkModal/EditChunkModal";
 import VideoThumbnail from "../VideoPlayer/VideoThumbnail";
-import WarningMessage from "../WarningMessage/WarningMessage";
 import BackButton from "../BackButton/BackButton";
-import useConfirmBeforeAction, {
-  NotAttemptingAction,
-} from "../../hooks/useConfirmBeforeAction";
+import useConfirmBeforeAction from "../../hooks/useConfirmBeforeAction";
 import SimpleCard from "../SimpleCard/SimpleCard";
 import useWatchForNewElements from "../../hooks/useWatchForNewElements";
+import ConfirmIntentModal from "../ConfirmIntentModal/ConfirmIntentModal";
 
 type ChunkEditorProps = {
   /** Action to do when back button is pressed */
@@ -162,9 +159,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
 
   const {
     attemptAction: attemptNewChunk,
-    cancelAction: cancelAttemptNewChunk,
-    attemptingActionWith: attemptNewChunkArgs,
-    confirmAction: confirmNewChunk,
+    ...attemptNewChunkActionControls
   } = useConfirmBeforeAction(createNewChunk, (chunks, time) => {
     const enclosingChunk = getEnclosingChunk(chunks, time);
     return enclosingChunk !== undefined && hasTranscription(enclosingChunk);
@@ -186,20 +181,12 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
 
   const {
     attemptAction: attemptToDeleteChunk,
-    cancelAction: cancelDeleteAttempt,
-    attemptingActionWith: chunkAttemptingToDeleteArray,
-    confirmAction: confirmDeletion,
+    ...attemptDeleteActionControls
   } = useConfirmBeforeAction(deleteChunk, (chunk) => hasTranscription(chunk));
-  /**
-   * This unpacks the chunk from the list of parameters attemptToDeleteChunk
-   * was called with, for convenience
-   */
-  const chunkAttemptingToDelete = useMemo(
-    () => chunkAttemptingToDeleteArray && chunkAttemptingToDeleteArray[0],
-    [chunkAttemptingToDeleteArray]
-  );
 
-  const [showTranscriptionsFor, setShowTranscriptionsFor] = useState<Chunk | undefined>(undefined);
+  const [showTranscriptionsFor, setShowTranscriptionsFor] = useState<
+    Chunk | undefined
+  >(undefined);
 
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
@@ -213,65 +200,47 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
         exit={() => setCroppingChunk(undefined)}
         storyDuration={duration}
       />
-      <CentralModal
-        open={chunkAttemptingToDelete !== NotAttemptingAction.True}
-        exit={cancelDeleteAttempt}
-        header={<WarningMessage message="This Chunk has a transcription" />}
+      <ConfirmIntentModal
+        actionControls={attemptDeleteActionControls}
+        warningMessage={<div>This Chunk has a transcription</div>}
       >
-        <div>
-          Attempting to delete chunk
-          {chunkAttemptingToDelete &&
-            ` "${getNameOf(chunkAttemptingToDelete)}"`}
-          , which has a transcription saved to it. Are you sure you want to
-          delete it?
-          <br />
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <IndabaButton
-              style={{ marginTop: "8px" }}
-              onClick={confirmDeletion}
-            >
-              <Delete fontSize="large" style={{ marginRight: "8px" }} />
-              <Typography variant="subtitle1">Confirm</Typography>
-            </IndabaButton>
+        {(...args) => (
+          <div>
+            Attempting to delete chunk
+            {args[0] && ` "${getNameOf(args[0])}"`}, which has a
+            transcription saved to it. Are you sure you want to delete it?
           </div>
-        </div>
-      </CentralModal>
+        )}
+      </ConfirmIntentModal>
+      <ConfirmIntentModal
+        actionControls={attemptNewChunkActionControls}
+        warningMessage={<div>The enclosing chunk has a transcription</div>}
+      >
+        {(...args) => (
+          <div>
+            Creating a new chunk here will delete the transcriptions on the
+            enclosing chunk, "
+            {getNameOf(getEnclosingChunk(args[0], args[1]) ?? args[0][0])}
+            ". Are you sure you want to discard these transcriptions?
+          </div>
+        )}
+      </ConfirmIntentModal>
       <CentralModal
-        open={attemptNewChunkArgs !== NotAttemptingAction.True}
-        exit={cancelAttemptNewChunk}
+        open={showTranscriptionsFor !== undefined}
         header={
-          <WarningMessage message="The enclosing chunks has a transcription" />
+          <h2 style={{ margin: 0 }}>{`Transcriptions for "${
+            showTranscriptionsFor && getNameOf(showTranscriptionsFor)
+          }"`}</h2>
         }
+        exit={() => setShowTranscriptionsFor(undefined)}
       >
         <div>
-          Creating a new chunk here will delete the transcriptions on the
-          enclosing chunk, "
-          {attemptNewChunkArgs &&
-            getNameOf(
-              getEnclosingChunk(
-                attemptNewChunkArgs[0],
-                attemptNewChunkArgs[1]
-              ) ?? attemptNewChunkArgs[0][0]
-            )}
-          ". Are you sure you want to discard these transcriptions?
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <IndabaButton
-              style={{ marginTop: "8px" }}
-              onClick={confirmNewChunk}
-            >
-              <Delete fontSize="large" style={{ marginRight: "8px" }} />
-              <Typography variant="subtitle1">Confirm</Typography>
-            </IndabaButton>
-          </div>
-        </div>
-      </CentralModal>
-      <CentralModal open={showTranscriptionsFor !== undefined} header={<h2 style={{margin: 0}}>{`Transcriptions for "${showTranscriptionsFor && getNameOf(showTranscriptionsFor)}"`}</h2>} exit={() => setShowTranscriptionsFor(undefined)}>
-        <div>
-          {showTranscriptionsFor && showTranscriptionsFor.transcriptions.map((transcription) => (
-            <SimpleCard title={<b>{transcription.creatorid}</b>}>
-              {transcription.content}
-            </SimpleCard>
-          ))}
+          {showTranscriptionsFor &&
+            showTranscriptionsFor.transcriptions.map((transcription) => (
+              <SimpleCard title={<b>{transcription.creatorid}</b>}>
+                {transcription.content}
+              </SimpleCard>
+            ))}
         </div>
       </CentralModal>
       <div className={classes.videoPlayerContainer}>
@@ -296,9 +265,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
                       right: 0,
                       margin: "6px",
                     }}
-                    onClick={
-                      () => setShowTranscriptionsFor(c)
-                    }
+                    onClick={() => setShowTranscriptionsFor(c)}
                   />
                 )
               }

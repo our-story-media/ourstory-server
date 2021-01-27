@@ -76,7 +76,7 @@ const ContributerListModal: React.FC<{
     <CentralModal
       header={
         <Typography variant="h3" style={{ fontWeight: "lighter" }}>
-          Contributers
+          Contributions
         </Typography>
       }
       open={show}
