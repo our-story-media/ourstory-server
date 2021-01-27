@@ -19,7 +19,7 @@ import { FileCopy } from "@material-ui/icons";
 import CentralModal from "../CentralModal/CentralModal";
 import WarningMessage from "../WarningMessage/WarningMessage";
 import BackButton from "../BackButton/BackButton";
-import useConfirmBeforeAction from "../../hooks/useConfirmBeforeAction";
+import useConfirmBeforeAction, { NotAttemptingAction } from "../../hooks/useConfirmBeforeAction";
 import useFirstRender from "../../hooks/useFirstRender";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 
@@ -124,7 +124,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
             header={
               <WarningMessage message={"You Will Lose Your Transcription"} />
             }
-            open={attemptingTranscriptionChangeWith !== undefined}
+            open={attemptingTranscriptionChangeWith !== NotAttemptingAction.True}
           >
             <div>
               Duplicating this transcription will discard your current
