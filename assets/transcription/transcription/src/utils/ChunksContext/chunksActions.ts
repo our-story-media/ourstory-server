@@ -259,6 +259,9 @@ export const useDeleteReview = () => {
 const renameChunk = (newName: string, chunk: Chunk): Chunk =>
   newName !== "" ? { ...chunk, name: newName } : { ...chunk, name: undefined };
 
+const deleteNegativeChunks = (chunks: Chunk[]): Chunk[] =>
+  chunks.filter((chunk) => chunk.endtimeseconds > chunk.starttimeseconds);
+
 /**
  * Hook for getting a function for cropping a chunk
  *
@@ -281,7 +284,7 @@ export const useCropChunk = () => {
   ) => {
     setChunks((chunks) => {
       const neighbouringChunks = getAdjacentChunks(toUpdate, chunks);
-      return (
+      return deleteNegativeChunks(
         chunks
           .map((chunk) =>
             chunk.id === toUpdate.id
@@ -330,8 +333,7 @@ export const useCropChunk = () => {
                 ]
               : []
           )
-          .sort((a, b) => a.endtimeseconds - b.endtimeseconds)
-      );
+      ).sort((a, b) => a.endtimeseconds - b.endtimeseconds);
     });
   };
 };
