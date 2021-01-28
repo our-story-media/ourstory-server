@@ -50,7 +50,7 @@ const EditChunkModal: React.FC<{
       open={shown}
       header={<ChunkNameEditor nameState={[name, setName]} />}
     >
-      <div>
+      <div style={{paddingBottom: "24px"}}>
         {chunk && <ChunkCropper croppedSplitState={[newCropSplit, setNewCropSplit]} storyDuration={storyDuration} chunk={chunk} />}
       </div>
     </CentralModal>

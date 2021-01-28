@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 
 // Internal Dependencies
 import api_key, { api_base_address } from "../../../utils/getApiKey";
-import story_id from "../../../utils/getId";
 import { Chunk, Story } from "../../../utils/types";
 
 /**
@@ -16,7 +15,7 @@ import { Chunk, Story } from "../../../utils/types";
  * @param chunks - the chunks state to synchonise to the api
  * @param setChunks - setter for the chunks
  */
-const useOurstoryApi = (): {
+const useOurstoryApi = (story_id: string): {
   storyTitle: string | undefined;
   chunksState: [Chunk[], (setter: (newState: Chunk[]) => Chunk[]) => void];
 } => {
@@ -51,7 +50,7 @@ const useOurstoryApi = (): {
           response.data.transcription ? response.data.transcription.chunks : []
         );
       });
-  }, []);
+  }, [story_id]);
 
   useEffect(() => {
     story &&
@@ -61,7 +60,7 @@ const useOurstoryApi = (): {
         withCredentials: true,
         data: { ...story, transcription: { chunks } },
       });
-  }, [chunks, story]);
+  }, [chunks, story, story_id]);
 
   const memoChunks = useMemo<
     [Chunk[], (setter: (newState: Chunk[]) => Chunk[]) => void]

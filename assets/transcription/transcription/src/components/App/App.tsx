@@ -1,4 +1,3 @@
-
 /**
  * - Don't expose other people's transcriptions in Transcriber component
  * - Hide Edit and Delete Button in ChunkEditor
@@ -8,7 +7,7 @@
  */
 
 // External Dependencies
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 // Internal Dependencies
 import ChunkEditor from "../ChunkEditor/ChunkEditor";
@@ -16,7 +15,7 @@ import Dashboard from "../Dashboard/Dashboard";
 import Header from "../Header/Header";
 import useSteps from "./hooks/useSteps";
 import View from "./Views";
-import story_id from "../../utils/getId";
+import { useStoryId } from "../../utils/getId";
 import Transcriber from "../Transcriber/Transcriber";
 import UserProvider from "../UserProvider/UserProvider";
 import useOurstoryApi from "./hooks/useOurstoryApi";
@@ -29,14 +28,30 @@ import {
 } from "../../utils/chunkManipulation";
 import useToggle from "../../hooks/useToggle";
 import ContributerListModal from "../ContributersModal/ContributersModal";
+import { Switch } from "@material-ui/core";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 const App: React.FC<{}> = () => {
   const [view, setView] = useState<View>(View.Dashboard);
   const { ChunksProvider } = chunksContext;
+  const [usingVidOneString, setUsingVidOneString] = useLocalStorage(
+    "useVidOne"
+  );
+
+  if (usingVidOneString === null) {
+    setUsingVidOneString("true");
+  }
+
+  const usingVidOne = useMemo(() => usingVidOneString === "true", [
+    usingVidOneString,
+  ]);
+
+  const story_id = useStoryId(usingVidOne);
+
   const {
     storyTitle,
     chunksState: [chunks, setChunks],
-  } = useOurstoryApi();
+  } = useOurstoryApi(story_id);
 
   const chunkingProgress = getLastEndTimeSeconds(chunks);
   const transcriptionProgress = chunks.length
@@ -76,6 +91,22 @@ const App: React.FC<{}> = () => {
                 content: "Show Contributions",
                 handler: toggleShowContributers,
               },
+              {
+                content: (
+                  <div>
+                    Use Video One{" "}
+                    <Switch
+                      checked={usingVidOne}
+                      onChange={() =>
+                        setUsingVidOneString((usingVidOneString) =>
+                          usingVidOneString === "true" ? "false" : "true"
+                        )
+                      }
+                    />
+                  </div>
+                ),
+                handler: () => null,
+              },
             ]}
           >
             {view === View.Dashboard ? (
@@ -84,7 +115,10 @@ const App: React.FC<{}> = () => {
                 storyName={storyTitle ? storyTitle : "Loading"}
               />
             ) : view === View.Chunking ? (
-              <ChunkEditor atExit={() => setView(View.Dashboard)} />
+              <ChunkEditor
+                story_id={story_id}
+                atExit={() => setView(View.Dashboard)}
+              />
             ) : view === View.Transcribing ? (
               <Transcriber
                 story_id={story_id}

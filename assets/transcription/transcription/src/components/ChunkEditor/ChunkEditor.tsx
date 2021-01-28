@@ -18,7 +18,6 @@ import {
 // Internal Dependencies
 import ChunkCard from "../SimpleCard/ChunkCard";
 import useStyles from "./ChunkEditorStyles";
-import story_id from "../../utils/getId";
 import { UserContext } from "../UserProvider/UserProvider";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
@@ -47,10 +46,12 @@ import SimpleCard from "../SimpleCard/SimpleCard";
 import ScrollToOnMount from "../ScrollToOnMount/ScrollToOnMount";
 import ChunkCardContextMenu from "./ChunkCardContextMenu";
 import { api_base_address } from "../../utils/getApiKey";
+import CentralModal from "../CentralModal/CentralModal";
 
 type ChunkEditorProps = {
   /** Action to do when back button is pressed */
   atExit: () => void;
+  story_id: string;
 };
 
 /**
@@ -64,7 +65,7 @@ const getMarks = (chunks: Chunk[]): Mark[] =>
     value: chunk.endtimeseconds * 100,
   }));
 
-const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
+const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
   const [chunks] = chunksContext.useChunksState();
 
   const {
@@ -166,12 +167,29 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
     });
   };
 
+  const [showIntroductionModal, setShowIntroductionModal] = useState(true);
+
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
       <div style={{ marginTop: "4px" }}>
         <BackButton action={atExit} />
       </div>
+      <CentralModal
+        header={<h2 style={{ margin: 0 }}>Chunking Instructions</h2>}
+        open={showIntroductionModal}
+        exit={() => setShowIntroductionModal(false)}
+      >
+        <div style={{ padding: "0px 8px 16px 8px" }}>
+          You are about to chunk the video. The aim of chunking is to make
+          Transcribing easy. <br/>To create a chunk, press the '+' button in the
+          bottom right corner. The time that you press the '+' button in the
+          video will be the end of the new chunk. <br/>You should aim to have only
+          one person speaking in each chunk. Create a new chunk when there is a
+          change in who is talking, there is a gap in the talking, or a person
+          begins/ends talking.
+        </div>
+      </CentralModal>
       <EditChunkModal
         shown={croppingChunk !== undefined}
         chunk={chunks[croppingChunk ? croppingChunk : 0]}
@@ -287,7 +305,10 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
           .concat(
             getLastEndTimeSeconds(chunks) > 0.75
               ? [
-                  <GridListTile key="Done Card" onClick={handleCompleteChunking}>
+                  <GridListTile
+                    key="Done Card"
+                    onClick={handleCompleteChunking}
+                  >
                     <ScrollToOnMount style={{ height: "100%" }}>
                       <SimpleCard
                         contentStyle={{
@@ -303,7 +324,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
                         cardStyle={{
                           margin: "8px",
                           transform: "translateY(8px)",
-                          height: "calc(100% - 16px)"
+                          height: "calc(100% - 16px)",
                         }}
                       >
                         <Check
