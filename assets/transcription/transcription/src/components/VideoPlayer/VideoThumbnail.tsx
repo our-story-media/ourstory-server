@@ -1,5 +1,6 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
+import captureVideoFrame from "capture-video-frame";
 
 type VideoThumbnailProps = {
   url: string;
@@ -8,15 +9,34 @@ type VideoThumbnailProps = {
 
 const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ url, time }) => {
   const playerRef = useRef<ReactPlayer>(null);
+  // const [screenshot, setScreenshot] = useState<null | HTMLVideoElement >(null);
 
+  // useEffect(() => {
+  //   const video = document.createElement("video");
+  //   video.crossOrigin = "anonymous";
+  //   video.src = url;
+  //   video.addEventListener("loadeddata", () => {
+  //     video.currentTime = time;
+  //     setScreenshot(video);
+  //   });
+  // }, []);
+
+  // return screenshot ? (
+  //   <div>{screenshot}</div>
+  // ) : <div>Loading</div>
   return (
     <ReactPlayer
+      crossOrigin="anonymous"
       url={url}
       width="100%"
       height="100%"
       playing={false}
       ref={playerRef}
-      onReady={() => playerRef.current?.seekTo(time, "fraction")}
+      id={"video-thumbnail-player"}
+      onReady={() => {
+        playerRef.current?.seekTo(time, "fraction");
+      }}
+      
     />
   );
 };

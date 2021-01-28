@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  Mark,
-  SliderProps,
-  Typography,
-} from "@material-ui/core";
+import { Box, Button, Mark, SliderProps, Typography } from "@material-ui/core";
 import { Pause, PlayArrow } from "@material-ui/icons";
 import React, { useRef } from "react";
 import ReactPlayer from "react-player";
@@ -91,44 +85,39 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         {...playerProps}
       />
       {showControls && (
-        <>
-          {/* Play/Pause Button */}
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.videoPlayerPlayButton}
-            onClick={toggleIsPlaying}
-          >
-            {(isPlaying && <Pause fontSize="large" />) || (
-              <PlayArrow fontSize="large" />
-            )}
-          </Button>
-          {slider || (
-            <div className={classes.progressBarContainer}>
-              {/* Progress Bar */}
-              <Typography
-                variant="caption"
-                style={{ margin: "8px", color: "#FFFFFF" }}
-              >
-                {duration &&
-                  `${toShortTimeStamp(
-                    (progress.progress - split.start) * duration
-                  )} / ${toShortTimeStamp(
-                    (split.end - split.start) * duration
-                  )}`}
-              </Typography>
-              <IndabaSlider
-                valueLabelDisplay="auto"
-                valueLabelFormat={(progress) =>
-                  toShortTimeStamp((progress / 100) * duration)
-                }
-                ValueLabelComponent={ProgressBarLabel}
-                marks={sliderMarks ? sliderMarks : []}
-                {...progressBarProps}
-              />
-            </div>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.videoPlayerPlayButton}
+          onClick={toggleIsPlaying}
+        >
+          {(isPlaying && <Pause fontSize="large" />) || (
+            <PlayArrow fontSize="large" />
           )}
-        </>
+        </Button>
+      )}
+      {slider || (
+        <div className={classes.progressBarContainer}>
+          {/* Progress Bar */}
+          <Typography
+            variant="caption"
+            style={{ margin: "8px", color: "#FFFFFF" }}
+          >
+            {duration &&
+              `${toShortTimeStamp(
+                (progress.progress - split.start) * duration
+              )} / ${toShortTimeStamp((split.end - split.start) * duration)}`}
+          </Typography>
+          <IndabaSlider
+            valueLabelDisplay="auto"
+            valueLabelFormat={(progress) =>
+              toShortTimeStamp((progress / 100) * duration)
+            }
+            ValueLabelComponent={ProgressBarLabel}
+            marks={sliderMarks ? sliderMarks : []}
+            {...progressBarProps}
+          />
+        </div>
       )}
     </Box>
   );

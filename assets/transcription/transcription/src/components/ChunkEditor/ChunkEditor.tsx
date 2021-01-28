@@ -1,22 +1,18 @@
 // External Dependencies
-import {
-  Add,
-  Check,
-  Delete,
-  Edit,
-  Pause,
-  PlayArrow,
-  Receipt,
-} from "@material-ui/icons";
+import { Add, Check, Stop, PlayArrow } from "@material-ui/icons";
 import React, {
   useCallback,
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
-import { Box, GridList, GridListTile, Mark } from "@material-ui/core";
+import {
+  Box,
+  GridList,
+  GridListTile,
+  Mark,
+} from "@material-ui/core";
 
 // Internal Dependencies
 import ChunkCard from "../SimpleCard/ChunkCard";
@@ -43,10 +39,12 @@ import EditChunkModal from "../EditChunkModal/EditChunkModal";
 import VideoThumbnail from "../VideoPlayer/VideoThumbnail";
 import BackButton from "../BackButton/BackButton";
 import useConfirmBeforeAction from "../../hooks/useConfirmBeforeAction";
-import useWatchForNewElements from "../../hooks/useWatchForNewElements";
 import ConfirmIntentModal from "../ConfirmIntentModal/ConfirmIntentModal";
 import TranscriptionsModal from "../TranscriptionsModal/TranscriptionsModal";
 import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
+import SimpleCard from "../SimpleCard/SimpleCard";
+import ScrollToOnMount from "../ScrollToOnMount/ScrollToOnMount";
+import ChunkCardContextMenu from "./ChunkCardContextMenu";
 
 type ChunkEditorProps = {
   /** Action to do when back button is pressed */
@@ -121,28 +119,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
     undefined
   );
 
-  /* We use these for auto scrolling to the new chunks,
-   * as they are created
-   */
-  const [newEl, setNewEl] = useState("");
-  const newElRef = useRef<any>();
-
-  useWatchForNewElements(
-    chunks,
-    (a, b) => a.id === b.id,
-    (newChunks) => {
-      setNewEl(newChunks[newChunks.length - 1]?.id);
-    }
-  );
-
-  useEffect(() => {
-    newElRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "end",
-      inline: "nearest",
-    });
-  }, [newEl]);
-
   const handleCompleteChunking = () => {
     getLastEndTimeSeconds(chunks) !== 1 &&
       userName &&
@@ -179,6 +155,14 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
   const [showTranscriptionsFor, setShowTranscriptionsFor] = useState<
     Chunk | undefined
   >(undefined);
+
+  const handleAttemptDeleteChunk = (c: Chunk) => {
+    doWithChunks((chunks: Chunk[]) => {
+      chunks.forEach(
+        (chunk) => chunk.id === c.id && attemptToDeleteChunk(chunk)
+      );
+    });
+  };
 
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
@@ -230,72 +214,90 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
         />
       </div>
       <GridList className={classes.chunksList} cellHeight="auto" cols={2.5}>
-        {chunks.map((c, idx) => (
-          <GridListTile key={c.id} ref={c.id === newEl ? newElRef : null}>
-            <ChunkCard
-              chunk={c}
-              transcriptionIcon={
-                c.transcriptions.length === 0 ? undefined : (
-                  <Receipt
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                      margin: "6px",
-                    }}
-                    onClick={() => setShowTranscriptionsFor(c)}
-                  />
-                )
-              }
-            >
-              <div style={{ marginTop: "8px" }}>
-                <VideoThumbnail
-                  url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
-                  time={
-                    c.starttimeseconds +
-                    (c.endtimeseconds - c.starttimeseconds) / 2
+        {chunks
+          .map((c, idx) => (
+            <GridListTile key={c.id} >
+              <ScrollToOnMount>
+                <ChunkCard
+                  chunk={c}
+                  transcriptionIcon={
+                    <ChunkCardContextMenu
+                      chunk={c}
+                      menuItems={[
+                        {
+                          content: "Delete",
+                          handler: () => handleAttemptDeleteChunk(c),
+                        },
+                        {
+                          content: "Edit",
+                          handler: () => setCroppingChunk(idx),
+                        },
+                      ].concat(
+                        c.transcriptions.length !== 0
+                          ? [
+                              {
+                                content: "View Transcriptions",
+                                handler: () => setShowTranscriptionsFor(c),
+                              },
+                            ]
+                          : []
+                      )}
+                    />
                   }
-                />
-              </div>
-              <IndabaButton
-                round
-                color="primary"
-                style={{ marginRight: "4px" }}
-                onClick={() =>
-                  handleChunkPlayButtonClick(idx, playingChunk, playingState[0])
-                }
-              >
-                {playingChunk === idx && playingState[0] ? (
-                  <Pause />
-                ) : (
-                  <PlayArrow />
-                )}
-              </IndabaButton>
-              <IndabaButton
-                round
-                aria-label="Delete Chunk"
-                style={{ marginRight: "4px" }}
-                onClick={() => {
-                  doWithChunks((chunks: Chunk[]) => {
-                    chunks.forEach(
-                      (chunk) =>
-                        chunk.id === c.id && attemptToDeleteChunk(chunk)
-                    );
-                  });
-                }}
-              >
-                <Delete />
-              </IndabaButton>
-              <IndabaButton
-                round
-                aria-label="Edit Chunk"
-                onClick={() => setCroppingChunk(idx)}
-              >
-                <Edit />
-              </IndabaButton>
-            </ChunkCard>
-          </GridListTile>
-        ))}
+                >
+                  <div style={{ marginTop: "8px", position: "relative" }}>
+                    <VideoThumbnail
+                      url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
+                      time={
+                        c.starttimeseconds +
+                        (c.endtimeseconds - c.starttimeseconds) / 2
+                      }
+                    />
+                    <IndabaButton
+                      round
+                      color="primary"
+                      style={{
+                        marginRight: "4px",
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%",
+                        transform: "translate(-50%, -50%)",
+                        opacity: 0.8,
+                      }}
+                      onClick={() =>
+                        handleChunkPlayButtonClick(
+                          idx,
+                          playingChunk,
+                          playingState[0]
+                        )
+                      }
+                    >
+                      {playingChunk === idx && playingState[0] ? (
+                        <Stop />
+                      ) : (
+                        <PlayArrow />
+                      )}
+                    </IndabaButton>
+                  </div>
+                </ChunkCard>
+              </ScrollToOnMount>
+            </GridListTile>
+          ))
+          .concat(
+            getLastEndTimeSeconds(chunks) > 0.75
+              ? [
+                  <GridListTile key="Done Card">
+                    <ScrollToOnMount>
+                      <SimpleCard
+                        style={{ margin: "8px", height: "calc(100% - 16px)" }}
+                      >
+                        <IndabaButton>Done</IndabaButton>
+                      </SimpleCard>
+                    </ScrollToOnMount>
+                  </GridListTile>,
+                ]
+              : []
+          )}
       </GridList>
       <div>
         <div
@@ -306,7 +308,9 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
           }}
         >
           <SkipForwardBackButtons
-            skipForward={() => duration && setProgress((progress) => progress + 5 / duration)}
+            skipForward={() =>
+              duration && setProgress((progress) => progress + 5 / duration)
+            }
             skipBackward={() =>
               duration && setProgress((progress) => progress - 5 / duration)
             }

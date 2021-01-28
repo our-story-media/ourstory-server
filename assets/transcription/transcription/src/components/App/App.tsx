@@ -1,3 +1,12 @@
+
+/**
+ * - Don't expose other people's transcriptions in Transcriber component
+ * - Hide Edit and Delete Button in ChunkEditor
+ * - Ditch red borders on boxes
+ * - Ditch box inside box in review interface
+ * - Add last time edited to Contributions list
+ */
+
 // External Dependencies
 import React, { useState } from "react";
 
@@ -64,7 +73,7 @@ const App: React.FC<{}> = () => {
             title={View[view]}
             contextMenuItems={[
               {
-                content: "Show Contributers",
+                content: "Show Contributions",
                 handler: toggleShowContributers,
               },
             ]}

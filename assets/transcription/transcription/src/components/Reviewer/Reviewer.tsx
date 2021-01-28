@@ -69,6 +69,11 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
     }
   }, [chunksToReview, atExit]);
 
+  /*
+   * When the user navigates between chunks,
+   * this effect keeps the split and progress of
+   * the video player up to date
+   */
   useEffect(() => {
     setSplit({
       start: currentChunk.starttimeseconds,
@@ -82,8 +87,16 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
 
   const { userName } = useContext(UserContext);
 
+  /*
+   * This is the state for the new transcription being edited
+   * when the user decides to edit a transcription.
+   */
   const [transcriptionEdit, setTranscriptionEdit] = useState("");
 
+  /*
+   * State to keep track of which transcription is currently
+   * being edited
+   */
   const [editingTranscription, setEditingTranscription] = useState<
     undefined | Transcription
   >(undefined);
@@ -222,7 +235,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
                         }
                         style={{ backgroundColor: "initial" }}
                       />
-                      <Typography style={{ padding: "8px" }}>
+                      <Typography style={{ whiteSpace: "pre", padding: "8px" }}>
                         {transcription.content}
                       </Typography>
                     </div>

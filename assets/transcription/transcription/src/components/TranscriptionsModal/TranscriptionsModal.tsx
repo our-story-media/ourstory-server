@@ -15,31 +15,28 @@ type TranscriptionsModalProps = {
 const TranscriptionsModal: React.FC<TranscriptionsModalProps> = ({
   chunk,
   exit,
-}) => {
-  return (
-    <CentralModal
-      open={chunk !== undefined}
-      header={
-        <h2 style={{ margin: 0 }}>{`Transcriptions for "${
-          chunk && getNameOf(chunk)
-        }"`}</h2>
-      }
-      exit={exit}
-    >
-      <div style={{height: "80vh", overflow: "scroll"}}>
-        {chunk &&
-          chunk.transcriptions.map((transcription) => (
-            <SimpleCard
-              key={transcription.id}
-              title={<b>{transcription.creatorid}</b>}
-              style={{ whiteSpace: "pre" }}
-            >
-              {transcription.content}
-            </SimpleCard>
-          ))}
-      </div>
-    </CentralModal>
-  );
-};
+}) => (
+  <CentralModal
+    open={chunk !== undefined}
+    header={
+      <h2 style={{ margin: 0 }}>{`Transcriptions for "${
+        chunk && getNameOf(chunk)
+      }"`}</h2>
+    }
+    exit={exit}
+  >
+    <div style={{ height: "80vh", overflow: "scroll" }}>
+      {chunk?.transcriptions.map((transcription) => (
+        <SimpleCard
+          key={transcription.id}
+          title={<b>{transcription.creatorid}</b>}
+          style={{ whiteSpace: "pre" }}
+        >
+          {transcription.content}
+        </SimpleCard>
+      ))}
+    </div>
+  </CentralModal>
+);
 
 export default TranscriptionsModal;
