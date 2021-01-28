@@ -12,6 +12,7 @@ import {
   GridList,
   GridListTile,
   Mark,
+  Typography,
 } from "@material-ui/core";
 
 // Internal Dependencies
@@ -216,7 +217,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
       <GridList className={classes.chunksList} cellHeight="auto" cols={2.5}>
         {chunks
           .map((c, idx) => (
-            <GridListTile key={c.id} >
+            <GridListTile key={c.id}>
               <ScrollToOnMount>
                 <ChunkCard
                   chunk={c}
@@ -286,12 +287,30 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
           .concat(
             getLastEndTimeSeconds(chunks) > 0.75
               ? [
-                  <GridListTile key="Done Card">
-                    <ScrollToOnMount>
+                  <GridListTile key="Done Card" onClick={handleCompleteChunking}>
+                    <ScrollToOnMount style={{ height: "100%" }}>
                       <SimpleCard
-                        style={{ margin: "8px", height: "calc(100% - 16px)" }}
+                        style={{
+                          backgroundColor: "#40bf11",
+                          height: "100%",
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          color: "white",
+                        }}
                       >
-                        <IndabaButton>Done</IndabaButton>
+                        <Check
+                          fontSize="large"
+                          style={{ marginRight: "4px" }}
+                        />
+                        <Typography
+                          variant="h5"
+                          component="h2"
+                          style={{ transform: "translateY(2px)" }}
+                        >
+                          Done
+                        </Typography>
                       </SimpleCard>
                     </ScrollToOnMount>
                   </GridListTile>,
@@ -315,25 +334,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
               duration && setProgress((progress) => progress - 5 / duration)
             }
           />
-        </div>
-        <div
-          style={{
-            margin: "16px 16px 32px 16px",
-            position: "absolute",
-            bottom: 0,
-            left: "50vw",
-            transform: "translate(-50%)",
-          }}
-        >
-          <IndabaButton
-            onClick={handleCompleteChunking}
-            style={{ margin: "8px", backgroundColor: "#40bf11" }}
-          >
-            <Check />
-            <span style={{ marginLeft: "4px", fontSize: "1.05rem" }}>
-              Complete
-            </span>
-          </IndabaButton>
         </div>
         <div
           style={{

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const ScrollToOnMount: React.FC<{}> = ({ children }) => {
+const ScrollToOnMount: React.FC<{ style?: any }> = ({ children, style }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -11,7 +11,7 @@ const ScrollToOnMount: React.FC<{}> = ({ children }) => {
     });
   }, []);
 
-  return <div ref={ref}>{children}</div>;
+  return <div ref={ref} style={{...style}}>{children}</div>;
 };
 
 export default ScrollToOnMount;

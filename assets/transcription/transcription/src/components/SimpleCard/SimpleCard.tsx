@@ -8,8 +8,8 @@ type SimpleCardProps = {
 
 const SimpleCard: React.FC<SimpleCardProps> = ({ title, children, style }) => {
   return (
-    <Card variant="outlined" style={{ ...style }}>
-      <CardContent>
+    <Card variant="outlined" style={{height: "100%"}}>
+      <CardContent style={{ ...style }}>
         <Typography variant="h5" component="h2">
           {title}
         </Typography>
