@@ -13,10 +13,11 @@ const EditTranscriptionCard: React.FC<EditTranscriptionCardProps> = ({ inputRef,
   const [transcription, setTranscription] = transcriptionState;
 
   return (
-    <ChunkCard chunk={chunk}>
+    <ChunkCard chunk={chunk} style={{margin: "4px"}}>
       <TextField
         autoFocus
         multiline
+        rows={10}
         inputRef={inputRef}
         style={{width: "100%"}}
         variant="outlined"

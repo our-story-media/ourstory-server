@@ -30,7 +30,7 @@ const TranscriptionsModal: React.FC<TranscriptionsModalProps> = ({
         <SimpleCard
           key={transcription.id}
           title={<b>{transcription.creatorid}</b>}
-          style={{ whiteSpace: "pre" }}
+          contentStyle={{ whiteSpace: "pre" }}
         >
           {transcription.content}
         </SimpleCard>

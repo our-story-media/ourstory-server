@@ -8,11 +8,10 @@ import { Chunk } from "../../utils/types";
 import IndabaMenu from "../IndabaMenu/IndabaMenu";
 
 type ChunkCardContextMenuProps = {
-  chunk: Chunk;
   menuItems: { content: ReactNode; handler: () => void }[];
 }
 
-const ChunkCardContextMenu: React.FC<ChunkCardContextMenuProps> = ({ chunk, menuItems }) => {
+const ChunkCardContextMenu: React.FC<ChunkCardContextMenuProps> = ({ menuItems }) => {
 
   const [showContextMenu, setShowContextMenu] = useState(false);
 

@@ -5,15 +5,17 @@ import IndabaButton from "../IndabaButton/IndabaButton";
 type SkipForwardBackButtonsProps = {
   skipForward: () => void;
   skipBackward: () => void;
+  style?: any;
 };
 
 const SkipForwardBackButtons: React.FC<SkipForwardBackButtonsProps> = ({
   skipForward,
   skipBackward,
+  style
 }) => {
   return (
     <div
-      style={{
+      style={style ? {...style} : {
         margin: "16px 16px 32px 16px",
         display: "flex",
       }}

@@ -3,13 +3,14 @@ import React, { ReactNode } from "react";
 
 type SimpleCardProps = {
   title?: ReactNode;
-  style?: any;
+  contentStyle?: any;
+  cardStyle?: any;
 };
 
-const SimpleCard: React.FC<SimpleCardProps> = ({ title, children, style }) => {
+const SimpleCard: React.FC<SimpleCardProps> = ({ title, children, contentStyle, cardStyle }) => {
   return (
-    <Card variant="outlined" style={{height: "100%"}}>
-      <CardContent style={{ ...style }}>
+    <Card variant="outlined" style={{...cardStyle}}>
+      <CardContent style={{ ...contentStyle }}>
         <Typography variant="h5" component="h2">
           {title}
         </Typography>

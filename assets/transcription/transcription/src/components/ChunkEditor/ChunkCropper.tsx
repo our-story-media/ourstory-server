@@ -1,5 +1,6 @@
 import { Container } from "@material-ui/core";
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { api_base_address } from "../../utils/getApiKey";
 import story_id from "../../utils/getId";
 import { Chunk, State } from "../../utils/types";
 import IndabaSlider from "../IndabaSlider/IndabaSlider";
@@ -65,7 +66,7 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
         <h2 style={{ margin: 0 }}>Cropping:</h2>
       </Container>
       <VideoPlayer
-        url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
+        url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
         controller={cropPlayerController}
         slider={
           <IndabaSlider

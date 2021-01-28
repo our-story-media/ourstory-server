@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 
 // Internal Dependencies
-import api_key from "../../../utils/getApiKey";
+import api_key, { api_base_address } from "../../../utils/getApiKey";
 import story_id from "../../../utils/getId";
 import { Chunk, Story } from "../../../utils/types";
 
@@ -28,7 +28,8 @@ const useOurstoryApi = (): {
       setter(
         (
           await axios.request<Chunk[]>({
-            url: `http://localhost:8845/api/watch/edit/${story_id}`,
+            withCredentials: true,
+            url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
             transformResponse: (r: string) =>
               (JSON.parse(r) as Story).transcription.chunks,
           })
@@ -40,7 +41,8 @@ const useOurstoryApi = (): {
   useEffect(() => {
     axios
       .request<Story>({
-        url: `http://localhost:8845/api/watch/edit/${story_id}`,
+        url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
+        withCredentials: true,
         transformResponse: (r: string) => JSON.parse(r),
       })
       .then((response) => {
@@ -54,8 +56,9 @@ const useOurstoryApi = (): {
   useEffect(() => {
     story &&
       axios.request<Story>({
-        url: `http://localhost:8845/api/watch/savedit/${story_id}?apikey=${api_key}`,
+        url: `http://${api_base_address}:8845/api/watch/savedit/${story_id}?apikey=${api_key}`,
         method: "POST",
+        withCredentials: true,
         data: { ...story, transcription: { chunks } },
       });
   }, [chunks, story]);

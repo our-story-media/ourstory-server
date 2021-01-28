@@ -9,6 +9,7 @@ import {
   useUpdateTranscription,
 } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
+import { api_base_address } from "../../utils/getApiKey";
 import { Transcription } from "../../utils/types";
 import BackButton from "../BackButton/BackButton";
 import CentralModal from "../CentralModal/CentralModal";
@@ -167,7 +168,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
       </CentralModal>
       <Box>
         <VideoPlayer
-          url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
+          url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
           controller={playerController}
         />
       </Box>

@@ -2,7 +2,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   videoPlayerContainer: {
-    width: "90%",
     margin: "auto",
   },
   actionButton: {

@@ -25,6 +25,7 @@ import useConfirmBeforeAction, {
 import useFirstRender from "../../hooks/useFirstRender";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
+import { api_base_address } from "../../utils/getApiKey";
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
@@ -69,14 +70,6 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
   }, [page, direction]);
 
   const currentChunk = useMemo(() => chunks[page], [chunks, page]);
-
-  const otherUsersTranscriptions = useMemo(
-    () =>
-      currentChunk.transcriptions.filter(
-        (transcription) => transcription.creatorid !== userName
-      ),
-    [currentChunk]
-  );
 
   useEffect(() => {
     userName && setTranscription(getUsersTranscription(currentChunk, userName));
@@ -150,11 +143,11 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
           </CentralModal>
           <Box className={classes.videoPlayerContainer}>
             <VideoPlayer
-              url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
+              url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
               controller={controller}
             />
           </Box>
-          <div style={{height: "50vh", overflow: "scroll"}}>
+          <div style={{ height: "50vh", overflow: "scroll" }}>
             <Slideshow
               onNavigate={goTo}
               currentPage={page}
@@ -167,42 +160,6 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
                 transcriptionState={[transcription, setTranscription]}
               />
             </Slideshow>
-            <div>
-              {otherUsersTranscriptions.map((t) => (
-                <SimpleCard
-                  key={t.creatorid}
-                  title={
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div style={{ fontSize: "1.2rem" }}>
-                        <span style={{ fontWeight: "bold" }}>Author:</span>
-                        {` ${t.creatorid}`}
-                      </div>
-                      <IndabaButton
-                        onClick={() =>
-                          tryCopyTranscription(transcription, t.content)
-                        }
-                        style={{
-                          padding: "0px",
-                          height: "32px",
-                          width: "32px",
-                          minWidth: "32px",
-                        }}
-                      >
-                        <FileCopy fontSize="small" />
-                      </IndabaButton>
-                    </div>
-                  }
-                  style={{ margin: "16px 0 16px 0" }}
-                >
-                  <div style={{whiteSpace: "pre"}}>{t.content}</div>
-                </SimpleCard>
-              ))}
-            </div>
           </div>
         </>
       )}
@@ -211,16 +168,18 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
           position: "absolute",
           left: 0,
           bottom: 0,
+          width: "100%"
         }}
       >
-        <SkipForwardBackButtons
+        {false && <SkipForwardBackButtons
+          style={{ margin: "8px", width: "calc(100% - 16px)", display: "flex", justifyContent: "space-between" }}
           skipForward={() =>
             duration && setProgress((progress) => progress + 5 / duration)
           }
           skipBackward={() =>
             duration && setProgress((progress) => progress - 5 / duration)
           }
-        />
+        />}
       </div>
     </div>
   );

@@ -43,7 +43,7 @@ const ChunkCard: React.FC<{
           </span>
         </div>
       }
-      style={{ ...style, position: "relative", margin: "8px" }}
+      cardStyle={{ ...style, position: "relative", margin: "8px" }}
     >
       {children}
     </SimpleCard>

@@ -46,6 +46,7 @@ import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackBut
 import SimpleCard from "../SimpleCard/SimpleCard";
 import ScrollToOnMount from "../ScrollToOnMount/ScrollToOnMount";
 import ChunkCardContextMenu from "./ChunkCardContextMenu";
+import { api_base_address } from "../../utils/getApiKey";
 
 type ChunkEditorProps = {
   /** Action to do when back button is pressed */
@@ -209,7 +210,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer
           controller={videoPlayerController}
-          url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
+          url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
           sliderMarks={marks}
           onProgressDrag={() => setPlayingChunk(undefined)}
         />
@@ -223,7 +224,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
                   chunk={c}
                   transcriptionIcon={
                     <ChunkCardContextMenu
-                      chunk={c}
                       menuItems={[
                         {
                           content: "Delete",
@@ -248,7 +248,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
                 >
                   <div style={{ marginTop: "8px", position: "relative" }}>
                     <VideoThumbnail
-                      url={`http://localhost:8845/api/watch/getvideo/${story_id}`}
+                      url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
                       time={
                         c.starttimeseconds +
                         (c.endtimeseconds - c.starttimeseconds) / 2
@@ -290,14 +290,20 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit }) => {
                   <GridListTile key="Done Card" onClick={handleCompleteChunking}>
                     <ScrollToOnMount style={{ height: "100%" }}>
                       <SimpleCard
-                        style={{
-                          backgroundColor: "#40bf11",
+                        contentStyle={{
+                          backgroundColor: "#40bf11C9",
                           height: "100%",
+                          padding: "16px",
                           display: "flex",
                           flexDirection: "row",
                           justifyContent: "center",
                           alignItems: "center",
                           color: "white",
+                        }}
+                        cardStyle={{
+                          margin: "8px",
+                          transform: "translateY(8px)",
+                          height: "calc(100% - 16px)"
                         }}
                       >
                         <Check
