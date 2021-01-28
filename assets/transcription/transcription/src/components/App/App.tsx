@@ -46,7 +46,7 @@ const App: React.FC<{}> = () => {
     usingVidOneString,
   ]);
 
-  const story_id = useStoryId(true);
+  const story_id = useStoryId(usingVidOne);
 
   const {
     storyTitle,
@@ -91,22 +91,22 @@ const App: React.FC<{}> = () => {
                 content: "Show Contributions",
                 handler: toggleShowContributers,
               },
-              // {
-              //   content: (
-              //     <div>
-              //       Use Video One{" "}
-              //       <Switch
-              //         checked={usingVidOne}
-              //         onChange={() =>
-              //           setUsingVidOneString((usingVidOneString) =>
-              //             usingVidOneString === "true" ? "false" : "true"
-              //           )
-              //         }
-              //       />
-              //     </div>
-              //   ),
-              //   handler: () => null,
-              // },
+              {
+                content: (
+                  <div>
+                    Use Video One{" "}
+                    <Switch
+                      checked={usingVidOne}
+                      onChange={() =>
+                        setUsingVidOneString((usingVidOneString) =>
+                          usingVidOneString === "true" ? "false" : "true"
+                        )
+                      }
+                    />
+                  </div>
+                ),
+                handler: () => null,
+              },
             ]}
           >
             {view === View.Dashboard ? (

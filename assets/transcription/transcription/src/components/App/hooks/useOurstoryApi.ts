@@ -64,7 +64,7 @@ const useOurstoryApi = (
         withCredentials: true,
         data: { ...story, transcription: { chunks } },
       });
-  }, [chunks, story, story_id]);
+  }, [chunks, story]);
 
   const memoChunks = useMemo<
     [Chunk[], (setter: (newState: Chunk[]) => Chunk[]) => void]
