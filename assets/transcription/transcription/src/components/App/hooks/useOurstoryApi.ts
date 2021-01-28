@@ -15,7 +15,9 @@ import { Chunk, Story } from "../../../utils/types";
  * @param chunks - the chunks state to synchonise to the api
  * @param setChunks - setter for the chunks
  */
-const useOurstoryApi = (story_id: string): {
+const useOurstoryApi = (
+  story_id: string
+): {
   storyTitle: string | undefined;
   chunksState: [Chunk[], (setter: (newState: Chunk[]) => Chunk[]) => void];
 } => {
@@ -26,12 +28,14 @@ const useOurstoryApi = (story_id: string): {
     setChunks(
       setter(
         (
-          await axios.request<Chunk[]>({
-            withCredentials: true,
-            url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
-            transformResponse: (r: string) =>
-              (JSON.parse(r) as Story).transcription.chunks,
-          })
+          await axios
+            .request<Chunk[]>({
+              withCredentials: true,
+              url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
+              transformResponse: (r: string) =>
+                (JSON.parse(r) as Story).transcription.chunks,
+            })
+            .catch(() => ({ data: chunks }))
         ).data
       )
     );

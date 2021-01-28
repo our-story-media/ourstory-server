@@ -1,5 +1,11 @@
-import { Box, Checkbox, makeStyles, Typography } from "@material-ui/core";
-import { Done, Edit } from "@material-ui/icons";
+import {
+  Box,
+  Checkbox,
+  Divider,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
+import { AccountCircle, Done, Edit } from "@material-ui/icons";
 import React, { useMemo, useContext, useEffect, useState } from "react";
 import useSlideshow from "../../hooks/useSlideshow";
 import { hasTranscription } from "../../utils/chunkManipulation";
@@ -36,6 +42,7 @@ const useStyles = makeStyles({
   cardContainer: {
     marginTop: "8px",
     marginBottom: "8px",
+    padding: "0 8px 0 8px",
   },
 });
 
@@ -110,11 +117,28 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
 
   const updateTranscription = useUpdateTranscription();
 
+  const [showIntroductionModal, setShowIntroductionModal] = useState(true);
+
   return (
     <div>
       <div style={{ marginTop: "4px" }}>
         <BackButton action={atExit} />
       </div>
+      <CentralModal
+        header={<h2 style={{ margin: 0 }}>Chunking Instructions</h2>}
+        open={showIntroductionModal}
+        exit={() => setShowIntroductionModal(false)}
+      >
+        <div style={{ padding: "0px 8px 16px 8px" }}>
+          You are about to review the transcriptions made on the video.
+          For each chunk, select one of the transcriptions from the list.
+          You can do this by clicking on the text or the check box to the
+          left of the text.<br/>
+          You can also edit the transcriptions by clicking on the pencil button
+          above the text.
+        </div>
+      </CentralModal>
+
       <CentralModal
         open={editingTranscription !== undefined}
         header={
@@ -183,64 +207,68 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
             (transcription) =>
               transcription.content && (
                 <Box key={transcription.id} className={classes.cardContainer}>
-                  <SimpleCard
-                    title={
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <div style={{ fontSize: "1.2rem" }}>
-                          <span style={{ fontWeight: "bold" }}>Author:</span>
-                          {` ${transcription.creatorid}`}
-                        </div>
-                        <IndabaButton
-                          onClick={() => setEditingTranscription(transcription)}
-                          style={{
-                            padding: "0px",
-                            height: "32px",
-                            width: "32px",
-                            minWidth: "32px",
-                          }}
-                        >
-                          <Edit fontSize="small" />
-                        </IndabaButton>
-                      </div>
-                    }
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
                   >
                     <div
-                      onClick={() =>
-                        userName &&
-                        (currentChunk.review?.selectedtranscription !==
+                      style={{
+                        fontSize: "1.2rem",
+                        display: "flex",
+                        justifyContent: "center",
+                        paddingLeft: "10px",
+                      }}
+                    >
+                      <AccountCircle />
+                      <div style={{ marginLeft: "4px" }}>
+                        {transcription.creatorid}
+                      </div>
+                    </div>
+                    <IndabaButton
+                      onClick={() => setEditingTranscription(transcription)}
+                      style={{
+                        padding: "0px",
+                        height: "32px",
+                        width: "32px",
+                        minWidth: "32px",
+                      }}
+                    >
+                      <Edit fontSize="small" />
+                    </IndabaButton>
+                  </div>
+                  <div
+                    onClick={() =>
+                      userName &&
+                      (currentChunk.review?.selectedtranscription !==
+                      transcription.id
+                        ? updateReview(currentChunk, transcription, userName)
+                        : deleteReview(currentChunk))
+                    }
+                    style={{ display: "flex", flexDirection: "row" }}
+                  >
+                    <Checkbox
+                      checked={
+                        currentChunk.review?.selectedtranscription ===
                         transcription.id
+                      }
+                      onChange={(_, checked) =>
+                        userName &&
+                        (checked
                           ? updateReview(currentChunk, transcription, userName)
                           : deleteReview(currentChunk))
                       }
-                      style={{ display: "flex", flexDirection: "row" }}
+                      style={{ backgroundColor: "initial" }}
+                    />
+                    <Typography
+                      variant="h5"
+                      style={{ whiteSpace: "pre", padding: "8px" }}
                     >
-                      <Checkbox
-                        checked={
-                          currentChunk.review?.selectedtranscription ===
-                          transcription.id
-                        }
-                        onChange={(_, checked) =>
-                          userName &&
-                          (checked
-                            ? updateReview(
-                                currentChunk,
-                                transcription,
-                                userName
-                              )
-                            : deleteReview(currentChunk))
-                        }
-                        style={{ backgroundColor: "initial" }}
-                      />
-                      <Typography style={{ whiteSpace: "pre", padding: "8px" }}>
-                        {transcription.content}
-                      </Typography>
-                    </div>
-                  </SimpleCard>
+                      {transcription.content}
+                    </Typography>
+                  </div>
+                  <Divider style={{ margin: "16px 0 16px 0" }} />
                 </Box>
               )
           )}

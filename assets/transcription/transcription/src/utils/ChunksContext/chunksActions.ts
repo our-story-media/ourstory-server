@@ -97,8 +97,9 @@ export const useNewChunk = () => {
     }
     const enclosingChunk = getEnclosingChunk(chunks, splitAt);
     if (enclosingChunk !== undefined) {
-      setChunks((chunks) =>
-        chunks
+      setChunks((chunks) => {
+        console.log(chunks);
+        const newChunks = chunks
           .filter((c) => c.id !== enclosingChunk.id)
           .concat([
             {
@@ -122,11 +123,14 @@ export const useNewChunk = () => {
               transcriptions: [],
             },
           ])
-          .sort((a, b) => a.endtimeseconds - b.endtimeseconds)
-      );
+          .sort((a, b) => a.endtimeseconds - b.endtimeseconds);
+        return newChunks;
+      });
     } else {
-      setChunks((chunks) =>
-        chunks.concat([
+      setChunks((chunks) => {
+        console.log(chunks);
+
+        const newChunks = chunks.concat([
           {
             starttimestamp: getLastEndTimeStamp(chunks),
             endtimestamp: toTimeStamp(splitAt * storyDuration),
@@ -137,8 +141,12 @@ export const useNewChunk = () => {
             id: uuidv4(),
             transcriptions: [],
           },
-        ])
-      );
+        ]);
+
+        console.log(newChunks);
+
+        return newChunks;
+      });
     }
   };
 };
@@ -158,8 +166,9 @@ export const useUpdateTranscription = () => {
   const [, setChunks] = chunksContext.useChunksState();
 
   return (toUpdate: Chunk, updatedTranscription: string, userName: string) => {
-    setChunks((chunks) =>
-      chunks.map((chunk) =>
+    setChunks((chunks) => {
+      console.log(chunks);
+      const newChunks = chunks.map((chunk) =>
         chunk.id === toUpdate.id
           ? {
               ...(chunk.review?.selectedtranscription ===
@@ -198,8 +207,10 @@ export const useUpdateTranscription = () => {
                   ),
             }
           : chunk
-      )
-    );
+      );
+      console.log(newChunks);
+      return newChunks;
+    });
   };
 };
 
