@@ -54,7 +54,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
     playerRef
   } = useVideoPlayerController();
 
-  const { setProgress } = progressState;
+  const { setProgressWithVideoUpdate } = progressState;
 
   const [chunks] = chunksContext.useChunksState();
 
@@ -90,7 +90,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
       start: currentChunk.starttimeseconds,
       end: currentChunk.endtimeseconds,
     });
-    setProgress(currentChunk.starttimeseconds);
+    setProgressWithVideoUpdate(currentChunk.starttimeseconds);
   }, [page, chunks, currentChunk]);
 
   const updateReview = useUpdateReview();

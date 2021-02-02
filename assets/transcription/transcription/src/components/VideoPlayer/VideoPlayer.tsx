@@ -96,6 +96,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       />
       {showControls && (
         <Button
+          disableRipple
           variant="contained"
           color="primary"
           className={classes.videoPlayerPlayButton}

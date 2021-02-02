@@ -1,4 +1,4 @@
-import { ButtonBase, makeStyles } from "@material-ui/core";
+import { ButtonBase, makeStyles, Typography } from "@material-ui/core";
 import { ChevronLeft } from "@material-ui/icons";
 import React from "react";
 
@@ -15,8 +15,10 @@ const BackButton: React.FC<BackButtonProps> = ({ action }) => {
 
   return (
     <ButtonBase className={classes.backButton} onClick={action}>
-      <ChevronLeft />
-      Back
+      <ChevronLeft fontSize="large" />
+      <Typography variant="h5">
+        Back
+      </Typography>
     </ButtonBase>
   );
 };

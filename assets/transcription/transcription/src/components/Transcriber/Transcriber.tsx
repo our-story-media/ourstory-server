@@ -48,7 +48,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     controller,
   } = useVideoPlayerController();
 
-  const { setProgress } = progressState;
+  const { setProgressWithVideoUpdate } = progressState;
 
   const { userName } = useContext(UserContext);
 
@@ -80,7 +80,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
       start: currentChunk.starttimeseconds,
       end: currentChunk.endtimeseconds,
     });
-    setProgress(currentChunk.starttimeseconds);
+    setProgressWithVideoUpdate(currentChunk.starttimeseconds);
   }, [chunks, page, userName]);
 
   const updateTranscription = useUpdateTranscription();
@@ -179,10 +179,10 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
         {false && <SkipForwardBackButtons
           style={{ margin: "8px", width: "calc(100% - 16px)", display: "flex", justifyContent: "space-between" }}
           skipForward={() =>
-            duration && setProgress((progress) => progress + 5 / duration)
+            duration && setProgressWithVideoUpdate((progress) => progress + 5 / duration)
           }
           skipBackward={() =>
-            duration && setProgress((progress) => progress - 5 / duration)
+            duration && setProgressWithVideoUpdate((progress) => progress - 5 / duration)
           }
         />}
       </div>

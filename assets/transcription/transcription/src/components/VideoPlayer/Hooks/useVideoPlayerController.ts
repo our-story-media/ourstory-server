@@ -21,7 +21,8 @@ const useVideoPlayerController = (): {
   const playerRef = useRef<ReactPlayer>(null);
 
   const updatePlayerProgress = useCallback((newVal: number) => {
-    playerRef?.current?.seekTo(newVal, "fraction");
+    const secondsLoaded = playerRef?.current?.getSecondsLoaded()
+    secondsLoaded && secondsLoaded > 0 && playerRef.current?.seekTo(newVal, "fraction");
   }, []);
 
   const [progress, setProgress] = useState(0);
