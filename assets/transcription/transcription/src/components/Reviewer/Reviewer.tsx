@@ -48,10 +48,13 @@ const useStyles = makeStyles({
 
 export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
   const {
-    progressState: [, setProgress],
+    progressState,
     splitState: [, setSplit],
     controller: playerController,
+    playerRef
   } = useVideoPlayerController();
+
+  const { setProgress } = progressState;
 
   const [chunks] = chunksContext.useChunksState();
 
@@ -192,6 +195,8 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
       </CentralModal>
       <Box>
         <VideoPlayer
+          playerRef={playerRef}
+          progressState={progressState}
           url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
           controller={playerController}
         />

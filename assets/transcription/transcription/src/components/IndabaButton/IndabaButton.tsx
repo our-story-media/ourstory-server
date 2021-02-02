@@ -18,16 +18,17 @@ const useButtonStyles = makeStyles({
   }),
 });
 
+const useStyleClass = (styles: any | undefined) => makeStyles({ overrideStyles: { ...styles }});
+
 const IndabaButton: React.FC<
   ButtonProps & { round?: boolean; styles?: any }
 > = ({ children, round, styles, ...props }) => {
-  const useStyleClass = makeStyles({ overrideStyles: { ...styles }});
-  const overrideClass = useStyleClass()
+  const overrideClass = useStyleClass(styles)()
 
   const classes = useButtonStyles(!!round);
 
   return (
-    <Button className={`${classes.button} ${overrideClass.overrideStyles}`} {...props}>
+    <Button disableRipple className={`${classes.button} ${overrideClass.overrideStyles}`} {...props}>
       {children}
     </Button>
   );

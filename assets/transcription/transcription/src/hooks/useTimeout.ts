@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 const useTimeout = <T extends (...args: any) => void>(
   timeUntilFire: number,
@@ -7,6 +7,7 @@ const useTimeout = <T extends (...args: any) => void>(
   startTimer: (...args: Parameters<T>) => void;
   cancelTimer: () => void;
   resetTimer: (...args: Parameters<T>) => void;
+  timerActive: boolean
 } => {
   const timer = useRef<null | NodeJS.Timeout>(null);
 
@@ -39,11 +40,14 @@ const useTimeout = <T extends (...args: any) => void>(
     cancelTimer();
     startTimer(...args);
   };
+  
+  const timerActive = useMemo(() => timer.current !== null, [timer.current]);
 
   return {
     startTimer,
     cancelTimer,
     resetTimer,
+    timerActive
   };
 };
 

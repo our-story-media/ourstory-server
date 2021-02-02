@@ -71,11 +71,14 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
   const [chunks] = chunksContext.useChunksState();
 
   const {
-    progressState: [progress, setProgress],
+    progressState: videoPlayerProgressState,
     playingState,
     duration,
     controller: videoPlayerController,
+    playerRef
   } = useVideoPlayerController();
+
+  const {progress, setProgress, setProgressWithVideoUpdate} = videoPlayerProgressState
 
   const [, setPlay] = playingState;
 
@@ -114,7 +117,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
       } else {
         setPlay(true);
         setPlayingChunk(chunkIdx);
-        setProgress(chunks[chunkIdx].starttimeseconds);
+        setProgressWithVideoUpdate(chunks[chunkIdx].starttimeseconds);
       }
     },
     [chunks]
@@ -170,18 +173,26 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
   };
 
   const [showIntroductionModal, setShowIntroductionModal] = useState(true);
+  const playButtonStyle = useMemo(
+    () => ({
+      marginRight: "4px",
+      position: "absolute",
+      left: "50%",
+      top: "50%",
+      transform: "translate(-50%, -50%)",
+      opacity: 0.8,
+    }),
+    []
+  );
 
-  const { startTimer, cancelTimer } = useTimeout(1000, () => console.log("Timed!"));
-
-  const throttledFunction = useThrottle(1000, () => {console.log("Yup")});
+  const playButtonClickHandler = useCallback(
+    (idx) => handleChunkPlayButtonClick(idx, playingChunk, playingState[0]),
+    [playingChunk]
+  );
 
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
-          <button onClick={startTimer}>Start</button>
-          <button onClick={cancelTimer}>Cancel</button>
-          <br/>
-          <button onClick={throttledFunction}>I'm throttled</button>
       <div style={{ marginTop: "4px" }}>
         <BackButton action={atExit} />
       </div>
@@ -192,12 +203,13 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
       >
         <div style={{ padding: "0px 8px 16px 8px" }}>
           You are about to chunk the video. The aim of chunking is to make
-          Transcribing easy. <br/>To create a chunk, press the '+' button in the
-          bottom right corner. The time that you press the '+' button in the
-          video will be the end of the new chunk. <br/>You should aim to have only
-          one person speaking in each chunk. Create a new chunk when there is a
-          change in who is talking, there is a gap in the talking, or a person
-          begins/ends talking.
+          Transcribing easy. <br />
+          To create a chunk, press the '+' button in the bottom right corner.
+          The time that you press the '+' button in the video will be the end of
+          the new chunk. <br />
+          You should aim to have only one person speaking in each chunk. Create
+          a new chunk when there is a change in who is talking, there is a gap
+          in the talking, or a person begins/ends talking.
         </div>
       </CentralModal>
       <EditChunkModal
@@ -238,6 +250,8 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
       <div className={classes.videoPlayerContainer}>
         <VideoPlayer
           controller={videoPlayerController}
+          progressState={videoPlayerProgressState}
+          playerRef={playerRef}
           url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
           sliderMarks={marks}
           onProgressDrag={() => setPlayingChunk(undefined)}
@@ -285,21 +299,8 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
                     <IndabaButton
                       round
                       color="primary"
-                      style={{
-                        marginRight: "4px",
-                        position: "absolute",
-                        left: "50%",
-                        top: "50%",
-                        transform: "translate(-50%, -50%)",
-                        opacity: 0.8,
-                      }}
-                      onClick={() =>
-                        handleChunkPlayButtonClick(
-                          idx,
-                          playingChunk,
-                          playingState[0]
-                        )
-                      }
+                      style={playButtonStyle as React.CSSProperties}
+                      onClick={() => playButtonClickHandler(idx)}
                     >
                       {playingChunk === idx && playingState[0] ? (
                         <Stop />
@@ -320,35 +321,32 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
                     onClick={handleCompleteChunking}
                   >
                     {/* <ScrollToOnMount style={{ height: "100%" }}> */}
-                      <SimpleCard
-                        contentStyle={{
-                          backgroundColor: "#40bf11C9",
-                          height: "100%",
-                          padding: "16px",
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          color: "white",
-                        }}
-                        cardStyle={{
-                          margin: "8px",
-                          transform: "translateY(8px)",
-                          height: "calc(100% - 16px)",
-                        }}
+                    <SimpleCard
+                      contentStyle={{
+                        backgroundColor: "#40bf11C9",
+                        height: "100%",
+                        padding: "16px",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        color: "white",
+                      }}
+                      cardStyle={{
+                        margin: "8px",
+                        transform: "translateY(8px)",
+                        height: "calc(100% - 16px)",
+                      }}
+                    >
+                      <Check fontSize="large" style={{ marginRight: "4px" }} />
+                      <Typography
+                        variant="h5"
+                        component="h2"
+                        style={{ transform: "translateY(2px)" }}
                       >
-                        <Check
-                          fontSize="large"
-                          style={{ marginRight: "4px" }}
-                        />
-                        <Typography
-                          variant="h5"
-                          component="h2"
-                          style={{ transform: "translateY(2px)" }}
-                        >
-                          Done
-                        </Typography>
-                      </SimpleCard>
+                        Done
+                      </Typography>
+                    </SimpleCard>
                     {/* </ScrollToOnMount> */}
                   </GridListTile>,
                 ]
@@ -364,12 +362,16 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
           }}
         >
           <SkipForwardBackButtons
-            skipForward={useCallback(() =>
-              duration && setProgress((progress) => progress + 5 / duration)
-            , [duration])}
-            skipBackward={useCallback(() =>
-              duration && setProgress((progress) => progress - 5 / duration)
-            , [duration])}
+            skipForward={useCallback(
+              () =>
+                duration && setProgressWithVideoUpdate((progress) => progress + 5 / duration),
+              [duration]
+            )}
+            skipBackward={useCallback(
+              () =>
+                duration && setProgressWithVideoUpdate((progress) => progress - 5 / duration),
+              [duration]
+            )}
           />
         </div>
         <div

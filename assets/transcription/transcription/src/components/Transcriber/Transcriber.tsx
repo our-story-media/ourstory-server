@@ -41,11 +41,14 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
   const [chunks] = chunksContext.useChunksState();
 
   const {
-    progressState: [, setProgress],
+    progressState,
+    playerRef,
     splitState: [, setSplit],
     duration,
     controller,
   } = useVideoPlayerController();
+
+  const { setProgress } = progressState;
 
   const { userName } = useContext(UserContext);
 
@@ -143,6 +146,8 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
           </CentralModal>
           <Box className={classes.videoPlayerContainer}>
             <VideoPlayer
+              progressState={progressState}
+              playerRef={playerRef}
               url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
               controller={controller}
             />

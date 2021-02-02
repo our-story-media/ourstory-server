@@ -1,21 +1,26 @@
 import { Box, Button, Mark, SliderProps, Typography } from "@material-ui/core";
 import { Pause, PlayArrow } from "@material-ui/icons";
-import React, { useRef } from "react";
+import React, { RefObject, useRef } from "react";
 import ReactPlayer from "react-player";
 import useDefaultState from "../../hooks/useDefaultState";
 import { toShortTimeStamp } from "../../utils/chunkManipulation";
-import { State } from "../../utils/types";
+import { State, StateSetter } from "../../utils/types";
 import IndabaSlider from "../IndabaSlider/IndabaSlider";
 import useVideoPlayerProps from "./Hooks/useVideoPlayerProps";
-import { ProgressState, SplitState } from "./Hooks/useVideoPlayerState";
+import { SplitState } from "./Hooks/useVideoPlayerState";
 import ProgressBarLabel from "./ProgressBarLabel";
 import useStyles from "./VideoPlayerStyles";
 
 export type VideoPlayerControllerType = {
-  progressState: State<ProgressState>;
   durationState: State<number>;
   playingState: State<boolean>;
   splitState: State<SplitState>;
+};
+
+export type ProgressState = {
+  progress: number;
+  setProgress: StateSetter<number>;
+  setProgressWithVideoUpdate: StateSetter<number>;
 };
 
 export type VideoPlayerProps = {
@@ -29,6 +34,8 @@ export type VideoPlayerProps = {
    * The url of the video
    */
   url: string;
+  playerRef: RefObject<ReactPlayer>;
+  progressState: ProgressState;
   sliderMarks?: Mark[];
   onProgressDrag?: () => void;
   slider?: React.ReactElement<SliderProps>;
@@ -36,21 +43,19 @@ export type VideoPlayerProps = {
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
   url,
+  playerRef,
   controller,
   sliderMarks,
+  progressState,
   onProgressDrag,
   slider,
 }) => {
   const classes = useStyles();
-  const playerRef = useRef<ReactPlayer>(null);
   const [duration, setDuration] = useDefaultState(
     controller ? controller.durationState : null,
     0
   );
-  const [progress, setProgress] = useDefaultState(
-    controller ? controller.progressState : null,
-    { progress: 0, fromPlayer: false }
-  );
+  const { progress, setProgress, setProgressWithVideoUpdate } = progressState;
   const playState = useDefaultState(
     controller ? controller.playingState : null,
     false
@@ -67,7 +72,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     isPlaying,
     toggleIsPlaying,
   } = useVideoPlayerProps(
-    [progress, setProgress],
+    progressState,
     playState,
     playerRef,
     setDuration,
@@ -105,7 +110,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           >
             {duration &&
               `${toShortTimeStamp(
-                (progress.progress - split.start) * duration
+                (progress - split.start) * duration
               )} / ${toShortTimeStamp((split.end - split.start) * duration)}`}
           </Typography>
           <IndabaSlider

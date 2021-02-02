@@ -2,12 +2,30 @@
 import { useState, useEffect, RefObject, useMemo, useCallback } from "react";
 import ReactPlayer, { ReactPlayerProps } from "react-player";
 import useDebounce from "../../../hooks/useDebounce";
-import useThrottle from "../../../hooks/useThrottle";
 import { StateSetter } from "../../../utils/types";
+import { ProgressState } from "../VideoPlayer";
 
-// Internal Dependencies
-import useFadeControls from "./useFadeControls";
-import { ProgressState } from "./useVideoPlayerState";
+const useProgressBarControls = (
+  initialValue: number,
+  playerUpdater: (newValue: number) => void
+): {
+  value: number;
+  setWithoutVideoUpdate: (newValue: number) => void;
+  setWithVideoUpdate: (newValue: number) => void;
+} => {
+  const [state, setState] = useState(initialValue);
+
+  return {
+    value: state,
+    setWithoutVideoUpdate: (newValue: number) => {
+      setState(newValue);
+    },
+    setWithVideoUpdate: (newValue: number) => {
+      playerUpdater(newValue);
+      setState(newValue);
+    },
+  };
+};
 
 /**
  * This hook maintains the logic for the VideoPlayer component.
@@ -18,10 +36,7 @@ import { ProgressState } from "./useVideoPlayerState";
  * @param playerRef - a reference to the player that this hook controls
  */
 const useVideoPlayerProps = (
-  progressStateIn: [
-    progressState: ProgressState,
-    setProgress: (state: ProgressState) => void
-  ],
+  progressState: ProgressState,
   playStateIn: [play: boolean, setPlay: StateSetter<boolean>],
   playerRef: RefObject<ReactPlayer>,
   setDuration: (state: number) => void,
@@ -47,7 +62,7 @@ const useVideoPlayerProps = (
   const [dragging, setDragging] = useState(false);
 
   /* State for the progress through the video, as a fraction */
-  const [progressState, setProgressState] = progressStateIn;
+  const { progress, setProgress, setProgressWithVideoUpdate } = progressState;
 
   useEffect(() => {
     if (isLoaded && playerRef.current) {
@@ -67,45 +82,27 @@ const useVideoPlayerProps = (
       playing: !dragging && isPlaying,
       progressInterval: 250,
       onProgress: ({ played /*playedSeconds, loaded, loadedSeconds*/ }) =>
-        setProgressState({ progress: played, fromPlayer: true }),
+        setProgress(played),
       onReady: () => setIsLoaded(true),
       onEnded: () => setIsPlaying(false),
     }),
-    [dragging, isPlaying, setIsLoaded, setIsPlaying, setProgressState]
+    [dragging, isPlaying]
   );
 
-  const [progressBarValue, setProgressBarValue] = useState(
-    useMemo(() => progressState.progress * 100, [])
+  const {
+    value: progressBarValue,
+    setWithVideoUpdate: onScrobble,
+    setWithoutVideoUpdate: updateProgressBar,
+  } = useProgressBarControls(
+    progress * 100,
+    useDebounce((newVal: number) => {
+      setProgressWithVideoUpdate(newVal / 100);
+    }, 100)
   );
 
   useEffect(() => {
-    progressState.fromPlayer &&
-      setProgressBarValue(progressState.progress * 100);
-  }, [progressState]);
-
-  const debouncedProgressBarValue = useDebounce(progressBarValue, 100);
-
-  useEffect(() => {
-    setProgressState({
-      progress: debouncedProgressBarValue / 100,
-      fromPlayer: false,
-    });
-  }, [debouncedProgressBarValue]);
-
-  const progressBarOnChange = useCallback(
-    (_: any, newVal: number | number[]) => {
-      setProgressBarValue(newVal as number);
-    },
-    []
-  );
-
-  const progressBarOnCommitChange = useCallback(
-    (_: any, newVal: number | number[]) => {
-      playerRef?.current?.seekTo((newVal as number) / 100, "fraction");
-      setDragging(false);
-    },
-    []
-  );
+    updateProgressBar(progress * 100);
+  }, [progress]);
 
   /* These are the props that will be passed onto the Slider component (the slider component is the video progress bar) */
   const progressBarProps = useMemo(
@@ -114,38 +111,28 @@ const useVideoPlayerProps = (
       min: split.start * 100,
       max: split.end * 100,
       step: 0.0001,
-      onChange: progressBarOnChange,
-      onChangeCommitted: progressBarOnCommitChange,
+      onChange: (_: any, newVal: number | number[]) => {
+        onProgressDrag && onProgressDrag();
+        setDragging(true);
+        onScrobble(newVal as number);
+      },
+      onChangeCommitted: (_: any, newVal: number | number[]) => {
+        setDragging(false);
+      },
     }),
-    [progressBarValue, split, progressBarOnChange, progressBarOnCommitChange]
+    [progressBarValue, split]
   );
-
-  useEffect(() => {
-    /** If the change in state wasn't from the ReactPlayer component,
-     *  we need to update the player ourselves
-     */
-    !progressState.fromPlayer &&
-      isLoaded &&
-      playerRef?.current?.seekTo(progressState.progress, "fraction");
-  }, [progressState, dragging, isPlaying, isLoaded, playerRef]);
 
   useEffect(() => {
     /** If the video is playing and it has reached the end, stop it from continuing */
     if (progressState.progress > split.end) {
-      setProgressState({ progress: split.end, fromPlayer: false });
+      setProgress(split.end);
       setIsPlaying(false);
       /** If the video's progress is before the start of the split, set it to the start */
-    } else if (progressState.progress < split.start) {
-      setProgressState({ progress: split.start, fromPlayer: false });
+    } else if (progress < split.start) {
+      setProgress(split.start);
     }
-  }, [
-    progressState,
-    setProgressState,
-    isPlaying,
-    setIsPlaying,
-    split.end,
-    split.start,
-  ]);
+  }, [progress, isPlaying, setIsPlaying, split.end, split.start]);
 
   return {
     playerProps,

@@ -1,23 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 import useTimeout from "./useTimeout";
 
-const useDebounce = <T extends any>(val: T, time: number): T => {
-  const [debouncedVal, setDebouncedVal] = useState(useMemo(() => val, []));
+type NoValue = {};
 
-  const { startTimer, cancelTimer, resetTimer } = useTimeout(
+const useDebounce = <T extends (...args: any) => void>(fn: T, time: number): (...args: Parameters<T>) => void => {
+  const { startTimer, resetTimer, timerActive } = useTimeout(
     time,
-    (newVal: T) => {
-      console.log(`Debouncing ${newVal}`);
-      setDebouncedVal(newVal);
-    }
+    fn
   );
 
-  useEffect(() => {
-    startTimer(val);
-    resetTimer(val);
-  }, [val]);
+  const debounceFn = (...args: Parameters<T>) => {
+    timerActive ? resetTimer(...args) : startTimer(...args);
+  };
 
-  return debouncedVal;
+  return debounceFn;
 };
 
 export default useDebounce;

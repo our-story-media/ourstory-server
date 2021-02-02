@@ -1,5 +1,13 @@
 import { Container } from "@material-ui/core";
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import React, {
+  useState,
+  useEffect,
+  ChangeEvent,
+  FormEvent,
+  useRef,
+  useCallback,
+} from "react";
+import ReactPlayer from "react-player";
 import { api_base_address } from "../../utils/getApiKey";
 import story_id from "../../utils/getId";
 import { Chunk, State } from "../../utils/types";
@@ -43,9 +51,11 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
   storyDuration,
   croppedSplitState,
 }) => {
+  
   const {
-    progressState: [cropPlayerProgress, setCropPlayerProgress],
+    progressState: cropPlayerProgressState,
     controller: cropPlayerController,
+    playerRef: cropperPlayerRef
   } = useVideoPlayerController();
 
   const [videoSplit, setVideoSplit] = useState([0, 0] as [number, number]);
@@ -53,7 +63,7 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
 
   /* Set initial state based on props  */
   useEffect(() => {
-    setCropPlayerProgress(chunk.starttimeseconds);
+    cropPlayerProgressState.setProgress(chunk.starttimeseconds);
     const start = chunk.starttimeseconds - 2 / storyDuration;
     const end = chunk.endtimeseconds + 2 / storyDuration;
     setVideoSplit([start < 0 ? 0 : start, end > 1 ? 1 : end]);
@@ -66,13 +76,15 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
         <h2 style={{ margin: 0 }}>Cropping:</h2>
       </Container>
       <VideoPlayer
+        progressState={cropPlayerProgressState}
         url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
         controller={cropPlayerController}
+        playerRef={cropperPlayerRef}
         slider={
           <IndabaSlider
             value={[
               croppedSplit[0] * 100,
-              cropPlayerProgress * 100,
+              cropPlayerProgressState.progress * 100,
               croppedSplit[1] * 100,
             ]}
             min={videoSplit[0] * 100}
@@ -85,7 +97,7 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
                   (newValue as number[])[0] / 100,
                   (newValue as number[])[2] / 100,
                 ]);
-                setCropPlayerProgress((newValue as number[])[1] / 100);
+                cropPlayerProgressState.setProgress((newValue as number[])[1] / 100);
               }) as ((
                 event: ChangeEvent<{}>,
                 value: number | number[]
