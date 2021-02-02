@@ -42,24 +42,32 @@ const App: React.FC<{}> = () => {
     setUsingVidOneString("true");
   }
 
-  const usingVidOne = useMemo(() => usingVidOneString === "true", [
-    usingVidOneString,
-  ]);
+  const usingVidOne = useMemo(() => {
+    console.log(usingVidOneString)
+    return usingVidOneString === "true";
+  }, [usingVidOneString]);
 
   const story_id = useStoryId(usingVidOne);
+
+  // console.log(`App says: ${story_id}`);
 
   const {
     storyTitle,
     chunksState: [chunks, setChunks],
   } = useOurstoryApi(story_id);
 
-  const chunkingProgress = useMemo(() => getLastEndTimeSeconds(chunks), [chunks]);
-  const transcriptionProgress = useMemo(() => chunks.length
-    ? countChunksWithTranscription(chunks) / chunks.length
-    : 0, [chunks]);
-  const reviewProgress = useMemo(() => chunks.length
-    ? countReviewedChunks(chunks) / chunks.length
-    : 0, [chunks]);
+  const chunkingProgress = useMemo(() => getLastEndTimeSeconds(chunks), [
+    chunks,
+  ]);
+  const transcriptionProgress = useMemo(
+    () =>
+      chunks.length ? countChunksWithTranscription(chunks) / chunks.length : 0,
+    [chunks]
+  );
+  const reviewProgress = useMemo(
+    () => (chunks.length ? countReviewedChunks(chunks) / chunks.length : 0),
+    [chunks]
+  );
 
   const steps = useSteps(setView, [
     { progress: chunkingProgress * 100, enabled: true },

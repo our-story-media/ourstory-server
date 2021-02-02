@@ -43,6 +43,7 @@ const useStyles = makeStyles({
     marginTop: "8px",
     marginBottom: "8px",
     padding: "0 8px 0 8px",
+    width: "100%",
   },
 });
 
@@ -206,6 +207,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
         onNavigate={goTo}
         numberOfPages={chunksToReview.length}
         onComplete={atExit}
+        style={{width: "100%"}}
       >
         <ChunkCard chunk={currentChunk}>
           {currentChunk.transcriptions.map(
@@ -267,8 +269,8 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
                       style={{ backgroundColor: "initial" }}
                     />
                     <Typography
-                      variant="h5"
-                      style={{ whiteSpace: "pre", padding: "8px" }}
+                      variant="h6"
+                      style={{ padding: "8px" }}
                     >
                       {transcription.content}
                     </Typography>

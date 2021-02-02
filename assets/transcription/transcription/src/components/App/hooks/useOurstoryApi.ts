@@ -22,26 +22,73 @@ const useOurstoryApi = (
   chunksState: [Chunk[], (setter: (newState: Chunk[]) => Chunk[]) => void];
 } => {
   const [story, setStory] = useState<Story | undefined>(undefined);
-  const [chunks, setChunks] = useState<Chunk[]>([]);
 
-  const setWithUpdate = async (setter: (state: Chunk[]) => Chunk[]) => {
-    setChunks(
-      setter(
-        (
-          await axios
-            .request<Chunk[]>({
-              withCredentials: true,
-              url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
-              transformResponse: (r: string) =>
-                (JSON.parse(r) as Story).transcription.chunks,
-            })
-            .catch(() => ({ data: chunks }))
-        ).data
-      )
+  const chunks = useMemo(() => story?.transcription.chunks ?? [], [
+    story?.transcription?.chunks,
+  ]);
+
+  const setChunks = (new_chunks: Chunk[]) => {
+    setStory((story) =>
+      story === undefined
+        ? undefined
+        : { ...story, transcription: { chunks: new_chunks } }
     );
   };
 
+  const pushStoryChanges = (new_story: Story) => {
+    axios.request<Story>({
+      url: `http://${api_base_address}:8845/api/watch/savedit/${story_id}?apikey=${api_key}`,
+      method: "POST",
+      withCredentials: true,
+      data: new_story,
+    });
+  };
+
+  const setChunksWithUpdate = async (
+    setter: (new_chunks: Chunk[]) => Chunk[]
+  ) => {
+    const new_chunks = setter(
+      (
+        await axios.request<Chunk[]>({
+          withCredentials: true,
+          url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
+          transformResponse: (r: string) =>
+            (JSON.parse(r) as Story).transcription.chunks,
+        })
+      ).data
+    );
+
+    const new_story =
+      story === undefined
+        ? undefined
+        : { ...story, transcription: { chunks: new_chunks } };
+
+    setStory(new_story);
+    new_story && pushStoryChanges(new_story);
+  };
+
+  // const setWithUpdnew_chunksc;(setter: (state: Chunk[]) => Chunk[]) => {
+  //   console.log(`Setting Chunks with update for story: ${story_id}`)
+  //   setChunks(
+  //     setter(
+  //       (
+  //         await axios
+  //           .request<Chunk[]>({
+  //             withCredentials: true,
+  //             url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
+  //             transformResponse: (r: string) =>
+  //               (JSON.parse(r) as Story).transcription.chunks,
+  //           })
+  //           .catch(() => ({ data: chunks }))
+  //       ).data
+  //     )
+  //   );
+  // };
+
   useEffect(() => {
+    console.log(
+      `Story_id has changed, fetching story and chunks for story_id: ${story_id}`
+    );
     axios
       .request<Story>({
         url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
@@ -56,19 +103,19 @@ const useOurstoryApi = (
       });
   }, [story_id]);
 
-  useEffect(() => {
-    story &&
-      axios.request<Story>({
-        url: `http://${api_base_address}:8845/api/watch/savedit/${story_id}?apikey=${api_key}`,
-        method: "POST",
-        withCredentials: true,
-        data: { ...story, transcription: { chunks } },
-      });
-  }, [chunks, story]);
+  // useEffect(() => {
+  //   console.log(
+  //     `Chunks or story has changed, pushing these changes for story_id: ${story_id}`
+  //   );
+  //   console.log(`The new chunks are:`);
+  //   console.log(chunks);
+  //   console.log(`The new story is: `);
+  //   console.log(story);
+  // }, [story]);
 
   const memoChunks = useMemo<
     [Chunk[], (setter: (newState: Chunk[]) => Chunk[]) => void]
-  >(() => [chunks, setWithUpdate], [chunks]);
+  >(() => [chunks, setChunksWithUpdate], [chunks]);
 
   return {
     storyTitle: story && story.title,
