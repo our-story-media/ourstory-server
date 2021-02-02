@@ -90,17 +90,16 @@ const useVideoPlayerProps = (
     [dragging, isPlaying]
   );
 
+  const { throttledFn: throttleUpdateVideo, flush: flushUpdateVideo } = useThrottle((newVal: number) => {
+    console.log("Updating video progress");
+    setProgressWithVideoUpdate(newVal / 100);
+  }, 200);
+
   const {
     value: progressBarValue,
     setWithVideoUpdate: onScrobble,
     setWithoutVideoUpdate: updateProgressBar,
-  } = useProgressBarControls(
-    progress * 100,
-    useThrottle((newVal: number) => {
-      console.log("Updating video progress");
-      setProgressWithVideoUpdate(newVal / 100);
-    }, 200)
-  );
+  } = useProgressBarControls(progress * 100, throttleUpdateVideo);
 
   useEffect(() => {
     updateProgressBar(progress * 100);
@@ -119,6 +118,7 @@ const useVideoPlayerProps = (
         onScrobble(newVal as number);
       },
       onChangeCommitted: (_: any, newVal: number | number[]) => {
+        flushUpdateVideo();
         setDragging(false);
       },
     }),

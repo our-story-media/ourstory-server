@@ -1,16 +1,23 @@
+import { useCallback, useState } from "react";
 import useTimeout from "./useTimeout";
 
 const useThrottle = <T extends (...args: any) => void>(
   fn: T,
   time: number
-): ((...args: Parameters<T>) => void) => {
-  const { startTimer, timerActive } = useTimeout(time, () => null);
+): { throttledFn: (...args: Parameters<T>) => void, flush: () => void } => {
+  const [flush, setFlush] = useState<(() => void)>(() => () => null)
 
-  return (...args: Parameters<T>) => {
-    if (!timerActive) {
-      startTimer();
-      fn(...args);
-    }
+  const { startTimer, timerActive } = useTimeout(time, ()=>null);
+
+  return {
+    throttledFn: (...args: Parameters<T>) => {
+      setFlush(() => () => fn(...args));
+      if (!timerActive) {
+        startTimer();
+        fn(...args);
+      }
+    },
+    flush
   };
 };
 
