@@ -4,12 +4,8 @@ import React, {
   useEffect,
   ChangeEvent,
   FormEvent,
-  useRef,
-  useCallback,
 } from "react";
-import ReactPlayer from "react-player";
 import { api_base_address } from "../../utils/getApiKey";
-import story_id from "../../utils/getId";
 import { Chunk, State } from "../../utils/types";
 import IndabaSlider from "../IndabaSlider/IndabaSlider";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
@@ -41,12 +37,14 @@ const CropThumbComponent: React.FC<{}> = (props) => {
 };
 
 type ChunkCropperProps = {
+  story_id: string,
   chunk: Chunk;
   storyDuration: number;
   croppedSplitState: State<[number, number]>;
 };
 
 const ChunkCropper: React.FC<ChunkCropperProps> = ({
+  story_id,
   chunk,
   storyDuration,
   croppedSplitState,
@@ -63,7 +61,7 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
 
   /* Set initial state based on props  */
   useEffect(() => {
-    cropPlayerProgressState.setProgress(chunk.starttimeseconds);
+    cropPlayerProgressState.setProgressWithVideoUpdate(chunk.starttimeseconds);
     const start = chunk.starttimeseconds - 2 / storyDuration;
     const end = chunk.endtimeseconds + 2 / storyDuration;
     setVideoSplit([start < 0 ? 0 : start, end > 1 ? 1 : end]);
@@ -97,7 +95,7 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
                   (newValue as number[])[0] / 100,
                   (newValue as number[])[2] / 100,
                 ]);
-                cropPlayerProgressState.setProgress((newValue as number[])[1] / 100);
+                cropPlayerProgressState.setProgressWithVideoUpdate((newValue as number[])[1] / 100);
               }) as ((
                 event: ChangeEvent<{}>,
                 value: number | number[]

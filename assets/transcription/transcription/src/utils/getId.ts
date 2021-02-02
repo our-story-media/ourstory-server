@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const story_id = "5cd5f30e82d5b02a00cfcea3"; // window.location.href.split('/')[5].split('?')[0];
+// const story_id = "5cd5f30e82d5b02a00cfcea3"; // window.location.href.split('/')[5].split('?')[0];
 
 export const useStoryId = (useVidOne: boolean) => {
   const [story_id, set_story_id] = useState(
@@ -14,4 +14,4 @@ export const useStoryId = (useVidOne: boolean) => {
   return story_id
 };
 
-export default story_id;
+// export default story_id;

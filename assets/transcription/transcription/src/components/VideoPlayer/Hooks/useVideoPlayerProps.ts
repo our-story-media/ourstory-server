@@ -2,6 +2,7 @@
 import { useState, useEffect, RefObject, useMemo, useCallback } from "react";
 import ReactPlayer, { ReactPlayerProps } from "react-player";
 import useDebounce from "../../../hooks/useDebounce";
+import useThrottle from "../../../hooks/useThrottle";
 import { StateSetter } from "../../../utils/types";
 import { ProgressState } from "../VideoPlayer";
 
@@ -95,9 +96,10 @@ const useVideoPlayerProps = (
     setWithoutVideoUpdate: updateProgressBar,
   } = useProgressBarControls(
     progress * 100,
-    useDebounce((newVal: number) => {
+    useThrottle((newVal: number) => {
+      console.log("Updating video progress");
       setProgressWithVideoUpdate(newVal / 100);
-    }, 100)
+    }, 200)
   );
 
   useEffect(() => {

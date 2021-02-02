@@ -24,11 +24,11 @@ const ChunkNameEditor: React.FC<{ nameState: State<string> }> = ({
 };
 
 const EditChunkModal: React.FC<{
+  story_id: string,
   chunk: Chunk | undefined;
-  shown: boolean;
   exit: () => void;
   storyDuration: number;
-}> = ({ chunk, shown, exit, storyDuration }) => {
+}> = ({ story_id, chunk, exit, storyDuration }) => {
   const [name, setName] = useState("");
 
   useEffect(() => {
@@ -47,11 +47,11 @@ const EditChunkModal: React.FC<{
         chunk && userName && cropChunk(chunk, storyDuration, newCropSplit, userName, name);
         exit();
       }}
-      open={shown}
+      open={chunk !== undefined}
       header={<ChunkNameEditor nameState={[name, setName]} />}
     >
       <div style={{paddingBottom: "24px"}}>
-        {chunk && <ChunkCropper croppedSplitState={[newCropSplit, setNewCropSplit]} storyDuration={storyDuration} chunk={chunk} />}
+        {chunk && <ChunkCropper story_id={story_id} croppedSplitState={[newCropSplit, setNewCropSplit]} storyDuration={storyDuration} chunk={chunk} />}
       </div>
     </CentralModal>
   );

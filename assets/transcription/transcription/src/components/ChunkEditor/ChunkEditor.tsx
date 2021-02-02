@@ -47,8 +47,6 @@ import ScrollToOnMount from "../ScrollToOnMount/ScrollToOnMount";
 import ChunkCardContextMenu from "./ChunkCardContextMenu";
 import { api_base_address } from "../../utils/getApiKey";
 import CentralModal from "../CentralModal/CentralModal";
-import useTimeout from "../../hooks/useTimeout";
-import useThrottle from "../../hooks/useThrottle";
 
 type ChunkEditorProps = {
   /** Action to do when back button is pressed */
@@ -75,10 +73,10 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
     playingState,
     duration,
     controller: videoPlayerController,
-    playerRef
+    playerRef,
   } = useVideoPlayerController();
 
-  const {progress, setProgress, setProgressWithVideoUpdate} = videoPlayerProgressState
+  const { progress, setProgressWithVideoUpdate } = videoPlayerProgressState;
 
   const [, setPlay] = playingState;
 
@@ -92,38 +90,31 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
 
   const classes = useStyles();
 
-  const [playingChunk, setPlayingChunk] = useState<undefined | number>(
+  const [playingChunk, setPlayingChunk] = useState<undefined | Chunk>(
     undefined
   );
 
   useEffect(() => {
-    if (
-      playingChunk !== undefined &&
-      progress > chunks[playingChunk].endtimeseconds
-    ) {
+    if (playingChunk !== undefined && progress > playingChunk.endtimeseconds) {
       setPlayingChunk(undefined);
       setPlay(false);
     }
   }, [progress, playingChunk, chunks]);
 
   const handleChunkPlayButtonClick = useCallback(
-    (
-      chunkIdx: number,
-      playingChunk: number | undefined,
-      videoPlaying: boolean
-    ) => {
-      if (playingChunk === chunkIdx && videoPlaying) {
+    (chunk: Chunk, playingChunk: Chunk | undefined, videoPlaying: boolean) => {
+      if (playingChunk?.id === chunk.id && videoPlaying) {
         setPlay(false);
       } else {
         setPlay(true);
-        setPlayingChunk(chunkIdx);
-        setProgressWithVideoUpdate(chunks[chunkIdx].starttimeseconds);
+        setPlayingChunk(chunk);
+        setProgressWithVideoUpdate(chunk.starttimeseconds);
       }
     },
     [chunks]
   );
 
-  const [croppingChunk, setCroppingChunk] = useState<number | undefined>(
+  const [croppingChunk, setCroppingChunk] = useState<Chunk | undefined>(
     undefined
   );
 
@@ -213,8 +204,8 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
         </div>
       </CentralModal>
       <EditChunkModal
-        shown={croppingChunk !== undefined}
-        chunk={chunks[croppingChunk ? croppingChunk : 0]}
+        story_id={story_id}
+        chunk={croppingChunk}
         exit={() => setCroppingChunk(undefined)}
         storyDuration={duration}
       />
@@ -259,7 +250,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
       </div>
       <GridList className={classes.chunksList} cellHeight="auto" cols={2.5}>
         {chunks
-          .map((c, idx) => (
+          .map((c) => (
             <GridListTile key={c.id}>
               <ScrollToOnMount>
                 <ChunkCard
@@ -273,7 +264,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
                         },
                         {
                           content: "Edit",
-                          handler: () => setCroppingChunk(idx),
+                          handler: () => setCroppingChunk(c),
                         },
                       ].concat(
                         c.transcriptions.length !== 0
@@ -300,9 +291,9 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
                       round
                       color="primary"
                       style={playButtonStyle as React.CSSProperties}
-                      onClick={() => playButtonClickHandler(idx)}
+                      onClick={() => playButtonClickHandler(c)}
                     >
-                      {playingChunk === idx && playingState[0] ? (
+                      {playingChunk?.id === c.id && playingState[0] ? (
                         <Stop />
                       ) : (
                         <PlayArrow />
@@ -364,12 +355,18 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
           <SkipForwardBackButtons
             skipForward={useCallback(
               () =>
-                duration && setProgressWithVideoUpdate((progress) => progress + 5 / duration),
+                duration &&
+                setProgressWithVideoUpdate(
+                  (progress) => progress + 5 / duration
+                ),
               [duration]
             )}
             skipBackward={useCallback(
               () =>
-                duration && setProgressWithVideoUpdate((progress) => progress - 5 / duration),
+                duration &&
+                setProgressWithVideoUpdate(
+                  (progress) => progress - 5 / duration
+                ),
               [duration]
             )}
           />

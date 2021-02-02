@@ -1,23 +1,17 @@
 import useTimeout from "./useTimeout";
-import useToggle from "./useToggle";
 
-const useThrottle = <T extends (...args: any) => any>(
-  time: number,
-  fn: T
-): ((...args: Parameters<T>) => ReturnType<T> | undefined) => {
-  const [lock, toggleLock, setLock] = useToggle(false);
-
-  const { startTimer } = useTimeout(time, toggleLock);
-
-  const onFunctionCalled = () => {
-    setLock(true);
-    startTimer();
-  }
+const useThrottle = <T extends (...args: any) => void>(
+  fn: T,
+  time: number
+): ((...args: Parameters<T>) => void) => {
+  const { startTimer, timerActive } = useTimeout(time, () => null);
 
   return (...args: Parameters<T>) => {
-    onFunctionCalled();
-    return lock ? undefined : fn(...args);
-  }
+    if (!timerActive) {
+      startTimer();
+      fn(...args);
+    }
+  };
 };
 
 export default useThrottle;

@@ -1,6 +1,6 @@
 import { Box, Button, Mark, SliderProps, Typography } from "@material-ui/core";
 import { Pause, PlayArrow } from "@material-ui/icons";
-import React, { RefObject, useRef } from "react";
+import React, { RefObject, useCallback } from "react";
 import ReactPlayer from "react-player";
 import useDefaultState from "../../hooks/useDefaultState";
 import { toShortTimeStamp } from "../../utils/chunkManipulation";
@@ -55,7 +55,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     controller ? controller.durationState : null,
     0
   );
-  const { progress, setProgress, setProgressWithVideoUpdate } = progressState;
+  const { progress } = progressState;
   const playState = useDefaultState(
     controller ? controller.playingState : null,
     false
@@ -78,6 +78,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setDuration,
     split,
     onProgressDrag
+  );
+
+  const sliderValueLabelFormat = useCallback(
+    (progress: number) => toShortTimeStamp((progress / 100) * duration),
+    [duration]
   );
 
   return (
@@ -115,9 +120,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           </Typography>
           <IndabaSlider
             valueLabelDisplay="auto"
-            valueLabelFormat={(progress) =>
-              toShortTimeStamp((progress / 100) * duration)
-            }
+            valueLabelFormat={sliderValueLabelFormat}
             ValueLabelComponent={ProgressBarLabel}
             marks={sliderMarks ? sliderMarks : []}
             {...progressBarProps}
