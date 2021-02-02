@@ -36,31 +36,43 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <Container style={{ height: "calc(100vh - 5px)", marginTop: "5px", display: "flex", flexDirection: "column" }}>
-        <div className={classes.titleRow}>
-          <div className={classes.logoContainer}>
-            <img src={Logo} alt="logo" width="120px" height="36px" />
-            <span className={classes.buildVersion}>TITAN</span>
+      <Container
+        style={{
+          height: "calc(100vh - 5px)",
+          width: "100%",
+          transform: "translateX(2px)",
+          padding: 0,
+          marginTop: "5px",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Container>
+          <div className={classes.titleRow}>
+            <div className={classes.logoContainer}>
+              <img src={Logo} alt="logo" width="120px" height="36px" />
+              <span className={classes.buildVersion}>TITAN</span>
+            </div>
+            <div className={classes.titleContainer}>
+              <div className={classes.titleWrapper}>{title}</div>
+            </div>
+            <ClickAwayListener onClickAway={hideContextMenu}>
+              <IconButton
+                className={classes.contextMenuButton}
+                onClick={toggleShowContextMenu}
+                ref={contextMenuButtonRef}
+              >
+                <MoreVert />
+              </IconButton>
+            </ClickAwayListener>
+            <IndabaMenu
+              show={showContextMenu}
+              anchor={contextMenuButtonRef.current!}
+              menuItems={contextMenuItems}
+            />
           </div>
-          <div className={classes.titleContainer}>
-            <div className={classes.titleWrapper}>{title}</div>
-          </div>
-          <ClickAwayListener onClickAway={hideContextMenu}>
-            <IconButton
-              className={classes.contextMenuButton}
-              onClick={toggleShowContextMenu}
-              ref={contextMenuButtonRef}
-            >
-              <MoreVert />
-            </IconButton>
-          </ClickAwayListener>
-          <IndabaMenu
-            show={showContextMenu}
-            anchor={contextMenuButtonRef.current!}
-            menuItems={contextMenuItems}
-          />
-        </div>
         <Divider />
+        </Container>
         {children}
       </Container>
     </>

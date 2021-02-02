@@ -41,7 +41,7 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
   const classes = useStyles();
 
   return (
-    <Box>
+    <Container>
       <NameModal setName={setName} show={!userName} />
       <Container className={classes.introContainer}>
         <Title storyName={storyName} />
@@ -63,7 +63,7 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
           ))}
         </GridList>
       </Box>
-    </Box>
+    </Container>
   );
 };
 

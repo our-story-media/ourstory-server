@@ -1,5 +1,5 @@
 // External Dependencies
-import { Box, Typography } from "@material-ui/core";
+import { Box, Container, Typography } from "@material-ui/core";
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 
 // Internal Dependencies
@@ -114,9 +114,9 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
 
   return (
     <div>
-      <div style={{ marginTop: "4px" }}>
+      <Container style={{ marginTop: "4px" }}>
         <BackButton action={exitHandler} />
-      </div>
+      </Container>
       {chunks.length && (
         <>
           <CentralModal
@@ -152,7 +152,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
               controller={controller}
             />
           </Box>
-          <div style={{ height: "50vh", overflow: "scroll" }}>
+          <Container style={{ height: "50vh", overflow: "scroll" }}>
             <Slideshow
               onNavigate={goTo}
               currentPage={page}
@@ -165,7 +165,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
                 transcriptionState={[transcription, setTranscription]}
               />
             </Slideshow>
-          </div>
+          </Container>
         </>
       )}
       <div

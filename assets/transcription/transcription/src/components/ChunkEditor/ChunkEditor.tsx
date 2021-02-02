@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import {
   Box,
+  Container,
   GridList,
   GridListTile,
   Mark,
@@ -184,9 +185,11 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
-      <div style={{ marginTop: "4px" }}>
-        <BackButton action={atExit} />
-      </div>
+      <Container>
+        <div style={{ marginTop: "4px" }}>
+          <BackButton action={atExit} />
+        </div>
+      </Container>
       <CentralModal
         header={<h2 style={{ margin: 0 }}>Chunking Instructions</h2>}
         open={showIntroductionModal}

@@ -1,6 +1,7 @@
 import {
   Box,
   Checkbox,
+  Container,
   Divider,
   makeStyles,
   Typography,
@@ -52,7 +53,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
     progressState,
     splitState: [, setSplit],
     controller: playerController,
-    playerRef
+    playerRef,
   } = useVideoPlayerController();
 
   const { setProgressWithVideoUpdate } = progressState;
@@ -125,24 +126,23 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
 
   return (
     <div>
-      <div style={{ marginTop: "4px" }}>
+      <Container style={{ marginTop: "4px" }}>
         <BackButton action={atExit} />
-      </div>
+      </Container>
       <CentralModal
         header={<h2 style={{ margin: 0 }}>Chunking Instructions</h2>}
         open={showIntroductionModal}
         exit={() => setShowIntroductionModal(false)}
       >
         <div style={{ padding: "0px 8px 16px 8px" }}>
-          You are about to review the transcriptions made on the video.
-          For each chunk, select one of the transcriptions from the list.
-          You can do this by clicking on the text or the check box to the
-          left of the text.<br/>
+          You are about to review the transcriptions made on the video. For each
+          chunk, select one of the transcriptions from the list. You can do this
+          by clicking on the text or the check box to the left of the text.
+          <br />
           You can also edit the transcriptions by clicking on the pencil button
           above the text.
         </div>
       </CentralModal>
-
       <CentralModal
         open={editingTranscription !== undefined}
         header={
@@ -202,85 +202,88 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
           controller={playerController}
         />
       </Box>
-      <Slideshow
-        currentPage={page}
-        onNavigate={goTo}
-        numberOfPages={chunksToReview.length}
-        onComplete={atExit}
-        style={{width: "100%"}}
-      >
-        <ChunkCard chunk={currentChunk}>
-          {currentChunk.transcriptions.map(
-            (transcription) =>
-              transcription.content && (
-                <Box key={transcription.id} className={classes.cardContainer}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
+      <Container>
+        <Slideshow
+          currentPage={page}
+          onNavigate={goTo}
+          numberOfPages={chunksToReview.length}
+          onComplete={atExit}
+          style={{ width: "100%" }}
+        >
+          <ChunkCard chunk={currentChunk}>
+            {currentChunk.transcriptions.map(
+              (transcription) =>
+                transcription.content && (
+                  <Box key={transcription.id} className={classes.cardContainer}>
                     <div
                       style={{
-                        fontSize: "1.2rem",
                         display: "flex",
-                        justifyContent: "center",
-                        paddingLeft: "10px",
+                        justifyContent: "space-between",
                       }}
                     >
-                      <AccountCircle />
-                      <div style={{ marginLeft: "4px" }}>
-                        {transcription.creatorid}
+                      <div
+                        style={{
+                          fontSize: "1.2rem",
+                          display: "flex",
+                          justifyContent: "center",
+                          paddingLeft: "10px",
+                        }}
+                      >
+                        <AccountCircle />
+                        <div style={{ marginLeft: "4px" }}>
+                          {transcription.creatorid}
+                        </div>
                       </div>
+                      <IndabaButton
+                        onClick={() => setEditingTranscription(transcription)}
+                        style={{
+                          padding: "0px",
+                          height: "32px",
+                          width: "32px",
+                          minWidth: "32px",
+                        }}
+                      >
+                        <Edit fontSize="small" />
+                      </IndabaButton>
                     </div>
-                    <IndabaButton
-                      onClick={() => setEditingTranscription(transcription)}
-                      style={{
-                        padding: "0px",
-                        height: "32px",
-                        width: "32px",
-                        minWidth: "32px",
-                      }}
-                    >
-                      <Edit fontSize="small" />
-                    </IndabaButton>
-                  </div>
-                  <div
-                    onClick={() =>
-                      userName &&
-                      (currentChunk.review?.selectedtranscription !==
-                      transcription.id
-                        ? updateReview(currentChunk, transcription, userName)
-                        : deleteReview(currentChunk))
-                    }
-                    style={{ display: "flex", flexDirection: "row" }}
-                  >
-                    <Checkbox
-                      checked={
-                        currentChunk.review?.selectedtranscription ===
-                        transcription.id
-                      }
-                      onChange={(_, checked) =>
+                    <div
+                      onClick={() =>
                         userName &&
-                        (checked
+                        (currentChunk.review?.selectedtranscription !==
+                        transcription.id
                           ? updateReview(currentChunk, transcription, userName)
                           : deleteReview(currentChunk))
                       }
-                      style={{ backgroundColor: "initial" }}
-                    />
-                    <Typography
-                      variant="h6"
-                      style={{ padding: "8px" }}
+                      style={{ display: "flex", flexDirection: "row" }}
                     >
-                      {transcription.content}
-                    </Typography>
-                  </div>
-                  <Divider style={{ margin: "16px 0 16px 0" }} />
-                </Box>
-              )
-          )}
-        </ChunkCard>
-      </Slideshow>
+                      <Checkbox
+                        checked={
+                          currentChunk.review?.selectedtranscription ===
+                          transcription.id
+                        }
+                        onChange={(_, checked) =>
+                          userName &&
+                          (checked
+                            ? updateReview(
+                                currentChunk,
+                                transcription,
+                                userName
+                              )
+                            : deleteReview(currentChunk))
+                        }
+                        style={{ backgroundColor: "initial" }}
+                      />
+                      <Typography variant="h6" style={{ padding: "8px" }}>
+                        {transcription.content}
+                      </Typography>
+                    </div>
+                    <Divider style={{ margin: "16px 0 16px 0" }} />
+                  </Box>
+                )
+            )}
+          </ChunkCard>
+        </Slideshow>
+      </Container>{" "}
     </div>
   );
 };
