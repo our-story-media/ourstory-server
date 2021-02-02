@@ -47,6 +47,8 @@ import ScrollToOnMount from "../ScrollToOnMount/ScrollToOnMount";
 import ChunkCardContextMenu from "./ChunkCardContextMenu";
 import { api_base_address } from "../../utils/getApiKey";
 import CentralModal from "../CentralModal/CentralModal";
+import useTimeout from "../../hooks/useTimeout";
+import useThrottle from "../../hooks/useThrottle";
 
 type ChunkEditorProps = {
   /** Action to do when back button is pressed */
@@ -169,9 +171,17 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
 
   const [showIntroductionModal, setShowIntroductionModal] = useState(true);
 
+  const { startTimer, cancelTimer } = useTimeout(1000, () => console.log("Timed!"));
+
+  const throttledFunction = useThrottle(1000, () => {console.log("Yup")});
+
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
+          <button onClick={startTimer}>Start</button>
+          <button onClick={cancelTimer}>Cancel</button>
+          <br/>
+          <button onClick={throttledFunction}>I'm throttled</button>
       <div style={{ marginTop: "4px" }}>
         <BackButton action={atExit} />
       </div>
@@ -309,7 +319,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
                     key="Done Card"
                     onClick={handleCompleteChunking}
                   >
-                    <ScrollToOnMount style={{ height: "100%" }}>
+                    {/* <ScrollToOnMount style={{ height: "100%" }}> */}
                       <SimpleCard
                         contentStyle={{
                           backgroundColor: "#40bf11C9",
@@ -339,7 +349,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
                           Done
                         </Typography>
                       </SimpleCard>
-                    </ScrollToOnMount>
+                    {/* </ScrollToOnMount> */}
                   </GridListTile>,
                 ]
               : []
@@ -354,12 +364,12 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
           }}
         >
           <SkipForwardBackButtons
-            skipForward={() =>
+            skipForward={useCallback(() =>
               duration && setProgress((progress) => progress + 5 / duration)
-            }
-            skipBackward={() =>
+            , [duration])}
+            skipBackward={useCallback(() =>
               duration && setProgress((progress) => progress - 5 / duration)
-            }
+            , [duration])}
           />
         </div>
         <div

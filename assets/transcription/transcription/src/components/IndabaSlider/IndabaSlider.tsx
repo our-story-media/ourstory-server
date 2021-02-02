@@ -8,20 +8,21 @@ const useStyles = makeStyles({
     padding: "0px",
     width: "96%",
     transform: "translateX(2%)",
-    height: 4,
+    height: 6,
   },
   progressBarRail: {
-    height: 4,
+    height: 6,
   },
   progressBarTrack: {
-    height: 4,
+    height: 6,
   },
   progressBarThumb: {
-    height: 12,
-    marginTop: -4,
+    height: 18,
+    width: 18,
+    marginTop: -6,
   },
   progressBarMark: {
-    height: 10,
+    height: 14,
     marginTop: -3,
   },
   markedSlider: {

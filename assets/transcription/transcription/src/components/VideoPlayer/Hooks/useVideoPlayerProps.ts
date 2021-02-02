@@ -1,6 +1,8 @@
 // External Dependencies
-import { useState, useEffect, RefObject, useMemo } from "react";
+import { useState, useEffect, RefObject, useMemo, useCallback } from "react";
 import ReactPlayer, { ReactPlayerProps } from "react-player";
+import useDebounce from "../../../hooks/useDebounce";
+import useThrottle from "../../../hooks/useThrottle";
 import { StateSetter } from "../../../utils/types";
 
 // Internal Dependencies
@@ -28,7 +30,7 @@ const useVideoPlayerProps = (
    *  the video
    */
   split: { start: number; end: number },
-  onProgressDrag?: () => void,
+  onProgressDrag?: () => void
 ): {
   playerProps: ReactPlayerProps;
   progressBarProps: any;
@@ -54,10 +56,10 @@ const useVideoPlayerProps = (
   }, [setDuration, playerRef, isLoaded]);
 
   /* The useFadecontrols hook maintains the state for whether the video controls should be shown */
-  const [showControls, setShowControls] = useFadeControls(
-    !dragging && isPlaying,
-    2000
-  );
+  // const [showControls, setShowControls] = useFadeControls(
+  //   !dragging && isPlaying,
+  //   2000
+  // );
 
   /* These are the props that will be passed onto the ReactPlayer component */
   const playerProps: ReactPlayerProps = useMemo(
@@ -66,47 +68,56 @@ const useVideoPlayerProps = (
       progressInterval: 250,
       onProgress: ({ played /*playedSeconds, loaded, loadedSeconds*/ }) =>
         setProgressState({ progress: played, fromPlayer: true }),
-      onClick: () => setShowControls((state) => !state),
       onReady: () => setIsLoaded(true),
       onEnded: () => setIsPlaying(false),
     }),
-    [
-      dragging,
-      isPlaying,
-      setShowControls,
-      setIsLoaded,
-      setIsPlaying,
-      setProgressState,
-    ]
+    [dragging, isPlaying, setIsLoaded, setIsPlaying, setProgressState]
+  );
+
+  const [progressBarValue, setProgressBarValue] = useState(
+    useMemo(() => progressState.progress * 100, [])
+  );
+
+  useEffect(() => {
+    progressState.fromPlayer &&
+      setProgressBarValue(progressState.progress * 100);
+  }, [progressState]);
+
+  const debouncedProgressBarValue = useDebounce(progressBarValue, 100);
+
+  useEffect(() => {
+    setProgressState({
+      progress: debouncedProgressBarValue / 100,
+      fromPlayer: false,
+    });
+  }, [debouncedProgressBarValue]);
+
+  const progressBarOnChange = useCallback(
+    (_: any, newVal: number | number[]) => {
+      setProgressBarValue(newVal as number);
+    },
+    []
+  );
+
+  const progressBarOnCommitChange = useCallback(
+    (_: any, newVal: number | number[]) => {
+      playerRef?.current?.seekTo((newVal as number) / 100, "fraction");
+      setDragging(false);
+    },
+    []
   );
 
   /* These are the props that will be passed onto the Slider component (the slider component is the video progress bar) */
   const progressBarProps = useMemo(
     () => ({
-      value: progressState.progress * 100,
+      value: progressBarValue,
       min: split.start * 100,
       max: split.end * 100,
       step: 0.0001,
-      onChange: (_: any, newVal: number | number[]) => {
-        onProgressDrag && onProgressDrag();
-        setDragging(true);
-        setProgressState({
-          progress: (newVal as number) / 100,
-          fromPlayer: false,
-        });
-      },
-      onChangeCommitted: () => {
-        setDragging(false);
-      },
+      onChange: progressBarOnChange,
+      onChangeCommitted: progressBarOnCommitChange,
     }),
-    [
-      split.start,
-      split.end,
-      progressState.progress,
-      setDragging,
-      setProgressState,
-      onProgressDrag,
-    ]
+    [progressBarValue, split, progressBarOnChange, progressBarOnCommitChange]
   );
 
   useEffect(() => {
@@ -114,9 +125,8 @@ const useVideoPlayerProps = (
      *  we need to update the player ourselves
      */
     !progressState.fromPlayer &&
-      playerRef.current &&
       isLoaded &&
-      playerRef.current.seekTo(progressState.progress, "fraction");
+      playerRef?.current?.seekTo(progressState.progress, "fraction");
   }, [progressState, dragging, isPlaying, isLoaded, playerRef]);
 
   useEffect(() => {
@@ -140,7 +150,7 @@ const useVideoPlayerProps = (
   return {
     playerProps,
     progressBarProps,
-    showControls,
+    showControls: true,
     isPlaying,
     toggleIsPlaying: () => setIsPlaying((s) => !s),
   };

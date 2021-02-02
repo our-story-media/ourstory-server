@@ -53,13 +53,13 @@ const App: React.FC<{}> = () => {
     chunksState: [chunks, setChunks],
   } = useOurstoryApi(story_id);
 
-  const chunkingProgress = getLastEndTimeSeconds(chunks);
-  const transcriptionProgress = chunks.length
+  const chunkingProgress = useMemo(() => getLastEndTimeSeconds(chunks), [chunks]);
+  const transcriptionProgress = useMemo(() => chunks.length
     ? countChunksWithTranscription(chunks) / chunks.length
-    : 0;
-  const reviewProgress = chunks.length
+    : 0, [chunks]);
+  const reviewProgress = useMemo(() => chunks.length
     ? countReviewedChunks(chunks) / chunks.length
-    : 0;
+    : 0, [chunks]);
 
   const steps = useSteps(setView, [
     { progress: chunkingProgress * 100, enabled: true },
