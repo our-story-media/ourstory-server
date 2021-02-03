@@ -1,5 +1,5 @@
 // External Dependencies
-import { Box, Container, Typography } from "@material-ui/core";
+import { Box, Container, MobileStepper, Typography } from "@material-ui/core";
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 
 // Internal Dependencies
@@ -13,7 +13,6 @@ import useSlideshow from "../../hooks/useSlideshow";
 import { useUpdateTranscription } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 import Slideshow from "../Slideshow/Slideshow";
-import SimpleCard from "../SimpleCard/SimpleCard";
 import IndabaButton from "../IndabaButton/IndabaButton";
 import { FileCopy } from "@material-ui/icons";
 import CentralModal from "../CentralModal/CentralModal";
@@ -35,6 +34,20 @@ const getUsersTranscription = (chunk: Chunk, userName: string): string =>
 type TranscriberProps = {
   story_id: string;
   atExit: () => void;
+};
+
+const getMiniChunks = (chunk: Chunk, duration: number) => {
+  var miniChunks: number[] = [];
+
+  var currentTime = chunk.starttimeseconds + 4 / duration;
+
+  while (currentTime < chunk.endtimeseconds) {
+    miniChunks.push(currentTime);
+    currentTime += 5 / duration;
+  }
+
+  console.log(miniChunks);
+  return miniChunks;
 };
 
 const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
@@ -74,14 +87,34 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
 
   const currentChunk = useMemo(() => chunks[page], [chunks, page]);
 
+  /* Each chunk is presented as a series of smaller, mini, chunks */
+  const [miniChunks, setMiniChunks] = useState<{ chunks: number[], currentChunk: number}>({ chunks: [], currentChunk: 0 });
+
+  console.log(currentChunk);
+  console.log(miniChunks);
+
+  useEffect(() => {
+    setMiniChunks({ chunks: getMiniChunks(currentChunk, duration), currentChunk: 0 });
+  }, [currentChunk, duration]);
+
+  const currentMiniChunkStart = useMemo(() => {
+    const value = (miniChunks.chunks[miniChunks.currentChunk - 1] ?? 0) - 1 / duration;
+    return value < 0 ? 0 : value
+  }, [miniChunks, duration]);
+
+  const currentMiniChunkEnd = useMemo(() => {
+    const value = (miniChunks.chunks[miniChunks.currentChunk] + 1 / duration)
+    return value > duration ? duration : value;
+  }, [miniChunks, duration])
+
   useEffect(() => {
     userName && setTranscription(getUsersTranscription(currentChunk, userName));
     setSplit({
-      start: currentChunk.starttimeseconds,
-      end: currentChunk.endtimeseconds,
+      start:  /*currentChunk.starttimeseconds*/ currentMiniChunkStart,
+      end: /*currentChunk.endtimeseconds*/ currentMiniChunkEnd,
     });
     setProgressWithVideoUpdate(currentChunk.starttimeseconds);
-  }, [chunks, page, userName]);
+  }, [chunks, page, userName, miniChunks, duration]);
 
   const updateTranscription = useUpdateTranscription();
 
@@ -153,6 +186,14 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
             />
           </Box>
           <Container style={{ height: "50vh", overflow: "scroll" }}>
+            <MobileStepper
+              variant="dots"
+              steps={miniChunks.chunks.length}
+              activeStep={miniChunks.currentChunk}
+              position="static"
+              nextButton={<IndabaButton disabled={miniChunks.currentChunk === miniChunks.chunks.length - 1} onClick={() => setMiniChunks((prev_mini_chunks) => ({ ...prev_mini_chunks, currentChunk: prev_mini_chunks.currentChunk + 1 }))}>Next</IndabaButton>}
+              backButton={<IndabaButton disabled={miniChunks.currentChunk === 0} onClick={() => setMiniChunks((prev_mini_chunks) => ({ ...prev_mini_chunks, currentChunk: prev_mini_chunks.currentChunk - 1 }))}>Back</IndabaButton>}
+            />
             <Slideshow
               onNavigate={goTo}
               currentPage={page}
@@ -173,18 +214,27 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
           position: "absolute",
           left: 0,
           bottom: 0,
-          width: "100%"
+          width: "100%",
         }}
       >
-        {false && <SkipForwardBackButtons
-          style={{ margin: "8px", width: "calc(100% - 16px)", display: "flex", justifyContent: "space-between" }}
-          skipForward={() =>
-            duration && setProgressWithVideoUpdate((progress) => progress + 5 / duration)
-          }
-          skipBackward={() =>
-            duration && setProgressWithVideoUpdate((progress) => progress - 5 / duration)
-          }
-        />}
+        {false && (
+          <SkipForwardBackButtons
+            style={{
+              margin: "8px",
+              width: "calc(100% - 16px)",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+            skipForward={() =>
+              duration &&
+              setProgressWithVideoUpdate((progress) => progress + 5 / duration)
+            }
+            skipBackward={() =>
+              duration &&
+              setProgressWithVideoUpdate((progress) => progress - 5 / duration)
+            }
+          />
+        )}
       </div>
     </div>
   );
