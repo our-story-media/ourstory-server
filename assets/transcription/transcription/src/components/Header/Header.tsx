@@ -40,7 +40,6 @@ const Header: React.FC<HeaderProps> = ({
         style={{
           height: "calc(100vh - 5px)",
           width: "100%",
-          transform: "translateX(2px)",
           padding: 0,
           marginTop: "5px",
           display: "flex",

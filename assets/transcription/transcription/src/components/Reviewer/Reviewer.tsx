@@ -23,7 +23,6 @@ import CentralModal from "../CentralModal/CentralModal";
 import IndabaButton from "../IndabaButton/IndabaButton";
 import ChunkCard from "../SimpleCard/ChunkCard";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
-import SimpleCard from "../SimpleCard/SimpleCard";
 import Slideshow from "../Slideshow/Slideshow";
 import { UserContext } from "../UserProvider/UserProvider";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
@@ -71,16 +70,9 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
      * Here, if the chunks to review array is empty, we use a dummy chunk,
      * as we are about to exit, and if we set it to undefined we will crash
      */
-    () => (chunksToReview.length === 0 ? chunks[0] : chunksToReview[page]),
-    [page, chunksToReview, chunks]
+    () => chunksToReview[page],
+    [page, chunksToReview]
   );
-
-  /** If the chunks to review array is empty, exit */
-  useEffect(() => {
-    if (chunksToReview.length === 0) {
-      atExit();
-    }
-  }, [chunksToReview, atExit]);
 
   /*
    * When the user navigates between chunks,
@@ -185,6 +177,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
                 bottom: 0,
                 right: 0,
               }}
+              disabled={transcriptionEdit === ""}
             >
               <Done />
               <span style={{ marginLeft: "4px", fontSize: "1.05rem" }}>
