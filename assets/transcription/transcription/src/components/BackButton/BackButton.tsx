@@ -16,7 +16,7 @@ const BackButton: React.FC<BackButtonProps> = ({ action }) => {
   return (
     <ButtonBase className={classes.backButton} onClick={action}>
       <ChevronLeft fontSize="large" />
-      <Typography variant="h5">
+      <Typography variant="h5" style={{position: "relative", left: -5}}>
         Back
       </Typography>
     </ButtonBase>

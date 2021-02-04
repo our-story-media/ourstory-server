@@ -78,12 +78,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     loop
   );
 
-  /* FIXME:
-   * This doesn't currently consider the video split (need to add split.start)
-   */
   const sliderValueLabelFormat = useCallback(
-    (progress: number) => toShortTimeStamp((progress / 100) * duration),
-    [duration]
+    (progress: number) => toShortTimeStamp((progress / 100 - split.start) * duration),
+    [duration, split.start]
   );
 
   return (

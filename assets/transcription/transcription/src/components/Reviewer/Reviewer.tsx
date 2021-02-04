@@ -4,6 +4,7 @@ import {
   Container,
   Divider,
   makeStyles,
+  Radio,
   Typography,
 } from "@material-ui/core";
 import { AccountCircle, Done, Edit } from "@material-ui/icons";
@@ -249,8 +250,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
                       }
                       style={{ display: "flex", flexDirection: "row" }}
                     >
-                      <Checkbox
-                        checked={
+                      <Radio checked={
                           currentChunk.review?.selectedtranscription ===
                           transcription.id
                         }
