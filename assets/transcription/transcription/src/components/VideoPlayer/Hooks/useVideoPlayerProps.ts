@@ -1,7 +1,7 @@
 // External Dependencies
 import { useState, useEffect, RefObject, useMemo } from "react";
 import ReactPlayer, { ReactPlayerProps } from "react-player";
-import { useThrottleCallback } from '@react-hook/throttle'
+import { useThrottleCallback } from "@react-hook/throttle";
 
 // Internal Dependencies
 import { StateSetter } from "../../../utils/types";
@@ -47,7 +47,8 @@ const useVideoPlayerProps = (
    *  the video
    */
   split: { start: number; end: number },
-  onProgressDrag?: () => void
+  onProgressDrag?: () => void,
+  loop?: boolean
 ): {
   playerProps: ReactPlayerProps;
   progressBarProps: any;
@@ -91,7 +92,10 @@ const useVideoPlayerProps = (
     [dragging, isPlaying]
   );
 
-  const throttleUpdateVideo = useThrottleCallback((newVal: number) => setProgressWithVideoUpdate(newVal / 100))
+  const throttleUpdateVideo = useThrottleCallback(
+    (newVal: number) => setProgressWithVideoUpdate(newVal / 100),
+    10
+  );
 
   const {
     value: progressBarValue,
@@ -116,7 +120,7 @@ const useVideoPlayerProps = (
         onScrobble(newVal as number);
       },
       onChangeCommitted: (_: any, newVal: number | number[]) => {
-        setProgressWithVideoUpdate(newVal as number / 100);
+        setProgressWithVideoUpdate((newVal as number) / 100);
         setDragging(false);
       },
     }),
@@ -126,11 +130,15 @@ const useVideoPlayerProps = (
   useEffect(() => {
     /** If the video is playing and it has reached the end, stop it from continuing */
     if (progressState.progress > split.end) {
-      setProgress(split.end);
-      setIsPlaying(false);
+      if (loop) {
+        setProgressWithVideoUpdate(split.start);
+      } else {
+        setProgressWithVideoUpdate(split.end);
+        setIsPlaying(false);
+      }
       /** If the video's progress is before the start of the split, set it to the start */
     } else if (progress < split.start) {
-      setProgress(split.start);
+      setProgressWithVideoUpdate(split.start);
     }
   }, [progress, isPlaying, setIsPlaying, split.end, split.start]);
 

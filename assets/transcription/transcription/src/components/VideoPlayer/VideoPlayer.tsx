@@ -39,6 +39,7 @@ export type VideoPlayerProps = {
   sliderMarks?: Mark[];
   onProgressDrag?: () => void;
   slider?: React.ReactElement<SliderProps>;
+  loop?: boolean;
 };
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
@@ -49,17 +50,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   progressState,
   onProgressDrag,
   slider,
+  loop,
 }) => {
   const classes = useStyles();
-  const [duration, setDuration] = useDefaultState(
-    controller?.durationState,
-    0
-  );
+  const [duration, setDuration] = useDefaultState(controller?.durationState, 0);
   const { progress } = progressState;
-  const playState = useDefaultState(
-    controller?.playingState,
-    false
-  );
+  const playState = useDefaultState(controller?.playingState, false);
   const [split] = useDefaultState(controller?.splitState, {
     start: 0,
     end: 1,
@@ -77,7 +73,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     playerRef,
     setDuration,
     split,
-    onProgressDrag
+    onProgressDrag,
+    loop
   );
 
   /* FIXME:
@@ -95,6 +92,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         ref={playerRef}
         width="100%"
         height="100%"
+        loop={loop}
         {...playerProps}
       />
       {showControls && (

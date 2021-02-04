@@ -187,6 +187,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
               playerRef={playerRef}
               url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
               controller={controller}
+              loop
             />
           </Box>
           <Container style={{ height: "50vh", overflow: "scroll" }}>
