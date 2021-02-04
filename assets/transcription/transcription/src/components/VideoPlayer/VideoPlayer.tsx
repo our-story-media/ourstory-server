@@ -52,15 +52,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 }) => {
   const classes = useStyles();
   const [duration, setDuration] = useDefaultState(
-    controller ? controller.durationState : null,
+    controller?.durationState,
     0
   );
   const { progress } = progressState;
   const playState = useDefaultState(
-    controller ? controller.playingState : null,
+    controller?.playingState,
     false
   );
-  const [split] = useDefaultState(controller ? controller.splitState : null, {
+  const [split] = useDefaultState(controller?.splitState, {
     start: 0,
     end: 1,
   });
@@ -80,6 +80,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     onProgressDrag
   );
 
+  /* FIXME:
+   * This doesn't currently consider the video split (need to add split.start)
+   */
   const sliderValueLabelFormat = useCallback(
     (progress: number) => toShortTimeStamp((progress / 100) * duration),
     [duration]

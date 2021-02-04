@@ -1,8 +1,9 @@
 // External Dependencies
-import { useState, useEffect, RefObject, useMemo, useCallback } from "react";
+import { useState, useEffect, RefObject, useMemo } from "react";
 import ReactPlayer, { ReactPlayerProps } from "react-player";
-import useDebounce from "../../../hooks/useDebounce";
-import useThrottle from "../../../hooks/useThrottle";
+import { useThrottleCallback } from '@react-hook/throttle'
+
+// Internal Dependencies
 import { StateSetter } from "../../../utils/types";
 import { ProgressState } from "../VideoPlayer";
 
@@ -22,8 +23,8 @@ const useProgressBarControls = (
       setState(newValue);
     },
     setWithVideoUpdate: (newValue: number) => {
-      playerUpdater(newValue);
       setState(newValue);
+      playerUpdater(newValue);
     },
   };
 };
@@ -90,10 +91,7 @@ const useVideoPlayerProps = (
     [dragging, isPlaying]
   );
 
-  const { throttledFn: throttleUpdateVideo, flush: flushUpdateVideo } = useThrottle((newVal: number) => {
-    console.log("Updating video progress");
-    setProgressWithVideoUpdate(newVal / 100);
-  }, 200);
+  const throttleUpdateVideo = useThrottleCallback((newVal: number) => setProgressWithVideoUpdate(newVal / 100))
 
   const {
     value: progressBarValue,
@@ -118,7 +116,7 @@ const useVideoPlayerProps = (
         onScrobble(newVal as number);
       },
       onChangeCommitted: (_: any, newVal: number | number[]) => {
-        flushUpdateVideo();
+        setProgressWithVideoUpdate(newVal as number / 100);
         setDragging(false);
       },
     }),

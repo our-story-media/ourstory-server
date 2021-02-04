@@ -46,7 +46,6 @@ const getMiniChunks = (chunk: Chunk, duration: number) => {
     currentTime += 5 / duration;
   }
 
-  console.log(miniChunks);
   return miniChunks;
 };
 
@@ -88,32 +87,37 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
   const currentChunk = useMemo(() => chunks[page], [chunks, page]);
 
   /* Each chunk is presented as a series of smaller, mini, chunks */
-  const [miniChunks, setMiniChunks] = useState<{ chunks: number[], currentChunk: number}>({ chunks: [], currentChunk: 0 });
-
-  console.log(currentChunk);
-  console.log(miniChunks);
+  const [miniChunks, setMiniChunks] = useState<{
+    chunks: number[];
+    currentChunk: number;
+  }>({ chunks: [], currentChunk: 0 });
 
   useEffect(() => {
-    setMiniChunks({ chunks: getMiniChunks(currentChunk, duration), currentChunk: 0 });
+    setMiniChunks({
+      chunks: getMiniChunks(currentChunk, duration),
+      currentChunk: 0,
+    });
   }, [currentChunk, duration]);
 
   const currentMiniChunkStart = useMemo(() => {
-    const value = (miniChunks.chunks[miniChunks.currentChunk - 1] ?? 0) - 1 / duration;
-    return value < 0 ? 0 : value
+    return (
+      miniChunks.chunks[miniChunks.currentChunk - 1] ??
+      currentChunk.starttimeseconds
+    );
   }, [miniChunks, duration]);
 
   const currentMiniChunkEnd = useMemo(() => {
-    const value = (miniChunks.chunks[miniChunks.currentChunk] + 1 / duration)
+    const value = miniChunks.chunks[miniChunks.currentChunk] + 1 / duration;
     return value > duration ? duration : value;
-  }, [miniChunks, duration])
+  }, [miniChunks, duration]);
 
   useEffect(() => {
     userName && setTranscription(getUsersTranscription(currentChunk, userName));
     setSplit({
-      start:  /*currentChunk.starttimeseconds*/ currentMiniChunkStart,
+      start: /*currentChunk.starttimeseconds*/ currentMiniChunkStart,
       end: /*currentChunk.endtimeseconds*/ currentMiniChunkEnd,
     });
-    setProgressWithVideoUpdate(currentChunk.starttimeseconds);
+    setProgressWithVideoUpdate(currentMiniChunkStart);
   }, [chunks, page, userName, miniChunks, duration]);
 
   const updateTranscription = useUpdateTranscription();
@@ -191,8 +195,34 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
               steps={miniChunks.chunks.length}
               activeStep={miniChunks.currentChunk}
               position="static"
-              nextButton={<IndabaButton disabled={miniChunks.currentChunk === miniChunks.chunks.length - 1} onClick={() => setMiniChunks((prev_mini_chunks) => ({ ...prev_mini_chunks, currentChunk: prev_mini_chunks.currentChunk + 1 }))}>Next</IndabaButton>}
-              backButton={<IndabaButton disabled={miniChunks.currentChunk === 0} onClick={() => setMiniChunks((prev_mini_chunks) => ({ ...prev_mini_chunks, currentChunk: prev_mini_chunks.currentChunk - 1 }))}>Back</IndabaButton>}
+              nextButton={
+                <IndabaButton
+                  disabled={
+                    miniChunks.currentChunk === miniChunks.chunks.length - 1
+                  }
+                  onClick={() =>
+                    setMiniChunks((prev_mini_chunks) => ({
+                      ...prev_mini_chunks,
+                      currentChunk: prev_mini_chunks.currentChunk + 1,
+                    }))
+                  }
+                >
+                  Next
+                </IndabaButton>
+              }
+              backButton={
+                <IndabaButton
+                  disabled={miniChunks.currentChunk === 0}
+                  onClick={() =>
+                    setMiniChunks((prev_mini_chunks) => ({
+                      ...prev_mini_chunks,
+                      currentChunk: prev_mini_chunks.currentChunk - 1,
+                    }))
+                  }
+                >
+                  Back
+                </IndabaButton>
+              }
             />
             <Slideshow
               onNavigate={goTo}
