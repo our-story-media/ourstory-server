@@ -1,5 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 
+const chunkProgressHeight = "8px";
+
 const useStyles = makeStyles({
   videoPlayerContainer: {
     position: "relative",
@@ -9,10 +11,14 @@ const useStyles = makeStyles({
     width: "100%",
   },
   chunkProgressRail: {
-    height: "8px"
+    height: chunkProgressHeight
   },
   chunkProgressTrack: {
-    height: "8px"
+    height: chunkProgressHeight
+  },
+  chunkProgressMark: {
+    height: chunkProgressHeight,
+    width: "4px"
   }
 });
 

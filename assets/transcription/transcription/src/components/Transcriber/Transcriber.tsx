@@ -1,5 +1,5 @@
 // External Dependencies
-import { Box, Container, MobileStepper, Slider } from "@material-ui/core";
+import { Box, Button, Container, MobileStepper, Slider } from "@material-ui/core";
 import React, {
   useCallback,
   useContext,
@@ -28,6 +28,7 @@ import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
 import { api_base_address } from "../../utils/getApiKey";
 import { ArrowLeft, ArrowRight, Check } from "@material-ui/icons";
+import { parseTimeStamp, secondsOf, toShortTimeStamp } from "../../utils/chunkManipulation";
 
 const EmptyComponent: React.FC<{}> = () => {
   return <div />;
@@ -105,7 +106,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
   }>({ chunks: [], currentChunk: 0 });
 
   useEffect(() => {
-    const newMiniChunks = getMiniChunks(currentChunk, duration)
+    const newMiniChunks = getMiniChunks(currentChunk, duration);
     setMiniChunks({
       chunks: newMiniChunks,
       currentChunk: direction === "prev" ? newMiniChunks.length - 1 : 0,
@@ -209,8 +210,8 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
               steps={miniChunks.chunks.length}
               activeStep={miniChunks.currentChunk}
               position="static"
-              nextButton={<div />}
-              backButton={<div />}
+              nextButton={<Button onClick={() => setMiniChunks({...miniChunks, currentChunk: miniChunks.chunks.length - 1})}>Last</Button>}
+              backButton={<Button onClick={() => setMiniChunks({...miniChunks, currentChunk: 0})}>First</Button>}
             />
             <Slideshow
               onNavigate={goTo}
@@ -249,8 +250,17 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
                     ]}
                     classes={{
                       rail: classes.chunkProgressRail,
-                      track: classes.chunkProgressTrack
+                      track: classes.chunkProgressTrack,
+                      mark: classes.chunkProgressMark,
                     }}
+                    marks={[
+                      {
+                        value: miniChunks.chunks[miniChunks.currentChunk] * 100,
+                        label: toShortTimeStamp(
+                          miniChunks.chunks[miniChunks.currentChunk] * duration
+                        ),
+                      },
+                    ]}
                   />
                 }
                 inputRef={inputRef}
