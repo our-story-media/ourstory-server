@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import { Done, NavigateBefore, NavigateNext } from "@material-ui/icons";
-import React from "react";
+import React, { ReactNode } from "react";
 import IndabaButton from "../IndabaButton/IndabaButton";
 import useStyles from "./SlideshowStyles";
 
@@ -10,6 +10,8 @@ type SlideshowProps = {
   numberOfPages: number;
   style?: any;
   onComplete?: () => void;
+  leftColumn?: ReactNode;
+  rightColumn?: ReactNode;
 };
 
 const Slideshow: React.FC<SlideshowProps> = ({
@@ -19,12 +21,14 @@ const Slideshow: React.FC<SlideshowProps> = ({
   numberOfPages,
   children,
   style,
+  leftColumn,
+  rightColumn
 }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.slideshowContainer} style={style}>
-      <IndabaButton
+      {leftColumn ?? <IndabaButton
         round
         aria-label="Previous"
         style={{ color: "#FFFFFF", alignSelf: "flex-start", marginTop: "32px" }}
@@ -32,9 +36,9 @@ const Slideshow: React.FC<SlideshowProps> = ({
         onClick={() => onNavigate("prev")}
       >
         <NavigateBefore />
-      </IndabaButton>
+      </IndabaButton>}
       <Box className={classes.slideshowContentContainer}>{children}</Box>
-      {onComplete && currentPage === numberOfPages - 1 ? (
+      {rightColumn ?? (onComplete && currentPage === numberOfPages - 1 ? (
         <IndabaButton
           round
           aria-label="Complete"
@@ -62,7 +66,7 @@ const Slideshow: React.FC<SlideshowProps> = ({
         >
           <NavigateNext />
         </IndabaButton>
-      )}
+      ))}
     </div>
   );
 };

@@ -27,6 +27,7 @@ import useFirstRender from "../../hooks/useFirstRender";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
 import { api_base_address } from "../../utils/getApiKey";
+import { ArrowLeft, ArrowRight, Check } from "@material-ui/icons";
 
 const MiniChunkButton: React.FC<{
   disabled: boolean;
@@ -83,6 +84,8 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
 
   const { page, direction, goTo } = useSlideshow(chunks);
 
+  const updateTranscription = useUpdateTranscription();
+
   /*
    * firstRender and this effect are used to update
    * the transcription of the page everytime the page changes.
@@ -91,6 +94,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
   const firstRender = useFirstRender();
   useEffect(() => {
     userName && setTranscription(getUsersTranscription(currentChunk, userName));
+    console.log(`Page changed, transcription: ${transcription}`)
     !firstRender &&
       userName &&
       updateTranscription(
@@ -135,8 +139,6 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     setProgressWithVideoUpdate(currentMiniChunkStart);
   }, [chunks, page, userName, miniChunks, duration]);
 
-  const updateTranscription = useUpdateTranscription();
-
   const classes = useStyles();
 
   const inputRef = useRef(null);
@@ -170,6 +172,23 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     debouncedPlay();
   };
 
+  const handleNextButtonPressed = () => {
+    if (miniChunks.currentChunk === miniChunks.chunks.length - 1) {
+      goTo("next");
+    } else {
+      miniChunkClickHandler("next");
+    }
+  };
+  const handlePrevButtonPressed = () => {
+    if (miniChunks.currentChunk === 0) {
+      goTo("prev");
+    } else {
+      miniChunkClickHandler("prev");
+    }
+  };
+
+  const finalMiniChunk = useMemo(() => page === chunks.length - 1 && miniChunks.currentChunk === miniChunks.chunks.length - 1, [page, miniChunks]);
+
   return (
     <div>
       <Container style={{ marginTop: "4px" }}>
@@ -193,20 +212,10 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
               activeStep={miniChunks.currentChunk}
               position="static"
               nextButton={
-                <MiniChunkButton
-                  disabled={
-                    miniChunks.currentChunk === miniChunks.chunks.length - 1
-                  }
-                  clickHandler={() => miniChunkClickHandler("next")}
-                  text="Next"
-                />
+                <div/>
               }
               backButton={
-                <MiniChunkButton
-                  disabled={miniChunks.currentChunk === 0}
-                  clickHandler={() => miniChunkClickHandler("prev")}
-                  text="Back"
-                />
+                <div/>
               }
             />
             <Slideshow
@@ -214,6 +223,8 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
               currentPage={page}
               numberOfPages={chunks.length}
               onComplete={exitHandler}
+              leftColumn={<div><IndabaButton onClick={handlePrevButtonPressed}><ArrowLeft /></IndabaButton></div>}
+              rightColumn={<div><IndabaButton style={{backgroundColor: finalMiniChunk ? "green" : "#d9534f"}} onClick={() => finalMiniChunk ? atExit() : handleNextButtonPressed()}>{finalMiniChunk ? <Check /> : <ArrowRight />}</IndabaButton></div>}
             >
               <EditTranscriptionCard
                 inputRef={inputRef}

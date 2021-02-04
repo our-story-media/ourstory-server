@@ -24,7 +24,7 @@ const EditTranscriptionCard: React.FC<EditTranscriptionCardProps> = ({
       <TextField
         autoFocus
         multiline
-        rows={10}
+        rows={7}
         inputRef={inputRef}
         style={{ width: "100%" }}
         variant="outlined"
