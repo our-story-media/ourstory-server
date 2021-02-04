@@ -1,5 +1,5 @@
 // External Dependencies
-import { Box, Container, MobileStepper, Typography } from "@material-ui/core";
+import { Box, Container, MobileStepper } from "@material-ui/core";
 import React, {
   useCallback,
   useContext,
@@ -8,6 +8,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useDebounceCallback } from "@react-hook/debounce";
 
 // Internal Dependencies
 import oneSatisfies from "../../utils/oneSatisfies";
@@ -21,13 +22,7 @@ import { useUpdateTranscription } from "../../utils/ChunksContext/chunksActions"
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 import Slideshow from "../Slideshow/Slideshow";
 import IndabaButton from "../IndabaButton/IndabaButton";
-import { FileCopy } from "@material-ui/icons";
-import CentralModal from "../CentralModal/CentralModal";
-import WarningMessage from "../WarningMessage/WarningMessage";
 import BackButton from "../BackButton/BackButton";
-import useConfirmBeforeAction, {
-  NotAttemptingAction,
-} from "../../hooks/useConfirmBeforeAction";
 import useFirstRender from "../../hooks/useFirstRender";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
@@ -77,7 +72,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     splitState: [, setSplit],
     duration,
     controller,
-    playingState,
+    playingState: [playing, setPlaying],
   } = useVideoPlayerController(true);
 
   const { setProgressWithVideoUpdate } = progressState;
@@ -87,8 +82,6 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
   const [transcription, setTranscription] = useState("");
 
   const { page, direction, goTo } = useSlideshow(chunks);
-
-  const [playing] = playingState;
 
   /*
    * firstRender and this effect are used to update
@@ -155,17 +148,6 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     ).focus();
   }, [page, miniChunks.currentChunk, playing]);
 
-  const {
-    attemptingActionWith: attemptingTranscriptionChangeWith,
-    attemptAction: tryCopyTranscription,
-    cancelAction: cancelCopyTranscription,
-    confirmAction: confirmCopyTranscription,
-  } = useConfirmBeforeAction(
-    (oldTranscription: string, newTranscription: string) =>
-      setTranscription(newTranscription),
-    (oldTranscription) => oldTranscription !== ""
-  );
-
   const exitHandler = () => {
     userName && updateTranscription(currentChunk, transcription, userName);
     atExit();
@@ -180,6 +162,13 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
       })),
     []
   );
+
+  const debouncedPlay = useDebounceCallback(() => setPlaying(true), 500)
+
+  const onType = () => {
+    setPlaying(false);
+    debouncedPlay();
+  };
 
   return (
     <div>
@@ -230,6 +219,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
                 inputRef={inputRef}
                 chunk={currentChunk}
                 transcriptionState={[transcription, setTranscription]}
+                onChange={onType}
               />
             </Slideshow>
           </Container>
