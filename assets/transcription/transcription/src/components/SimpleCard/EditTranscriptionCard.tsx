@@ -1,11 +1,11 @@
 import { TextField } from "@material-ui/core";
-import FocusTrap from "focus-trap-react";
-import React from "react";
+import React, { ReactNode } from "react";
 import { Chunk, State } from "../../utils/types";
 import ChunkCard from "./ChunkCard";
 
 type EditTranscriptionCardProps = {
   inputRef?: React.MutableRefObject<null>;
+  transcriptionIcon?: ReactNode,
   chunk: Chunk;
   transcriptionState: State<string>;
   onChange?: () => void;
@@ -15,12 +15,13 @@ const EditTranscriptionCard: React.FC<EditTranscriptionCardProps> = ({
   inputRef,
   chunk,
   transcriptionState,
+  transcriptionIcon,
   onChange,
 }) => {
   const [transcription, setTranscription] = transcriptionState;
 
   return (
-    <ChunkCard chunk={chunk} style={{ margin: "4px" }}>
+    <ChunkCard transcriptionIcon={transcriptionIcon} chunk={chunk} style={{ margin: "4px" }}>
       <TextField
         autoFocus
         multiline

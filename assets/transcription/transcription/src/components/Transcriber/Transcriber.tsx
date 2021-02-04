@@ -1,5 +1,5 @@
 // External Dependencies
-import { Box, Container, MobileStepper } from "@material-ui/core";
+import { Box, Container, MobileStepper, Slider } from "@material-ui/core";
 import React, {
   useCallback,
   useContext,
@@ -29,16 +29,8 @@ import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackBut
 import { api_base_address } from "../../utils/getApiKey";
 import { ArrowLeft, ArrowRight, Check } from "@material-ui/icons";
 
-const MiniChunkButton: React.FC<{
-  disabled: boolean;
-  clickHandler: () => void;
-  text: string;
-}> = ({ disabled, clickHandler, text }) => {
-  return (
-    <IndabaButton disabled={disabled} onClick={clickHandler}>
-      {text}
-    </IndabaButton>
-  );
+const EmptyComponent: React.FC<{}> = () => {
+  return <div />;
 };
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
@@ -94,7 +86,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
   const firstRender = useFirstRender();
   useEffect(() => {
     userName && setTranscription(getUsersTranscription(currentChunk, userName));
-    console.log(`Page changed, transcription: ${transcription}`)
+    console.log(`Page changed, transcription: ${transcription}`);
     !firstRender &&
       userName &&
       updateTranscription(
@@ -113,11 +105,12 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
   }>({ chunks: [], currentChunk: 0 });
 
   useEffect(() => {
+    const newMiniChunks = getMiniChunks(currentChunk, duration)
     setMiniChunks({
-      chunks: getMiniChunks(currentChunk, duration),
-      currentChunk: 0,
+      chunks: newMiniChunks,
+      currentChunk: direction === "prev" ? newMiniChunks.length - 1 : 0,
     });
-  }, [currentChunk, duration]);
+  }, [currentChunk, duration, direction]);
 
   const currentMiniChunkStart = useMemo(() => {
     return (
@@ -165,7 +158,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     []
   );
 
-  const debouncedPlay = useDebounceCallback(() => setPlaying(true), 500)
+  const debouncedPlay = useDebounceCallback(() => setPlaying(true), 500);
 
   const onType = () => {
     setPlaying(false);
@@ -187,7 +180,12 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     }
   };
 
-  const finalMiniChunk = useMemo(() => page === chunks.length - 1 && miniChunks.currentChunk === miniChunks.chunks.length - 1, [page, miniChunks]);
+  const finalMiniChunk = useMemo(
+    () =>
+      page === chunks.length - 1 &&
+      miniChunks.currentChunk === miniChunks.chunks.length - 1,
+    [page, miniChunks]
+  );
 
   return (
     <div>
@@ -211,22 +209,50 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
               steps={miniChunks.chunks.length}
               activeStep={miniChunks.currentChunk}
               position="static"
-              nextButton={
-                <div/>
-              }
-              backButton={
-                <div/>
-              }
+              nextButton={<div />}
+              backButton={<div />}
             />
             <Slideshow
               onNavigate={goTo}
               currentPage={page}
               numberOfPages={chunks.length}
               onComplete={exitHandler}
-              leftColumn={<div><IndabaButton onClick={handlePrevButtonPressed}><ArrowLeft /></IndabaButton></div>}
-              rightColumn={<div><IndabaButton style={{backgroundColor: finalMiniChunk ? "green" : "#d9534f"}} onClick={() => finalMiniChunk ? atExit() : handleNextButtonPressed()}>{finalMiniChunk ? <Check /> : <ArrowRight />}</IndabaButton></div>}
+              leftColumn={
+                <div>
+                  <IndabaButton onClick={handlePrevButtonPressed}>
+                    <ArrowLeft />
+                  </IndabaButton>
+                </div>
+              }
+              rightColumn={
+                <div>
+                  <IndabaButton
+                    style={{
+                      backgroundColor: finalMiniChunk ? "green" : "#d9534f",
+                    }}
+                    onClick={() =>
+                      finalMiniChunk ? atExit() : handleNextButtonPressed()
+                    }
+                  >
+                    {finalMiniChunk ? <Check /> : <ArrowRight />}
+                  </IndabaButton>
+                </div>
+              }
             >
               <EditTranscriptionCard
+                transcriptionIcon={
+                  <Slider
+                    ThumbComponent={EmptyComponent}
+                    value={[
+                      currentChunk.starttimeseconds * 100,
+                      currentChunk.endtimeseconds * 100,
+                    ]}
+                    classes={{
+                      rail: classes.chunkProgressRail,
+                      track: classes.chunkProgressTrack
+                    }}
+                  />
+                }
                 inputRef={inputRef}
                 chunk={currentChunk}
                 transcriptionState={[transcription, setTranscription]}

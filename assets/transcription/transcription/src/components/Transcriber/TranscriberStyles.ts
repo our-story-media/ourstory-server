@@ -4,11 +4,16 @@ const useStyles = makeStyles({
   videoPlayerContainer: {
     position: "relative",
     overflow: "hidden",
-    padding: 0
   },
   inputField: {
     width: "100%",
   },
+  chunkProgressRail: {
+    height: "8px"
+  },
+  chunkProgressTrack: {
+    height: "8px"
+  }
 });
 
 export default useStyles;
