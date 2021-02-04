@@ -355,24 +355,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
             bottom: 0,
           }}
         >
-          <SkipForwardBackButtons
-            skipForward={useCallback(
-              () =>
-                duration &&
-                setProgressWithVideoUpdate(
-                  (progress) => progress + 5 / duration
-                ),
-              [duration]
-            )}
-            skipBackward={useCallback(
-              () =>
-                duration &&
-                setProgressWithVideoUpdate(
-                  (progress) => progress - 5 / duration
-                ),
-              [duration]
-            )}
-          />
         </div>
         <div
           style={{

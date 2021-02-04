@@ -1,12 +1,23 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
-  videoPlayerPlayButton: {
-    position: "absolute",
+  videoControlsContainer: {
+    display: "flex",
     left: "50%",
+    position: "absolute",
     bottom: "50%",
     transform: "translate(-50%, 50%)",
+  },
+  videoPlayerButton: {
     background: "linear-gradient(45deg, #FE6B8B 30%, #f54414 90%)",
+  },
+  roundButton: {
+    borderRadius: "50px",
+    width: "64px",
+    height: "64px",
+    color: "white",
+    display: "relative",
+    top: "4px",
   },
   videoPlayerContainer: {
     position: "relative",

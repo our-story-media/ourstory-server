@@ -1,10 +1,11 @@
 import { Box, Button, Mark, SliderProps, Typography } from "@material-ui/core";
-import { Pause, PlayArrow } from "@material-ui/icons";
+import { Forward5, Pause, PlayArrow, Replay5 } from "@material-ui/icons";
 import React, { RefObject, useCallback } from "react";
 import ReactPlayer from "react-player";
 import useDefaultState from "../../hooks/useDefaultState";
 import { toShortTimeStamp } from "../../utils/chunkManipulation";
 import { State, StateSetter } from "../../utils/types";
+import IndabaButton from "../IndabaButton/IndabaButton";
 import IndabaSlider from "../IndabaSlider/IndabaSlider";
 import useVideoPlayerProps from "./Hooks/useVideoPlayerProps";
 import { SplitState } from "./Hooks/useVideoPlayerState";
@@ -54,7 +55,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 }) => {
   const classes = useStyles();
   const [duration, setDuration] = useDefaultState(controller?.durationState, 0);
-  const { progress } = progressState;
+  const { progress, setProgressWithVideoUpdate } = progressState;
   const playState = useDefaultState(controller?.playingState, false);
   const [split] = useDefaultState(controller?.splitState, {
     start: 0,
@@ -96,17 +97,47 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         {...playerProps}
       />
       {showControls && (
-        <Button
-          disableRipple
-          variant="contained"
-          color="primary"
-          className={classes.videoPlayerPlayButton}
-          onClick={toggleIsPlaying}
-        >
-          {(isPlaying && <Pause fontSize="large" />) || (
-            <PlayArrow fontSize="large" />
-          )}
-        </Button>
+        <div className={classes.videoControlsContainer}>
+          <div style={{ position: "absolute", right: "240px", bottom: -4 }}>
+            <Button
+              disableRipple
+              className={`${classes.videoPlayerButton} ${classes.roundButton}`}
+              onClick={() =>
+                duration &&
+                setProgressWithVideoUpdate(
+                  (progress) => progress - 5 / duration
+                )
+              }
+            >
+              <Replay5 fontSize="large" />
+            </Button>
+          </div>
+          <Button
+            disableRipple
+            variant="contained"
+            color="primary"
+            className={classes.videoPlayerButton}
+            onClick={toggleIsPlaying}
+          >
+            {(isPlaying && <Pause fontSize="large" />) || (
+              <PlayArrow fontSize="large" />
+            )}
+          </Button>
+          <div style={{ position: "absolute", left: "240px", bottom: -4 }}>
+            <Button
+              onClick={() =>
+                duration &&
+                setProgressWithVideoUpdate(
+                  (progress) => progress + 5 / duration
+                )
+              }
+              disableRipple
+              className={`${classes.videoPlayerButton} ${classes.roundButton}`}
+            >
+              <Forward5 fontSize="large" />
+            </Button>
+          </div>
+        </div>
       )}
       {slider || (
         <div className={classes.progressBarContainer}>
