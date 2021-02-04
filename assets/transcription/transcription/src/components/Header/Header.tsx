@@ -15,12 +15,14 @@ import IndabaMenu from "../IndabaMenu/IndabaMenu";
 type HeaderProps = {
   title: string;
   contextMenuItems: { content: ReactNode; handler: () => void }[];
+  hidden?: boolean;
 };
 
 const Header: React.FC<HeaderProps> = ({
   children,
   title,
   contextMenuItems,
+  hidden,
 }) => {
   const classes = useStyles();
 
@@ -46,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({
           flexDirection: "column",
         }}
       >
-        <Container>
+        {!hidden ? <Container>
           <div className={classes.titleRow}>
             <div className={classes.logoContainer}>
               <img src={Logo} alt="logo" width="120px" height="36px" />
@@ -70,8 +72,8 @@ const Header: React.FC<HeaderProps> = ({
               menuItems={contextMenuItems}
             />
           </div>
-        <Divider />
-        </Container>
+          <Divider />
+        </Container> : null}
         {children}
       </Container>
     </>

@@ -1,6 +1,13 @@
 // External Dependencies
 import { Box, Container, MobileStepper, Typography } from "@material-ui/core";
-import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 // Internal Dependencies
 import oneSatisfies from "../../utils/oneSatisfies";
@@ -25,6 +32,18 @@ import useFirstRender from "../../hooks/useFirstRender";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
 import { api_base_address } from "../../utils/getApiKey";
+
+const MiniChunkButton: React.FC<{
+  disabled: boolean;
+  clickHandler: () => void;
+  text: string;
+}> = ({ disabled, clickHandler, text }) => {
+  return (
+    <IndabaButton disabled={disabled} onClick={clickHandler}>
+      {text}
+    </IndabaButton>
+  );
+};
 
 const getUsersTranscription = (chunk: Chunk, userName: string): string =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
@@ -58,7 +77,8 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     splitState: [, setSplit],
     duration,
     controller,
-  } = useVideoPlayerController();
+    playingState,
+  } = useVideoPlayerController(true);
 
   const { setProgressWithVideoUpdate } = progressState;
 
@@ -68,6 +88,8 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
 
   const { page, direction, goTo } = useSlideshow(chunks);
 
+  const [playing] = playingState;
+
   /*
    * firstRender and this effect are used to update
    * the transcription of the page everytime the page changes.
@@ -75,6 +97,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
    */
   const firstRender = useFirstRender();
   useEffect(() => {
+    userName && setTranscription(getUsersTranscription(currentChunk, userName));
     !firstRender &&
       userName &&
       updateTranscription(
@@ -112,7 +135,6 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
   }, [miniChunks, duration]);
 
   useEffect(() => {
-    userName && setTranscription(getUsersTranscription(currentChunk, userName));
     setSplit({
       start: /*currentChunk.starttimeseconds*/ currentMiniChunkStart,
       end: /*currentChunk.endtimeseconds*/ currentMiniChunkEnd,
@@ -131,7 +153,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
       ? (inputRef.current as any)
       : { focus: () => null }
     ).focus();
-  }, [page]);
+  }, [page, miniChunks.currentChunk, playing]);
 
   const {
     attemptingActionWith: attemptingTranscriptionChangeWith,
@@ -149,6 +171,16 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     atExit();
   };
 
+  const miniChunkClickHandler = useCallback(
+    (action: "next" | "prev") =>
+      setMiniChunks((prev_mini_chunks) => ({
+        ...prev_mini_chunks,
+        currentChunk:
+          prev_mini_chunks.currentChunk + (action === "next" ? 1 : -1),
+      })),
+    []
+  );
+
   return (
     <div>
       <Container style={{ marginTop: "4px" }}>
@@ -156,31 +188,6 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
       </Container>
       {chunks.length && (
         <>
-          <CentralModal
-            exit={cancelCopyTranscription}
-            header={
-              <WarningMessage message={"You Will Lose Your Transcription"} />
-            }
-            open={
-              attemptingTranscriptionChangeWith !== NotAttemptingAction.True
-            }
-          >
-            <div>
-              Duplicating this transcription will discard your current
-              transcription! Are you sure you want to discard your
-              transcription?
-              <br />
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <IndabaButton
-                  style={{ marginTop: "8px" }}
-                  onClick={confirmCopyTranscription}
-                >
-                  <FileCopy fontSize="large" style={{ marginRight: "8px" }} />
-                  <Typography variant="subtitle1">Confirm</Typography>
-                </IndabaButton>
-              </div>
-            </div>
-          </CentralModal>
           <Box className={classes.videoPlayerContainer}>
             <VideoPlayer
               progressState={progressState}
@@ -197,32 +204,20 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
               activeStep={miniChunks.currentChunk}
               position="static"
               nextButton={
-                <IndabaButton
+                <MiniChunkButton
                   disabled={
                     miniChunks.currentChunk === miniChunks.chunks.length - 1
                   }
-                  onClick={() =>
-                    setMiniChunks((prev_mini_chunks) => ({
-                      ...prev_mini_chunks,
-                      currentChunk: prev_mini_chunks.currentChunk + 1,
-                    }))
-                  }
-                >
-                  Next
-                </IndabaButton>
+                  clickHandler={() => miniChunkClickHandler("next")}
+                  text="Next"
+                />
               }
               backButton={
-                <IndabaButton
+                <MiniChunkButton
                   disabled={miniChunks.currentChunk === 0}
-                  onClick={() =>
-                    setMiniChunks((prev_mini_chunks) => ({
-                      ...prev_mini_chunks,
-                      currentChunk: prev_mini_chunks.currentChunk - 1,
-                    }))
-                  }
-                >
-                  Back
-                </IndabaButton>
+                  clickHandler={() => miniChunkClickHandler("prev")}
+                  text="Back"
+                />
               }
             />
             <Slideshow

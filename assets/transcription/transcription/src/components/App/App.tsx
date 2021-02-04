@@ -94,6 +94,7 @@ const App: React.FC<{}> = () => {
           />
           <Header
             title={View[view]}
+            hidden={view === View.Transcribing}
             contextMenuItems={[
               {
                 content: "Show Contributions",

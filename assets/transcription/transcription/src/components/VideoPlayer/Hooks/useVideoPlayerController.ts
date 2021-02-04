@@ -10,7 +10,7 @@ import { SplitState } from "./useVideoPlayerState";
  * to read and write progress and playing states, read the duration state and
  * the controller object to be passed to the VideoPlayer component
  */
-const useVideoPlayerController = (): {
+const useVideoPlayerController = (autoPlay?: boolean): {
   progressState: ProgressState;
   playingState: State<boolean>;
   splitState: State<SplitState>;
@@ -46,7 +46,7 @@ const useVideoPlayerController = (): {
 
   const [duration, setDuration] = useState(0);
 
-  const playingState = useState(false);
+  const playingState = useState(autoPlay ?? false);
 
   return {
     progressState: { progress, setProgress, setProgressWithVideoUpdate },
