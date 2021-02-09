@@ -8,10 +8,11 @@ type OnboardingModalProps = {
   show: boolean;
   dismiss: () => void;
   title: ReactElement;
-  steps: string[]
+  steps: string[];
+  startButtonContent: ReactElement;
 };
 
-const OnboardingModal: React.FC<OnboardingModalProps> = ({ show, dismiss, title, steps }) => {
+const OnboardingModal: React.FC<OnboardingModalProps> = ({ show, dismiss, title, steps, startButtonContent }) => {
 
   const {page, goTo} = useSlideshow(steps);
 
@@ -66,7 +67,7 @@ const nextPageHandler = useCallback(() => {
           )}
           <ButtonBase onClick={nextPageHandler}>
             {page === steps.length - 1 ? (
-              "Start Chunking"
+              startButtonContent
             ) : (
               <>
                 Next <ChevronRight />

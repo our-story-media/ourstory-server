@@ -2,11 +2,8 @@
 import {
   Box,
   Button,
-  CircularProgress,
   Container,
-  DialogContent,
   MobileStepper,
-  Modal,
   Slider,
 } from "@material-ui/core";
 import React, {
@@ -38,11 +35,10 @@ import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackBut
 import { api_base_address } from "../../utils/getApiKey";
 import { ArrowLeft, ArrowRight, Check } from "@material-ui/icons";
 import {
-  parseTimeStamp,
-  secondsOf,
   toShortTimeStamp,
 } from "../../utils/chunkManipulation";
 import LoadingModal from "../LoadingModal/LoadingModal";
+import OnboardingModal from "../OnboardingModal/OnboardingModal";
 
 const EmptyComponent: React.FC<{}> = () => {
   return <div />;
@@ -56,6 +52,10 @@ const getUsersTranscription = (chunk: Chunk, userName: string): string =>
 type TranscriberProps = {
   story_id: string;
   atExit: () => void;
+  onboarding: {
+    showOnboardingModal: boolean;
+    dismissOnboardingModal: () => void;
+  };
 };
 
 const getMiniChunks = (chunk: Chunk, duration: number) => {
@@ -71,8 +71,14 @@ const getMiniChunks = (chunk: Chunk, duration: number) => {
   return miniChunks;
 };
 
-const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
+const Transcriber: React.FC<TranscriberProps> = ({
+  story_id,
+  atExit,
+  onboarding,
+}) => {
   const [chunks] = chunksContext.useChunksState();
+
+  const { showOnboardingModal, dismissOnboardingModal } = onboarding;
 
   const {
     progressState,
@@ -81,7 +87,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     duration,
     controller,
     playingState: [playing, setPlaying],
-  } = useVideoPlayerController(true);
+  } = useVideoPlayerController();
 
   const { setProgressWithVideoUpdate } = progressState;
 
@@ -199,15 +205,27 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
     () =>
       page === chunks.length - 1 &&
       miniChunks.currentChunk === miniChunks.chunks.length - 1,
-    [page, miniChunks]
+    [page, miniChunks, chunks.length]
   );
 
   return (
     <div>
-      <LoadingModal open={duration == 0} />
+      <LoadingModal open={duration === 0} />
       <Container style={{ marginTop: "4px" }}>
         <BackButton action={exitHandler} />
       </Container>
+      <OnboardingModal
+        show={showOnboardingModal}
+        dismiss={dismissOnboardingModal}
+        title={<h2 style={{ margin: 0 }}>Transcribing Instructions</h2>}
+        steps={[
+          "You are about to Transcribe the chunks.",
+          "Each chunk has been divided into 5 second clips for you. These clips will loop.",
+          "When you type, the video will pause until you stop typing",
+          'When you are done transcribing a clip press the ">" button',
+        ]}
+        startButtonContent={<div>Start Transcribing</div>}
+      />
       {chunks.length && (
         <>
           <Box className={classes.videoPlayerContainer}>

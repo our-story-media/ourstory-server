@@ -73,12 +73,6 @@ const useVideoPlayerProps = (
     }
   }, [setDuration, playerRef, isLoaded]);
 
-  /* The useFadecontrols hook maintains the state for whether the video controls should be shown */
-  // const [showControls, setShowControls] = useFadeControls(
-  //   !dragging && isPlaying,
-  //   2000
-  // );
-
   /* These are the props that will be passed onto the ReactPlayer component */
   const playerProps: ReactPlayerProps = useMemo(
     () => ({

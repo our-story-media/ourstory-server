@@ -103,16 +103,6 @@ const useOurstoryApi = (
       });
   }, [story_id]);
 
-  // useEffect(() => {
-  //   console.log(
-  //     `Chunks or story has changed, pushing these changes for story_id: ${story_id}`
-  //   );
-  //   console.log(`The new chunks are:`);
-  //   console.log(chunks);
-  //   console.log(`The new story is: `);
-  //   console.log(story);
-  // }, [story]);
-
   const memoChunks = useMemo<
     [Chunk[], (setter: (newState: Chunk[]) => Chunk[]) => void]
   >(() => [chunks, setChunksWithUpdate], [chunks]);

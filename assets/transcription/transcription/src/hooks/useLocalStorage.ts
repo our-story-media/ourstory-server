@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { StateSetter } from "../utils/types";
 import useToggle from "./useToggle";
 
@@ -14,7 +14,7 @@ const useLocalStorage = (key: string, defaultValue?: string): [string | undefine
     item && setState(item);
   }
 
-  const setToStorage = (setter: (string | undefined) | ((oldVal: undefined | string) => string | undefined)) => {
+  const setToStorage = useCallback((key: string) => (setter: (string | undefined) | ((oldVal: undefined | string) => string | undefined)) => {
     if (typeof setter == "string" || setter === null) {
       setState(setter);
       window.localStorage.setItem(key, setter ?? "");
@@ -25,14 +25,18 @@ const useLocalStorage = (key: string, defaultValue?: string): [string | undefine
         return new_val;
       })
     }
-  }
+  }, []);
 
   const clearStorage = () => {
       window.localStorage.removeItem(key);
       setState(undefined);
   };
 
-  return [state, setToStorage, clearStorage];
+  const setToStorageMemo = useCallback((setter: (string | undefined) | ((oldVal: undefined | string) => string | undefined)) => {
+    setToStorage(key)(setter)
+  }, [setToStorage, key]);
+
+  return [state, setToStorageMemo, clearStorage];
 };
 
 export default useLocalStorage;

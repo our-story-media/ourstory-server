@@ -7,7 +7,7 @@
  */
 
 // External Dependencies
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 
 // Internal Dependencies
 import ChunkEditor from "../ChunkEditor/ChunkEditor";
@@ -43,7 +43,7 @@ const App: React.FC<{}> = () => {
   }
 
   const usingVidOne = useMemo(() => {
-    console.log(usingVidOneString)
+    console.log(usingVidOneString);
     return usingVidOneString === "true";
   }, [usingVidOneString]);
 
@@ -81,11 +81,19 @@ const App: React.FC<{}> = () => {
 
   const [showContributers, toggleShowContributers] = useToggle(false);
 
-  const [showChunkEditorOnboarding, setShowChunkEditorOnboarding] = useLocalStorage("showChunkEditorOnboardingModal", "true");
+  const [
+    showChunkEditorOnboarding,
+    setShowChunkEditorOnboarding,
+  ] = useLocalStorage("showChunkEditorOnboardingModal", "true");
+  const [
+    showTranscriberOnboarding,
+    setShowTranscriberOnboarding,
+  ] = useLocalStorage("showTranscriberOnboardingModal", "true");
 
   const logOutAction = () => {
     setShowChunkEditorOnboarding("true");
-  }
+    setShowTranscriberOnboarding("true");
+  };
 
   return (
     <ChunksProvider state={[chunks, setChunks]}>
@@ -132,12 +140,21 @@ const App: React.FC<{}> = () => {
               <ChunkEditor
                 story_id={story_id}
                 atExit={() => setView(View.Dashboard)}
-                onboarding={{ showOnboardingModal: showChunkEditorOnboarding === "true", dismissOnboardingModal: () => setShowChunkEditorOnboarding("false") }}
+                onboarding={{
+                  showOnboardingModal: showChunkEditorOnboarding === "true",
+                  dismissOnboardingModal: () =>
+                    setShowChunkEditorOnboarding("false"),
+                }}
               />
             ) : view === View.Transcribing ? (
               <Transcriber
                 story_id={story_id}
                 atExit={() => setView(View.Dashboard)}
+                onboarding={{
+                  showOnboardingModal: showTranscriberOnboarding === "true",
+                  dismissOnboardingModal: () =>
+                    setShowTranscriberOnboarding("false"),
+                }}
               />
             ) : view === View.Reviewing ? (
               <Reviewer
