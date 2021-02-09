@@ -5,7 +5,6 @@ import ReactPlayer from "react-player";
 import useDefaultState from "../../hooks/useDefaultState";
 import { toShortTimeStamp } from "../../utils/chunkManipulation";
 import { State, StateSetter } from "../../utils/types";
-import IndabaButton from "../IndabaButton/IndabaButton";
 import IndabaSlider from "../IndabaSlider/IndabaSlider";
 import useVideoPlayerProps from "./Hooks/useVideoPlayerProps";
 import { SplitState } from "./Hooks/useVideoPlayerState";

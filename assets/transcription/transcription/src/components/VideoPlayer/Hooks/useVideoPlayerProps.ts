@@ -138,7 +138,7 @@ const useVideoPlayerProps = (
       }
       /** If the video's progress is before the start of the split, set it to the start */
     } else if (progress < split.start) {
-      setProgressWithVideoUpdate(split.start);
+      setProgressWithVideoUpdate(split.start + 0.1);
     }
   }, [progress, isPlaying, setIsPlaying, split.end, split.start]);
 

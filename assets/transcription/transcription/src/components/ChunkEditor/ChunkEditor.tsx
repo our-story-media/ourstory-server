@@ -13,6 +13,7 @@ import {
   GridList,
   GridListTile,
   Mark,
+  MobileStepper,
   Typography,
 } from "@material-ui/core";
 
@@ -48,6 +49,9 @@ import ScrollToOnMount from "../ScrollToOnMount/ScrollToOnMount";
 import ChunkCardContextMenu from "./ChunkCardContextMenu";
 import { api_base_address } from "../../utils/getApiKey";
 import CentralModal from "../CentralModal/CentralModal";
+import LoadingModal from "../LoadingModal/LoadingModal";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import OnboardingModal from "./ChunkEditorOnboardingModal";
 
 type ChunkEditorProps = {
   /** Action to do when back button is pressed */
@@ -164,7 +168,8 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
     });
   };
 
-  const [showIntroductionModal, setShowIntroductionModal] = useState(true);
+  const [showOnboardingModal, setShowOnboardingModal] = useLocalStorage("showChunkEditorOnboardingModal", "true");
+
   const playButtonStyle = useMemo(
     () => ({
       marginRight: "4px",
@@ -185,27 +190,13 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
+      <LoadingModal open={duration == 0} />
       <Container>
         <div style={{ marginTop: "4px" }}>
           <BackButton action={atExit} />
         </div>
       </Container>
-      <CentralModal
-        header={<h2 style={{ margin: 0 }}>Chunking Instructions</h2>}
-        open={showIntroductionModal}
-        exit={() => setShowIntroductionModal(false)}
-      >
-        <div style={{ padding: "0px 8px 16px 8px" }}>
-          You are about to chunk the video. The aim of chunking is to make
-          Transcribing easy. <br />
-          To create a chunk, press the '+' button in the bottom right corner.
-          The time that you press the '+' button in the video will be the end of
-          the new chunk. <br />
-          You should aim to have only one person speaking in each chunk. Create
-          a new chunk when there is a change in who is talking, there is a gap
-          in the talking, or a person begins/ends talking.
-        </div>
-      </CentralModal>
+      <OnboardingModal show={showOnboardingModal === "true"} dismiss={() => setShowOnboardingModal("false") } />
       <EditChunkModal
         story_id={story_id}
         chunk={croppingChunk}
@@ -314,34 +305,37 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
                     key="Done Card"
                     onClick={handleCompleteChunking}
                   >
-                    {/* <ScrollToOnMount style={{ height: "100%" }}> */}
-                    <SimpleCard
-                      contentStyle={{
-                        backgroundColor: "#40bf11C9",
-                        height: "100%",
-                        padding: "16px",
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        color: "white",
-                      }}
-                      cardStyle={{
-                        margin: "8px",
-                        transform: "translateY(8px)",
-                        height: "calc(100% - 16px)",
-                      }}
-                    >
-                      <Check fontSize="large" style={{ marginRight: "4px" }} />
-                      <Typography
-                        variant="h5"
-                        component="h2"
-                        style={{ transform: "translateY(2px)" }}
+                    <ScrollToOnMount style={{ height: "100%" }}>
+                      <SimpleCard
+                        contentStyle={{
+                          backgroundColor: "#40bf11C9",
+                          height: "100%",
+                          padding: "16px",
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          color: "white",
+                        }}
+                        cardStyle={{
+                          margin: "8px",
+                          transform: "translateY(8px)",
+                          height: "calc(100% - 16px)",
+                        }}
                       >
-                        Done
-                      </Typography>
-                    </SimpleCard>
-                    {/* </ScrollToOnMount> */}
+                        <Check
+                          fontSize="large"
+                          style={{ marginRight: "4px" }}
+                        />
+                        <Typography
+                          variant="h5"
+                          component="h2"
+                          style={{ transform: "translateY(2px)" }}
+                        >
+                          Done
+                        </Typography>
+                      </SimpleCard>
+                    </ScrollToOnMount>
                   </GridListTile>,
                 ]
               : []
@@ -354,8 +348,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
             left: 0,
             bottom: 0,
           }}
-        >
-        </div>
+        ></div>
         <div
           style={{
             position: "absolute",

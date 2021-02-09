@@ -11,15 +11,26 @@ const useStyles = makeStyles({
     width: "100%",
   },
   chunkProgressRail: {
-    height: chunkProgressHeight
+    height: chunkProgressHeight,
+    color: "#d9534f",
   },
   chunkProgressTrack: {
-    height: chunkProgressHeight
+    height: chunkProgressHeight,
+    color: "#d9534f",
   },
   chunkProgressMark: {
     height: chunkProgressHeight,
-    width: "4px"
-  }
+    width: "4px",
+  },
+  stepperDots: {
+    backgroundColor: "#d9534f",
+  },
+  loadingModal: {
+    outline: "0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 export default useStyles;

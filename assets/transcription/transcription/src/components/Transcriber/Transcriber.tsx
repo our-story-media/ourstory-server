@@ -1,5 +1,14 @@
 // External Dependencies
-import { Box, Button, Container, MobileStepper, Slider } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  DialogContent,
+  MobileStepper,
+  Modal,
+  Slider,
+} from "@material-ui/core";
 import React, {
   useCallback,
   useContext,
@@ -28,7 +37,12 @@ import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
 import { api_base_address } from "../../utils/getApiKey";
 import { ArrowLeft, ArrowRight, Check } from "@material-ui/icons";
-import { parseTimeStamp, secondsOf, toShortTimeStamp } from "../../utils/chunkManipulation";
+import {
+  parseTimeStamp,
+  secondsOf,
+  toShortTimeStamp,
+} from "../../utils/chunkManipulation";
+import LoadingModal from "../LoadingModal/LoadingModal";
 
 const EmptyComponent: React.FC<{}> = () => {
   return <div />;
@@ -190,6 +204,7 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
 
   return (
     <div>
+      <LoadingModal open={duration == 0} />
       <Container style={{ marginTop: "4px" }}>
         <BackButton action={exitHandler} />
       </Container>
@@ -210,8 +225,30 @@ const Transcriber: React.FC<TranscriberProps> = ({ story_id, atExit }) => {
               steps={miniChunks.chunks.length}
               activeStep={miniChunks.currentChunk}
               position="static"
-              nextButton={<Button onClick={() => setMiniChunks({...miniChunks, currentChunk: miniChunks.chunks.length - 1})}>Last</Button>}
-              backButton={<Button onClick={() => setMiniChunks({...miniChunks, currentChunk: 0})}>First</Button>}
+              classes={{
+                dotActive: classes.stepperDots,
+              }}
+              nextButton={
+                <Button
+                  onClick={() =>
+                    setMiniChunks({
+                      ...miniChunks,
+                      currentChunk: miniChunks.chunks.length - 1,
+                    })
+                  }
+                >
+                  Last
+                </Button>
+              }
+              backButton={
+                <Button
+                  onClick={() =>
+                    setMiniChunks({ ...miniChunks, currentChunk: 0 })
+                  }
+                >
+                  First
+                </Button>
+              }
             />
             <Slideshow
               onNavigate={goTo}

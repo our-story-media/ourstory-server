@@ -7,7 +7,7 @@ import useStyles from "./NameModalStyles";
 
 type NameModalProps = {
   show: boolean;
-  setName: StateSetter<string | null>;
+  setName: StateSetter<string | undefined>;
 };
 
 const NameModal: React.FC<NameModalProps> = ({ show, setName }) => {

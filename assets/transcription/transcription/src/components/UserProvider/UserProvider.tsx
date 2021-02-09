@@ -4,13 +4,13 @@ import { name_key } from "../../utils/localStorageKeys";
 import { StateSetter } from "../../utils/types";
 
 type UserContextType = {
-  userName: string | null,
-  setName: StateSetter<string | null>,
+  userName: string | undefined,
+  setName: StateSetter<string | undefined>,
   clearName: () => void
 }
 
 const initialValue: UserContextType = {
-  userName: null,
+  userName: undefined,
   setName: () => null,
   clearName: () => null,
 }

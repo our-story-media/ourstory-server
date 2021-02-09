@@ -22,6 +22,7 @@ import { Transcription } from "../../utils/types";
 import BackButton from "../BackButton/BackButton";
 import CentralModal from "../CentralModal/CentralModal";
 import IndabaButton from "../IndabaButton/IndabaButton";
+import LoadingModal from "../LoadingModal/LoadingModal";
 import ChunkCard from "../SimpleCard/ChunkCard";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import Slideshow from "../Slideshow/Slideshow";
@@ -54,6 +55,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
     splitState: [, setSplit],
     controller: playerController,
     playerRef,
+    duration
   } = useVideoPlayerController();
 
   const { setProgressWithVideoUpdate } = progressState;
@@ -119,6 +121,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
 
   return (
     <div>
+      <LoadingModal open={duration == 0} />
       <Container style={{ marginTop: "4px" }}>
         <BackButton action={atExit} />
       </Container>
@@ -250,7 +253,8 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
                       }
                       style={{ display: "flex", flexDirection: "row" }}
                     >
-                      <Radio checked={
+                      <Radio
+                        checked={
                           currentChunk.review?.selectedtranscription ===
                           transcription.id
                         }

@@ -20,7 +20,7 @@ type DashboardProps = {
   steps: StepInfoProps[];
 };
 
-const Greeting: React.FC<{ name: string | null }> = ({ name }) => (
+const Greeting: React.FC<{ name: string | undefined }> = ({ name }) => (
   <Typography style={{ fontWeight: "lighter" }} variant="h5">
     {name && `Hello ${name}`}
   </Typography>
