@@ -147,8 +147,8 @@ const Transcriber: React.FC<TranscriberProps> = ({
 
   useEffect(() => {
     setSplit({
-      start: /*currentChunk.starttimeseconds*/ currentMiniChunkStart,
-      end: /*currentChunk.endtimeseconds*/ currentMiniChunkEnd,
+      start: currentMiniChunkStart,
+      end: currentMiniChunkEnd,
     });
     setProgressWithVideoUpdate(currentMiniChunkStart);
   }, [chunks, page, userName, miniChunks, duration]);

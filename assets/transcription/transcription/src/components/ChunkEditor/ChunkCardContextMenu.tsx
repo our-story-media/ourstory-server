@@ -4,7 +4,6 @@ import { MoreVert } from "@material-ui/icons";
 import React, { ReactNode, useRef, useState } from "react";
 
 // Internal Dependencies
-import { Chunk } from "../../utils/types";
 import IndabaMenu from "../IndabaMenu/IndabaMenu";
 
 type ChunkCardContextMenuProps = {

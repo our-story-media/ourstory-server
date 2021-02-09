@@ -59,14 +59,16 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
   const [videoSplit, setVideoSplit] = useState([0, 0] as [number, number]);
   const [croppedSplit, setCroppedSplit] = croppedSplitState;
 
+  const { setProgressWithVideoUpdate } = cropPlayerProgressState;
+
   /* Set initial state based on props  */
   useEffect(() => {
-    cropPlayerProgressState.setProgressWithVideoUpdate(chunk.starttimeseconds);
+    setProgressWithVideoUpdate(chunk.starttimeseconds);
     const start = chunk.starttimeseconds - 2 / storyDuration;
     const end = chunk.endtimeseconds + 2 / storyDuration;
     setVideoSplit([start < 0 ? 0 : start, end > 1 ? 1 : end]);
     setCroppedSplit([chunk.starttimeseconds, chunk.endtimeseconds]);
-  }, [chunk.starttimeseconds, chunk.endtimeseconds, storyDuration]);
+  }, [chunk.starttimeseconds, chunk.endtimeseconds, storyDuration, setProgressWithVideoUpdate, setCroppedSplit]);
 
   return (
     <div>

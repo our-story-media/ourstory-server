@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import ReactPlayer from "react-player";
-import captureVideoFrame from "capture-video-frame";
 
 type VideoThumbnailProps = {
   url: string;

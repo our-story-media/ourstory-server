@@ -7,7 +7,7 @@
  */
 
 // External Dependencies
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 // Internal Dependencies
 import ChunkEditor from "../ChunkEditor/ChunkEditor";
@@ -17,7 +17,7 @@ import useSteps from "./hooks/useSteps";
 import View from "./Views";
 import { useStoryId } from "../../utils/getId";
 import Transcriber from "../Transcriber/Transcriber";
-import UserProvider, { UserContext } from "../UserProvider/UserProvider";
+import UserProvider from "../UserProvider/UserProvider";
 import useOurstoryApi from "./hooks/useOurstoryApi";
 import { Reviewer } from "../Reviewer/Reviewer";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
@@ -90,9 +90,15 @@ const App: React.FC<{}> = () => {
     setShowTranscriberOnboarding,
   ] = useLocalStorage("showTranscriberOnboardingModal", "true");
 
+  const [showReviewerOnboardring, setShowReviewerOnboarding] = useLocalStorage(
+    "showReviewerOnboardingModal",
+    "true"
+  );
+
   const logOutAction = () => {
     setShowChunkEditorOnboarding("true");
     setShowTranscriberOnboarding("true");
+    setShowReviewerOnboarding("true");
   };
 
   return (
@@ -160,6 +166,11 @@ const App: React.FC<{}> = () => {
               <Reviewer
                 atExit={() => setView(View.Dashboard)}
                 story_id={story_id}
+                onboarding={{
+                  showOnboardingModal: showReviewerOnboardring === "true",
+                  dismissOnboardingModal: () =>
+                    setShowReviewerOnboarding("false"),
+                }}
               />
             ) : null}
           </Header>

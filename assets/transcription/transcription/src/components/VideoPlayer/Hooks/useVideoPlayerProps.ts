@@ -1,5 +1,5 @@
 // External Dependencies
-import { useState, useEffect, RefObject, useMemo } from "react";
+import { useState, useEffect, RefObject, useMemo, useCallback } from "react";
 import ReactPlayer, { ReactPlayerProps } from "react-player";
 import { useThrottleCallback } from "@react-hook/throttle";
 
@@ -17,15 +17,19 @@ const useProgressBarControls = (
 } => {
   const [state, setState] = useState(initialValue);
 
-  return {
-    value: state,
-    setWithoutVideoUpdate: (newValue: number) => {
-      setState(newValue);
-    },
-    setWithVideoUpdate: (newValue: number) => {
+  useEffect(() => {
+    console.log("playerUpdater changed");
+  }, [playerUpdater]);
+
+  const setWithVideoUpdate = useCallback((newValue: number) => {
       setState(newValue);
       playerUpdater(newValue);
-    },
+    }, [setState, playerUpdater]);
+
+  return {
+    value: state,
+    setWithoutVideoUpdate: setState,
+    setWithVideoUpdate
   };
 };
 
@@ -83,7 +87,7 @@ const useVideoPlayerProps = (
       onReady: () => setIsLoaded(true),
       onEnded: () => setIsPlaying(false),
     }),
-    [dragging, isPlaying]
+    [dragging, isPlaying, setIsPlaying, setProgress]
   );
 
   const throttleUpdateVideo = useThrottleCallback(
@@ -99,7 +103,7 @@ const useVideoPlayerProps = (
 
   useEffect(() => {
     updateProgressBar(progress * 100);
-  }, [progress]);
+  }, [progress, updateProgressBar]);
 
   /* These are the props that will be passed onto the Slider component (the slider component is the video progress bar) */
   const progressBarProps = useMemo(
@@ -118,13 +122,13 @@ const useVideoPlayerProps = (
         setDragging(false);
       },
     }),
-    [progressBarValue, split]
+    [progressBarValue, split, onProgressDrag, onScrobble, setProgressWithVideoUpdate]
   );
 
   useEffect(() => {
     /** If the video is playing and it has reached the end, stop it from continuing */
-    if (progressState.progress > split.end) {
-      if (loop) {
+    if (progress > split.end) {
+      if (loop && !dragging) {
         setProgressWithVideoUpdate(split.start);
       } else {
         setProgressWithVideoUpdate(split.end);
@@ -134,7 +138,7 @@ const useVideoPlayerProps = (
     } else if (progress < split.start) {
       setProgressWithVideoUpdate(split.start + 0.1);
     }
-  }, [progress, isPlaying, setIsPlaying, split.end, split.start]);
+  }, [progress, isPlaying, setIsPlaying, split.end, split.start, loop, setProgressWithVideoUpdate, dragging]);
 
   return {
     playerProps,

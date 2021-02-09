@@ -1,10 +1,19 @@
 // External Dependencies
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 // Internal Dependencies
 import api_key, { api_base_address } from "../../../utils/getApiKey";
 import { Chunk, Story } from "../../../utils/types";
+
+const pushStoryChanges = (new_story: Story, story_id: string) => {
+  axios.request<Story>({
+    url: `http://${api_base_address}:8845/api/watch/savedit/${story_id}?apikey=${api_key}`,
+    method: "POST",
+    withCredentials: true,
+    data: new_story,
+  });
+};
 
 /**
  * This hook synchronizes the chunks being created and edited in the user
@@ -35,55 +44,30 @@ const useOurstoryApi = (
     );
   };
 
-  const pushStoryChanges = (new_story: Story) => {
-    axios.request<Story>({
-      url: `http://${api_base_address}:8845/api/watch/savedit/${story_id}?apikey=${api_key}`,
-      method: "POST",
-      withCredentials: true,
-      data: new_story,
-    });
-  };
+  const setChunksWithUpdate = useCallback(
+    async (setter: (new_chunks: Chunk[]) => Chunk[]) => {
+      const new_chunks = setter(
+        (
+          await axios.request<Chunk[]>({
+            withCredentials: true,
+            url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
+            transformResponse: (r: string) =>
+              (JSON.parse(r) as Story).transcription.chunks,
+          })
+        ).data
+      );
 
-  const setChunksWithUpdate = async (
-    setter: (new_chunks: Chunk[]) => Chunk[]
-  ) => {
-    const new_chunks = setter(
-      (
-        await axios.request<Chunk[]>({
-          withCredentials: true,
-          url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
-          transformResponse: (r: string) =>
-            (JSON.parse(r) as Story).transcription.chunks,
-        })
-      ).data
-    );
-
-    const new_story =
-      story === undefined
-        ? undefined
-        : { ...story, transcription: { chunks: new_chunks } };
-
-    setStory(new_story);
-    new_story && pushStoryChanges(new_story);
-  };
-
-  // const setWithUpdnew_chunksc;(setter: (state: Chunk[]) => Chunk[]) => {
-  //   console.log(`Setting Chunks with update for story: ${story_id}`)
-  //   setChunks(
-  //     setter(
-  //       (
-  //         await axios
-  //           .request<Chunk[]>({
-  //             withCredentials: true,
-  //             url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
-  //             transformResponse: (r: string) =>
-  //               (JSON.parse(r) as Story).transcription.chunks,
-  //           })
-  //           .catch(() => ({ data: chunks }))
-  //       ).data
-  //     )
-  //   );
-  // };
+      setStory((old_story) => {
+        const new_story =
+          old_story === undefined
+            ? undefined
+            : { ...old_story, transcription: { chunks: new_chunks } };
+        new_story && pushStoryChanges(new_story, story_id);
+        return new_story;
+      });
+    },
+    [story_id]
+  );
 
   useEffect(() => {
     console.log(
@@ -105,7 +89,7 @@ const useOurstoryApi = (
 
   const memoChunks = useMemo<
     [Chunk[], (setter: (newState: Chunk[]) => Chunk[]) => void]
-  >(() => [chunks, setChunksWithUpdate], [chunks]);
+  >(() => [chunks, setChunksWithUpdate], [chunks, setChunksWithUpdate]);
 
   return {
     storyTitle: story && story.title,

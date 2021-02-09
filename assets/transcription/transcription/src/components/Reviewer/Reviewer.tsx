@@ -1,6 +1,5 @@
 import {
   Box,
-  Checkbox,
   Container,
   Divider,
   makeStyles,
@@ -23,6 +22,7 @@ import BackButton from "../BackButton/BackButton";
 import CentralModal from "../CentralModal/CentralModal";
 import IndabaButton from "../IndabaButton/IndabaButton";
 import LoadingModal from "../LoadingModal/LoadingModal";
+import OnboardingModal from "../OnboardingModal/OnboardingModal";
 import ChunkCard from "../SimpleCard/ChunkCard";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import Slideshow from "../Slideshow/Slideshow";
@@ -31,10 +31,14 @@ import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerControl
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import WarningMessage from "../WarningMessage/WarningMessage";
 
-interface ReviewerProps {
+type ReviewerProps = {
   story_id: string;
   atExit: () => void;
-}
+  onboarding: {
+    showOnboardingModal: boolean;
+    dismissOnboardingModal: () => void;
+  };
+};
 
 const useStyles = makeStyles({
   doneButton: {
@@ -49,13 +53,19 @@ const useStyles = makeStyles({
   },
 });
 
-export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
+export const Reviewer: React.FC<ReviewerProps> = ({
+  atExit,
+  story_id,
+  onboarding,
+}) => {
+  const { showOnboardingModal, dismissOnboardingModal } = onboarding;
+
   const {
     progressState,
     splitState: [, setSplit],
     controller: playerController,
     playerRef,
-    duration
+    duration,
   } = useVideoPlayerController();
 
   const { setProgressWithVideoUpdate } = progressState;
@@ -88,7 +98,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
       end: currentChunk.endtimeseconds,
     });
     setProgressWithVideoUpdate(currentChunk.starttimeseconds);
-  }, [page, chunks, currentChunk]);
+  }, [page, chunks, currentChunk, setProgressWithVideoUpdate, setSplit]);
 
   const updateReview = useUpdateReview();
   const deleteReview = useDeleteReview();
@@ -117,35 +127,30 @@ export const Reviewer: React.FC<ReviewerProps> = ({ atExit, story_id }) => {
 
   const updateTranscription = useUpdateTranscription();
 
-  const [showIntroductionModal, setShowIntroductionModal] = useState(true);
-
   return (
     <div>
-      <LoadingModal open={duration == 0} />
+      <LoadingModal open={duration === 0} />
       <Container style={{ marginTop: "4px" }}>
         <BackButton action={atExit} />
       </Container>
-      <CentralModal
-        header={<h2 style={{ margin: 0 }}>Chunking Instructions</h2>}
-        open={showIntroductionModal}
-        exit={() => setShowIntroductionModal(false)}
-      >
-        <div style={{ padding: "0px 8px 16px 8px" }}>
-          You are about to review the transcriptions made on the video. For each
-          chunk, select one of the transcriptions from the list. You can do this
-          by clicking on the text or the check box to the left of the text.
-          <br />
-          You can also edit the transcriptions by clicking on the pencil button
-          above the text.
-        </div>
-      </CentralModal>
+      <OnboardingModal
+        show={showOnboardingModal}
+        dismiss={dismissOnboardingModal}
+        steps={[
+          "You are about to review the transcriptions made on the video.",
+          "For each chunk, select one of the transcriptions from the list. You can do this by clicking on the text or the check box to the left of the text.",
+          "You can also edit the transcriptions by clicking on the pencil button above the text.",
+        ]}
+        title={<h2 style={{ margin: 0 }}>Transcribing Instructions</h2>}
+        startButtonContent={<div>Start Reviewing</div>}
+      />
       <CentralModal
         open={editingTranscription !== undefined}
         header={
           <WarningMessage
             message={
               <div>
-                You Are Editing{" "}
+                You Are Editing
                 <span
                   style={{ textDecoration: "underline" }}
                 >{` ${editingTranscription?.creatorid}`}</span>

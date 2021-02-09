@@ -8,7 +8,6 @@ import { Chunk } from "../../utils/types";
 import SimpleCard from "./SimpleCard";
 import { parseChunkTimeStamps } from "../../utils/chunkManipulation";
 import React, { ReactNode } from "react";
-import { Receipt } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   titleContainer: {

@@ -13,7 +13,6 @@ import {
   GridList,
   GridListTile,
   Mark,
-  MobileStepper,
   Typography,
 } from "@material-ui/core";
 
@@ -43,14 +42,11 @@ import BackButton from "../BackButton/BackButton";
 import useConfirmBeforeAction from "../../hooks/useConfirmBeforeAction";
 import ConfirmIntentModal from "../ConfirmIntentModal/ConfirmIntentModal";
 import TranscriptionsModal from "../TranscriptionsModal/TranscriptionsModal";
-import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
 import SimpleCard from "../SimpleCard/SimpleCard";
 import ScrollToOnMount from "../ScrollToOnMount/ScrollToOnMount";
 import ChunkCardContextMenu from "./ChunkCardContextMenu";
 import { api_base_address } from "../../utils/getApiKey";
-import CentralModal from "../CentralModal/CentralModal";
 import LoadingModal from "../LoadingModal/LoadingModal";
-import useLocalStorage from "../../hooks/useLocalStorage";
 import OnboardingModal from "../OnboardingModal/OnboardingModal";
 
 type ChunkEditorProps = {
@@ -112,7 +108,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
       setPlayingChunk(undefined);
       setPlay(false);
     }
-  }, [progress, playingChunk, chunks]);
+  }, [progress, playingChunk, chunks, setPlay]);
 
   const handleChunkPlayButtonClick = useCallback(
     (chunk: Chunk, playingChunk: Chunk | undefined, videoPlaying: boolean) => {
@@ -124,7 +120,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
         setProgressWithVideoUpdate(chunk.starttimeseconds);
       }
     },
-    [chunks]
+    [setProgressWithVideoUpdate, setPlay]
   );
 
   const [croppingChunk, setCroppingChunk] = useState<Chunk | undefined>(
@@ -188,12 +184,9 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
     []
   );
 
-  const playButtonClickHandler = useCallback(
-    (idx) => handleChunkPlayButtonClick(idx, playingChunk, playingState[0]),
-    [playingChunk]
-  );
-
   const { showOnboardingModal, dismissOnboardingModal } = onboarding;
+
+  const playerDragHandler = useCallback(() => setPlayingChunk(undefined), [setPlayingChunk]);
 
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
@@ -258,7 +251,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
           playerRef={playerRef}
           url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
           sliderMarks={marks}
-          onProgressDrag={() => setPlayingChunk(undefined)}
+          onProgressDrag={playerDragHandler}
         />
       </div>
       <GridList className={classes.chunksList} cellHeight="auto" cols={2.5}>
@@ -304,7 +297,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
                       round
                       color="primary"
                       style={playButtonStyle as React.CSSProperties}
-                      onClick={() => playButtonClickHandler(c)}
+                      onClick={() => handleChunkPlayButtonClick(c, playingChunk, playingState[0])}
                     >
                       {playingChunk?.id === c.id && playingState[0] ? (
                         <Stop />
