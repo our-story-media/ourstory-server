@@ -18,6 +18,8 @@ type DashboardProps = {
   storyName: string;
   /** The transcription steps and their progress */
   steps: StepInfoProps[];
+  /** Action for logging out */
+  logOutAction: () => void;
 };
 
 const Greeting: React.FC<{ name: string | undefined }> = ({ name }) => (
@@ -35,7 +37,11 @@ const Title: React.FC<{ storyName: string }> = ({ storyName }) => (
   </Typography>
 );
 
-const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
+const Dashboard: React.FC<DashboardProps> = ({
+  storyName,
+  steps,
+  logOutAction,
+}) => {
   const { userName, setName, clearName } = useContext(UserContext);
 
   const classes = useStyles();
@@ -47,7 +53,14 @@ const Dashboard: React.FC<DashboardProps> = ({ storyName, steps }) => {
         <Title storyName={storyName} />
         <Greeting name={userName} />
         {userName && (
-          <IndabaLink onClick={clearName}>This is not me!</IndabaLink>
+          <IndabaLink
+            onClick={() => {
+              clearName();
+              logOutAction();
+            }}
+          >
+            This is not me!
+          </IndabaLink>
         )}
       </Container>
       <div style={{ marginBottom: "16px" }}>

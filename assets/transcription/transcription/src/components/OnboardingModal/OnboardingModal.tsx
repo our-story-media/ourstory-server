@@ -1,33 +1,23 @@
-import {
-  ButtonBase,
-  Container,
-  Divider,
-  Step,
-  StepLabel,
-  Stepper,
-  Typography,
-} from "@material-ui/core";
-import { ChevronRight, ChevronLeft } from "@material-ui/icons";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Stepper, Step, StepLabel, Container, Divider, Typography, ButtonBase } from "@material-ui/core";
+import { ChevronLeft, ChevronRight } from "@material-ui/icons";
+import React, { ReactElement, useCallback } from "react";
 import useSlideshow from "../../hooks/useSlideshow";
 import CentralModal from "../CentralModal/CentralModal";
 
 type OnboardingModalProps = {
   show: boolean;
   dismiss: () => void;
+  title: ReactElement;
+  steps: string[]
 };
 
-const OnboardingModal: React.FC<OnboardingModalProps> = ({ show, dismiss }) => {
-  const steps = useRef([
-    "You are about to chunk the video. The aim of chunking is to make Transcribing easy.",
-    "To create a chunk, press the '+' button in the bottom right corner. The time that you press the '+' button in the video will be the end of the new chunk.",
-    "You should aim to have only one person speaking in each chunk. Create a new chunk when there is a change in who is talking, there is a gap in the talking, or a person begins/ends talking.",
-  ]);
-  const { page, goTo } = useSlideshow(steps.current);
+const OnboardingModal: React.FC<OnboardingModalProps> = ({ show, dismiss, title, steps }) => {
 
-  const nextPageHandler = useCallback(() => {
-    page === steps.current.length - 1 ? dismiss() : goTo("next");
-  }, [page, goTo, dismiss]);
+  const {page, goTo} = useSlideshow(steps);
+
+const nextPageHandler = useCallback(() => {
+    page === steps.length - 1 ? dismiss() : goTo("next");
+  }, [page, goTo, dismiss, steps.length]);
 
   const prevPageHandler = useCallback(() => {
     goTo("prev");
@@ -35,7 +25,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({ show, dismiss }) => {
 
   return (
     <CentralModal
-      header={<h2 style={{ margin: 0 }}>Chunking Instructions</h2>}
+      header={title}
       open={show}
       exit={dismiss}
     >
@@ -48,7 +38,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({ show, dismiss }) => {
         }}
       >
         <Stepper activeStep={page}>
-          {steps.current.map((_, idx) => (
+          {steps.map((_, idx) => (
             <Step key={idx}>
               <StepLabel />
             </Step>
@@ -63,7 +53,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({ show, dismiss }) => {
               transform: "translateY(-50%)",
             }}
           >
-            <Typography variant="subtitle1">{steps.current[page]}</Typography>
+            <Typography variant="h5">{steps[page]}</Typography>
           </div>
         </Container>
         <Container style={{ display: "flex", justifyContent: "space-between" }}>
@@ -75,7 +65,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({ show, dismiss }) => {
             </ButtonBase>
           )}
           <ButtonBase onClick={nextPageHandler}>
-            {page === steps.current.length - 1 ? (
+            {page === steps.length - 1 ? (
               "Start Chunking"
             ) : (
               <>

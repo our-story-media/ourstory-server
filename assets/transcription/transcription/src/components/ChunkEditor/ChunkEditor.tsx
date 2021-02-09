@@ -51,12 +51,16 @@ import { api_base_address } from "../../utils/getApiKey";
 import CentralModal from "../CentralModal/CentralModal";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import OnboardingModal from "./ChunkEditorOnboardingModal";
+import OnboardingModal from "../OnboardingModal/OnboardingModal";
 
 type ChunkEditorProps = {
   /** Action to do when back button is pressed */
   atExit: () => void;
   story_id: string;
+  onboarding: {
+    showOnboardingModal: boolean;
+    dismissOnboardingModal: () => void;
+  };
 };
 
 /**
@@ -70,7 +74,11 @@ const getMarks = (chunks: Chunk[]): Mark[] =>
     value: chunk.endtimeseconds * 100,
   }));
 
-const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
+const ChunkEditor: React.FC<ChunkEditorProps> = ({
+  atExit,
+  story_id,
+  onboarding,
+}) => {
   const [chunks] = chunksContext.useChunksState();
 
   const {
@@ -168,8 +176,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
     });
   };
 
-  const [showOnboardingModal, setShowOnboardingModal] = useLocalStorage("showChunkEditorOnboardingModal", "true");
-
   const playButtonStyle = useMemo(
     () => ({
       marginRight: "4px",
@@ -187,16 +193,27 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({ atExit, story_id }) => {
     [playingChunk]
   );
 
+  const { showOnboardingModal, dismissOnboardingModal } = onboarding;
+
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
-      <LoadingModal open={duration == 0} />
+      <LoadingModal open={duration === 0} />
       <Container>
         <div style={{ marginTop: "4px" }}>
           <BackButton action={atExit} />
         </div>
       </Container>
-      <OnboardingModal show={showOnboardingModal === "true"} dismiss={() => setShowOnboardingModal("false") } />
+      <OnboardingModal
+        show={showOnboardingModal}
+        dismiss={dismissOnboardingModal}
+        title={<h2 style={{ margin: 0 }}>Chunking Instructions</h2>}
+        steps={[
+          "You are about to chunk the video. The aim of chunking is to make Transcribing easy.",
+          "To create a chunk, press the '+' button in the bottom right corner. The time that you press the '+' button in the video will be the end of the new chunk.",
+          "You should aim to have only one person speaking in each chunk. Create a new chunk when there is a change in who is talking, there is a gap in the talking, or a person begins/ends talking.",
+        ]}
+      />
       <EditChunkModal
         story_id={story_id}
         chunk={croppingChunk}

@@ -7,7 +7,7 @@
  */
 
 // External Dependencies
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 
 // Internal Dependencies
 import ChunkEditor from "../ChunkEditor/ChunkEditor";
@@ -17,7 +17,7 @@ import useSteps from "./hooks/useSteps";
 import View from "./Views";
 import { useStoryId } from "../../utils/getId";
 import Transcriber from "../Transcriber/Transcriber";
-import UserProvider from "../UserProvider/UserProvider";
+import UserProvider, { UserContext } from "../UserProvider/UserProvider";
 import useOurstoryApi from "./hooks/useOurstoryApi";
 import { Reviewer } from "../Reviewer/Reviewer";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
@@ -48,8 +48,6 @@ const App: React.FC<{}> = () => {
   }, [usingVidOneString]);
 
   const story_id = useStoryId(usingVidOne);
-
-  // console.log(`App says: ${story_id}`);
 
   const {
     storyTitle,
@@ -82,6 +80,12 @@ const App: React.FC<{}> = () => {
   ]);
 
   const [showContributers, toggleShowContributers] = useToggle(false);
+
+  const [showChunkEditorOnboarding, setShowChunkEditorOnboarding] = useLocalStorage("showChunkEditorOnboardingModal", "true");
+
+  const logOutAction = () => {
+    setShowChunkEditorOnboarding("true");
+  }
 
   return (
     <ChunksProvider state={[chunks, setChunks]}>
@@ -122,11 +126,13 @@ const App: React.FC<{}> = () => {
               <Dashboard
                 steps={steps}
                 storyName={storyTitle ? storyTitle : "Loading"}
+                logOutAction={logOutAction}
               />
             ) : view === View.Chunking ? (
               <ChunkEditor
                 story_id={story_id}
                 atExit={() => setView(View.Dashboard)}
+                onboarding={{ showOnboardingModal: showChunkEditorOnboarding === "true", dismissOnboardingModal: () => setShowChunkEditorOnboarding("false") }}
               />
             ) : view === View.Transcribing ? (
               <Transcriber

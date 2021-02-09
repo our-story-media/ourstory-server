@@ -25,12 +25,6 @@ const useStyles = makeStyles({
   stepperDots: {
     backgroundColor: "#d9534f",
   },
-  loadingModal: {
-    outline: "0",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+  });
 
 export default useStyles;
