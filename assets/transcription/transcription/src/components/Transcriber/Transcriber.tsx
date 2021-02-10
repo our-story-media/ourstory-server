@@ -11,43 +11,36 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useReducer,
   useRef,
-  useState,
 } from "react";
 import { useDebounceCallback } from "@react-hook/debounce";
 
 // Internal Dependencies
-import oneSatisfies from "../../utils/oneSatisfies";
-import { Chunk } from "../../utils/types";
 import { UserContext } from "../UserProvider/UserProvider";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import useStyles from "./TranscriberStyles";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
-import useSlideshow from "../../hooks/useSlideshow";
 import { useUpdateTranscription } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
 import Slideshow from "../Slideshow/Slideshow";
 import IndabaButton from "../IndabaButton/IndabaButton";
 import BackButton from "../BackButton/BackButton";
-import useFirstRender from "../../hooks/useFirstRender";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
 import { api_base_address } from "../../utils/getApiKey";
 import { ArrowLeft, ArrowRight, Check } from "@material-ui/icons";
-import {
-  toShortTimeStamp,
-} from "../../utils/chunkManipulation";
+import { toShortTimeStamp } from "../../utils/chunkManipulation";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import OnboardingModal from "../OnboardingModal/OnboardingModal";
+import makeTranscriberReducer, {
+  getMiniChunks,
+  getUsersTranscription,
+} from "./hooks/useTranscriberState";
 
 const EmptyComponent: React.FC<{}> = () => {
   return <div />;
 };
-
-const getUsersTranscription = (chunk: Chunk, userName: string): string =>
-  oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
-    ? chunk.transcriptions.filter((t) => t.creatorid === userName)[0].content
-    : "";
 
 type TranscriberProps = {
   story_id: string;
@@ -56,19 +49,6 @@ type TranscriberProps = {
     showOnboardingModal: boolean;
     dismissOnboardingModal: () => void;
   };
-};
-
-const getMiniChunks = (chunk: Chunk, duration: number) => {
-  var miniChunks: number[] = [];
-
-  var currentTime = chunk.starttimeseconds + 4 / duration;
-
-  while (currentTime < chunk.endtimeseconds) {
-    miniChunks.push(currentTime);
-    currentTime += 5 / duration;
-  }
-
-  return miniChunks;
 };
 
 const Transcriber: React.FC<TranscriberProps> = ({
@@ -89,69 +69,52 @@ const Transcriber: React.FC<TranscriberProps> = ({
     playingState: [playing, setPlaying],
   } = useVideoPlayerController();
 
-  const { setProgressWithVideoUpdate } = progressState;
+  const updateTranscription = useUpdateTranscription();
 
   const { userName } = useContext(UserContext);
 
-  const [transcription, setTranscription] = useState("");
+  const { setProgressWithVideoUpdate } = progressState;
 
-  const { page, direction, goTo } = useSlideshow(chunks);
+  /** TODO - make 'makeTranscriberReducer' into a hook, and call useCallback in the hook */
+  const transcriberReducer = useCallback(
+    makeTranscriberReducer(
+      chunks,
+      duration,
+      updateTranscription,
+      userName,
+      setSplit,
+      setProgressWithVideoUpdate
+    ),
+    [chunks, duration, updateTranscription, userName, setSplit]
+  );
 
-  const updateTranscription = useUpdateTranscription();
-
-  /*
-   * firstRender and this effect are used to update
-   * the transcription of the page everytime the page changes.
-   * (we don't want to do the effect on the first render)
-   */
-  const firstRender = useFirstRender();
+  const [transcriberState, transcriberDispatch] = useReducer(
+    transcriberReducer,
+    {
+      currentChunk: 0,
+      currentMiniChunk: 0,
+      miniChunks: getMiniChunks(chunks[0], duration),
+      transcription: getUsersTranscription(chunks[0], userName ?? ""),
+    }
+  );
   useEffect(() => {
-    userName && setTranscription(getUsersTranscription(currentChunk, userName));
-    console.log(`Page changed, transcription: ${transcription}`);
-    !firstRender &&
-      userName &&
-      updateTranscription(
-        chunks[page + (direction === "next" ? -1 : 1)],
-        transcription,
-        userName
-      );
-  }, [page, direction]);
+    if (duration !== 0) {
+      transcriberDispatch({ actionType: "refresh mini chunks" });
+    }
+  }, [duration]);
 
-  const currentChunk = useMemo(() => chunks[page], [chunks, page]);
-
-  /* Each chunk is presented as a series of smaller, mini, chunks */
-  const [miniChunks, setMiniChunks] = useState<{
-    chunks: number[];
-    currentChunk: number;
-  }>({ chunks: [], currentChunk: 0 });
-
-  useEffect(() => {
-    const newMiniChunks = getMiniChunks(currentChunk, duration);
-    setMiniChunks({
-      chunks: newMiniChunks,
-      currentChunk: direction === "prev" ? newMiniChunks.length - 1 : 0,
-    });
-  }, [currentChunk, duration, direction]);
-
-  const currentMiniChunkStart = useMemo(() => {
-    return (
-      miniChunks.chunks[miniChunks.currentChunk - 1] ??
-      currentChunk.starttimeseconds
-    );
-  }, [miniChunks, duration]);
-
-  const currentMiniChunkEnd = useMemo(() => {
-    const value = miniChunks.chunks[miniChunks.currentChunk] + 1 / duration;
-    return value > duration ? duration : value;
-  }, [miniChunks, duration]);
-
-  useEffect(() => {
-    setSplit({
-      start: currentMiniChunkStart,
-      end: currentMiniChunkEnd,
-    });
-    setProgressWithVideoUpdate(currentMiniChunkStart);
-  }, [chunks, page, userName, miniChunks, duration]);
+  const lastPage = useMemo(
+    () =>
+      transcriberState.currentChunk === chunks.length - 1 &&
+      transcriberState.currentMiniChunk ===
+        transcriberState.miniChunks.length - 1,
+    [
+      transcriberState.currentChunk,
+      transcriberState.currentMiniChunk,
+      transcriberState.miniChunks,
+      chunks,
+    ]
+  );
 
   const classes = useStyles();
 
@@ -162,22 +125,12 @@ const Transcriber: React.FC<TranscriberProps> = ({
       ? (inputRef.current as any)
       : { focus: () => null }
     ).focus();
-  }, [page, miniChunks.currentChunk, playing]);
+  }, [playing]);
 
   const exitHandler = () => {
-    userName && updateTranscription(currentChunk, transcription, userName);
+    transcriberDispatch({ actionType: "flush transcription changes" });
     atExit();
   };
-
-  const miniChunkClickHandler = useCallback(
-    (action: "next" | "prev") =>
-      setMiniChunks((prev_mini_chunks) => ({
-        ...prev_mini_chunks,
-        currentChunk:
-          prev_mini_chunks.currentChunk + (action === "next" ? 1 : -1),
-      })),
-    []
-  );
 
   const debouncedPlay = useDebounceCallback(() => setPlaying(true), 500);
 
@@ -185,28 +138,6 @@ const Transcriber: React.FC<TranscriberProps> = ({
     setPlaying(false);
     debouncedPlay();
   };
-
-  const handleNextButtonPressed = () => {
-    if (miniChunks.currentChunk === miniChunks.chunks.length - 1) {
-      goTo("next");
-    } else {
-      miniChunkClickHandler("next");
-    }
-  };
-  const handlePrevButtonPressed = () => {
-    if (miniChunks.currentChunk === 0) {
-      goTo("prev");
-    } else {
-      miniChunkClickHandler("prev");
-    }
-  };
-
-  const finalMiniChunk = useMemo(
-    () =>
-      page === chunks.length - 1 &&
-      miniChunks.currentChunk === miniChunks.chunks.length - 1,
-    [page, miniChunks, chunks.length]
-  );
 
   return (
     <div>
@@ -238,10 +169,11 @@ const Transcriber: React.FC<TranscriberProps> = ({
             />
           </Box>
           <Container style={{ height: "50vh", overflow: "scroll" }}>
+            {/* TODO - Fix bug where you can't see the 'Last' button when there are too many dots */}
             <MobileStepper
               variant="dots"
-              steps={miniChunks.chunks.length}
-              activeStep={miniChunks.currentChunk}
+              steps={transcriberState.miniChunks.length}
+              activeStep={transcriberState.currentMiniChunk}
               position="static"
               classes={{
                 dotActive: classes.stepperDots,
@@ -249,10 +181,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
               nextButton={
                 <Button
                   onClick={() =>
-                    setMiniChunks({
-                      ...miniChunks,
-                      currentChunk: miniChunks.chunks.length - 1,
-                    })
+                    transcriberDispatch({ actionType: "go to last mini chunk" })
                   }
                 >
                   Last
@@ -261,7 +190,9 @@ const Transcriber: React.FC<TranscriberProps> = ({
               backButton={
                 <Button
                   onClick={() =>
-                    setMiniChunks({ ...miniChunks, currentChunk: 0 })
+                    transcriberDispatch({
+                      actionType: "go to first mini chunk",
+                    })
                   }
                 >
                   First
@@ -269,13 +200,17 @@ const Transcriber: React.FC<TranscriberProps> = ({
               }
             />
             <Slideshow
-              onNavigate={goTo}
-              currentPage={page}
+              currentPage={transcriberState.currentChunk}
+              onNavigate={() => null}
               numberOfPages={chunks.length}
               onComplete={exitHandler}
               leftColumn={
                 <div>
-                  <IndabaButton onClick={handlePrevButtonPressed}>
+                  <IndabaButton
+                    onClick={() =>
+                      transcriberDispatch({ actionType: "go to previous page" })
+                    }
+                  >
                     <ArrowLeft />
                   </IndabaButton>
                 </div>
@@ -284,13 +219,13 @@ const Transcriber: React.FC<TranscriberProps> = ({
                 <div>
                   <IndabaButton
                     style={{
-                      backgroundColor: finalMiniChunk ? "green" : "#d9534f",
+                      backgroundColor: lastPage ? "green" : "#d9534f",
                     }}
                     onClick={() =>
-                      finalMiniChunk ? atExit() : handleNextButtonPressed()
+                      transcriberDispatch({ actionType: "go to next page" })
                     }
                   >
-                    {finalMiniChunk ? <Check /> : <ArrowRight />}
+                    {lastPage ? <Check /> : <ArrowRight />}
                   </IndabaButton>
                 </div>
               }
@@ -300,8 +235,10 @@ const Transcriber: React.FC<TranscriberProps> = ({
                   <Slider
                     ThumbComponent={EmptyComponent}
                     value={[
-                      currentChunk.starttimeseconds * 100,
-                      currentChunk.endtimeseconds * 100,
+                      chunks[transcriberState.currentChunk].starttimeseconds *
+                        100,
+                      chunks[transcriberState.currentChunk].endtimeseconds *
+                        100,
                     ]}
                     classes={{
                       rail: classes.chunkProgressRail,
@@ -310,18 +247,29 @@ const Transcriber: React.FC<TranscriberProps> = ({
                     }}
                     marks={[
                       {
-                        value: miniChunks.chunks[miniChunks.currentChunk] * 100,
+                        value:
+                          transcriberState.miniChunks[
+                            transcriberState.currentMiniChunk
+                          ] * 100,
                         label: toShortTimeStamp(
-                          miniChunks.chunks[miniChunks.currentChunk] * duration
+                          transcriberState.miniChunks[
+                            transcriberState.currentMiniChunk
+                          ] * duration
                         ),
                       },
                     ]}
                   />
                 }
                 inputRef={inputRef}
-                chunk={currentChunk}
-                transcriptionState={[transcription, setTranscription]}
-                onChange={onType}
+                chunk={chunks[transcriberState.currentChunk]}
+                transcriptionValue={transcriberState.transcription}
+                onChange={(newValue: string) => {
+                  onType();
+                  transcriberDispatch({
+                    actionType: "transcription changed",
+                    newTranscription: newValue,
+                  });
+                }}
               />
             </Slideshow>
           </Container>

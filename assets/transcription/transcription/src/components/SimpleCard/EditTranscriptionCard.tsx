@@ -7,18 +7,17 @@ type EditTranscriptionCardProps = {
   inputRef?: React.MutableRefObject<null>;
   transcriptionIcon?: ReactNode,
   chunk: Chunk;
-  transcriptionState: State<string>;
-  onChange?: () => void;
+  transcriptionValue: string;
+  onChange: (newValue: string) => void;
 };
 
 const EditTranscriptionCard: React.FC<EditTranscriptionCardProps> = ({
   inputRef,
   chunk,
-  transcriptionState,
+  transcriptionValue,
   transcriptionIcon,
   onChange,
 }) => {
-  const [transcription, setTranscription] = transcriptionState;
 
   return (
     <ChunkCard transcriptionIcon={transcriptionIcon} chunk={chunk} style={{ margin: "4px" }}>
@@ -30,10 +29,9 @@ const EditTranscriptionCard: React.FC<EditTranscriptionCardProps> = ({
         style={{ width: "100%" }}
         variant="outlined"
         label="Transcription"
-        value={transcription}
+        value={transcriptionValue}
         onChange={(e) => {
-          onChange && onChange();
-          setTranscription(e.target.value);
+          onChange(e.target.value);
         }}
       />
     </ChunkCard>

@@ -1,30 +1,33 @@
-import { createContext, } from "react";
+import { createContext, useEffect, useMemo } from "react";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { name_key } from "../../utils/localStorageKeys";
 import { StateSetter } from "../../utils/types";
 
 type UserContextType = {
-  userName: string | undefined,
-  setName: StateSetter<string | undefined>,
-  clearName: () => void
-}
+  userName: string | undefined;
+  setName: StateSetter<string | undefined>;
+  clearName: () => void;
+};
 
 const initialValue: UserContextType = {
   userName: undefined,
   setName: () => null,
   clearName: () => null,
-}
+};
 
 export const UserContext = createContext<UserContextType>(initialValue);
 
 const UserProvider: React.FC<{}> = ({ children }) => {
   const [name, setName, clearName] = useLocalStorage(name_key);
 
-  const value = {
-    userName: name,
-    setName: setName,
-    clearName: clearName,
-  };
+  const value = useMemo(
+    () => ({
+      userName: name,
+      setName: setName,
+      clearName: clearName,
+    }),
+    [name, setName, clearName]
+  );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

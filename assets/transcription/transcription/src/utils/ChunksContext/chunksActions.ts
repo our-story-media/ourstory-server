@@ -1,4 +1,5 @@
 // External Dependencies
+import { useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 // Internal Dependencies
@@ -162,56 +163,63 @@ const getTranscriptionByCreator = (chunk: Chunk, userName: string) =>
  * Using the ChunksContext, get a function for updating a chunks transcription
  * list
  */
-export const useUpdateTranscription = () => {
+export const useUpdateTranscription = (): ((toUpdate: Chunk, updatedTranscription: string, userName: string) => void) => {
   const [, setChunks] = chunksContext.useChunksState();
 
-  return (toUpdate: Chunk, updatedTranscription: string, userName: string) => {
-    setChunks((chunks) => {
-      console.log(chunks);
-      const newChunks = chunks.map((chunk) =>
-        chunk.id === toUpdate.id
-          ? {
-              ...(chunk.review?.selectedtranscription ===
-                getTranscriptionByCreator(chunk, userName)?.id &&
-              updatedTranscription === ""
-                ? removeReview(chunk)
-                : chunk),
-              /* This call to oneSatisfies checks if the current user has
-               * already made a transcription for this chunk (in that case,
-               * update that chunk instead of creating a new one)
-               */
-              transcriptions: oneSatisfies(
-                chunk.transcriptions,
-                (t) => t.creatorid === userName
-              )
-                ? /* The ternary here is to delete a transcription if a user has a transcription but is now transcribing an empty string */
-                  updatedTranscription === ""
-                  ? chunk.transcriptions.filter((t) => t.creatorid !== userName)
-                  : chunk.transcriptions.map((t) =>
-                      t.creatorid === userName
-                        ? { ...t, content: updatedTranscription }
-                        : t
-                    )
-                : /* The ternary here is to avoid adding empty transcriptions */
-                  chunk.transcriptions.concat(
+  const updateFunction = useCallback(
+    (toUpdate: Chunk, updatedTranscription: string, userName: string) => {
+      setChunks((chunks) => {
+        console.log(chunks);
+        const newChunks = chunks.map((chunk) =>
+          chunk.id === toUpdate.id
+            ? {
+                ...(chunk.review?.selectedtranscription ===
+                  getTranscriptionByCreator(chunk, userName)?.id &&
+                updatedTranscription === ""
+                  ? removeReview(chunk)
+                  : chunk),
+                /* This call to oneSatisfies checks if the current user has
+                 * already made a transcription for this chunk (in that case,
+                 * update that chunk instead of creating a new one)
+                 */
+                transcriptions: oneSatisfies(
+                  chunk.transcriptions,
+                  (t) => t.creatorid === userName
+                )
+                  ? /* The ternary here is to delete a transcription if a user has a transcription but is now transcribing an empty string */
                     updatedTranscription === ""
-                      ? []
-                      : [
-                          {
-                            creatorid: userName,
-                            content: updatedTranscription,
-                            id: uuidv4(),
-                            updatedat: new Date(),
-                          },
-                        ]
-                  ),
-            }
-          : chunk
-      );
-      console.log(newChunks);
-      return newChunks;
-    });
-  };
+                    ? chunk.transcriptions.filter(
+                        (t) => t.creatorid !== userName
+                      )
+                    : chunk.transcriptions.map((t) =>
+                        t.creatorid === userName
+                          ? { ...t, content: updatedTranscription }
+                          : t
+                      )
+                  : /* The ternary here is to avoid adding empty transcriptions */
+                    chunk.transcriptions.concat(
+                      updatedTranscription === ""
+                        ? []
+                        : [
+                            {
+                              creatorid: userName,
+                              content: updatedTranscription,
+                              id: uuidv4(),
+                              updatedat: new Date(),
+                            },
+                          ]
+                    ),
+              }
+            : chunk
+        );
+        console.log(newChunks);
+        return newChunks;
+      });
+    },
+    []
+  );
+
+  return updateFunction;
 };
 
 /**

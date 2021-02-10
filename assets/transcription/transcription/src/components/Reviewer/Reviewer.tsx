@@ -166,7 +166,8 @@ export const Reviewer: React.FC<ReviewerProps> = ({
         <div style={{ position: "relative" }}>
           <EditTranscriptionCard
             chunk={currentChunk}
-            transcriptionState={[transcriptionEdit, setTranscriptionEdit]}
+            transcriptionValue={transcriptionEdit}
+            onChange={setTranscriptionEdit}
           />
           <div style={{ display: "flex", justifyContent: "center" }}>
             <IndabaButton

@@ -27,10 +27,10 @@ const useLocalStorage = (key: string, defaultValue?: string): [string | undefine
     }
   }, [key]);
 
-  const clearStorage = () => {
+  const clearStorage = useCallback(() => {
       window.localStorage.removeItem(key);
       setState(undefined);
-  };
+  }, [setState, key]);
 
   return [state, setToStorage, clearStorage];
 };

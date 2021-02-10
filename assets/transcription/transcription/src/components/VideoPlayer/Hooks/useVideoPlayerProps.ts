@@ -17,10 +17,6 @@ const useProgressBarControls = (
 } => {
   const [state, setState] = useState(initialValue);
 
-  useEffect(() => {
-    console.log("playerUpdater changed");
-  }, [playerUpdater]);
-
   const setWithVideoUpdate = useCallback((newValue: number) => {
       setState(newValue);
       playerUpdater(newValue);
@@ -127,7 +123,7 @@ const useVideoPlayerProps = (
 
   useEffect(() => {
     /** If the video is playing and it has reached the end, stop it from continuing */
-    if (progress > split.end) {
+    if (progress > split.end + 0.0001) {
       if (loop && !dragging) {
         setProgressWithVideoUpdate(split.start);
       } else {
@@ -135,7 +131,7 @@ const useVideoPlayerProps = (
         setIsPlaying(false);
       }
       /** If the video's progress is before the start of the split, set it to the start */
-    } else if (progress < split.start) {
+    } else if (progress < split.start - 0.0001) {
       setProgressWithVideoUpdate(split.start + 0.1);
     }
   }, [progress, isPlaying, setIsPlaying, split.end, split.start, loop, setProgressWithVideoUpdate, dragging]);
