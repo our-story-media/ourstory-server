@@ -7,7 +7,7 @@
  */
 
 // External Dependencies
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 
 // Internal Dependencies
 import ChunkEditor from "../ChunkEditor/ChunkEditor";
@@ -101,6 +101,8 @@ const App: React.FC<{}> = () => {
     setShowReviewerOnboarding("true");
   };
 
+  const exit = useCallback(() => setView(View.Dashboard),[]);
+
   return (
     <ChunksProvider state={[chunks, setChunks]}>
       <UserProvider>
@@ -145,7 +147,7 @@ const App: React.FC<{}> = () => {
             ) : view === View.Chunking ? (
               <ChunkEditor
                 story_id={story_id}
-                atExit={() => setView(View.Dashboard)}
+                atExit={exit}
                 onboarding={{
                   showOnboardingModal: showChunkEditorOnboarding === "true",
                   dismissOnboardingModal: () =>
@@ -155,7 +157,7 @@ const App: React.FC<{}> = () => {
             ) : view === View.Transcribing ? (
               <Transcriber
                 story_id={story_id}
-                atExit={() => setView(View.Dashboard)}
+                atExit={exit}
                 onboarding={{
                   showOnboardingModal: showTranscriberOnboarding === "true",
                   dismissOnboardingModal: () =>
@@ -164,7 +166,7 @@ const App: React.FC<{}> = () => {
               />
             ) : view === View.Reviewing ? (
               <Reviewer
-                atExit={() => setView(View.Dashboard)}
+                atExit={exit}
                 story_id={story_id}
                 onboarding={{
                   showOnboardingModal: showReviewerOnboardring === "true",

@@ -7,7 +7,6 @@ import {
   Slider,
 } from "@material-ui/core";
 import React, {
-  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -33,7 +32,7 @@ import { ArrowLeft, ArrowRight, Check } from "@material-ui/icons";
 import { toShortTimeStamp } from "../../utils/chunkManipulation";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import OnboardingModal from "../OnboardingModal/OnboardingModal";
-import makeTranscriberReducer, {
+import useTranscriberReducer, {
   getMiniChunks,
   getUsersTranscription,
 } from "./hooks/useTranscriberState";
@@ -75,17 +74,14 @@ const Transcriber: React.FC<TranscriberProps> = ({
 
   const { setProgressWithVideoUpdate } = progressState;
 
-  /** TODO - make 'makeTranscriberReducer' into a hook, and call useCallback in the hook */
-  const transcriberReducer = useCallback(
-    makeTranscriberReducer(
-      chunks,
-      duration,
-      updateTranscription,
-      userName,
-      setSplit,
-      setProgressWithVideoUpdate
-    ),
-    [chunks, duration, updateTranscription, userName, setSplit]
+  const transcriberReducer = useTranscriberReducer(
+    chunks,
+    duration,
+    updateTranscription,
+    userName,
+    setSplit,
+    setProgressWithVideoUpdate,
+    atExit
   );
 
   const [transcriberState, transcriberDispatch] = useReducer(
@@ -120,12 +116,20 @@ const Transcriber: React.FC<TranscriberProps> = ({
 
   const inputRef = useRef(null);
 
-  useEffect(() => {
+  const focusInput = () => {
     (inputRef.current
       ? (inputRef.current as any)
       : { focus: () => null }
     ).focus();
-  }, [playing]);
+  };
+
+  useEffect(() => {
+    focusInput();
+  }, [
+    playing,
+    transcriberState.currentChunk,
+    transcriberState.currentMiniChunk,
+  ]);
 
   const exitHandler = () => {
     transcriberDispatch({ actionType: "flush transcription changes" });

@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import oneSatisfies from "../../../utils/oneSatisfies";
 import { Chunk } from "../../../utils/types";
 import { SplitState } from "../../VideoPlayer/Hooks/useVideoPlayerState";
@@ -98,7 +99,7 @@ const makeTranscriberPageChange = (
  * TODO - change this into a hook, so that the caller doesn't have to use 'useCallback',
  * we should do that internall
  */
-const makeTranscriberReducer = (
+const useTranscriberReducer = (
   chunks: Chunk[],
   duration: number,
   updateTranscription: (
@@ -109,6 +110,7 @@ const makeTranscriberReducer = (
   userName: string | undefined,
   setSplit: React.Dispatch<React.SetStateAction<SplitState>>,
   setProgress: React.Dispatch<React.SetStateAction<number>>,
+  onComplete: () => void,
 ) => {
   const pageChange = makeTranscriberPageChange(
     setProgress,
@@ -116,7 +118,8 @@ const makeTranscriberReducer = (
     chunks,
     duration
   );
-  return (
+
+  const trancribeReducer = useCallback((
     state: TranscriberState,
     action: TranscriberAction
   ): TranscriberState => {
@@ -153,7 +156,7 @@ const makeTranscriberReducer = (
             state.transcription
           );
         } else {
-          //TODO - Handle finished transcribing
+          onComplete();
         }
         break;
       case "go to previous page":
@@ -194,7 +197,8 @@ const makeTranscriberReducer = (
         };
     }
     return state;
-  };
+  }, [chunks, duration, updateTranscription, userName, setSplit, setProgress, onComplete]);
+  return trancribeReducer;
 };
 
-export default makeTranscriberReducer;
+export default useTranscriberReducer;
