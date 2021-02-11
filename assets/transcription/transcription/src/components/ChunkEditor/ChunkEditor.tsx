@@ -75,7 +75,11 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
   story_id,
   onboarding,
 }) => {
-  const [chunks] = chunksContext.useChunksState();
+  const [chunks, setChunks] = chunksContext.useChunksState();
+
+  useEffect(() => {
+    setChunks((newChunks) => newChunks);
+  }, [setChunks]);
 
   const {
     progressState: videoPlayerProgressState,
