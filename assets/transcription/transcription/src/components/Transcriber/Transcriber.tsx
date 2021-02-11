@@ -7,15 +7,12 @@ import {
   Slider,
 } from "@material-ui/core";
 import React, {
-  useCallback,
   useContext,
   useEffect,
   useMemo,
   useReducer,
   useRef,
-  useState,
 } from "react";
-import { useDebounceCallback } from "@react-hook/debounce";
 
 // Internal Dependencies
 import { UserContext } from "../UserProvider/UserProvider";
@@ -38,6 +35,7 @@ import useTranscriberReducer, {
   getMiniChunks,
   getUsersTranscription,
 } from "./hooks/useTranscriberState";
+import useAutoPauseOnType from "./hooks/useAutoPauseOnType";
 
 const EmptyComponent: React.FC<{}> = () => {
   return <div />;
@@ -139,33 +137,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
     atExit();
   };
 
-  /*
-   * Here, we automatically pause the video when the user types.
-   *
-   * If the video was paused when the user starts typing, keep it
-   * paused. Otherwise, play the video again once the user stops typing
-   */
-  const [, setTypingDebounced] = useState(false);
-  const [
-    playStateBeforeTypingDebounce,
-    setPlayStateBeforeTypingDebounce,
-  ] = useState(false);
-
-  const debouncedPlay = useDebounceCallback(() => {
-    setPlaying(playStateBeforeTypingDebounce);
-    setTypingDebounced(false);
-  }, 500);
-
-  const onType = useCallback(() => {
-    setTypingDebounced((typingDebounced) => {
-      if (!typingDebounced) {
-        setPlayStateBeforeTypingDebounce(playing)
-      }
-      return true;
-    });
-    debouncedPlay();
-    setPlaying(false);
-  }, [playing, setPlaying, debouncedPlay]);
+  const onType = useAutoPauseOnType(playing, setPlaying);
 
   return (
     <div>
