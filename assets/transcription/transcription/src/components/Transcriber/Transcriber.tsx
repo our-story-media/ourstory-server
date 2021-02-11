@@ -89,9 +89,9 @@ const Transcriber: React.FC<TranscriberProps> = ({
     {
       currentChunk: 0,
       currentMiniChunk: 0,
-      miniChunks: getMiniChunks(chunks[0], duration),
+      miniChunks: [],
       transcription:
-        getUsersTranscription(chunks[0], userName ?? "")?.content ?? "",
+        "",
     }
   );
   useEffect(() => {

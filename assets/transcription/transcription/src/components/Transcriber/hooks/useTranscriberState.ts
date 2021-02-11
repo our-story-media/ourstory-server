@@ -20,6 +20,9 @@ export const getMiniChunks = (chunk: Chunk, duration: number) => {
     miniChunks.push(currentTime);
     currentTime += 5 / duration;
   }
+  if (currentTime !== chunk.endtimeseconds) {
+    miniChunks.push(chunk.endtimeseconds)
+  }
 
   return miniChunks;
 };
