@@ -11,7 +11,8 @@ import { Chunk, Contribution } from "./types";
  * @param value the value to zero pad
  */
 export const zeroPad = (value: number) =>
-  ((rounded) => (rounded < 10 ? `0${rounded}` : rounded.toString()))(
+  ((rounded) =>
+    rounded < 10 ? `0${rounded < 0 ? 0 : rounded}` : rounded.toString())(
     Math.floor(value)
   );
 
