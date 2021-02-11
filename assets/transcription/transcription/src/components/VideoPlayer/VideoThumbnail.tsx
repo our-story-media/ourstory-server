@@ -6,6 +6,10 @@ type VideoThumbnailProps = {
   time: number;
 };
 
+/*
+ * TODO - Find a better solution for this, this solution is resource intensive as it
+ * loads a whole video component just to use a single frame...
+ */
 const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ url, time }) => {
   const playerRef = useRef<ReactPlayer>(null);
   // const [screenshot, setScreenshot] = useState<null | HTMLVideoElement >(null);

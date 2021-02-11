@@ -8,10 +8,11 @@ import IndabaMenu from "../IndabaMenu/IndabaMenu";
 
 type ChunkCardContextMenuProps = {
   menuItems: { content: ReactNode; handler: () => void }[];
-}
+};
 
-const ChunkCardContextMenu: React.FC<ChunkCardContextMenuProps> = ({ menuItems }) => {
-
+const ChunkCardContextMenu: React.FC<ChunkCardContextMenuProps> = ({
+  menuItems,
+}) => {
   const [showContextMenu, setShowContextMenu] = useState(false);
 
   const ref = useRef<HTMLButtonElement>(null);
@@ -19,14 +20,16 @@ const ChunkCardContextMenu: React.FC<ChunkCardContextMenuProps> = ({ menuItems }
   return (
     <div
       style={{
-        position: "absolute",
+        position: "relative",
         top: 0,
         right: 0,
         display: "flex",
         flexDirection: "row",
       }}
     >
-      <ClickAwayListener onClickAway={() => setShowContextMenu(false)}>
+      <ClickAwayListener
+        onClickAway={() => setShowContextMenu(false)}
+      >
         <IconButton
           onClick={() => setShowContextMenu(true)}
           ref={ref}

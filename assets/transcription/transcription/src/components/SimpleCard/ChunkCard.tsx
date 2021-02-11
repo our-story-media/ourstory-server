@@ -31,10 +31,13 @@ const ChunkCard: React.FC<{
     <SimpleCard
       title={
         <div>
-          {transcriptionIcon}
-          <span className={classes.titleContainer} style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontWeight: 600, overflowWrap: "anywhere" }}>
+          <span
+            className={classes.titleContainer}
+            style={{ display: "flex", flexDirection: "column" }}
+          >
+            <span style={{ fontWeight: 600, overflowWrap: "anywhere", display: "flex", justifyContent: "space-between" }}>
               {getNameOf(chunk)}
+              {transcriptionIcon}
             </span>
             <br />
             {`${toShortTimeStamp(startSeconds)} - ${toShortTimeStamp(

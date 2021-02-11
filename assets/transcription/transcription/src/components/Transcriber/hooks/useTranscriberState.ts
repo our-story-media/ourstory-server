@@ -3,7 +3,10 @@ import oneSatisfies from "../../../utils/oneSatisfies";
 import { Chunk, Transcription } from "../../../utils/types";
 import { SplitState } from "../../VideoPlayer/Hooks/useVideoPlayerState";
 
-export const getUsersTranscription = (chunk: Chunk, userName: string): Transcription | undefined =>
+export const getUsersTranscription = (
+  chunk: Chunk,
+  userName: string
+): Transcription | undefined =>
   oneSatisfies(chunk.transcriptions, (t) => t.creatorid === userName)
     ? chunk.transcriptions.filter((t) => t.creatorid === userName)[0]
     : undefined;
@@ -84,6 +87,12 @@ const useTranscriberReducer = (
       );
 
       setProgress(newChunkStart);
+      console.log(
+        `Transcriber setting split to: { start: ${newChunkStart}, end: ${getMiniChunkEnd(
+          newMiniChunks[newCurrentMiniChunk],
+          duration
+        )}}`
+      );
       setSplit({
         start: newChunkStart,
         end: getMiniChunkEnd(newMiniChunks[newCurrentMiniChunk], duration),
@@ -129,7 +138,8 @@ const useTranscriberReducer = (
               newCurrentChunk,
               getMiniChunks(chunks[newCurrentChunk], duration),
               0,
-              getUsersTranscription(chunks[newCurrentChunk], userName ?? "")?.content ?? ""
+              getUsersTranscription(chunks[newCurrentChunk], userName ?? "")
+                ?.content ?? ""
             );
           } else if (state.currentMiniChunk < state.miniChunks.length - 1) {
             return pageChange(
@@ -153,7 +163,8 @@ const useTranscriberReducer = (
               newCurrentChunk,
               newMiniChunks,
               newMiniChunks.length - 1,
-              getUsersTranscription(chunks[newCurrentChunk], userName ?? "")?.content ?? ""
+              getUsersTranscription(chunks[newCurrentChunk], userName ?? "")
+                ?.content ?? ""
             );
           } else if (state.currentMiniChunk > 0) {
             return pageChange(
@@ -165,18 +176,27 @@ const useTranscriberReducer = (
           }
           break;
         case "transcription changed":
-          return action.newTranscription
+          return action.newTranscription !== undefined
             ? { ...state, transcription: action.newTranscription }
             : { ...state };
         case "go to first mini chunk":
-          return { ...state, currentMiniChunk: 0 };
+          const firstMiniChunk = 0;
+          pageChange(state.currentChunk, state.miniChunks, firstMiniChunk, state.transcription);
+          return { ...state, currentMiniChunk: firstMiniChunk };
         case "go to last mini chunk":
-          return { ...state, currentMiniChunk: state.miniChunks.length - 1 };
+          const lastMiniChunk = state.miniChunks.length - 1;
+          pageChange(state.currentChunk, state.miniChunks, lastMiniChunk, state.transcription);
+          return { ...state, currentMiniChunk: lastMiniChunk };
         case "refresh mini chunks":
+          const newMiniChunks = getMiniChunks(
+            chunks[state.currentChunk],
+            duration
+          );
+          pageChange(state.currentChunk, newMiniChunks, 0, state.transcription);
           return {
             ...state,
             currentMiniChunk: 0,
-            miniChunks: getMiniChunks(chunks[state.currentChunk], duration),
+            miniChunks: newMiniChunks,
           };
       }
       return state;

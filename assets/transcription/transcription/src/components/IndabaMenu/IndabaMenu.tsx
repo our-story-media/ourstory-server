@@ -8,6 +8,8 @@ type IndabaMenuProps = {
 };
 
 const IndabaMenu = React.forwardRef<ReactNode, IndabaMenuProps>(({ anchor, show, menuItems }, ref) => {
+  console.log(`Indaba Menu, menuItems:`);
+  console.log(menuItems)
   return (
     <Menu ref={ref} anchorEl={anchor} open={show}>
       {menuItems.map((item, idx) => (
