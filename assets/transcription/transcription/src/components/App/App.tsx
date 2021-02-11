@@ -134,7 +134,7 @@ const App: React.FC<{}> = () => {
             }
           : []
       ),
-    [view]
+    [view, setShowChunkEditorOnboarding, setShowReviewerOnboarding, setUsingVidOneString, toggleShowContributers, usingVidOne]
   );
 
   return (

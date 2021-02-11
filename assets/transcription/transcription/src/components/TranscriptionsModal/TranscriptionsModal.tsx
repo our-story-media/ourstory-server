@@ -20,13 +20,13 @@ const TranscriptionsModal: React.FC<TranscriptionsModalProps> = ({
     open={chunk !== undefined}
     // TODO- this breaks if the name is too long
     header={
-      <h2 style={{ margin: 0 }}>{`Transcriptions for "${
-        chunk && getNameOf(chunk)
-      }"`}</h2>
+      <h2
+        style={{ margin: 0, overflowWrap: "anywhere" }}
+      >{`Transcriptions for "${chunk && getNameOf(chunk)}"`}</h2>
     }
     exit={exit}
   >
-    <div style={{ height: "80vh", overflow: "scroll" }}>
+    <div style={{ overflow: "scroll" }}>
       {chunk?.transcriptions.map((transcription) => (
         <SimpleCard
           key={transcription.id}

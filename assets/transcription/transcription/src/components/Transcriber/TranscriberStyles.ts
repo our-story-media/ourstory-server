@@ -21,6 +21,8 @@ const useStyles = makeStyles({
   chunkProgressMark: {
     height: chunkProgressHeight,
     width: "4px",
+    backgroundColor: "#FFFFFF",
+    opacity: 0.8
   },
   stepperDots: {
     backgroundColor: "#d9534f",

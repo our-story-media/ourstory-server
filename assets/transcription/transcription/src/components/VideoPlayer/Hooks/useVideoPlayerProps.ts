@@ -77,7 +77,7 @@ const useVideoPlayerProps = (
   const playerProps: ReactPlayerProps = useMemo(
     () => ({
       playing: !dragging && isPlaying,
-      progressInterval: 250,
+      progressInterval: 100,
       onProgress: ({ played /*playedSeconds, loaded, loadedSeconds*/ }) =>
         setProgress(played),
       onReady: () => setIsLoaded(true),

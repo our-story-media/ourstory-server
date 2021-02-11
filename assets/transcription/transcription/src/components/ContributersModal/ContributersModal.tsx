@@ -72,8 +72,8 @@ const ContributionDescription: React.FC<{
   };
   return (
     <span style={{ display: "flex", flexWrap: "wrap" }}>
-      <div><span style={{ fontWeight: "bold" }}>{typeDescription(type)}</span>the
-      chunk </div>"{getNameOf(chunk)}" (
+      <div style={{whiteSpace: "pre"}}><span style={{ fontWeight: "bold" }}>{typeDescription(type)}</span>the
+      chunk </div><div style={{ overflowWrap: "anywhere" }}>"{getNameOf(chunk)}"</div> (
       {`${toShortTimeStamp(
         secondsOf(parseTimeStamp(chunk.starttimestamp))
       )} - ${toShortTimeStamp(secondsOf(parseTimeStamp(chunk.endtimestamp)))}`}

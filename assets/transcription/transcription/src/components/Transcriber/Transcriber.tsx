@@ -6,6 +6,7 @@ import {
   MobileStepper,
   Slider,
 } from "@material-ui/core";
+import { ArrowLeft, ArrowRight, Check } from "@material-ui/icons";
 import React, {
   useContext,
   useEffect,
@@ -27,14 +28,10 @@ import BackButton from "../BackButton/BackButton";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
 import { api_base_address } from "../../utils/getApiKey";
-import { ArrowLeft, ArrowRight, Check } from "@material-ui/icons";
 import { getNameOf, toShortTimeStamp } from "../../utils/chunkManipulation";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import OnboardingModal from "../OnboardingModal/OnboardingModal";
-import useTranscriberReducer, {
-  getMiniChunks,
-  getUsersTranscription,
-} from "./hooks/useTranscriberState";
+import useTranscriberReducer from "./hooks/useTranscriberState";
 import useAutoPauseOnType from "./hooks/useAutoPauseOnType";
 
 const EmptyComponent: React.FC<{}> = () => {
@@ -90,8 +87,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
       currentChunk: 0,
       currentMiniChunk: 0,
       miniChunks: [],
-      transcription:
-        "",
+      transcription: "",
     }
   );
   useEffect(() => {
@@ -169,7 +165,6 @@ const Transcriber: React.FC<TranscriberProps> = ({
             />
           </Box>
           <div style={{ margin: "0 8px 0 8px" }}>
-            {/* TODO - Make these scrollable, instead of being squeezed together when there are too many? */}
             <MobileStepper
               variant="dots"
               steps={transcriberState.miniChunks.length}
@@ -241,7 +236,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
                       margin: "0 8px 0 8px",
                     }}
                   >
-                    <span style={{ fontWeight: 600 }}>
+                    <span style={{ fontWeight: 600, overflowWrap: "anywhere" }}>
                       {getNameOf(chunks[transcriberState.currentChunk])}
                     </span>
                     <Slider
@@ -256,6 +251,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
                         rail: classes.chunkProgressRail,
                         track: classes.chunkProgressTrack,
                         mark: classes.chunkProgressMark,
+                        markActive: classes.chunkProgressMark,
                       }}
                       marks={[
                         {
