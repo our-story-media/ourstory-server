@@ -54,6 +54,6 @@ export type State<T> = [T, StateSetter<T>];
 
 export type Contribution = {
   name: string,
-  for: "chunk" | "transcription" | "review";
+  type: "chunk" | "transcription" | "review";
   chunk: Chunk,
 }

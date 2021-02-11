@@ -159,7 +159,7 @@ export const listContributions = (chunks: Chunk[]): Contribution[] =>
   chunks
     .map<Contribution>((chunk) => ({
       name: chunk.creatorid,
-      for: "chunk" as const,
+      type: "chunk" as const,
       chunk,
     }))
     .concat(
@@ -168,7 +168,7 @@ export const listContributions = (chunks: Chunk[]): Contribution[] =>
           acc.concat(
             chunk.transcriptions.map((transcription) => ({
               name: transcription.creatorid,
-              for: "transcription" as const,
+              type: "transcription" as const,
               chunk,
             }))
           ),
@@ -182,7 +182,7 @@ export const listContributions = (chunks: Chunk[]): Contribution[] =>
             ? acc.concat([
                 {
                   name: chunk.review.reviewedby,
-                  for: "review" as const,
+                  type: "review" as const,
                   chunk,
                 },
               ])
