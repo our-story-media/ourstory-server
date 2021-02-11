@@ -1,11 +1,3 @@
-/**
- * - Don't expose other people's transcriptions in Transcriber component
- * - Hide Edit and Delete Button in ChunkEditor
- * - Ditch red borders on boxes
- * - Ditch box inside box in review interface
- * - Add last time edited to Contributions list
- */
-
 // External Dependencies
 import React, { useMemo, useState, useCallback } from "react";
 
@@ -101,7 +93,50 @@ const App: React.FC<{}> = () => {
     setShowReviewerOnboarding("true");
   };
 
-  const exit = useCallback(() => setView(View.Dashboard),[]);
+  const exit = useCallback(() => setView(View.Dashboard), []);
+
+  const contextMenuItems = useMemo(
+    () =>
+      [
+        {
+          content: "Show Contributions",
+          handler: toggleShowContributers,
+        },
+        {
+          content: (
+            <div>
+              Use Video One{" "}
+              <Switch
+                checked={usingVidOne}
+                onChange={() =>
+                  setUsingVidOneString((usingVidOneString) =>
+                    usingVidOneString === "true" ? "false" : "true"
+                  )
+                }
+              />
+            </div>
+          ),
+          handler: (): void => {},
+        },
+      ].concat(
+        view === View.Chunking
+          ? {
+              content: <div>View instructions</div>,
+              handler: (): void => {
+                setShowChunkEditorOnboarding("true");
+              },
+            }
+          : view === View.Reviewing
+          ? {
+              content: <div>View instructions</div>,
+              handler: (): void => {
+                setShowReviewerOnboarding("true");
+              },
+            }
+          : []
+      ),
+    [view]
+  );
 
   return (
     <ChunksProvider state={[chunks, setChunks]}>
@@ -115,28 +150,7 @@ const App: React.FC<{}> = () => {
           <Header
             title={View[view]}
             hidden={view === View.Transcribing}
-            contextMenuItems={[
-              {
-                content: "Show Contributions",
-                handler: toggleShowContributers,
-              },
-              {
-                content: (
-                  <div>
-                    Use Video One{" "}
-                    <Switch
-                      checked={usingVidOne}
-                      onChange={() =>
-                        setUsingVidOneString((usingVidOneString) =>
-                          usingVidOneString === "true" ? "false" : "true"
-                        )
-                      }
-                    />
-                  </div>
-                ),
-                handler: () => null,
-              },
-            ]}
+            contextMenuItems={contextMenuItems}
           >
             {view === View.Dashboard ? (
               <Dashboard
