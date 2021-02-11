@@ -14,19 +14,19 @@ import useStyles from "./VideoPlayerStyles";
 export type VideoPlayerControllerType = {
   /**
    * State for the duration of the video, in seconds.
-   * 
+   *
    * This starts as zero and is updated when the video initially loads
    */
   durationState: State<number>;
   /** State for whether the video is currently playing */
   playingState: State<boolean>;
   /**
-   * The caller of this function can choose to present only part of 
+   * The caller of this function can choose to present only part of
    * the source video to the end user, as if it was the whole video.
-   * 
+   *
    * To do so, they set this state to be the start and end of the
    * partial video they want to show as fractions of the video.
-   * 
+   *
    * For example: {start: 0, end: 0.5} would present the first
    * half of the source video to the user as if it were the entire
    * video
@@ -39,14 +39,14 @@ export type ProgressState = {
   progress: number;
   /**
    * Update the progress without affecting the video player
-   * 
+   *
    * This is what the player itself calls each time it progresses,
    * to inform the outside world of where it is in the video
    */
   setProgress: StateSetter<number>;
   /**
    * Update the progress in the video, including the player itself
-   * 
+   *
    * This is what is called when the user scrobbles through the video-
    * it updates the internal state of the video player
    */
@@ -125,7 +125,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   );
 
   const sliderValueLabelFormat = useCallback(
-    (progress: number) => toShortTimeStamp((progress / 100 - split.start) * duration),
+    (progress: number) => {
+      // console.log(`Formatting progress: ${toShortTimeStamp((progress / 100 - split.start) * duration)}`);
+      return toShortTimeStamp(((progress / 100 - split.start) === 0 ? 0 : (progress / 100 - split.start)) * duration);
+    },
     [duration, split.start]
   );
 

@@ -172,8 +172,8 @@ const Transcriber: React.FC<TranscriberProps> = ({
               loop
             />
           </Box>
-          <Container style={{ height: "50vh", overflow: "scroll" }}>
-            {/* TODO - Fix bug where you can't see the 'Last' button when there are too many dots */}
+          <Container style={{ height: "50vh" }}>
+            {/* TODO - Make these scrollable, instead of being squeezed together when there are too many? */}
             <MobileStepper
               variant="dots"
               steps={transcriberState.miniChunks.length}
@@ -181,7 +181,8 @@ const Transcriber: React.FC<TranscriberProps> = ({
               position="static"
               classes={{
                 dotActive: classes.stepperDots,
-                dots: classes.stepperDotsContainer
+                dots: classes.stepperDotsContainer,
+                dot: classes.stepperDot
               }}
               nextButton={
                 <Button

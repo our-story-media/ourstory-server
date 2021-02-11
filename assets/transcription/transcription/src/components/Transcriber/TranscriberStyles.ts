@@ -26,6 +26,11 @@ const useStyles = makeStyles({
     backgroundColor: "#d9534f",
   },
   stepperDotsContainer: {
+    flexWrap: "wrap",
+    width: "90%"
+  },
+  stepperDot:{
+    margin: "2px"
   }
   });
 
