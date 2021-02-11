@@ -5,6 +5,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import {
@@ -188,23 +189,44 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
     []
   );
 
+  const chunkCardContentStyle = useRef({
+    backgroundColor: "#40bf11C9",
+    height: "100%",
+    padding: "16px",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white",
+  });
+
+  const chunkCardStyle = useRef({
+    margin: "8px",
+    transform: "translateY(8px)",
+    height: "calc(100% - 16px)",
+  });
+
   const { showOnboardingModal, dismissOnboardingModal } = onboarding;
 
-  const playerDragHandler = useCallback(() => setPlayingChunk(undefined), [setPlayingChunk]);
+  const playerDragHandler = useCallback(() => setPlayingChunk(undefined), [
+    setPlayingChunk,
+  ]);
 
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Box>
       <LoadingModal open={duration === 0} />
       <Container>
-        <div style={{ marginTop: "4px" }}>
+        <div className={classes.backButtonContainer}>
           <BackButton action={atExit} />
         </div>
       </Container>
       <OnboardingModal
         show={showOnboardingModal}
         dismiss={dismissOnboardingModal}
-        title={<h2 style={{ margin: 0 }}>Chunking Instructions</h2>}
+        title={
+          <h2 className={classes.onboardingTitle}>Chunking Instructions</h2>
+        }
         steps={[
           "You are about to chunk the video. The aim of chunking is to make Transcribing easy.",
           "Rather than transcribing the entire video at once, you will break the video down into smaller chunks, which you will transcribe individually.",
@@ -289,7 +311,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
                     />
                   }
                 >
-                  <div style={{ marginTop: "8px", position: "relative" }}>
+                  <div className={classes.chunkCardBody}>
                     <VideoThumbnail
                       url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
                       time={
@@ -301,7 +323,13 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
                       round
                       color="primary"
                       style={playButtonStyle as React.CSSProperties}
-                      onClick={() => handleChunkPlayButtonClick(c, playingChunk, playingState[0])}
+                      onClick={() =>
+                        handleChunkPlayButtonClick(
+                          c,
+                          playingChunk,
+                          playingState[0]
+                        )
+                      }
                     >
                       {playingChunk?.id === c.id && playingState[0] ? (
                         <Stop />
@@ -323,21 +351,8 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
                   >
                     <ScrollToOnMount style={{ height: "100%" }}>
                       <SimpleCard
-                        contentStyle={{
-                          backgroundColor: "#40bf11C9",
-                          height: "100%",
-                          padding: "16px",
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          color: "white",
-                        }}
-                        cardStyle={{
-                          margin: "8px",
-                          transform: "translateY(8px)",
-                          height: "calc(100% - 16px)",
-                        }}
+                        contentStyle={chunkCardContentStyle.current}
+                        cardStyle={chunkCardStyle.current}
                       >
                         <Check
                           fontSize="large"
@@ -359,20 +374,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
       </GridList>
       <div>
         <div
-          style={{
-            position: "absolute",
-            left: 0,
-            bottom: 0,
-          }}
-        ></div>
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            bottom: 0,
-            margin: "16px 16px 32px 16px",
-            display: "flex",
-          }}
+          className={classes.newChunkButtonContainer}
         >
           <IndabaButton
             round

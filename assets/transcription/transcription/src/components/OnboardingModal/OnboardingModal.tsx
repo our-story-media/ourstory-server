@@ -11,6 +11,7 @@ import { ChevronLeft, ChevronRight } from "@material-ui/icons";
 import React, { ReactElement, useCallback } from "react";
 import useSlideshow from "../../hooks/useSlideshow";
 import CentralModal from "../CentralModal/CentralModal";
+import useStyles from "./OnboardingModalStyles";
 
 type OnboardingModalProps = {
   show: boolean;
@@ -42,16 +43,11 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
     goTo("prev");
   }, [goTo]);
 
+  const classes = useStyles();
+
   return (
     <CentralModal header={title} open={show} exit={dismissHandler}>
-      <div
-        style={{
-          paddingBottom: "32px",
-          height: "40vh",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      <div className={classes.contentContainer}>
         <Stepper activeStep={page}>
           {steps.map((_, idx) => (
             <Step key={idx}>
@@ -59,19 +55,13 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
             </Step>
           ))}
         </Stepper>
-        <Container style={{ flexGrow: 4 }}>
-          <Divider style={{ marginBottom: "16px" }} />
-          <div
-            style={{
-              position: "relative",
-              top: "50%",
-              transform: "translateY(-50%)",
-            }}
-          >
+        <Container className={classes.instructionsContainer}>
+          <Divider className={classes.divider} />
+          <div className={classes.centerVertically}>
             <Typography variant="h5">{steps[page]}</Typography>
           </div>
         </Container>
-        <Container style={{ display: "flex", justifyContent: "space-between" }}>
+        <Container className={classes.buttonsContainer}>
           {page === 0 ? (
             <div />
           ) : (

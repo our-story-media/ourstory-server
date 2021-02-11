@@ -1,6 +1,3 @@
-/** TODO
- * When the user enters the ChunkEditor screen, refetch the chunks
- */
 // External Dependencies
 import React, { useMemo, useState, useCallback } from "react";
 
