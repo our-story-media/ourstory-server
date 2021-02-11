@@ -29,7 +29,7 @@ import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
 import { api_base_address } from "../../utils/getApiKey";
 import { ArrowLeft, ArrowRight, Check } from "@material-ui/icons";
-import { toShortTimeStamp } from "../../utils/chunkManipulation";
+import { getNameOf, toShortTimeStamp } from "../../utils/chunkManipulation";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import OnboardingModal from "../OnboardingModal/OnboardingModal";
 import useTranscriberReducer, {
@@ -90,7 +90,8 @@ const Transcriber: React.FC<TranscriberProps> = ({
       currentChunk: 0,
       currentMiniChunk: 0,
       miniChunks: getMiniChunks(chunks[0], duration),
-      transcription: getUsersTranscription(chunks[0], userName ?? "")?.content ?? "",
+      transcription:
+        getUsersTranscription(chunks[0], userName ?? "")?.content ?? "",
     }
   );
   useEffect(() => {
@@ -182,7 +183,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
               classes={{
                 dotActive: classes.stepperDots,
                 dots: classes.stepperDotsContainer,
-                dot: classes.stepperDot
+                dot: classes.stepperDot,
               }}
               nextButton={
                 <Button
@@ -238,36 +239,38 @@ const Transcriber: React.FC<TranscriberProps> = ({
             >
               <EditTranscriptionCard
                 transcriptionIcon={
-                  <Slider
-                    ThumbComponent={EmptyComponent}
-                    value={[
-                      chunks[transcriberState.currentChunk].starttimeseconds *
-                        100,
-                      chunks[transcriberState.currentChunk].endtimeseconds *
-                        100,
-                    ]}
-                    classes={{
-                      rail: classes.chunkProgressRail,
-                      track: classes.chunkProgressTrack,
-                      mark: classes.chunkProgressMark,
-                    }}
-                    marks={[
-                      {
-                        value:
-                          transcriberState.miniChunks[
-                            transcriberState.currentMiniChunk
-                          ] * 100,
-                        label: toShortTimeStamp(
-                          transcriberState.miniChunks[
-                            transcriberState.currentMiniChunk
-                          ] * duration
-                        ),
-                      },
-                    ]}
-                  />
+                  <div style={{display: "flex", flexDirection: "column", margin: "0 8px 0 8px"}}>
+                    <span style={{fontWeight: 600}}>{getNameOf(chunks[transcriberState.currentChunk])}</span>
+                    <Slider
+                      ThumbComponent={EmptyComponent}
+                      value={[
+                        chunks[transcriberState.currentChunk].starttimeseconds *
+                          100,
+                        chunks[transcriberState.currentChunk].endtimeseconds *
+                          100,
+                      ]}
+                      classes={{
+                        rail: classes.chunkProgressRail,
+                        track: classes.chunkProgressTrack,
+                        mark: classes.chunkProgressMark,
+                      }}
+                      marks={[
+                        {
+                          value:
+                            transcriberState.miniChunks[
+                              transcriberState.currentMiniChunk
+                            ] * 100,
+                          label: toShortTimeStamp(
+                            transcriberState.miniChunks[
+                              transcriberState.currentMiniChunk
+                            ] * duration
+                          ),
+                        },
+                      ]}
+                    />
+                  </div>
                 }
                 inputRef={inputRef}
-                chunk={chunks[transcriberState.currentChunk]}
                 transcriptionValue={transcriberState.transcription}
                 onChange={(newValue: string) => {
                   onType();

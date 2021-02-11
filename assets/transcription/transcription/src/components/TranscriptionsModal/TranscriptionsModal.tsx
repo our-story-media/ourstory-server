@@ -18,6 +18,7 @@ const TranscriptionsModal: React.FC<TranscriptionsModalProps> = ({
 }) => (
   <CentralModal
     open={chunk !== undefined}
+    // TODO- this breaks if the name is too long
     header={
       <h2 style={{ margin: 0 }}>{`Transcriptions for "${
         chunk && getNameOf(chunk)

@@ -14,7 +14,7 @@ const SimpleCard: React.FC<SimpleCardProps> = ({ title, children, contentStyle, 
         <Typography variant="h5" component="h2">
           {title}
         </Typography>
-        {title ? <Divider style={{ margin: "4px 0 4px 0" }} /> : null}
+        {title ? <Divider style={{ margin: "16px 0 16px 0" }} /> : null}
         {children}
       </CardContent>
     </Card>

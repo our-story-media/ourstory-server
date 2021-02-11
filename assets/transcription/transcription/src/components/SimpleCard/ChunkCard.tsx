@@ -39,7 +39,6 @@ const ChunkCard: React.FC<{
               {getNameOf(chunk)}
               {transcriptionIcon}
             </span>
-            <br />
             {`${toShortTimeStamp(startSeconds)} - ${toShortTimeStamp(
               endSeconds
             )}`}

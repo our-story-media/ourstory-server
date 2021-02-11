@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   },
   stepperDotsContainer: {
     flexWrap: "wrap",
-    width: "90%"
+    // width: "90%"
   },
   stepperDot:{
     margin: "2px"

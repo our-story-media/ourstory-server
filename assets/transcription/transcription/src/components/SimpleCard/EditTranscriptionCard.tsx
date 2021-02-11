@@ -2,25 +2,24 @@ import { TextField } from "@material-ui/core";
 import React, { ReactNode } from "react";
 import { Chunk, State } from "../../utils/types";
 import ChunkCard from "./ChunkCard";
+import SimpleCard from "./SimpleCard";
 
 type EditTranscriptionCardProps = {
   inputRef?: React.MutableRefObject<null>;
   transcriptionIcon?: ReactNode,
-  chunk: Chunk;
   transcriptionValue: string;
   onChange: (newValue: string) => void;
 };
 
 const EditTranscriptionCard: React.FC<EditTranscriptionCardProps> = ({
   inputRef,
-  chunk,
   transcriptionValue,
   transcriptionIcon,
   onChange,
 }) => {
 
   return (
-    <ChunkCard transcriptionIcon={transcriptionIcon} chunk={chunk} style={{ margin: "4px" }}>
+    <SimpleCard title={transcriptionIcon} >
       <TextField
         autoFocus
         multiline
@@ -34,7 +33,7 @@ const EditTranscriptionCard: React.FC<EditTranscriptionCardProps> = ({
           onChange(e.target.value);
         }}
       />
-    </ChunkCard>
+    </SimpleCard>
   );
 };
 

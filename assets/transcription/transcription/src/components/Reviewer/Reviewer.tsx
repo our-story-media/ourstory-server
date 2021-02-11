@@ -165,7 +165,6 @@ export const Reviewer: React.FC<ReviewerProps> = ({
       >
         <div style={{ position: "relative" }}>
           <EditTranscriptionCard
-            chunk={currentChunk}
             transcriptionValue={transcriptionEdit}
             onChange={setTranscriptionEdit}
           />
