@@ -246,7 +246,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
         warningMessage={<div>This Chunk has a transcription</div>}
       >
         {(...args) => (
-          <div>
+          <div style={{overflowWrap: "anywhere"}}>
             Attempting to delete chunk
             {args[0] && ` "${getNameOf(args[0])}"`}, which has a transcription
             saved to it. Are you sure you want to delete it?

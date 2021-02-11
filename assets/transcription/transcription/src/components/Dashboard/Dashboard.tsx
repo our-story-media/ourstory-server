@@ -23,7 +23,7 @@ type DashboardProps = {
 };
 
 const Greeting: React.FC<{ name: string | undefined }> = ({ name }) => (
-  <Typography style={{ fontWeight: "lighter" }} variant="h5">
+  <Typography style={{ fontWeight: "lighter", overflowWrap: "anywhere" }} variant="h5">
     {name && `Hello ${name}`}
   </Typography>
 );

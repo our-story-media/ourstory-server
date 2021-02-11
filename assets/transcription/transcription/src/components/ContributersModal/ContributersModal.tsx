@@ -78,7 +78,7 @@ const ContributionDescription: React.FC<{
         secondsOf(parseTimeStamp(chunk.starttimestamp))
       )} - ${toShortTimeStamp(secondsOf(parseTimeStamp(chunk.endtimestamp)))}`}
       )
-      <Typography variant="subtitle2" style={{ marginLeft: "4px" }}>
+      <Typography variant="subtitle2" style={{ marginLeft: "4px", fontWeight: 500 }}>
         {timeAgo(
           type === "chunk"
             ? chunk.updatedat
@@ -130,7 +130,7 @@ const ContributerListModal: React.FC<{
           <GridList cols={1} cellHeight="auto">
             {contributers.map((contributer) => (
               <GridListTile key={contributer[0]}>
-                <SimpleCard title={contributer[0]}>
+                <SimpleCard title={<div style={{overflowWrap: "anywhere"}}>{contributer[0]}</div>}>
                   <List>
                     {contributer[1].map((contribution) => (
                       <ListItem

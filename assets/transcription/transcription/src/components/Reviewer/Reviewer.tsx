@@ -149,11 +149,11 @@ export const Reviewer: React.FC<ReviewerProps> = ({
         header={
           <WarningMessage
             message={
-              <div>
-                You Are Editing
+              <div style={{whiteSpace: "pre"}}>
+                You Are Editing{' '}
                 <span
                   style={{ textDecoration: "underline" }}
-                >{` ${editingTranscription?.creatorid}`}</span>
+                >{`${editingTranscription?.creatorid}`}</span>
                 's Transcription
               </div>
             }
@@ -232,7 +232,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({
                         }}
                       >
                         <AccountCircle />
-                        <div style={{ marginLeft: "4px" }}>
+                        <div style={{ marginLeft: "4px", overflowWrap: "anywhere" }}>
                           {transcription.creatorid}
                         </div>
                       </div>
@@ -275,7 +275,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({
                         }
                         style={{ backgroundColor: "initial" }}
                       />
-                      <Typography variant="h6" style={{ padding: "8px" }}>
+                      <Typography variant="h6" style={{ padding: "8px", overflowWrap: "anywhere" }}>
                         {transcription.content}
                       </Typography>
                     </div>
@@ -285,7 +285,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({
             )}
           </ChunkCard>
         </Slideshow>
-      </Container>{" "}
+      </Container>
     </div>
   );
 };

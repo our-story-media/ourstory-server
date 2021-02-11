@@ -1,6 +1,13 @@
 // External Dependencies
 import React, { useMemo, useState, useCallback } from "react";
 
+/**
+ * Consistent Done Buttons
+ * Consistent Iconography/Typography
+ * When editing transcription in review component, list other transcriptions
+ * Fix bugs
+ */
+
 // Internal Dependencies
 import ChunkEditor from "../ChunkEditor/ChunkEditor";
 import Dashboard from "../Dashboard/Dashboard";
@@ -134,7 +141,14 @@ const App: React.FC<{}> = () => {
             }
           : []
       ),
-    [view, setShowChunkEditorOnboarding, setShowReviewerOnboarding, setUsingVidOneString, toggleShowContributers, usingVidOne]
+    [
+      view,
+      setShowChunkEditorOnboarding,
+      setShowReviewerOnboarding,
+      setUsingVidOneString,
+      toggleShowContributers,
+      usingVidOne,
+    ]
   );
 
   return (
