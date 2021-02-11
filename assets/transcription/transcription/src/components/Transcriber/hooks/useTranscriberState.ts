@@ -87,12 +87,6 @@ const useTranscriberReducer = (
       );
 
       setProgress(newChunkStart);
-      console.log(
-        `Transcriber setting split to: { start: ${newChunkStart}, end: ${getMiniChunkEnd(
-          newMiniChunks[newCurrentMiniChunk],
-          duration
-        )}}`
-      );
       setSplit({
         start: newChunkStart,
         end: getMiniChunkEnd(newMiniChunks[newCurrentMiniChunk], duration),
@@ -117,9 +111,6 @@ const useTranscriberReducer = (
           "flush transcription changes",
         ].includes(action.actionType)
       ) {
-        console.log(
-          `Updating transcription of ${state.currentChunk} chunk to be ${state.transcription}`
-        );
         updateTranscription(
           chunks[state.currentChunk],
           state.transcription,
@@ -181,11 +172,21 @@ const useTranscriberReducer = (
             : { ...state };
         case "go to first mini chunk":
           const firstMiniChunk = 0;
-          pageChange(state.currentChunk, state.miniChunks, firstMiniChunk, state.transcription);
+          pageChange(
+            state.currentChunk,
+            state.miniChunks,
+            firstMiniChunk,
+            state.transcription
+          );
           return { ...state, currentMiniChunk: firstMiniChunk };
         case "go to last mini chunk":
           const lastMiniChunk = state.miniChunks.length - 1;
-          pageChange(state.currentChunk, state.miniChunks, lastMiniChunk, state.transcription);
+          pageChange(
+            state.currentChunk,
+            state.miniChunks,
+            lastMiniChunk,
+            state.transcription
+          );
           return { ...state, currentMiniChunk: lastMiniChunk };
         case "refresh mini chunks":
           const newMiniChunks = getMiniChunks(

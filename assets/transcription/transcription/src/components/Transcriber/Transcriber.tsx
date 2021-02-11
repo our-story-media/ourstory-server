@@ -7,11 +7,13 @@ import {
   Slider,
 } from "@material-ui/core";
 import React, {
+  useCallback,
   useContext,
   useEffect,
   useMemo,
   useReducer,
   useRef,
+  useState,
 } from "react";
 import { useDebounceCallback } from "@react-hook/debounce";
 
@@ -137,12 +139,33 @@ const Transcriber: React.FC<TranscriberProps> = ({
     atExit();
   };
 
-  const debouncedPlay = useDebounceCallback(() => setPlaying(true), 500);
+  /*
+   * Here, we automatically pause the video when the user types.
+   *
+   * If the video was paused when the user starts typing, keep it
+   * paused. Otherwise, play the video again once the user stops typing
+   */
+  const [, setTypingDebounced] = useState(false);
+  const [
+    playStateBeforeTypingDebounce,
+    setPlayStateBeforeTypingDebounce,
+  ] = useState(false);
 
-  const onType = () => {
-    setPlaying(false);
+  const debouncedPlay = useDebounceCallback(() => {
+    setPlaying(playStateBeforeTypingDebounce);
+    setTypingDebounced(false);
+  }, 500);
+
+  const onType = useCallback(() => {
+    setTypingDebounced((typingDebounced) => {
+      if (!typingDebounced) {
+        setPlayStateBeforeTypingDebounce(playing)
+      }
+      return true;
+    });
     debouncedPlay();
-  };
+    setPlaying(false);
+  }, [playing, setPlaying, debouncedPlay]);
 
   return (
     <div>
@@ -173,8 +196,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
               loop
             />
           </Box>
-          {/* <Container style={{ height: "50vh" }}> */}
-          <div style={{margin: "0 8px 0 8px"}}>
+          <div style={{ margin: "0 8px 0 8px" }}>
             {/* TODO - Make these scrollable, instead of being squeezed together when there are too many? */}
             <MobileStepper
               variant="dots"
@@ -240,8 +262,16 @@ const Transcriber: React.FC<TranscriberProps> = ({
             >
               <EditTranscriptionCard
                 transcriptionIcon={
-                  <div style={{display: "flex", flexDirection: "column", margin: "0 8px 0 8px"}}>
-                    <span style={{fontWeight: 600}}>{getNameOf(chunks[transcriberState.currentChunk])}</span>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      margin: "0 8px 0 8px",
+                    }}
+                  >
+                    <span style={{ fontWeight: 600 }}>
+                      {getNameOf(chunks[transcriberState.currentChunk])}
+                    </span>
                     <Slider
                       ThumbComponent={EmptyComponent}
                       value={[
@@ -257,14 +287,14 @@ const Transcriber: React.FC<TranscriberProps> = ({
                       }}
                       marks={[
                         {
-                          value:
-                            split.start * 100,
+                          value: split.start * 100,
                           label: toShortTimeStamp(
                             transcriberState.miniChunks[
                               transcriberState.currentMiniChunk
                             ] * duration
                           ),
-                        }, {value: split.end * 100},
+                        },
+                        { value: split.end * 100 },
                       ]}
                     />
                   </div>
@@ -280,7 +310,6 @@ const Transcriber: React.FC<TranscriberProps> = ({
                 }}
               />
             </Slideshow>
-          {/* </Container> */}
           </div>
         </>
       )}
