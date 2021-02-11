@@ -25,12 +25,12 @@ const ChunkCardContextMenu: React.FC<ChunkCardContextMenuProps> = ({
         right: 0,
         display: "flex",
         flexDirection: "row",
+        alignSelf: "flex-start",
       }}
     >
-      <ClickAwayListener
-        onClickAway={() => setShowContextMenu(false)}
-      >
+      <ClickAwayListener onClickAway={() => setShowContextMenu(false)}>
         <IconButton
+          style={{ padding: 0 }}
           onClick={() => setShowContextMenu(true)}
           ref={ref}
         >

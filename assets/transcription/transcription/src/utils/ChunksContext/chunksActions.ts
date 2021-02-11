@@ -166,9 +166,11 @@ const getTranscriptionByCreator = (chunk: Chunk, userName: string) =>
 export const useUpdateTranscription = (): ((toUpdate: Chunk, updatedTranscription: string, userName: string) => void) => {
   const [, setChunks] = chunksContext.useChunksState();
 
+  const setChunksMemo = useCallback(setChunks, []);
+
   const updateFunction = useCallback(
     (toUpdate: Chunk, updatedTranscription: string, userName: string) => {
-      setChunks((chunks) => {
+      setChunksMemo((chunks) => {
         console.log(chunks);
         const newChunks = chunks.map((chunk) =>
           chunk.id === toUpdate.id
@@ -216,7 +218,7 @@ export const useUpdateTranscription = (): ((toUpdate: Chunk, updatedTranscriptio
         return newChunks;
       });
     },
-    []
+    [setChunksMemo]
   );
 
   return updateFunction;
@@ -308,7 +310,7 @@ export const useCropChunk = () => {
           .map((chunk) =>
             chunk.id === toUpdate.id
               ? {
-                  ...(newName ? renameChunk(newName, chunk) : chunk),
+                  ...(newName ? renameChunk(newName, chunk) : { ...chunk, name: undefined }),
                   starttimeseconds: newSplit[0],
                   starttimestamp: toTimeStamp(newSplit[0] * storyDuration),
                   endtimeseconds: newSplit[1],
