@@ -70,9 +70,6 @@ const useOurstoryApi = (
   );
 
   useEffect(() => {
-    console.log(
-      `Story_id has changed, fetching story and chunks for story_id: ${story_id}`
-    );
     axios
       .request<Story>({
         url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,

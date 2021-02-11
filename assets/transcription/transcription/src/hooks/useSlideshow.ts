@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 /**
  * A convenience hook for indexing into a list and only allowing going
@@ -15,7 +15,6 @@ const useSlideshow = <T extends unknown>(list: T[]) => {
   >([0, null]);
 
   const goTo = (direction: "next" | "prev") => {
-    console.log(`List length: ${list.length}`);
     return direction === "next" && page < list.length - 1
       ? setPage(([p]) => [p + 1, "next"])
       : direction === "prev" && page > 0
@@ -23,7 +22,11 @@ const useSlideshow = <T extends unknown>(list: T[]) => {
       : null;
   };
 
-  return { page: page, direction: direction, goTo };
+  const reset = useCallback(() => {
+    setPage([0, null]);
+  }, [setPage]);
+
+  return { page: page, direction: direction, goTo, reset };
 };
 
 export default useSlideshow;

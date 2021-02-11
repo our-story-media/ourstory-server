@@ -35,7 +35,6 @@ const App: React.FC<{}> = () => {
   }
 
   const usingVidOne = useMemo(() => {
-    console.log(usingVidOneString);
     return usingVidOneString === "true";
   }, [usingVidOneString]);
 

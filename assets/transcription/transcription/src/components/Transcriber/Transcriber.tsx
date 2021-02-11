@@ -147,7 +147,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
   return (
     <div>
       <LoadingModal open={duration === 0} />
-      <Container style={{ marginTop: "4px" }}>
+      <Container style={{ marginBottom: "4px" }}>
         <BackButton action={exitHandler} />
       </Container>
       <OnboardingModal
@@ -173,7 +173,8 @@ const Transcriber: React.FC<TranscriberProps> = ({
               loop
             />
           </Box>
-          <Container style={{ height: "50vh" }}>
+          {/* <Container style={{ height: "50vh" }}> */}
+          <div style={{margin: "0 8px 0 8px"}}>
             {/* TODO - Make these scrollable, instead of being squeezed together when there are too many? */}
             <MobileStepper
               variant="dots"
@@ -279,7 +280,8 @@ const Transcriber: React.FC<TranscriberProps> = ({
                 }}
               />
             </Slideshow>
-          </Container>
+          {/* </Container> */}
+          </div>
         </>
       )}
       <div

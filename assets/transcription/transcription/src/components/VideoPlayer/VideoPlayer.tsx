@@ -127,10 +127,25 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const sliderValueLabelFormat = useCallback(
     (progress: number) => {
       // console.log(`Formatting progress: ${toShortTimeStamp((progress / 100 - split.start) * duration)}`);
-      return toShortTimeStamp(((progress / 100 - split.start) === 0 ? 0 : (progress / 100 - split.start)) * duration);
+      return toShortTimeStamp(
+        (progress / 100 - split.start === 0
+          ? 0
+          : progress / 100 - split.start) * duration
+      );
     },
     [duration, split.start]
   );
+
+
+  const skipForwardHandler = useCallback(() => {
+    duration &&
+      setProgressWithVideoUpdate((progress) => progress + 5 / duration);
+  }, [setProgressWithVideoUpdate, duration]);
+
+  const skipBackwardHandler = useCallback(() => {
+    duration &&
+      setProgressWithVideoUpdate((progress) => progress - 5 / duration);
+  }, [setProgressWithVideoUpdate, duration]);
 
   return (
     <Box className={classes.videoPlayerContainer}>
@@ -148,12 +163,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             <Button
               disableRipple
               className={`${classes.videoPlayerButton} ${classes.roundButton}`}
-              onClick={() =>
-                duration &&
-                setProgressWithVideoUpdate(
-                  (progress) => progress - 5 / duration
-                )
-              }
+              onClick={skipBackwardHandler}
             >
               <Replay5 fontSize="large" />
             </Button>
@@ -171,12 +181,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           </Button>
           <div style={{ position: "absolute", left: "240px", bottom: -4 }}>
             <Button
-              onClick={() =>
-                duration &&
-                setProgressWithVideoUpdate(
-                  (progress) => progress + 5 / duration
-                )
-              }
+              onClick={skipForwardHandler}
               disableRipple
               className={`${classes.videoPlayerButton} ${classes.roundButton}`}
             >

@@ -1,4 +1,12 @@
-import { Stepper, Step, StepLabel, Container, Divider, Typography, ButtonBase } from "@material-ui/core";
+import {
+  Stepper,
+  Step,
+  StepLabel,
+  Container,
+  Divider,
+  Typography,
+  ButtonBase,
+} from "@material-ui/core";
 import { ChevronLeft, ChevronRight } from "@material-ui/icons";
 import React, { ReactElement, useCallback } from "react";
 import useSlideshow from "../../hooks/useSlideshow";
@@ -12,24 +20,30 @@ type OnboardingModalProps = {
   startButtonContent: ReactElement;
 };
 
-const OnboardingModal: React.FC<OnboardingModalProps> = ({ show, dismiss, title, steps, startButtonContent }) => {
+const OnboardingModal: React.FC<OnboardingModalProps> = ({
+  show,
+  dismiss,
+  title,
+  steps,
+  startButtonContent,
+}) => {
+  const { page, goTo, reset } = useSlideshow(steps);
 
-  const {page, goTo} = useSlideshow(steps);
+  const dismissHandler = useCallback(() => {
+    reset();
+    dismiss();
+  }, []);
 
-const nextPageHandler = useCallback(() => {
-    page === steps.length - 1 ? dismiss() : goTo("next");
-  }, [page, goTo, dismiss, steps.length]);
+  const nextPageHandler = useCallback(() => {
+    page === steps.length - 1 ? dismissHandler() : goTo("next");
+  }, [page, goTo, dismissHandler, steps.length]);
 
   const prevPageHandler = useCallback(() => {
     goTo("prev");
   }, [goTo]);
 
   return (
-    <CentralModal
-      header={title}
-      open={show}
-      exit={dismiss}
-    >
+    <CentralModal header={title} open={show} exit={dismissHandler}>
       <div
         style={{
           paddingBottom: "32px",
