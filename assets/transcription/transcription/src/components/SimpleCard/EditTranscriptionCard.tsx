@@ -19,7 +19,7 @@ const EditTranscriptionCard: React.FC<EditTranscriptionCardProps> = ({
 }) => {
 
   return (
-    <SimpleCard title={transcriptionIcon} >
+    <SimpleCard title={transcriptionIcon} cardStyle={{margin: "16px 8px 0 8px"}} >
       <TextField
         autoFocus
         multiline

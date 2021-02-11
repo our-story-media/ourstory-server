@@ -62,7 +62,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
   const {
     progressState,
     playerRef,
-    splitState: [, setSplit],
+    splitState: [split, setSplit],
     duration,
     controller,
     playingState: [playing, setPlaying],
@@ -257,15 +257,13 @@ const Transcriber: React.FC<TranscriberProps> = ({
                       marks={[
                         {
                           value:
-                            transcriberState.miniChunks[
-                              transcriberState.currentMiniChunk
-                            ] * 100,
+                            split.start * 100,
                           label: toShortTimeStamp(
                             transcriberState.miniChunks[
                               transcriberState.currentMiniChunk
                             ] * duration
                           ),
-                        },
+                        }, {value: split.end * 100},
                       ]}
                     />
                   </div>
