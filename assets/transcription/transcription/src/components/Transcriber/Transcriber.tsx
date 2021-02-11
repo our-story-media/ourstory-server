@@ -181,6 +181,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
               position="static"
               classes={{
                 dotActive: classes.stepperDots,
+                dots: classes.stepperDotsContainer
               }}
               nextButton={
                 <Button

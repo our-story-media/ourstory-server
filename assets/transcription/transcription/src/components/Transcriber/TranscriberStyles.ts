@@ -25,6 +25,8 @@ const useStyles = makeStyles({
   stepperDots: {
     backgroundColor: "#d9534f",
   },
+  stepperDotsContainer: {
+  }
   });
 
 export default useStyles;
