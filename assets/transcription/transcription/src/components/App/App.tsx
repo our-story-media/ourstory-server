@@ -6,6 +6,7 @@ import React, { useMemo, useState, useCallback } from "react";
  * Consistent Iconography/Typography
  * When editing transcription in review component, list other transcriptions
  * Fix bugs
+ * Merge into main application
  */
 
 // Internal Dependencies

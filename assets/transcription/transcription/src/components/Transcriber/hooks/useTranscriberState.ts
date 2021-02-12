@@ -201,6 +201,7 @@ const useTranscriberReducer = (
             ...state,
             currentMiniChunk: 0,
             miniChunks: newMiniChunks,
+            transcription: getUsersTranscription(chunks[state.currentChunk], userName ?? "")?.content ?? ""
           };
       }
       return state;

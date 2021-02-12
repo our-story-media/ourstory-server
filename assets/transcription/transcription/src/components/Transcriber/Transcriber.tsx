@@ -92,6 +92,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
   );
   useEffect(() => {
     if (duration !== 0) {
+      console.log('Refreshing Transcription')
       transcriberDispatch({ actionType: "refresh mini chunks" });
     }
   }, [duration]);
