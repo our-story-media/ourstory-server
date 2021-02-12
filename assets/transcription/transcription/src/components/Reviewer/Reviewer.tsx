@@ -2,6 +2,8 @@ import {
   Box,
   Container,
   Divider,
+  List,
+  ListItem,
   makeStyles,
   Radio,
   Typography,
@@ -171,6 +173,16 @@ export const Reviewer: React.FC<ReviewerProps> = ({
         }}
       >
         <div style={{ position: "relative" }}>
+          <List style={{ height: "300px", overflow: "scroll" }}>
+            {currentChunk.transcriptions.map((t) => (
+              <ListItem style={{ display: "flex" }}>
+                <span style={{ alignSelf: "flex-start", fontWeight: 600, whiteSpace: "pre" }}>{t.creatorid}:{" "}</span>
+                <div style={{ whiteSpace: "pre", overflowWrap: "anywhere" }}>
+                  {t.content}
+                </div>
+              </ListItem>
+            ))}
+          </List>
           <EditTranscriptionCard
             transcriptionValue={transcriptionEdit}
             onChange={setTranscriptionEdit}
@@ -245,7 +257,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({
               }}
             >
               <IndabaButton
-                onClick={() => lastPage ? atExit() : goTo("next")}
+                onClick={() => (lastPage ? atExit() : goTo("next"))}
                 style={{
                   backgroundColor: lastPage ? "green" : "#d9534f",
                 }}
@@ -325,7 +337,11 @@ export const Reviewer: React.FC<ReviewerProps> = ({
                       />
                       <Typography
                         variant="h6"
-                        style={{ padding: "8px", overflowWrap: "anywhere" }}
+                        style={{
+                          padding: "8px",
+                          overflowWrap: "anywhere",
+                          whiteSpace: "pre",
+                        }}
                       >
                         {transcription.content}
                       </Typography>
