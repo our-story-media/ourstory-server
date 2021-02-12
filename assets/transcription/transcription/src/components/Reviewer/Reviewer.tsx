@@ -6,7 +6,7 @@ import {
   Radio,
   Typography,
 } from "@material-ui/core";
-import { AccountCircle, Done, Edit } from "@material-ui/icons";
+import { AccountCircle, ArrowLeft, ArrowRight, Done, Edit } from "@material-ui/icons";
 import React, { useMemo, useContext, useEffect, useState } from "react";
 import useSlideshow from "../../hooks/useSlideshow";
 import { hasTranscription } from "../../utils/chunkManipulation";
@@ -211,6 +211,21 @@ export const Reviewer: React.FC<ReviewerProps> = ({
           numberOfPages={chunksToReview.length}
           onComplete={atExit}
           style={{ width: "100%" }}
+          contentContainerStyle={{margin: "0 64px 0 64px"}}
+          leftColumn={
+            <div style={{position: "fixed", bottom: 0, left: 0, margin: "16px", zIndex: 1}}>
+              <IndabaButton>
+                <ArrowLeft />
+              </IndabaButton>
+            </div>
+          }
+          rightColumn={
+            <div style={{position: "fixed", bottom: 0, right: 0, margin: "16px", zIndex: 1}}>
+              <IndabaButton>
+                <ArrowRight />
+              </IndabaButton>
+            </div>
+          }
         >
           <ChunkCard chunk={currentChunk}>
             {currentChunk.transcriptions.map(

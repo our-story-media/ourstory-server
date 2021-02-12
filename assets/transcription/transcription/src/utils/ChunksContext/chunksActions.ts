@@ -99,7 +99,6 @@ export const useNewChunk = () => {
     const enclosingChunk = getEnclosingChunk(chunks, splitAt);
     if (enclosingChunk !== undefined) {
       setChunks((chunks) => {
-        console.log(chunks);
         const newChunks = chunks
           .filter((c) => c.id !== enclosingChunk.id)
           .concat([
@@ -129,7 +128,6 @@ export const useNewChunk = () => {
       });
     } else {
       setChunks((chunks) => {
-        console.log(chunks);
 
         const newChunks = chunks.concat([
           {
@@ -144,7 +142,6 @@ export const useNewChunk = () => {
           },
         ]);
 
-        console.log(newChunks);
 
         return newChunks;
       });
@@ -171,7 +168,6 @@ export const useUpdateTranscription = (): ((toUpdate: Chunk, updatedTranscriptio
   const updateFunction = useCallback(
     (toUpdate: Chunk, updatedTranscription: string, userName: string) => {
       setChunksMemo((chunks) => {
-        console.log(chunks);
         const newChunks = chunks.map((chunk) =>
           chunk.id === toUpdate.id
             ? {
@@ -214,7 +210,6 @@ export const useUpdateTranscription = (): ((toUpdate: Chunk, updatedTranscriptio
               }
             : chunk
         );
-        console.log(newChunks);
         return newChunks;
       });
     },

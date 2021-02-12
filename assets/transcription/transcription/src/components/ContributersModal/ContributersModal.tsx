@@ -78,7 +78,7 @@ const ContributionDescription: React.FC<{
         secondsOf(parseTimeStamp(chunk.starttimestamp))
       )} - ${toShortTimeStamp(secondsOf(parseTimeStamp(chunk.endtimestamp)))}`}
       )
-      <Typography variant="subtitle2" style={{ marginLeft: "4px", fontWeight: 500 }}>
+      <Typography variant="subtitle2" style={{ marginLeft: "4px", fontWeight: 600 }}>
         {timeAgo(
           type === "chunk"
             ? chunk.updatedat

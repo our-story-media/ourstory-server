@@ -126,7 +126,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const sliderValueLabelFormat = useCallback(
     (progress: number) => {
-      // console.log(`Formatting progress: ${toShortTimeStamp((progress / 100 - split.start) * duration)}`);
       return toShortTimeStamp(
         (progress / 100 - split.start === 0
           ? 0

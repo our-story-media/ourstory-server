@@ -9,6 +9,7 @@ type SlideshowProps = {
   currentPage: number;
   numberOfPages: number;
   style?: any;
+  contentContainerStyle?: any;
   onComplete?: () => void;
   leftColumn?: ReactNode;
   rightColumn?: ReactNode;
@@ -21,6 +22,7 @@ const Slideshow: React.FC<SlideshowProps> = ({
   numberOfPages,
   children,
   style,
+  contentContainerStyle,
   leftColumn,
   rightColumn
 }) => {
@@ -37,7 +39,7 @@ const Slideshow: React.FC<SlideshowProps> = ({
       >
         <NavigateBefore />
       </IndabaButton>}
-      <Box className={classes.slideshowContentContainer}>{children}</Box>
+      <Box style={{...contentContainerStyle}} className={classes.slideshowContentContainer}>{children}</Box>
       {rightColumn ?? (onComplete && currentPage === numberOfPages - 1 ? (
         <IndabaButton
           round
