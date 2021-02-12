@@ -173,8 +173,8 @@ export const Reviewer: React.FC<ReviewerProps> = ({
         }}
       >
         <div style={{ position: "relative" }}>
-          <List style={{ height: "300px", overflow: "scroll" }}>
-            {currentChunk.transcriptions.map((t) => (
+          <List style={{ maxHeight: "300px", overflow: "scroll" }}>
+            {currentChunk.transcriptions.filter((t) => t.id !== editingTranscription?.id).map((t) => (
               <ListItem style={{ display: "flex" }}>
                 <span style={{ alignSelf: "flex-start", fontWeight: 600, whiteSpace: "pre" }}>{t.creatorid}:{" "}</span>
                 <div style={{ whiteSpace: "pre", overflowWrap: "anywhere" }}>
