@@ -6,7 +6,14 @@ import {
   Radio,
   Typography,
 } from "@material-ui/core";
-import { AccountCircle, ArrowLeft, ArrowRight, Done, Edit } from "@material-ui/icons";
+import {
+  AccountCircle,
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  Done,
+  Edit,
+} from "@material-ui/icons";
 import React, { useMemo, useContext, useEffect, useState } from "react";
 import useSlideshow from "../../hooks/useSlideshow";
 import { hasTranscription } from "../../utils/chunkManipulation";
@@ -76,7 +83,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({
 
   const chunksToReview = chunks.filter(hasTranscription);
 
-  const { page, goTo } = useSlideshow(chunksToReview);
+  const { page, goTo, lastPage } = useSlideshow(chunksToReview);
 
   const currentChunk = useMemo(
     /**
@@ -149,8 +156,8 @@ export const Reviewer: React.FC<ReviewerProps> = ({
         header={
           <WarningMessage
             message={
-              <div style={{whiteSpace: "pre"}}>
-                You Are Editing{' '}
+              <div style={{ whiteSpace: "pre" }}>
+                You Are Editing{" "}
                 <span
                   style={{ textDecoration: "underline" }}
                 >{`${editingTranscription?.creatorid}`}</span>
@@ -211,18 +218,39 @@ export const Reviewer: React.FC<ReviewerProps> = ({
           numberOfPages={chunksToReview.length}
           onComplete={atExit}
           style={{ width: "100%" }}
-          contentContainerStyle={{margin: "0 64px 0 64px"}}
+          contentContainerStyle={{ margin: "0 64px 0 64px" }}
           leftColumn={
-            <div style={{position: "fixed", bottom: 0, left: 0, margin: "16px", zIndex: 1}}>
-              <IndabaButton>
+            <div
+              style={{
+                position: "fixed",
+                bottom: 0,
+                left: 0,
+                margin: "16px",
+                zIndex: 1,
+              }}
+            >
+              <IndabaButton onClick={() => goTo("prev")}>
                 <ArrowLeft />
               </IndabaButton>
             </div>
           }
           rightColumn={
-            <div style={{position: "fixed", bottom: 0, right: 0, margin: "16px", zIndex: 1}}>
-              <IndabaButton>
-                <ArrowRight />
+            <div
+              style={{
+                position: "fixed",
+                bottom: 0,
+                right: 0,
+                margin: "16px",
+                zIndex: 1,
+              }}
+            >
+              <IndabaButton
+                onClick={() => lastPage ? atExit() : goTo("next")}
+                style={{
+                  backgroundColor: lastPage ? "green" : "#d9534f",
+                }}
+              >
+                {lastPage ? <Check /> : <ArrowRight />}
               </IndabaButton>
             </div>
           }
@@ -247,7 +275,12 @@ export const Reviewer: React.FC<ReviewerProps> = ({
                         }}
                       >
                         <AccountCircle />
-                        <div style={{ marginLeft: "4px", overflowWrap: "anywhere" }}>
+                        <div
+                          style={{
+                            marginLeft: "4px",
+                            overflowWrap: "anywhere",
+                          }}
+                        >
                           {transcription.creatorid}
                         </div>
                       </div>
@@ -290,7 +323,10 @@ export const Reviewer: React.FC<ReviewerProps> = ({
                         }
                         style={{ backgroundColor: "initial" }}
                       />
-                      <Typography variant="h6" style={{ padding: "8px", overflowWrap: "anywhere" }}>
+                      <Typography
+                        variant="h6"
+                        style={{ padding: "8px", overflowWrap: "anywhere" }}
+                      >
                         {transcription.content}
                       </Typography>
                     </div>

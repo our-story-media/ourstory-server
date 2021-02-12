@@ -14,7 +14,6 @@ import {
   GridList,
   GridListTile,
   Mark,
-  Typography,
 } from "@material-ui/core";
 
 // Internal Dependencies
@@ -190,7 +189,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
   );
 
   const chunkCardContentStyle = useRef({
-    backgroundColor: "#40bf11C9",
+    backgroundColor: "green",
     height: "100%",
     padding: "16px",
     display: "flex",
@@ -358,13 +357,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
                           fontSize="large"
                           style={{ marginRight: "4px" }}
                         />
-                        <Typography
-                          variant="h5"
-                          component="h2"
-                          style={{ transform: "translateY(2px)" }}
-                        >
-                          Done
-                        </Typography>
                       </SimpleCard>
                     </ScrollToOnMount>
                   </GridListTile>,

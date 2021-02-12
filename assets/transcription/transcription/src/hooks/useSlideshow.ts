@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 /**
  * A convenience hook for indexing into a list and only allowing going
@@ -26,7 +26,11 @@ const useSlideshow = <T extends unknown>(list: T[]) => {
     setPage([0, null]);
   }, [setPage]);
 
-  return { page: page, direction: direction, goTo, reset };
+  const lastPage = useMemo(() => 
+    page === list.length - 1
+  , [page, list.length]);
+
+  return { page: page, direction: direction, goTo, reset, lastPage };
 };
 
 export default useSlideshow;
