@@ -114,7 +114,6 @@ const useVideoPlayerProps = (
         onScrobble(newVal as number);
       },
       onChangeCommitted: (_: any, newVal: number | number[]) => {
-        setProgressWithVideoUpdate((newVal as number) / 100);
         setDragging(false);
       },
     }),

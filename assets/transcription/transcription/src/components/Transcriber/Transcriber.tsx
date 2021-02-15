@@ -262,7 +262,6 @@ const Transcriber: React.FC<TranscriberProps> = ({
                             ] * duration
                           ),
                         },
-                        { value: split.end * 100 },
                       ]}
                     />
                   </div>
