@@ -1,7 +1,5 @@
 import { TextField } from "@material-ui/core";
 import React, { ReactNode } from "react";
-import { Chunk, State } from "../../utils/types";
-import ChunkCard from "./ChunkCard";
 import SimpleCard from "./SimpleCard";
 
 type EditTranscriptionCardProps = {

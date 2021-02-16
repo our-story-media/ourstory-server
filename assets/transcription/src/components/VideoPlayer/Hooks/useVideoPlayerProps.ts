@@ -117,7 +117,7 @@ const useVideoPlayerProps = (
         setDragging(false);
       },
     }),
-    [progressBarValue, split, onProgressDrag, onScrobble, setProgressWithVideoUpdate]
+    [progressBarValue, split, onProgressDrag, onScrobble]
   );
 
   useEffect(() => {

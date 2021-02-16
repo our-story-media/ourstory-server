@@ -1,4 +1,4 @@
-import { createContext, useEffect, useMemo } from "react";
+import { createContext, useMemo } from "react";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { name_key } from "../../utils/localStorageKeys";
 import { StateSetter } from "../../utils/types";

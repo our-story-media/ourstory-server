@@ -1,5 +1,5 @@
 // External Dependencies
-import { useCallback } from "react";
+import { useCallback} from "react";
 import { v4 as uuidv4 } from "uuid";
 
 // Internal Dependencies
@@ -164,11 +164,9 @@ export const useUpdateTranscription = (): ((
 ) => void) => {
   const [, setChunks] = chunksContext.useChunksState();
 
-  const setChunksMemo = useCallback(setChunks, []);
-
   const updateFunction = useCallback(
     (toUpdate: Chunk, updatedTranscription: string, userName: string) => {
-      setChunksMemo((chunks) => {
+      setChunks((chunks) => {
         const newChunks = chunks.map((chunk) =>
           chunk.id === toUpdate.id
             ? {
@@ -214,7 +212,7 @@ export const useUpdateTranscription = (): ((
         return newChunks;
       });
     },
-    [setChunksMemo]
+    [setChunks]
   );
 
   return updateFunction;

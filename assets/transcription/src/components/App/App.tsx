@@ -1,5 +1,5 @@
 // External Dependencies
-import React, { useMemo, useState, useCallback, useEffect } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 
 /**
  * Consistent Done Buttons
