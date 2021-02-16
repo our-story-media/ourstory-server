@@ -12,4 +12,6 @@ test("get enclosing chunk", () => {
     transcriptions: [],
   };
   expect(getEnclosingChunk([testChunk], 0.25)).toBe(testChunk);
+  expect(getEnclosingChunk([testChunk], 0.49)).toBe(testChunk);
+  expect(getEnclosingChunk([testChunk], 0.5)).toBeUndefined();
 });

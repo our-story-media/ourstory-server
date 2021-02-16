@@ -52,7 +52,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
   atExit,
   onboarding,
 }) => {
-  const [chunks] = chunksContext.useChunksState();
+  const [chunks, setChunks] = chunksContext.useChunksState();
 
   const { showOnboardingModal, dismissOnboardingModal } = onboarding;
 
@@ -65,7 +65,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
     playingState: [playing, setPlaying],
   } = useVideoPlayerController();
 
-  const updateTranscription = useUpdateTranscription();
+  const updateTranscription = useUpdateTranscription(setChunks);
 
   const { userName } = useContext(UserContext);
 

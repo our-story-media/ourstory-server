@@ -79,7 +79,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({
 
   const { setProgressWithVideoUpdate } = progressState;
 
-  const [chunks] = chunksContext.useChunksState();
+  const [chunks, setChunks] = chunksContext.useChunksState();
 
   const classes = useStyles();
 
@@ -134,7 +134,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({
     );
   }, [editingTranscription]);
 
-  const updateTranscription = useUpdateTranscription();
+  const updateTranscription = useUpdateTranscription(setChunks);
 
   return (
     <div>

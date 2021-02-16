@@ -19,8 +19,9 @@ import chunksContext from "./chunksContext";
 /**
  * Using the ChunksContext, get a function for deleting chunks
  */
-export const useDeleteChunk = () => {
-  const [, setChunks] = chunksContext.useChunksState();
+export const useDeleteChunk = (
+  setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
+) => {
 
   /**
    * Delete a chunk from the chunks in the ChunksContext
@@ -156,13 +157,13 @@ const getTranscriptionByCreator = (chunk: Chunk, userName: string) =>
  * Using the ChunksContext, get a function for updating a chunks transcription
  * list
  */
-export const useUpdateTranscription = (): ((
+export const useUpdateTranscription = (
+  setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
+): ((
   toUpdate: Chunk,
   updatedTranscription: string,
   userName: string
 ) => void) => {
-  const [, setChunks] = chunksContext.useChunksState();
-
   const updateFunction = useCallback(
     (toUpdate: Chunk, updatedTranscription: string, userName: string) => {
       setChunks((chunks) => {
