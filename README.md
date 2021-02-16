@@ -64,3 +64,7 @@ To build a new Titan version -- one of the following must be run locally to upda
 `uploadtitan-amd64.sh` tags and uploads the Windows x64 Docker tar file.
 
 `uploadtitan-armv7.sh` tags and uploads the RPi armv7 Docker tar file containing titan-compact.
+
+# Transcription React App
+
+The transcription portion of this web app is a standalone web app, stored in `/assets/transcription`. See `/assets/transcription/README.md` for details.

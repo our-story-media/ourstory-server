@@ -2,7 +2,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   buildVersion: {
-    fontFamily: "Open Sans",
     color: "#7a7a7a",
     fontWeight: "bold",
     fontSize: "19px",

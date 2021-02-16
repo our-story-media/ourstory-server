@@ -1,5 +1,5 @@
 // External Dependencies
-import { useCallback} from "react";
+import { useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 // Internal Dependencies
@@ -93,40 +93,40 @@ export const useNewChunk = (
    * @param userName - the name of the user doing the chunking
    */
   return (splitAt: number, storyDuration: number, userName: string) => {
-      setChunks((chunks) => {
-        if (invalidSplit(chunks, splitAt, storyDuration)) {
-          return chunks;
-        }
-        const enclosingChunk = getEnclosingChunk(chunks, splitAt);
-        if (enclosingChunk !== undefined) {
-          const newChunks = chunks
-            .filter((c) => c.id !== enclosingChunk.id)
-            .concat([
-              {
-                starttimestamp: enclosingChunk.starttimestamp,
-                starttimeseconds: enclosingChunk.starttimeseconds,
-                endtimestamp: toTimeStamp(splitAt * storyDuration),
-                endtimeseconds: splitAt,
-                creatorid: userName,
-                updatedat: new Date(),
-                id: uuidv4(),
-                transcriptions: [],
-              },
-              {
-                starttimestamp: toTimeStamp(splitAt * storyDuration),
-                starttimeseconds: splitAt,
-                endtimestamp: enclosingChunk.endtimestamp,
-                endtimeseconds: enclosingChunk.endtimeseconds,
-                creatorid: userName,
-                updatedat: new Date(),
-                id: uuidv4(),
-                transcriptions: [],
-              },
-            ])
-            .sort((a, b) => a.endtimeseconds - b.endtimeseconds);
-          return newChunks;
-        } else {
-          const newChunks = chunks.concat([
+    setChunks((chunks) => {
+      if (invalidSplit(chunks, splitAt, storyDuration)) {
+        return chunks;
+      }
+      const enclosingChunk = getEnclosingChunk(chunks, splitAt);
+      if (enclosingChunk !== undefined) {
+        const newChunks = chunks
+          .filter((c) => c.id !== enclosingChunk.id)
+          .concat([
+            {
+              starttimestamp: enclosingChunk.starttimestamp,
+              starttimeseconds: enclosingChunk.starttimeseconds,
+              endtimestamp: toTimeStamp(splitAt * storyDuration),
+              endtimeseconds: splitAt,
+              creatorid: userName,
+              updatedat: new Date(),
+              id: uuidv4(),
+              transcriptions: [],
+            },
+            {
+              starttimestamp: toTimeStamp(splitAt * storyDuration),
+              starttimeseconds: splitAt,
+              endtimestamp: enclosingChunk.endtimestamp,
+              endtimeseconds: enclosingChunk.endtimeseconds,
+              creatorid: userName,
+              updatedat: new Date(),
+              id: uuidv4(),
+              transcriptions: [],
+            },
+          ])
+          .sort((a, b) => a.endtimeseconds - b.endtimeseconds);
+        return newChunks;
+      } else {
+        const newChunks = chunks.concat([
           {
             starttimestamp: getLastEndTimeStamp(chunks),
             endtimestamp: toTimeStamp(splitAt * storyDuration),
@@ -140,8 +140,7 @@ export const useNewChunk = (
         ]);
 
         return newChunks;
-
-      };
+      }
     });
   };
 };
