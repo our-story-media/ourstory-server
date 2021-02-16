@@ -30,15 +30,6 @@ import useToggle from "../../hooks/useToggle";
 import ContributerListModal from "../ContributersModal/ContributersModal";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
-const useUserName = () => {
-  const [userName, setUserName] = useState("");
-  useEffect(() => {
-    setUserName(window.location.href.split('/')[5].split('=')[2]);
-  }, []);
-
-  return userName;
-}
-
 const App: React.FC<{}> = () => {
   const [view, setView] = useState<View>(View.Dashboard);
   const { ChunksProvider } = chunksContext;
@@ -131,11 +122,9 @@ const App: React.FC<{}> = () => {
     ]
   );
 
-  const userName = useUserName();
-
   return (
     <ChunksProvider state={[chunks, setChunks]}>
-      <UserProvider userName={userName}>
+      <UserProvider>
         <main>
           <ContributerListModal
             chunks={chunks}
