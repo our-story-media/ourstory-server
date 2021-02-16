@@ -24,10 +24,12 @@ module.exports = {
             var subs = edit.transcription || { chunks: [] };
 
             //convert the transcription object to srt:
+            var lineNumber = 0;
             const subs_text = subs.chunks.map((c) => {
+                lineNumber++;
                 return c.review === undefined
                     ? ''
-                    : `${c.starttimestamp} --> ${c.endtimestamp}\n${c.transcriptions.filter((t) => c.review.selectedtranscription === t.id)[0].content}\n`
+                    : `${lineNumber}\n${c.starttimestamp} --> ${c.endtimestamp}\n${c.transcriptions.filter((t) => c.review.selectedtranscription === t.id)[0].content}\n\n`
             })
 
             res.header('Content-Disposition', 'attachment; filename="subtitles.srt"');
