@@ -28,7 +28,7 @@ import BackButton from "../BackButton/BackButton";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
 import { api_base_address } from "../../utils/getApiKey";
-import { getNameOf, toShortTimeStamp } from "../../utils/chunkManipulation";
+import { getNameOf, toShortTimeStamp } from "../../utils/chunkManipulation/chunkManipulation";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import OnboardingModal from "../OnboardingModal/OnboardingModal";
 import useTranscriberReducer from "./hooks/useTranscriberState";

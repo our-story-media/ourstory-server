@@ -18,7 +18,7 @@ import {
 } from "@material-ui/icons";
 import React, { useMemo, useContext, useEffect, useState } from "react";
 import useSlideshow from "../../hooks/useSlideshow";
-import { hasTranscription } from "../../utils/chunkManipulation";
+import { hasTranscription } from "../../utils/chunkManipulation/chunkManipulation";
 import {
   useDeleteReview,
   useUpdateReview,

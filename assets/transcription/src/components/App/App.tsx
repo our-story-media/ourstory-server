@@ -25,7 +25,7 @@ import {
   countChunksWithTranscription,
   countReviewedChunks,
   getLastEndTimeSeconds,
-} from "../../utils/chunkManipulation";
+} from "../../utils/chunkManipulation/chunkManipulation";
 import useToggle from "../../hooks/useToggle";
 import ContributerListModal from "../ContributersModal/ContributersModal";
 import useLocalStorage from "../../hooks/useLocalStorage";

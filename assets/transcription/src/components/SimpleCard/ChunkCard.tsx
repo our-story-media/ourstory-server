@@ -3,10 +3,10 @@ import {
   getNameOf,
   secondsOf,
   toShortTimeStamp,
-} from "../../utils/chunkManipulation";
+} from "../../utils/chunkManipulation/chunkManipulation";
 import { Chunk } from "../../utils/types";
 import SimpleCard from "./SimpleCard";
-import { parseChunkTimeStamps } from "../../utils/chunkManipulation";
+import { parseChunkTimeStamps } from "../../utils/chunkManipulation/chunkManipulation";
 import React, { ReactNode } from "react";
 
 const useStyles = makeStyles({

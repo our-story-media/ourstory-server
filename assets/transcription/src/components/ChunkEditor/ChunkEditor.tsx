@@ -35,7 +35,7 @@ import {
   getLastEndTimeSeconds,
   getNameOf,
   hasTranscription,
-} from "../../utils/chunkManipulation";
+} from "../../utils/chunkManipulation/chunkManipulation";
 import EditChunkModal from "../EditChunkModal/EditChunkModal";
 import VideoThumbnail from "../VideoPlayer/VideoThumbnail";
 import BackButton from "../BackButton/BackButton";
@@ -77,6 +77,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
 }) => {
   const [chunks, setChunks] = chunksContext.useChunksState();
 
+  // This refreshes the chunks when the ChunkEditor is first rendered
   useEffect(() => {
     setChunks((newChunks) => newChunks);
   }, [setChunks]);
@@ -99,7 +100,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
 
   const doWithChunks = useDoWithChunks();
   const deleteChunk = useDeleteChunk();
-  const newChunk = useNewChunk();
+  const newChunk = useNewChunk(setChunks);
 
   const classes = useStyles();
 

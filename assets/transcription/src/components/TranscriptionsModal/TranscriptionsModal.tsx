@@ -1,5 +1,5 @@
 import React from "react";
-import { getNameOf } from "../../utils/chunkManipulation";
+import { getNameOf } from "../../utils/chunkManipulation/chunkManipulation";
 import { Chunk } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
 import SimpleCard from "../SimpleCard/SimpleCard";

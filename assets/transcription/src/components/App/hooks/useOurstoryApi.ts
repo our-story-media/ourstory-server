@@ -7,8 +7,9 @@ import api_key, { api_base_address } from "../../../utils/getApiKey";
 import { Chunk, Story } from "../../../utils/types";
 
 const pushStoryChanges = (new_story: Story, story_id: string) => {
+  const url = `http://${api_base_address}:8845/api/watch/savedit/${story_id}?apikey=${api_key}`;
   axios.request<Story>({
-    url: `http://${api_base_address}:8845/api/watch/savedit/${story_id}?apikey=${api_key}`,
+    url: url,
     method: "POST",
     withCredentials: true,
     data: new_story,

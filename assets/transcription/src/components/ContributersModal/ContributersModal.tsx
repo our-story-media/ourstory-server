@@ -16,7 +16,7 @@ import {
   toShortTimeStamp,
   parseTimeStamp,
   secondsOf,
-} from "../../utils/chunkManipulation";
+} from "../../utils/chunkManipulation/chunkManipulation";
 import { Contribution, Chunk } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
 import FlatPaper from "../FlatPaper/FlatPaper";

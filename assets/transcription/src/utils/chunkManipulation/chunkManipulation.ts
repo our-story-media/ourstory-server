@@ -1,4 +1,4 @@
-import { Chunk, Contribution } from "./types";
+import { Chunk, Contribution } from "../types";
 
 /**
  * Given an integer return a string representation of that integer

@@ -11,7 +11,7 @@ import {
   getLastEndTimeStamp,
   invalidSplit,
   toTimeStamp,
-} from "../chunkManipulation";
+} from "../chunkManipulation/chunkManipulation";
 import oneSatisfies from "../oneSatisfies";
 import { Chunk, Transcription } from "../types";
 import chunksContext from "./chunksContext";
@@ -81,9 +81,9 @@ export const useDeleteChunk = () => {
 /**
  * Using the ChunksContext, get a function for creating new chunks
  */
-export const useNewChunk = () => {
-  const [chunks, setChunks] = chunksContext.useChunksState();
-
+export const useNewChunk = (
+  setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
+) => {
   /**
    * This function creates a new chunk in the video.
    * Invalid chunks are defined by the invalidSplit function and will not be created
@@ -93,43 +93,40 @@ export const useNewChunk = () => {
    * @param userName - the name of the user doing the chunking
    */
   return (splitAt: number, storyDuration: number, userName: string) => {
-    if (invalidSplit(chunks, splitAt, storyDuration)) {
-      return;
-    }
-    const enclosingChunk = getEnclosingChunk(chunks, splitAt);
-    if (enclosingChunk !== undefined) {
       setChunks((chunks) => {
-        const newChunks = chunks
-          .filter((c) => c.id !== enclosingChunk.id)
-          .concat([
-            {
-              starttimestamp: enclosingChunk.starttimestamp,
-              starttimeseconds: enclosingChunk.starttimeseconds,
-              endtimestamp: toTimeStamp(splitAt * storyDuration),
-              endtimeseconds: splitAt,
-              creatorid: userName,
-              updatedat: new Date(),
-              id: uuidv4(),
-              transcriptions: [],
-            },
-            {
-              starttimestamp: toTimeStamp(splitAt * storyDuration),
-              starttimeseconds: splitAt,
-              endtimestamp: enclosingChunk.endtimestamp,
-              endtimeseconds: enclosingChunk.endtimeseconds,
-              creatorid: userName,
-              updatedat: new Date(),
-              id: uuidv4(),
-              transcriptions: [],
-            },
-          ])
-          .sort((a, b) => a.endtimeseconds - b.endtimeseconds);
-        return newChunks;
-      });
-    } else {
-      setChunks((chunks) => {
-
-        const newChunks = chunks.concat([
+        if (invalidSplit(chunks, splitAt, storyDuration)) {
+          return chunks;
+        }
+        const enclosingChunk = getEnclosingChunk(chunks, splitAt);
+        if (enclosingChunk !== undefined) {
+          const newChunks = chunks
+            .filter((c) => c.id !== enclosingChunk.id)
+            .concat([
+              {
+                starttimestamp: enclosingChunk.starttimestamp,
+                starttimeseconds: enclosingChunk.starttimeseconds,
+                endtimestamp: toTimeStamp(splitAt * storyDuration),
+                endtimeseconds: splitAt,
+                creatorid: userName,
+                updatedat: new Date(),
+                id: uuidv4(),
+                transcriptions: [],
+              },
+              {
+                starttimestamp: toTimeStamp(splitAt * storyDuration),
+                starttimeseconds: splitAt,
+                endtimestamp: enclosingChunk.endtimestamp,
+                endtimeseconds: enclosingChunk.endtimeseconds,
+                creatorid: userName,
+                updatedat: new Date(),
+                id: uuidv4(),
+                transcriptions: [],
+              },
+            ])
+            .sort((a, b) => a.endtimeseconds - b.endtimeseconds);
+          return newChunks;
+        } else {
+          const newChunks = chunks.concat([
           {
             starttimestamp: getLastEndTimeStamp(chunks),
             endtimestamp: toTimeStamp(splitAt * storyDuration),
@@ -142,10 +139,10 @@ export const useNewChunk = () => {
           },
         ]);
 
-
         return newChunks;
-      });
-    }
+
+      };
+    });
   };
 };
 
@@ -160,7 +157,11 @@ const getTranscriptionByCreator = (chunk: Chunk, userName: string) =>
  * Using the ChunksContext, get a function for updating a chunks transcription
  * list
  */
-export const useUpdateTranscription = (): ((toUpdate: Chunk, updatedTranscription: string, userName: string) => void) => {
+export const useUpdateTranscription = (): ((
+  toUpdate: Chunk,
+  updatedTranscription: string,
+  userName: string
+) => void) => {
   const [, setChunks] = chunksContext.useChunksState();
 
   const setChunksMemo = useCallback(setChunks, []);
@@ -305,7 +306,9 @@ export const useCropChunk = () => {
           .map((chunk) =>
             chunk.id === toUpdate.id
               ? {
-                  ...(newName ? renameChunk(newName, chunk) : { ...chunk, name: undefined }),
+                  ...(newName
+                    ? renameChunk(newName, chunk)
+                    : { ...chunk, name: undefined }),
                   starttimeseconds: newSplit[0],
                   starttimestamp: toTimeStamp(newSplit[0] * storyDuration),
                   endtimeseconds: newSplit[1],

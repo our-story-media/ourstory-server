@@ -3,7 +3,7 @@ import { Forward5, Pause, PlayArrow, Replay5 } from "@material-ui/icons";
 import React, { RefObject, useCallback } from "react";
 import ReactPlayer from "react-player";
 import useDefaultState from "../../hooks/useDefaultState";
-import { toShortTimeStamp } from "../../utils/chunkManipulation";
+import { toShortTimeStamp } from "../../utils/chunkManipulation/chunkManipulation";
 import { State, StateSetter } from "../../utils/types";
 import IndabaSlider from "../IndabaSlider/IndabaSlider";
 import useVideoPlayerProps from "./Hooks/useVideoPlayerProps";

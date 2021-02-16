@@ -4,16 +4,6 @@ const fs = require('fs');
 module.exports = {
 
     index: async function (req, res) {
-        if (req.method =='POST')
-        {
-            req.session.name = req.param('name');
-            console.log(req.param('name'));
-        }
-
-        if (!req.param('name'))
-        {
-            return res.redirect(`/transcribe/${req.param('id')}/?apikey=${res.locals.apikey}&name=${req.session.name}`);
-        }
 
         return res.sendfile(path.join(__dirname, '..', '..', `assets/transcription/build/index.html`))
     },
