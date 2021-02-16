@@ -33,9 +33,6 @@ module.exports.routes = {
     'get /event/contributors/:id':'EventController.contributors',
     'post /auth/process_admin':'AuthController.process_admin',
     '/transcribe/:id?':'TranscribeController.index',
-    'get /transcribe/s1/:id?':'TranscribeController.step1',
-    'get /transcribe/s2/:id?':'TranscribeController.step2',
-    'get /transcribe/s3/:id?':'TranscribeController.step3',
 
     /*
     API ENDPOINTS

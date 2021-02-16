@@ -95,9 +95,6 @@ module.exports.policies = {
     'transcribe':{
       '*':['superadmin','authenticated','apiauth'],
       'index':['superadmin','authenticated','apiauth','apikeygen','flash'],
-      'step1':['superadmin','authenticated','apiauth','apikeygen','flash'],
-      'step2':['superadmin','authenticated','apiauth','apikeygen','flash'],
-      'step3':['superadmin','authenticated','apiauth','apikeygen','flash'],
       'subs':['superadmin','authenticated','apiauth']
     },
     'watch':
