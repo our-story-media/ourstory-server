@@ -36,7 +36,18 @@ module.exports = {
             stage3: Math.round((reviewed.length / chunkLength)*100)
         }
 
-		return res.view({ id: req.param('id'), edit, progress });
+
+        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+        console.log("Progress:");
+        console.log(progress)
+        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+
+        if (!req.param('name'))
+        {
+            return res.redirect(`/transcribe/${req.param('id')}/?apikey=${res.locals.apikey}&name=${req.session.name}`);
+        }
+
+        return res.sendfile(path.join(__dirname, '..', '..', `assets/transcription/transcription/build/index.html`))
     },
     
     step1: function(req,res)
@@ -52,7 +63,7 @@ module.exports = {
             return res.redirect(`/transcribe/s1/${req.param('id')}/?apikey=${res.locals.apikey}&name=${req.session.name}`);
         }
 
-        return res.sendfile(path.join(__dirname,'..','..','/assets/transcription/step1/build/index.html'));
+        return res.sendfile(path.join(__dirname,'..','/assets/transcription/transcription/build/index.html'));
     },
 
     step2: function(req,res)
@@ -83,18 +94,11 @@ module.exports = {
             var subs = edit.transcription || { chunks: [] };
 
             //convert the transcription object to srt:
-
-            var subs_text = "";
-
-            var sequence = 0;
-
-            var subs_text = _.map(subs.chunks, function (chunk) {
-                sequence++;
-                var text = (chunk.adoptedContribution)?chunk.adoptedContribution.text:'';
-                var start = chunk.starttime;
-                var end = chunk.endtime;
-                return `${parseInt(sequence)}\n${start} --> ${end}\n${text}\n\n`;
-            });
+            const subs_text = subs.chunks.map((c) => {
+                return c.review === undefined
+                    ? ''
+                    : `${c.starttimestamp} --> ${c.endtimestamp}\n${c.transcriptions.filter((t) => c.review.selectedtranscription === t.id)[0].content}\n`
+            })
 
             res.header('Content-Disposition', 'attachment; filename="subtitles.srt"');
             return res.send(subs_text.join(''));

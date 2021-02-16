@@ -1,5 +1,5 @@
 // External Dependencies
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 
 /**
  * Consistent Done Buttons
@@ -28,25 +28,22 @@ import {
 } from "../../utils/chunkManipulation";
 import useToggle from "../../hooks/useToggle";
 import ContributerListModal from "../ContributersModal/ContributersModal";
-import { Switch } from "@material-ui/core";
 import useLocalStorage from "../../hooks/useLocalStorage";
+
+const useUserName = () => {
+  const [userName, setUserName] = useState("");
+  useEffect(() => {
+    setUserName(window.location.href.split('/')[5].split('=')[2]);
+  }, []);
+
+  return userName;
+}
 
 const App: React.FC<{}> = () => {
   const [view, setView] = useState<View>(View.Dashboard);
   const { ChunksProvider } = chunksContext;
-  const [usingVidOneString, setUsingVidOneString] = useLocalStorage(
-    "useVidOne"
-  );
 
-  if (usingVidOneString === null) {
-    setUsingVidOneString("true");
-  }
-
-  const usingVidOne = useMemo(() => {
-    return usingVidOneString === "true";
-  }, [usingVidOneString]);
-
-  const story_id = useStoryId(usingVidOne);
+  const story_id = useStoryId();
 
   const {
     storyTitle,
@@ -106,25 +103,9 @@ const App: React.FC<{}> = () => {
     () =>
       [
         {
-          content: "Show Contributions",
+          content: <div>Show Contributions</div>,
           handler: toggleShowContributers,
-        },
-        {
-          content: (
-            <div>
-              Use Video One{" "}
-              <Switch
-                checked={usingVidOne}
-                onChange={() =>
-                  setUsingVidOneString((usingVidOneString) =>
-                    usingVidOneString === "true" ? "false" : "true"
-                  )
-                }
-              />
-            </div>
-          ),
-          handler: (): void => {},
-        },
+        }
       ].concat(
         view === View.Chunking
           ? {
@@ -146,15 +127,15 @@ const App: React.FC<{}> = () => {
       view,
       setShowChunkEditorOnboarding,
       setShowReviewerOnboarding,
-      setUsingVidOneString,
       toggleShowContributers,
-      usingVidOne,
     ]
   );
 
+  const userName = useUserName();
+
   return (
     <ChunksProvider state={[chunks, setChunks]}>
-      <UserProvider>
+      <UserProvider userName={userName}>
         <main>
           <ContributerListModal
             chunks={chunks}

@@ -52,7 +52,7 @@ const useOurstoryApi = (
             withCredentials: true,
             url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
             transformResponse: (r: string) =>
-              (JSON.parse(r) as Story).transcription.chunks,
+              (JSON.parse(r) as Story)?.transcription?.chunks ?? [],
           })
         ).data
       );
@@ -79,7 +79,7 @@ const useOurstoryApi = (
       .then((response) => {
         setStory(response.data);
         setChunks(
-          response.data.transcription ? response.data.transcription.chunks : []
+          response.data?.transcription?.chunks ?? []
         );
       });
   }, [story_id]);

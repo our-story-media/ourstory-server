@@ -17,7 +17,7 @@ const initialValue: UserContextType = {
 
 export const UserContext = createContext<UserContextType>(initialValue);
 
-const UserProvider: React.FC<{}> = ({ children }) => {
+const UserProvider: React.FC<{ userName: string }> = ({ children, userName }) => {
   const [name, setName, clearName] = useLocalStorage(name_key);
 
   const value = useMemo(
@@ -28,6 +28,12 @@ const UserProvider: React.FC<{}> = ({ children }) => {
     }),
     [name, setName, clearName]
   );
+  
+  useEffect(() => {
+    if (userName !== "") {
+      setName(userName);
+    }
+  }, [userName]);
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
