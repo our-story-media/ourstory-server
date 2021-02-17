@@ -4,8 +4,9 @@ import {
   useNewChunk,
   useDeleteChunk,
   useUpdateTranscription,
+  useUpdateReview,
 } from "./chunksActions";
-import { Chunk } from "../types";
+import { Chunk, Transcription } from "../types";
 
 // Dumby values
 const testUserName = "test";
@@ -19,6 +20,12 @@ const testChunk = {
   updatedat: new Date(),
   id: "testId",
   transcriptions: [],
+};
+const testTranscription = {
+  creatorid: "no one",
+  content: "nothing",
+  id: "noID",
+  updatedat: new Date(),
 };
 
 // Here we declare variables that will be used in our tests.
@@ -38,6 +45,11 @@ var updateTranscription: (
   updatedTranscription: string,
   userName: string
 ) => void;
+var updateReview: (
+  toUpdate: Chunk,
+  selectedTranscription: Transcription,
+  userName: string
+) => void;
 
 // Helper function to get current chunks state
 const chunks = () => {
@@ -51,6 +63,7 @@ beforeEach(() => {
   deleteChunk = renderHook(() => useDeleteChunk(setChunks)).result.current;
   updateTranscription = renderHook(() => useUpdateTranscription(setChunks))
     .result.current;
+  updateReview = renderHook(() => useUpdateReview(setChunks)).result.current;
 });
 
 test("test new chunk", () => {
@@ -213,5 +226,73 @@ test("add transcription to chunk that doesn't exist", () => {
   });
 
   // Adding a transcription to a chunk that doesn't exist is a no-op
+  expect(chunks().length).toBe(0);
+});
+
+test("delete a transcription", () => {
+  act(() => {
+    newChunk(0.5, testDuration, testUserName);
+  });
+
+  act(() => {
+    updateTranscription(chunks()[0], "some transcription", testUserName);
+  })
+
+  expect(chunks()[0].transcriptions.length).toBe(1);
+
+  act(() => {
+    updateTranscription(chunks()[0], "", testUserName);
+  })
+
+  // Passing an empty string deletes that transcription
+  expect(chunks()[0].transcriptions.length).toBe(0);
+});
+
+test("review a transcription", () => {
+  act(() => {
+    newChunk(0.5, testDuration, testUserName);
+  });
+
+  act(() => {
+    updateTranscription(chunks()[0], "transcription", testUserName);
+  });
+
+  act(() => {
+    updateTranscription(chunks()[0], "transcription2", `${testUserName}2`);
+  });
+
+  // Review should be undefined until updateReview is called on that chunk
+  expect(chunks()[0].review).toBeUndefined();
+
+  act(() => {
+    updateReview(chunks()[0], chunks()[0].transcriptions[0], testUserName);
+  });
+
+  expect(chunks()[0].review).toBeDefined();
+  expect(chunks()[0].review?.reviewedby).toBe(testUserName);
+  expect(chunks()[0].review?.selectedtranscription).toBe(
+    chunks()[0].transcriptions[0].id
+  );
+});
+
+test("review a transcription that doesn't exist", () => {
+  act(() => {
+    newChunk(0.5, testDuration, testUserName);
+  });
+
+  act(() => {
+    updateReview(chunks()[0], testTranscription, testUserName);
+  });
+
+  // Reviewing a transcripion that doesn't exist is a no-op
+  expect(chunks()[0].review).toBeUndefined();
+});
+
+test("adding review to chunk that doesn't exist", () => {
+  act(() => {
+    updateReview(testChunk, testTranscription, testUserName);
+  });
+
+  // Adding a review to a transcription that doesn't exist is a no-op
   expect(chunks().length).toBe(0);
 });

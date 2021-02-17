@@ -127,7 +127,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({
     setProgressWithVideoUpdate(currentChunk.starttimeseconds);
   }, [page, chunks, currentChunk, setProgressWithVideoUpdate, setSplit]);
 
-  const updateReview = useUpdateReview();
+  const updateReview = useUpdateReview(setChunks);
   const deleteReview = useDeleteReview();
 
   const { userName } = useContext(UserContext);

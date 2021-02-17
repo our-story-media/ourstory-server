@@ -155,7 +155,7 @@ const getTranscriptionByCreator = (chunk: Chunk, userName: string) =>
 
 /**
  * Using the ChunksContext, get a function for updating a chunks transcription
- * list
+ * list. Passing an empty string as 'updatedTranscription' deletes the transcription
  */
 export const useUpdateTranscription = (
   setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
@@ -221,9 +221,9 @@ export const useUpdateTranscription = (
 /**
  * Using the ChunksContext, get a function for updating the Review of a Chunk
  */
-export const useUpdateReview = () => {
-  const [, setChunks] = chunksContext.useChunksState();
-
+export const useUpdateReview = (
+  setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
+) => {
   return (
     toUpdate: Chunk,
     selectedTranscription: Transcription,
