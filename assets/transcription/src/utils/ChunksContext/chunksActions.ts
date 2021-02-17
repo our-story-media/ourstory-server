@@ -190,7 +190,7 @@ export const useUpdateTranscription = (
                       )
                     : chunk.transcriptions.map((t) =>
                         t.creatorid === userName
-                          ? { ...t, content: updatedTranscription }
+                          ? { ...t, content: updatedTranscription, updatedat: new Date() }
                           : t
                       )
                   : /* The ternary here is to avoid adding empty transcriptions */

@@ -67,4 +67,4 @@ To build a new Titan version -- one of the following must be run locally to upda
 
 # Transcription React App
 
-The transcription portion of this web app is a standalone web app, stored in `/assets/transcription`. See `/assets/transcription/README.md` for details.
+The transcription portion of this web app is a standalone React app, stored in `/assets/transcription`. See `/assets/transcription/README.md` for details.

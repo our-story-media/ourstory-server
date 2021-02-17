@@ -1,13 +1,6 @@
 // External Dependencies
 import React, { useMemo, useState, useCallback } from "react";
-
-/**
- * Consistent Done Buttons
- * Consistent Iconography/Typography
- * When editing transcription in review component, list other transcriptions
- * Fix bugs
- * Merge into main application
- */
+import LocalizedStrings from 'react-localization';
 
 // Internal Dependencies
 import ChunkEditor from "../ChunkEditor/ChunkEditor";
@@ -29,6 +22,13 @@ import {
 import useToggle from "../../hooks/useToggle";
 import ContributerListModal from "../ContributersModal/ContributersModal";
 import useLocalStorage from "../../hooks/useLocalStorage";
+
+const strings = new LocalizedStrings({
+  en: {
+    loading: "Loading",
+    viewInstructions: "View Instructions"
+  }
+})
 
 const App: React.FC<{}> = () => {
   const [view, setView] = useState<View>(View.Dashboard);
@@ -100,14 +100,14 @@ const App: React.FC<{}> = () => {
       ].concat(
         view === View.Chunking
           ? {
-              content: <div>View instructions</div>,
+              content: <div>{strings.viewInstructions}</div>,
               handler: (): void => {
                 setShowChunkEditorOnboarding("true");
               },
             }
           : view === View.Reviewing
           ? {
-              content: <div>View instructions</div>,
+              content: <div>{strings.viewInstructions}</div>,
               handler: (): void => {
                 setShowReviewerOnboarding("true");
               },
@@ -139,7 +139,7 @@ const App: React.FC<{}> = () => {
             {view === View.Dashboard ? (
               <Dashboard
                 steps={steps}
-                storyName={storyTitle ? storyTitle : "Loading"}
+                storyName={storyTitle ? storyTitle : strings.loading}
                 logOutAction={logOutAction}
               />
             ) : view === View.Chunking ? (

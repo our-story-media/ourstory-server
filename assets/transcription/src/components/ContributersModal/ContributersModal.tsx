@@ -8,6 +8,7 @@ import {
   ListItem,
 } from "@material-ui/core";
 import React, { useMemo } from "react";
+import LocalizedStrings from "react-localization";
 
 // Internal Dependencies
 import {
@@ -23,13 +24,41 @@ import FlatPaper from "../FlatPaper/FlatPaper";
 import SimpleCard from "../SimpleCard/SimpleCard";
 import { getUsersTranscription } from "../Transcriber/hooks/useTranscriberState";
 
+const strings = new LocalizedStrings({
+  en: {
+    yr: "year",
+    mt: "month",
+    dy: "day",
+    hr: "hour",
+    min: "minute",
+    sec: "second",
+    yrs: "years",
+    mts: "months",
+    dys: "days",
+    hrs: "hours",
+    mins: "minutes",
+    secs: "seconds",
+    periodAgo: "{0} {1} ago",
+    contributions: "Contributions",
+
+    created: "Created",
+    transcribed: "Transcribed",
+    reviewed: "Reviewed",
+    contributionDescription: '{0} the chunk "{1}" {2} {3}',
+  },
+});
+
+const pluralize = (epoch: string) => {
+  return strings.getString(`${epoch}s`);
+};
+
 const epochs = [
-  ["year", 31536000],
-  ["month", 2592000],
-  ["day", 86400],
-  ["hour", 3600],
-  ["minute", 60],
-  ["second", 1],
+  ["yr", 31536000],
+  ["mt", 2592000],
+  ["dy", 86400],
+  ["hr", 3600],
+  ["min", 60],
+  ["sec", 1],
 ] as [string, number][];
 
 const getDuration = (
@@ -44,16 +73,19 @@ const getDuration = (
       };
     }
   }
-  return { interval: 0, epoch: "second" };
+  return { interval: 0, epoch: strings.sec };
 };
 
 const timeAgo = (date: Date) => {
   const timeAgoInSeconds = Math.floor((+new Date() - +new Date(date)) / 1000);
   const { interval, epoch } = getDuration(timeAgoInSeconds);
-  const suffix = interval === 1 ? "" : "s";
-  return epoch === "second"
-    ? "Less than a minute ago"
-    : `${interval} ${epoch}${suffix} ago`;
+  return epoch === strings.sec
+    ? strings.formatString(strings.periodAgo, "Less than a", "minute")
+    : strings.formatString(
+        strings.periodAgo,
+        interval.toString(),
+        `${interval === 1 ? strings.getString(epoch) : pluralize(epoch)}`
+      );
 };
 
 const ContributionDescription: React.FC<{
@@ -63,30 +95,41 @@ const ContributionDescription: React.FC<{
   const typeDescription = (type: "chunk" | "transcription" | "review") => {
     switch (type) {
       case "chunk":
-        return "Created ";
+        return strings.created;
       case "transcription":
-        return "Transcribed ";
+        return strings.transcribed;
       case "review":
-        return "Reviewed ";
+        return strings.reviewed;
     }
   };
   return (
-    <span style={{ display: "flex", flexWrap: "wrap" }}>
-      <div style={{whiteSpace: "pre"}}><span style={{ fontWeight: "bold" }}>{typeDescription(type)}</span>the
-      chunk </div><div style={{ overflowWrap: "anywhere" }}>"{getNameOf(chunk)}"</div> (
-      {`${toShortTimeStamp(
-        secondsOf(parseTimeStamp(chunk.starttimestamp))
-      )} - ${toShortTimeStamp(secondsOf(parseTimeStamp(chunk.endtimestamp)))}`}
-      )
-      <Typography variant="subtitle2" style={{ marginLeft: "4px", fontWeight: 600 }}>
-        {timeAgo(
-          type === "chunk"
-            ? chunk.updatedat
-            : type === "transcription"
-            ? getUsersTranscription(chunk, name)?.updatedat ?? new Date()
-            : chunk.review?.reviewedat ?? new Date()
-        )}
-      </Typography>
+    <span style={{ whiteSpace: "pre", display: "flex", flexWrap: "wrap" }}>
+      {strings.formatString(
+        strings.contributionDescription,
+        <span style={{ fontWeight: "bold" }}>{typeDescription(type)}</span>,
+        <div style={{ overflowWrap: "anywhere" }}>{getNameOf(chunk)}</div>,
+        <>
+          (
+          {`${toShortTimeStamp(
+            secondsOf(parseTimeStamp(chunk.starttimestamp))
+          )} - ${toShortTimeStamp(
+            secondsOf(parseTimeStamp(chunk.endtimestamp))
+          )}`}
+          )
+        </>,
+        <Typography
+          variant="subtitle2"
+          style={{ marginLeft: "4px", fontWeight: 600 }}
+        >
+          {timeAgo(
+            type === "chunk"
+              ? chunk.updatedat
+              : type === "transcription"
+              ? getUsersTranscription(chunk, name)?.updatedat ?? new Date()
+              : chunk.review?.reviewedat ?? new Date()
+          )}
+        </Typography>
+      )}
     </span>
   );
 };
@@ -117,7 +160,7 @@ const ContributerListModal: React.FC<{
     <CentralModal
       header={
         <Typography variant="h3" style={{ fontWeight: "lighter" }}>
-          Contributions
+          {strings.contributions}
         </Typography>
       }
       open={show}
@@ -130,7 +173,13 @@ const ContributerListModal: React.FC<{
           <GridList cols={1} cellHeight="auto">
             {contributers.map((contributer) => (
               <GridListTile key={contributer[0]}>
-                <SimpleCard title={<div style={{overflowWrap: "anywhere"}}>{contributer[0]}</div>}>
+                <SimpleCard
+                  title={
+                    <div style={{ overflowWrap: "anywhere" }}>
+                      {contributer[0]}
+                    </div>
+                  }
+                >
                   <List>
                     {contributer[1].map((contribution) => (
                       <ListItem

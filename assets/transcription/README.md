@@ -56,7 +56,7 @@ to find the logic that needs to be replaced with hardcoded values.
 
 ### `npm run test`
 
-Launches the test runner in the interactive watch mode.\
+Launches the test runner in the interactive watch mode.
 
 ### `npm run build`
 
