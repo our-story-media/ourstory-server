@@ -7,6 +7,19 @@ const strings = new LocalizedStrings({
   },
 });
 
+export const removeReview = (chunk: Chunk) => ({ ...chunk, review: undefined });
+
+export const getTranscriptionByCreator = (chunk: Chunk, userName: string) =>
+  chunk.transcriptions.filter(
+    (transcription) => transcription.creatorid === userName
+  )[0];
+
+export const renameChunk = (newName: string, chunk: Chunk): Chunk =>
+  newName !== "" ? { ...chunk, name: newName } : { ...chunk, name: undefined };
+
+export const deleteNegativeChunks = (chunks: Chunk[]): Chunk[] =>
+  chunks.filter((chunk) => chunk.endtimeseconds > chunk.starttimeseconds);
+
 /**
  * Given an integer return a string representation of that integer
  * padded with zeros up until the tens column

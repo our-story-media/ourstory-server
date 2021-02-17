@@ -11,6 +11,10 @@ import {
   getLastEndTimeStamp,
   invalidSplit,
   toTimeStamp,
+  removeReview,
+  getTranscriptionByCreator,
+  renameChunk,
+  deleteNegativeChunks
 } from "../chunkManipulation/chunkManipulation";
 import oneSatisfies from "../oneSatisfies";
 import { Chunk, Transcription } from "../types";
@@ -20,15 +24,16 @@ import { Chunk, Transcription } from "../types";
  */
 export const useDeleteChunk = (
   setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
-) => {
+): ((toDelete: Chunk) => void) => {
   /**
    * Delete a chunk from the chunks in the ChunksContext
    *
    * @param toDelete - the chunk to delete
    */
-  return (toDelete: Chunk) =>
-    setChunks((chunks) =>
-      /*
+  const deleteFn = useCallback(
+    (toDelete: Chunk) =>
+      setChunks((chunks) =>
+        /*
       This call to adjacentMap is checking if, after deleting the chunk, there
       is a gap in the chunks. If so, we need to create a new chunk that closes
       the gap
@@ -40,41 +45,45 @@ export const useDeleteChunk = (
       so we end up with: E D, where E is a new chunk that we create in this
       call to adjacentMap
       */
-      adjacentMap(
-        chunks.filter((c) => c.id !== toDelete.id),
-        (a: Chunk, b: Chunk) => {
-          if (a.endtimeseconds !== b.starttimeseconds) {
-            return {
-              ...b,
-              starttimeseconds: a.endtimeseconds,
-              starttimestamp: a.endtimestamp,
-              id: uuidv4(),
-              updatedat: new Date(),
-              transcriptions: [],
-            };
+        adjacentMap(
+          chunks.filter((c) => c.id !== toDelete.id),
+          (a: Chunk, b: Chunk) => {
+            if (a.endtimeseconds !== b.starttimeseconds) {
+              return {
+                ...b,
+                starttimeseconds: a.endtimeseconds,
+                starttimestamp: a.endtimestamp,
+                id: uuidv4(),
+                updatedat: new Date(),
+                transcriptions: [],
+              };
+            }
+            return b;
           }
-          return b;
-        }
-      )
-        .concat(
-          ((first) =>
-            first
-              ? first.starttimeseconds === 0
-                ? [first]
-                : [
-                    {
-                      ...first,
-                      starttimeseconds: 0,
-                      starttimestamp: "00:00:00:00",
-                      id: uuidv4(),
-                      updatedat: new Date(),
-                      transcriptions: [],
-                    },
-                  ]
-              : [])(chunks.filter((c) => c.id !== toDelete.id)[0])
         )
-        .sort((a, b) => a.endtimeseconds - b.endtimeseconds)
-    );
+          .concat(
+            ((first) =>
+              first
+                ? first.starttimeseconds === 0
+                  ? [first]
+                  : [
+                      {
+                        ...first,
+                        starttimeseconds: 0,
+                        starttimestamp: "00:00:00:00",
+                        id: uuidv4(),
+                        updatedat: new Date(),
+                        transcriptions: [],
+                      },
+                    ]
+                : [])(chunks.filter((c) => c.id !== toDelete.id)[0])
+          )
+          .sort((a, b) => a.endtimeseconds - b.endtimeseconds)
+      ),
+    [setChunks]
+  );
+
+  return deleteFn;
 };
 
 /**
@@ -82,7 +91,7 @@ export const useDeleteChunk = (
  */
 export const useNewChunk = (
   setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
-) => {
+): ((splitAt: number, storyDuration: number, userName: string) => void) => {
   /**
    * This function creates a new chunk in the video.
    * Invalid chunks are defined by the invalidSplit function and will not be created
@@ -91,65 +100,63 @@ export const useNewChunk = (
    * @param storyDuration - the length of the video being chunked
    * @param userName - the name of the user doing the chunking
    */
-  return (splitAt: number, storyDuration: number, userName: string) => {
-    setChunks((chunks) => {
-      if (invalidSplit(chunks, splitAt, storyDuration)) {
-        return chunks;
-      }
-      const enclosingChunk = getEnclosingChunk(chunks, splitAt);
-      if (enclosingChunk !== undefined) {
-        const newChunks = chunks
-          .filter((c) => c.id !== enclosingChunk.id)
-          .concat([
+  const newChunkFn = useCallback(
+    (splitAt: number, storyDuration: number, userName: string) => {
+      setChunks((chunks) => {
+        if (invalidSplit(chunks, splitAt, storyDuration)) {
+          return chunks;
+        }
+        const enclosingChunk = getEnclosingChunk(chunks, splitAt);
+        if (enclosingChunk !== undefined) {
+          const newChunks = chunks
+            .filter((c) => c.id !== enclosingChunk.id)
+            .concat([
+              {
+                starttimestamp: enclosingChunk.starttimestamp,
+                starttimeseconds: enclosingChunk.starttimeseconds,
+                endtimestamp: toTimeStamp(splitAt * storyDuration),
+                endtimeseconds: splitAt,
+                creatorid: userName,
+                updatedat: new Date(),
+                id: uuidv4(),
+                transcriptions: [],
+              },
+              {
+                starttimestamp: toTimeStamp(splitAt * storyDuration),
+                starttimeseconds: splitAt,
+                endtimestamp: enclosingChunk.endtimestamp,
+                endtimeseconds: enclosingChunk.endtimeseconds,
+                creatorid: userName,
+                updatedat: new Date(),
+                id: uuidv4(),
+                transcriptions: [],
+              },
+            ])
+            .sort((a, b) => a.endtimeseconds - b.endtimeseconds);
+          return newChunks;
+        } else {
+          const newChunks = chunks.concat([
             {
-              starttimestamp: enclosingChunk.starttimestamp,
-              starttimeseconds: enclosingChunk.starttimeseconds,
+              starttimestamp: getLastEndTimeStamp(chunks),
               endtimestamp: toTimeStamp(splitAt * storyDuration),
+              starttimeseconds: getLastEndTimeSeconds(chunks),
               endtimeseconds: splitAt,
               creatorid: userName,
               updatedat: new Date(),
               id: uuidv4(),
               transcriptions: [],
             },
-            {
-              starttimestamp: toTimeStamp(splitAt * storyDuration),
-              starttimeseconds: splitAt,
-              endtimestamp: enclosingChunk.endtimestamp,
-              endtimeseconds: enclosingChunk.endtimeseconds,
-              creatorid: userName,
-              updatedat: new Date(),
-              id: uuidv4(),
-              transcriptions: [],
-            },
-          ])
-          .sort((a, b) => a.endtimeseconds - b.endtimeseconds);
-        return newChunks;
-      } else {
-        const newChunks = chunks.concat([
-          {
-            starttimestamp: getLastEndTimeStamp(chunks),
-            endtimestamp: toTimeStamp(splitAt * storyDuration),
-            starttimeseconds: getLastEndTimeSeconds(chunks),
-            endtimeseconds: splitAt,
-            creatorid: userName,
-            updatedat: new Date(),
-            id: uuidv4(),
-            transcriptions: [],
-          },
-        ]);
+          ]);
 
-        return newChunks;
-      }
-    });
-  };
+          return newChunks;
+        }
+      });
+    },
+    [setChunks]
+  );
+
+  return newChunkFn;
 };
-
-const removeReview = (chunk: Chunk) => ({ ...chunk, review: undefined });
-
-const getTranscriptionByCreator = (chunk: Chunk, userName: string) =>
-  chunk.transcriptions.filter(
-    (transcription) => transcription.creatorid === userName
-  )[0];
 
 /**
  * Get a function for updating a chunks transcription
@@ -225,37 +232,46 @@ export const useUpdateTranscription = (
  */
 export const useUpdateReview = (
   setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
-) => {
-  return (
-    toUpdate: Chunk,
-    selectedTranscription: Transcription,
-    userName: string
-  ) => {
-    setChunks((chunks) =>
-      chunks.map((chunk) =>
-        chunk.id === toUpdate.id
-          ? /*
-             * This call to oneSatisfies simply checks if the
-             * selectedTranscription exists on the Chunk
-             * (if it doesn't, don't update the chunk)
-             */
-            oneSatisfies(
-              chunk.transcriptions,
-              (a) => a.id === selectedTranscription.id
-            )
-            ? {
-                ...chunk,
-                review: {
-                  reviewedat: new Date(),
-                  selectedtranscription: selectedTranscription.id,
-                  reviewedby: userName,
-                },
-              }
+): ((
+  toUpdate: Chunk,
+  selectedTranscription: Transcription,
+  userName: string
+) => void) => {
+  const updateFn = useCallback(
+    (
+      toUpdate: Chunk,
+      selectedTranscription: Transcription,
+      userName: string
+    ) => {
+      setChunks((chunks) =>
+        chunks.map((chunk) =>
+          chunk.id === toUpdate.id
+            ? /*
+               * This call to oneSatisfies simply checks if the
+               * selectedTranscription exists on the Chunk
+               * (if it doesn't, don't update the chunk)
+               */
+              oneSatisfies(
+                chunk.transcriptions,
+                (a) => a.id === selectedTranscription.id
+              )
+              ? {
+                  ...chunk,
+                  review: {
+                    reviewedat: new Date(),
+                    selectedtranscription: selectedTranscription.id,
+                    reviewedby: userName,
+                  },
+                }
+              : chunk
             : chunk
-          : chunk
-      )
-    );
-  };
+        )
+      );
+    },
+    [setChunks]
+  );
+
+  return updateFn;
 };
 
 /**
@@ -263,21 +279,20 @@ export const useUpdateReview = (
  */
 export const useDeleteReview = (
   setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
-) => {
-  return (toDelete: Chunk) => {
-    setChunks((chunks) =>
-      chunks.map((chunk) =>
-        chunk.id === toDelete.id ? { ...chunk, review: undefined } : chunk
-      )
-    );
-  };
+): ((toDelete: Chunk) => void) => {
+  const deleteFn = useCallback(
+    (toDelete: Chunk) => {
+      setChunks((chunks) =>
+        chunks.map((chunk) =>
+          chunk.id === toDelete.id ? { ...chunk, review: undefined } : chunk
+        )
+      );
+    },
+    [setChunks]
+  );
+
+  return deleteFn;
 };
-
-const renameChunk = (newName: string, chunk: Chunk): Chunk =>
-  newName !== "" ? { ...chunk, name: newName } : { ...chunk, name: undefined };
-
-const deleteNegativeChunks = (chunks: Chunk[]): Chunk[] =>
-  chunks.filter((chunk) => chunk.endtimeseconds > chunk.starttimeseconds);
 
 /**
  * Hook for getting a function for cropping a chunk
@@ -291,70 +306,81 @@ const deleteNegativeChunks = (chunks: Chunk[]): Chunk[] =>
  */
 export const useCropChunk = (
   setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
-) => {
-  return (
-    toUpdate: Chunk,
-    storyDuration: number,
-    newSplit: [number, number],
-    userName: string,
-    newName?: string
-  ) => {
-    setChunks((chunks) => {
-      const neighbouringChunks = getAdjacentChunks(toUpdate, chunks);
-      return deleteNegativeChunks(
-        chunks
-          .map((chunk) =>
-            chunk.id === toUpdate.id
-              ? {
-                  ...(newName
-                    ? renameChunk(newName, chunk)
-                    : { ...chunk, name: undefined }),
-                  starttimeseconds: newSplit[0],
-                  starttimestamp: toTimeStamp(newSplit[0] * storyDuration),
-                  endtimeseconds: newSplit[1],
-                  endtimestamp: toTimeStamp(newSplit[1] * storyDuration),
-                  updatedat: new Date(),
-                }
-              : chunk.id === neighbouringChunks.next?.id
-              ? {
-                  ...chunk,
-                  starttimeseconds: newSplit[1],
-                  starttimestamp: toTimeStamp(newSplit[1] * storyDuration),
-                  updatedat: new Date(),
-                }
-              : chunk.id === neighbouringChunks.prev?.id
-              ? {
-                  ...chunk,
-                  endtimeseconds: newSplit[0],
-                  endtimestamp: toTimeStamp(newSplit[0] * storyDuration),
-                  updatedat: new Date(),
-                }
-              : chunk
-          )
-          /*
-           * This is the case where the chunk the user is editing is the first
-           * chunk, and they are editing it so that it doesn't start at the very
-           * start. In this case, we need a new chunk to cover this gap
-           */
-          .concat(
-            !neighbouringChunks.prev && newSplit[0] !== 0
-              ? [
-                  {
-                    starttimestamp: toTimeStamp(0),
-                    starttimeseconds: 0,
-                    endtimestamp: toTimeStamp(newSplit[0] * storyDuration),
-                    endtimeseconds: newSplit[0],
-                    creatorid: userName,
+): ((
+  toUpdate: Chunk,
+  storyDuration: number,
+  newSplit: [number, number],
+  userName: string,
+  newName?: string | undefined
+) => void) => {
+  const cropFn = useCallback(
+    (
+      toUpdate: Chunk,
+      storyDuration: number,
+      newSplit: [number, number],
+      userName: string,
+      newName?: string
+    ) => {
+      setChunks((chunks) => {
+        const neighbouringChunks = getAdjacentChunks(toUpdate, chunks);
+        return deleteNegativeChunks(
+          chunks
+            .map((chunk) =>
+              chunk.id === toUpdate.id
+                ? {
+                    ...(newName
+                      ? renameChunk(newName, chunk)
+                      : { ...chunk, name: undefined }),
+                    starttimeseconds: newSplit[0],
+                    starttimestamp: toTimeStamp(newSplit[0] * storyDuration),
+                    endtimeseconds: newSplit[1],
+                    endtimestamp: toTimeStamp(newSplit[1] * storyDuration),
                     updatedat: new Date(),
-                    id: uuidv4(),
-                    transcriptions: [],
-                  },
-                ]
-              : []
-          )
-      ).sort((a, b) => a.endtimeseconds - b.endtimeseconds);
-    });
-  };
+                  }
+                : chunk.id === neighbouringChunks.next?.id
+                ? {
+                    ...chunk,
+                    starttimeseconds: newSplit[1],
+                    starttimestamp: toTimeStamp(newSplit[1] * storyDuration),
+                    updatedat: new Date(),
+                  }
+                : chunk.id === neighbouringChunks.prev?.id
+                ? {
+                    ...chunk,
+                    endtimeseconds: newSplit[0],
+                    endtimestamp: toTimeStamp(newSplit[0] * storyDuration),
+                    updatedat: new Date(),
+                  }
+                : chunk
+            )
+            /*
+             * This is the case where the chunk the user is editing is the first
+             * chunk, and they are editing it so that it doesn't start at the very
+             * start. In this case, we need a new chunk to cover this gap
+             */
+            .concat(
+              !neighbouringChunks.prev && newSplit[0] !== 0
+                ? [
+                    {
+                      starttimestamp: toTimeStamp(0),
+                      starttimeseconds: 0,
+                      endtimestamp: toTimeStamp(newSplit[0] * storyDuration),
+                      endtimeseconds: newSplit[0],
+                      creatorid: userName,
+                      updatedat: new Date(),
+                      id: uuidv4(),
+                      transcriptions: [],
+                    },
+                  ]
+                : []
+            )
+        ).sort((a, b) => a.endtimeseconds - b.endtimeseconds);
+      });
+    },
+    [setChunks]
+  );
+
+  return cropFn;
 };
 
 /**
@@ -364,11 +390,16 @@ export const useCropChunk = (
  */
 export const useDoWithChunks = (
   setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
-) => {
-  return (doWith: (chunks: Chunk[]) => void) => {
-    setChunks((chunks) => {
-      doWith(chunks);
-      return chunks;
-    });
-  };
+): ((doWith: (chunks: Chunk[]) => void) => void) => {
+  const doWithFn = useCallback(
+    (doWith: (chunks: Chunk[]) => void) => {
+      setChunks((chunks) => {
+        doWith(chunks);
+        return chunks;
+      });
+    },
+    [setChunks]
+  );
+
+  return doWithFn;
 };

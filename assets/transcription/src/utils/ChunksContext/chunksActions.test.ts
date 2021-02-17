@@ -32,36 +32,20 @@ const testTranscription = {
 };
 
 // Here we declare variables that will be used in our tests.
-// The variables are initialized in beforeEach
+// The variables are initialized in beforeEach, so they have
+// to be variable
 var chunkState: RenderResult<
   [Chunk[], React.Dispatch<React.SetStateAction<Chunk[]>>]
 >;
 var setChunks: React.Dispatch<React.SetStateAction<Chunk[]>>;
-var newChunk: (
-  splitAt: number,
-  storyDuration: number,
-  userName: string
-) => void;
-var deleteChunk: (toDelete: Chunk) => void;
-var updateTranscription: (
-  toUpdate: Chunk,
-  updatedTranscription: string,
-  userName: string
-) => void;
-var updateReview: (
-  toUpdate: Chunk,
-  selectedTranscription: Transcription,
-  userName: string
-) => void;
-var deleteReview: (toDelete: Chunk) => void;
-var cropChunk: (
-  toUpdate: Chunk,
-  storyDuration: number,
-  newSplit: [number, number],
-  userName: string,
-  newName?: string | undefined
-) => void;
-var doWithChunks: (doWith: (chunks: Chunk[]) => void) => void;
+// Chunk Actions
+var newChunk: ReturnType<typeof useNewChunk>;
+var deleteChunk: ReturnType<typeof useDeleteChunk>;
+var updateTranscription: ReturnType<typeof useUpdateTranscription>;
+var updateReview: ReturnType<typeof useUpdateReview>;
+var deleteReview: ReturnType<typeof useDeleteReview>;
+var cropChunk: ReturnType<typeof useCropChunk>;
+var doWithChunks: ReturnType<typeof useDoWithChunks>;
 
 // Helper function to get current chunks state
 const chunks = () => {
