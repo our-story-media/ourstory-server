@@ -2,6 +2,7 @@
 import { TextField } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
 import { useCropChunk } from "../../utils/ChunksContext/chunksActions";
+import chunksContext from "../../utils/ChunksContext/chunksContext";
 
 // Internal Dependencies
 import { Chunk, State } from "../../utils/types";
@@ -31,11 +32,13 @@ const EditChunkModal: React.FC<{
 }> = ({ story_id, chunk, exit, storyDuration }) => {
   const [name, setName] = useState("");
 
+  const [, setChunks] = chunksContext.useChunksState();
+
   useEffect(() => {
     chunk && setName(chunk.name ? chunk.name : "");
   }, [chunk]);
 
-  const cropChunk = useCropChunk();
+  const cropChunk = useCropChunk(setChunks);
 
   const [newCropSplit, setNewCropSplit] = useState<[number, number]>([0, 0]);
 

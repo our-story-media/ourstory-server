@@ -5,6 +5,9 @@ import {
   useDeleteChunk,
   useUpdateTranscription,
   useUpdateReview,
+  useDeleteReview,
+  useCropChunk,
+  useDoWithChunks,
 } from "./chunksActions";
 import { Chunk, Transcription } from "../types";
 
@@ -50,6 +53,15 @@ var updateReview: (
   selectedTranscription: Transcription,
   userName: string
 ) => void;
+var deleteReview: (toDelete: Chunk) => void;
+var cropChunk: (
+  toUpdate: Chunk,
+  storyDuration: number,
+  newSplit: [number, number],
+  userName: string,
+  newName?: string | undefined
+) => void;
+var doWithChunks: (doWith: (chunks: Chunk[]) => void) => void;
 
 // Helper function to get current chunks state
 const chunks = () => {
@@ -64,6 +76,9 @@ beforeEach(() => {
   updateTranscription = renderHook(() => useUpdateTranscription(setChunks))
     .result.current;
   updateReview = renderHook(() => useUpdateReview(setChunks)).result.current;
+  deleteReview = renderHook(() => useDeleteReview(setChunks)).result.current;
+  cropChunk = renderHook(() => useCropChunk(setChunks)).result.current;
+  doWithChunks = renderHook(() => useDoWithChunks(setChunks)).result.current;
 });
 
 test("test new chunk", () => {
@@ -236,13 +251,13 @@ test("delete a transcription", () => {
 
   act(() => {
     updateTranscription(chunks()[0], "some transcription", testUserName);
-  })
+  });
 
   expect(chunks()[0].transcriptions.length).toBe(1);
 
   act(() => {
     updateTranscription(chunks()[0], "", testUserName);
-  })
+  });
 
   // Passing an empty string deletes that transcription
   expect(chunks()[0].transcriptions.length).toBe(0);
@@ -295,4 +310,198 @@ test("adding review to chunk that doesn't exist", () => {
 
   // Adding a review to a transcription that doesn't exist is a no-op
   expect(chunks().length).toBe(0);
+});
+
+test("delete review", () => {
+  act(() => {
+    newChunk(0.5, testDuration, testUserName);
+  });
+
+  act(() => {
+    updateTranscription(chunks()[0], "transcription", testUserName);
+  });
+
+  act(() => {
+    updateReview(chunks()[0], chunks()[0].transcriptions[0], testUserName);
+  });
+
+  expect(chunks()[0].review).toBeDefined();
+
+  act(() => {
+    deleteReview(chunks()[0]);
+  });
+
+  expect(chunks()[0].review).toBeUndefined();
+});
+
+test("delete review that doesn't exist", () => {
+  act(() => {
+    newChunk(0.5, testDuration, testUserName);
+  });
+
+  expect(chunks()[0].review).toBeUndefined();
+
+  act(() => {
+    deleteReview(chunks()[0]);
+  });
+
+  expect(chunks()[0].review).toBeUndefined();
+});
+
+test("delete reviewed transcription", () => {
+  act(() => {
+    newChunk(0.5, testDuration, testUserName);
+  });
+
+  act(() => {
+    updateTranscription(chunks()[0], "Hello", testUserName);
+  });
+
+  act(() => {
+    updateReview(chunks()[0], chunks()[0].transcriptions[0], testUserName);
+  });
+
+  expect(chunks()[0].review).toBeDefined();
+  expect(chunks()[0].transcriptions.length).toBe(1);
+
+  act(() => {
+    updateTranscription(chunks()[0], "", testUserName);
+  });
+
+  // Deleting the selected transcription should make the review undefined
+  expect(chunks()[0].review).toBeUndefined();
+  expect(chunks()[0].transcriptions.length).toBe(0);
+});
+
+test("crop chunk", () => {
+  act(() => {
+    newChunk(0.5, testDuration, testUserName);
+  });
+
+  expect(chunks()[0].endtimeseconds).toBe(0.5);
+  expect(chunks()[0].name).toBeUndefined();
+
+  act(() => {
+    cropChunk(chunks()[0], testDuration, [0, 0.25], testUserName);
+  });
+
+  expect(chunks()[0].endtimeseconds).toBe(0.25);
+
+  // If no newName is passed, name shouldn't change
+  expect(chunks()[0].name).toBeUndefined();
+});
+
+test("rename chunk", () => {
+  act(() => {
+    newChunk(0.5, testDuration, testUserName);
+  });
+
+  expect(chunks()[0].name).toBeUndefined();
+
+  act(() => {
+    cropChunk(chunks()[0], testDuration, [0, 0.5], testUserName, "Hello!");
+  });
+
+  expect(chunks()[0].name).toBe("Hello!");
+});
+
+test("leave gap at start", () => {
+  act(() => {
+    newChunk(0.5, testDuration, testUserName);
+  });
+
+  expect(chunks().length).toBe(1);
+
+  act(() => {
+    cropChunk(chunks()[0], testDuration, [0.25, 0.5], "Second Person");
+  });
+
+  // Leaving a gap at the start of the chunks shouuld create a new chunk to fill the gap
+  expect(chunks().length).toBe(2);
+
+  expect(chunks()[1].creatorid).toBe(testUserName);
+  expect(chunks()[0].creatorid).toBe("Second Person");
+
+  expect(chunks()[0].starttimeseconds).toBe(0);
+  expect(chunks()[0].endtimeseconds).toBe(0.25);
+  expect(chunks()[1].starttimeseconds).toBe(0.25);
+  expect(chunks()[1].endtimeseconds).toBe(0.5);
+});
+
+test("crop chunk with neighbours", () => {
+  act(() => {
+    newChunk(0.25, testDuration, testUserName);
+  });
+
+  act(() => {
+    newChunk(0.5, testDuration, testUserName);
+  });
+
+  act(() => {
+    newChunk(0.75, testDuration, testUserName);
+  });
+
+  expect(chunks()[0].starttimeseconds).toBe(0);
+  expect(chunks()[0].endtimeseconds).toBe(0.25);
+  expect(chunks()[1].starttimeseconds).toBe(0.25);
+  expect(chunks()[1].endtimeseconds).toBe(0.5);
+  expect(chunks()[2].starttimeseconds).toBe(0.5);
+  expect(chunks()[2].endtimeseconds).toBe(0.75);
+
+  act(() => {
+    cropChunk(chunks()[1], testDuration, [0.2, 0.55], testUserName);
+  });
+
+  // Neighbouring chunks should be adjusted accordingly
+  expect(chunks()[0].starttimeseconds).toBe(0);
+  expect(chunks()[0].endtimeseconds).toBe(0.2);
+  expect(chunks()[1].starttimeseconds).toBe(0.2);
+  expect(chunks()[1].endtimeseconds).toBe(0.55);
+  expect(chunks()[2].starttimeseconds).toBe(0.55);
+  expect(chunks()[2].endtimeseconds).toBe(0.75);
+ 
+});
+
+test("crop over a chunk", () => {
+  act(() => {
+    newChunk(0.5, testDuration, testUserName);
+  });
+
+  act(() => {
+    newChunk(0.6, testDuration, testUserName);
+  });
+
+  expect(chunks().length).toBe(2);
+
+  act(() => {
+    cropChunk(chunks()[0], testDuration, [0, 0.65], testUserName);
+  });
+
+  /*
+   * Because the newly cropped chunk ends after the chunk after it ends,
+   * the chunk after it is deleted
+   */
+  expect(chunks().length).toBe(1);
+  expect(chunks()[0].starttimeseconds).toBe(0);
+  expect(chunks()[0].endtimeseconds).toBe(0.65);
+});
+
+test("do with chunks", () => {
+  act(() => {
+    newChunk(0.5, testDuration, testUserName);
+  });
+
+  act(() => {
+    newChunk(0.6, testDuration, testUserName)
+  });
+
+  var testOutput = [] as number[];
+
+  const testFn = (chunks: Chunk[]) => testOutput = chunks.map((c) => c.endtimeseconds);
+
+  act(() => {
+    doWithChunks(testFn);
+  });
+
+  expect(testOutput).toStrictEqual([0.5, 0.6]);
 });

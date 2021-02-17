@@ -14,15 +14,13 @@ import {
 } from "../chunkManipulation/chunkManipulation";
 import oneSatisfies from "../oneSatisfies";
 import { Chunk, Transcription } from "../types";
-import chunksContext from "./chunksContext";
 
 /**
- * Using the ChunksContext, get a function for deleting chunks
+ * Get a function for deleting chunks
  */
 export const useDeleteChunk = (
   setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
 ) => {
-
   /**
    * Delete a chunk from the chunks in the ChunksContext
    *
@@ -80,7 +78,7 @@ export const useDeleteChunk = (
 };
 
 /**
- * Using the ChunksContext, get a function for creating new chunks
+ * Get a function for creating new chunks
  */
 export const useNewChunk = (
   setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
@@ -154,7 +152,7 @@ const getTranscriptionByCreator = (chunk: Chunk, userName: string) =>
   )[0];
 
 /**
- * Using the ChunksContext, get a function for updating a chunks transcription
+ * Get a function for updating a chunks transcription
  * list. Passing an empty string as 'updatedTranscription' deletes the transcription
  */
 export const useUpdateTranscription = (
@@ -190,7 +188,11 @@ export const useUpdateTranscription = (
                       )
                     : chunk.transcriptions.map((t) =>
                         t.creatorid === userName
-                          ? { ...t, content: updatedTranscription, updatedat: new Date() }
+                          ? {
+                              ...t,
+                              content: updatedTranscription,
+                              updatedat: new Date(),
+                            }
                           : t
                       )
                   : /* The ternary here is to avoid adding empty transcriptions */
@@ -219,7 +221,7 @@ export const useUpdateTranscription = (
 };
 
 /**
- * Using the ChunksContext, get a function for updating the Review of a Chunk
+ * Get a function for updating the Review of a Chunk
  */
 export const useUpdateReview = (
   setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
@@ -257,11 +259,11 @@ export const useUpdateReview = (
 };
 
 /**
- * Using the ChunksContext, get a function for deleting the Review of a Chunk
+ * Get a function for deleting the Review of a Chunk
  */
-export const useDeleteReview = () => {
-  const [, setChunks] = chunksContext.useChunksState();
-
+export const useDeleteReview = (
+  setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
+) => {
   return (toDelete: Chunk) => {
     setChunks((chunks) =>
       chunks.map((chunk) =>
@@ -287,9 +289,9 @@ const deleteNegativeChunks = (chunks: Chunk[]): Chunk[] =>
  * The user may also, optionally, rename the chunk using
  * this action
  */
-export const useCropChunk = () => {
-  const [, setChunks] = chunksContext.useChunksState();
-
+export const useCropChunk = (
+  setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
+) => {
   return (
     toUpdate: Chunk,
     storyDuration: number,
@@ -356,31 +358,13 @@ export const useCropChunk = () => {
 };
 
 /**
- * Hook to get a function for renaming chunks
- *
- * If the newName parameter is an empty string, the name
- * will be set to undefined
- */
-export const useRenameChunk = () => {
-  const [, setChunks] = chunksContext.useChunksState();
-
-  return (toUpdate: Chunk, newName: string) => {
-    setChunks((chunks) =>
-      chunks.map((chunk) =>
-        chunk.id === toUpdate.id ? renameChunk(newName, chunk) : chunk
-      )
-    );
-  };
-};
-
-/**
  * Hook to get a function that accepts a function
  * and calls that function with the latest chunks
  * according to the server
  */
-export const useDoWithChunks = () => {
-  const [, setChunks] = chunksContext.useChunksState();
-
+export const useDoWithChunks = (
+  setChunks: (setter: (newState: Chunk[]) => Chunk[]) => void
+) => {
   return (doWith: (chunks: Chunk[]) => void) => {
     setChunks((chunks) => {
       doWith(chunks);

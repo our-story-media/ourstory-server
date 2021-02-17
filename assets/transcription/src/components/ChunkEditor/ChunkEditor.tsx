@@ -123,7 +123,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
 
   const { userName } = useContext(UserContext);
 
-  const doWithChunks = useDoWithChunks();
+  const doWithChunks = useDoWithChunks(setChunks);
   const deleteChunk = useDeleteChunk(setChunks);
   const newChunk = useNewChunk(setChunks);
 
