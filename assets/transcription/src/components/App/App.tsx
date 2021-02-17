@@ -1,6 +1,6 @@
 // External Dependencies
 import React, { useMemo, useState, useCallback } from "react";
-import LocalizedStrings from 'react-localization';
+import LocalizedStrings from "react-localization";
 
 // Internal Dependencies
 import ChunkEditor from "../ChunkEditor/ChunkEditor";
@@ -30,9 +30,10 @@ const strings = new LocalizedStrings({
     chunking: "Chunking",
     dashboard: "Dashboard",
     reviewing: "Reviewing",
-    transcribing: "Transcribing"
-  }
-})
+    transcribing: "Transcribing",
+    showContributions: "Show Contributions"
+  },
+});
 
 const getTitle = (view: View) => {
   switch (view) {
@@ -45,7 +46,7 @@ const getTitle = (view: View) => {
     case View.Transcribing:
       return strings.transcribing;
   }
-}
+};
 
 const App: React.FC<{}> = () => {
   const [view, setView] = useState<View>(View.Dashboard);
@@ -111,9 +112,9 @@ const App: React.FC<{}> = () => {
     () =>
       [
         {
-          content: <div>Show Contributions</div>,
+          content: <div>{strings.showContributions}</div>,
           handler: toggleShowContributers,
-        }
+        },
       ].concat(
         view === View.Chunking
           ? {

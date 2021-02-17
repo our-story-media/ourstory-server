@@ -1,5 +1,6 @@
 // External Dependencies
 import { Add, Check, Stop, PlayArrow } from "@material-ui/icons";
+import LocalizedStrings from "react-localization";
 import React, {
   useCallback,
   useContext,
@@ -48,6 +49,30 @@ import ChunkCardContextMenu from "./ChunkCardContextMenu";
 import { api_base_address } from "../../utils/getApiKey";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import OnboardingModal from "../OnboardingModal/OnboardingModal";
+
+const strings = new LocalizedStrings({
+  en: {
+    instructionsOne:
+      "You are about to chunk the video. The aim of chunking is to make Transcribing easy.",
+    instructionsTwo:
+      "Rather than transcribing the entire video at once, you will break the video down into smaller chunks, which you will transcribe individually.",
+    instructionsThree:
+      "You should aim to have only one person speaking in each chunk. Create a new chunk when there is a change in who is talking, there is a gap in the talking, or a person begins/ends talking.",
+    instructionsFour:
+      "To create a chunk, press the '+' button in the bottom right corner. The time that you press the '+' button in the video will be the end of the new chunk.",
+    instructionsTitle: "Chunking Instructions",
+    startChunking: "Start Chunking",
+    attemptDeleteWarningTitle: "This chunk has a transcription",
+    attemptDeleteWarningBody: "Attempting to delete chunk {0}, which has a transcription saved to it. Are you sure you want to delete it?",
+    attemptNewChunkTitle: "The enclosing chunk has a transcription",
+    attemptNewChunkBody: 'Creating a new chunk here will delete the transcriptions on the enclosing chunk, "{0}". Are you sure you want to discard these transcriptions?',
+    delete: "Delete",
+    edit: "Edit",
+    viewTranscriptions: "View Transcriptions",
+    newChunk: "New Chunk",
+    doneCard: "Done Card"
+  },
+});
 
 type ChunkEditorProps = {
   /** Action to do when back button is pressed */
@@ -225,15 +250,15 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
         show={showOnboardingModal}
         dismiss={dismissOnboardingModal}
         title={
-          <h2 className={classes.onboardingTitle}>Chunking Instructions</h2>
+          <h2 className={classes.onboardingTitle}>{strings.instructionsTitle}</h2>
         }
         steps={[
-          "You are about to chunk the video. The aim of chunking is to make Transcribing easy.",
-          "Rather than transcribing the entire video at once, you will break the video down into smaller chunks, which you will transcribe individually.",
-          "You should aim to have only one person speaking in each chunk. Create a new chunk when there is a change in who is talking, there is a gap in the talking, or a person begins/ends talking.",
-          "To create a chunk, press the '+' button in the bottom right corner. The time that you press the '+' button in the video will be the end of the new chunk.",
+          strings.instructionsOne,
+          strings.instructionsTwo,
+          strings.instructionsThree,
+          strings.instructionsFour,
         ]}
-        startButtonContent={<div>Start Chunking</div>}
+        startButtonContent={<div>{strings.startChunking}</div>}
       />
       <EditChunkModal
         story_id={story_id}
@@ -243,26 +268,20 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
       />
       <ConfirmIntentModal
         actionControls={attemptDeleteActionControls}
-        warningMessage={<div>This Chunk has a transcription</div>}
+        warningMessage={<div>{strings.attemptDeleteWarningTitle}</div>}
       >
         {(...args) => (
-          <div style={{overflowWrap: "anywhere"}}>
-            Attempting to delete chunk
-            {args[0] && ` "${getNameOf(args[0])}"`}, which has a transcription
-            saved to it. Are you sure you want to delete it?
-          </div>
+          <div style={{ overflowWrap: "anywhere" }}>
+            {strings.formatString(strings.attemptDeleteWarningBody, args[0] && ` "${getNameOf(args[0])}"`)}</div>
         )}
       </ConfirmIntentModal>
       <ConfirmIntentModal
         actionControls={attemptNewChunkActionControls}
-        warningMessage={<div>The enclosing chunk has a transcription</div>}
+        warningMessage={<div>{strings.attemptNewChunkTitle}</div>}
       >
         {(...args) => (
           <div>
-            Creating a new chunk here will delete the transcriptions on the
-            enclosing chunk, "
-            {getNameOf(getEnclosingChunk(args[0], args[1]) ?? args[0][0])}
-            ". Are you sure you want to discard these transcriptions?
+            {strings.formatString(strings.attemptNewChunkBody, getNameOf(getEnclosingChunk(args[0], args[1]) ?? args[0][0]))}
           </div>
         )}
       </ConfirmIntentModal>
@@ -291,18 +310,18 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
                     <ChunkCardContextMenu
                       menuItems={[
                         {
-                          content: "Delete",
+                          content: strings.delete,
                           handler: () => handleAttemptDeleteChunk(c),
                         },
                         {
-                          content: "Edit",
+                          content: strings.edit,
                           handler: () => setCroppingChunk(c),
                         },
                       ].concat(
                         c.transcriptions.length !== 0
                           ? [
                               {
-                                content: "View Transcriptions",
+                                content: strings.viewTranscriptions,
                                 handler: () => setShowTranscriptionsFor(c),
                               },
                             ]
@@ -346,7 +365,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
             getLastEndTimeSeconds(chunks) > 0.75
               ? [
                   <GridListTile
-                    key="Done Card"
+                    key={strings.doneCard}
                     onClick={handleCompleteChunking}
                   >
                     <ScrollToOnMount style={{ height: "100%" }}>
@@ -366,12 +385,10 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
           )}
       </GridList>
       <div>
-        <div
-          className={classes.newChunkButtonContainer}
-        >
+        <div className={classes.newChunkButtonContainer}>
           <IndabaButton
             round
-            aria-label="New Chunk"
+            aria-label={strings.newChunk}
             style={{ margin: "8px" }}
             onClick={handleNewChunk}
           >

@@ -1,3 +1,4 @@
+// External Dependencies
 import {
   Box,
   Typography,
@@ -5,13 +6,25 @@ import {
   GridList,
   GridListTile,
 } from "@material-ui/core";
+import LocalizedStrings from "react-localization";
 import React, { useContext } from "react";
-import StepInfo, { StepInfoProps } from "../App/StepInfo";
 
+// Internal Dependencies
+import StepInfo, { StepInfoProps } from "../App/StepInfo";
 import useStyles from "./DashboardStyles";
 import { UserContext } from "../UserProvider/UserProvider";
 import NameModal from "../NameModal/NameModal";
 import IndabaLink from "../IndabaLink/IndabaLink";
+
+const strings = new LocalizedStrings({
+  en: {
+    greeting: "Hello {0}",
+    transcriptionFor: "Field Transcription for {0}",
+    notMe: "This is not me!",
+    steps:
+      "There are 3 stages to transcribing, select which stage you are performing",
+  },
+});
 
 type DashboardProps = {
   /** The name of the story being transcribed */
@@ -23,17 +36,22 @@ type DashboardProps = {
 };
 
 const Greeting: React.FC<{ name: string | undefined }> = ({ name }) => (
-  <Typography style={{ fontWeight: "lighter", overflowWrap: "anywhere" }} variant="h5">
-    {name && `Hello ${name}`}
+  <Typography
+    style={{ fontWeight: "lighter", overflowWrap: "anywhere" }}
+    variant="h5"
+  >
+    {name && strings.formatString(strings.greeting, name)}
   </Typography>
 );
 
 const Title: React.FC<{ storyName: string }> = ({ storyName }) => (
   <Typography variant="h3" style={{ color: "gray", fontWeight: "lighter" }}>
-    Field Transcription for{" "}
-    <Box component="span" style={{ color: "black" }}>
-      {storyName}
-    </Box>
+    {strings.formatString(
+      strings.transcriptionFor,
+      <Box component="span" style={{ color: "black" }}>
+        {storyName}
+      </Box>
+    )}
   </Typography>
 );
 
@@ -59,14 +77,11 @@ const Dashboard: React.FC<DashboardProps> = ({
               logOutAction();
             }}
           >
-            This is not me!
+            {strings.notMe}
           </IndabaLink>
         )}
       </Container>
-      <div style={{ marginBottom: "16px" }}>
-        There are 3 stages to transcribing, select which stage you are
-        performing
-      </div>
+      <div style={{ marginBottom: "16px" }}>{strings.steps}</div>
       <Box>
         <GridList cols={3} cellHeight="auto" spacing={20}>
           {steps.map((step) => (

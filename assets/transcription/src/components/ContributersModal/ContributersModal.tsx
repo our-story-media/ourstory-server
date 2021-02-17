@@ -44,7 +44,7 @@ const strings = new LocalizedStrings({
     created: "Created",
     transcribed: "Transcribed",
     reviewed: "Reviewed",
-    contributionDescription: '{0} the chunk "{1}" {2} {3}',
+    contributionDescription: '{0} the chunk "{1}" ({2}) {3}', // Example: Created the chunk "chunk_name" (00:00:00 - 01:01:01) 4 minutes ago
   },
 });
 
@@ -109,13 +109,11 @@ const ContributionDescription: React.FC<{
         <span style={{ fontWeight: "bold" }}>{typeDescription(type)}</span>,
         <div style={{ overflowWrap: "anywhere" }}>{getNameOf(chunk)}</div>,
         <>
-          (
           {`${toShortTimeStamp(
             secondsOf(parseTimeStamp(chunk.starttimestamp))
           )} - ${toShortTimeStamp(
             secondsOf(parseTimeStamp(chunk.endtimestamp))
           )}`}
-          )
         </>,
         <Typography
           variant="subtitle2"

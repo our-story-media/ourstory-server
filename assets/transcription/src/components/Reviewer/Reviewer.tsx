@@ -1,3 +1,4 @@
+// External Dependencies
 import {
   Box,
   Container,
@@ -8,6 +9,7 @@ import {
   Radio,
   Typography,
 } from "@material-ui/core";
+import LocalizedStrings from "react-localization";
 import {
   AccountCircle,
   ArrowLeft,
@@ -17,6 +19,8 @@ import {
   Edit,
 } from "@material-ui/icons";
 import React, { useMemo, useContext, useEffect, useState } from "react";
+
+// Internal Dependencies
 import useSlideshow from "../../hooks/useSlideshow";
 import { hasTranscription } from "../../utils/chunkManipulation/chunkManipulation";
 import {
@@ -39,6 +43,20 @@ import { UserContext } from "../UserProvider/UserProvider";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import WarningMessage from "../WarningMessage/WarningMessage";
+
+const strings = new LocalizedStrings({
+  en: {
+    instructionsOne:
+      "You are about to review the transcriptions made on the video.",
+    instructionsTwo:
+      "For each chunk, select one of the transcriptions from the list. You can do this by clicking on the text or the check box to the left of the text.",
+    instructionsThree:
+      "You can also edit the transcriptions by clicking on the pencil button above the text.",
+    editingTranscriptionWarningHeading: "You are editing {0}'s transcription",
+    nameTranscription: "{0}: {1}",
+    instructionsTitle: "Reviewing Instructions",
+  },
+});
 
 type ReviewerProps = {
   story_id: string;
@@ -146,11 +164,11 @@ export const Reviewer: React.FC<ReviewerProps> = ({
         show={showOnboardingModal}
         dismiss={dismissOnboardingModal}
         steps={[
-          "You are about to review the transcriptions made on the video.",
-          "For each chunk, select one of the transcriptions from the list. You can do this by clicking on the text or the check box to the left of the text.",
-          "You can also edit the transcriptions by clicking on the pencil button above the text.",
+          strings.instructionsOne,
+          strings.instructionsTwo,
+          strings.instructionsThree,
         ]}
-        title={<h2 style={{ margin: 0 }}>Transcribing Instructions</h2>}
+        title={<h2 style={{ margin: 0 }}>{strings.instructionsTitle}</h2>}
         startButtonContent={<div>Start Reviewing</div>}
       />
       <CentralModal
@@ -159,11 +177,12 @@ export const Reviewer: React.FC<ReviewerProps> = ({
           <WarningMessage
             message={
               <div style={{ whiteSpace: "pre" }}>
-                You Are Editing{" "}
-                <span
-                  style={{ textDecoration: "underline" }}
-                >{`${editingTranscription?.creatorid}`}</span>
-                's Transcription
+                {strings.formatString(
+                  strings.editingTranscriptionWarningHeading,
+                  <span
+                    style={{ textDecoration: "underline" }}
+                  >{`${editingTranscription?.creatorid}`}</span>
+                )}
               </div>
             }
           />
@@ -174,20 +193,34 @@ export const Reviewer: React.FC<ReviewerProps> = ({
       >
         <div style={{ position: "relative" }}>
           <List style={{ maxHeight: "300px", overflow: "scroll" }}>
-            {currentChunk.transcriptions.filter((t) => t.id !== editingTranscription?.id).map((t) => (
-              <ListItem style={{ display: "flex" }}>
-                <span style={{ alignSelf: "flex-start", fontWeight: 600, whiteSpace: "pre" }}>{t.creatorid}:{" "}</span>
-                <div style={{ whiteSpace: "pre", overflowWrap: "anywhere" }}>
-                  {t.content}
-                </div>
-              </ListItem>
-            ))}
+            {currentChunk.transcriptions
+              .filter((t) => t.id !== editingTranscription?.id)
+              .map((t) => (
+                <ListItem style={{ display: "flex", whiteSpace: "pre" }}>
+                  {strings.formatString(
+                    strings.nameTranscription,
+                    <span
+                      style={{
+                        alignSelf: "flex-start",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {t.creatorid}
+                    </span>,
+                    <div
+                      style={{ whiteSpace: "pre", overflowWrap: "anywhere" }}
+                    >
+                      {t.content}
+                    </div>
+                  )}
+                </ListItem>
+              ))}
           </List>
           <EditTranscriptionCard
             transcriptionValue={transcriptionEdit}
             onChange={setTranscriptionEdit}
           />
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <IndabaButton
               onClick={() => {
                 editingTranscription &&
@@ -200,7 +233,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({
               }}
               style={{
                 margin: "8px",
-                backgroundColor: "#40bf11",
+                backgroundColor: "green",
                 position: "relative",
                 bottom: 0,
                 right: 0,
@@ -208,9 +241,6 @@ export const Reviewer: React.FC<ReviewerProps> = ({
               disabled={transcriptionEdit === ""}
             >
               <Done />
-              <span style={{ marginLeft: "4px", fontSize: "1.05rem" }}>
-                Complete
-              </span>
             </IndabaButton>
           </div>
         </div>

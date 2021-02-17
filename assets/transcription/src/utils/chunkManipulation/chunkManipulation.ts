@@ -1,4 +1,11 @@
 import { Chunk, Contribution } from "../types";
+import LocalizedStrings from "react-localization";
+
+const strings = new LocalizedStrings({
+  en: {
+    defaultChunkName: "{0} second chunk",
+  },
+});
 
 /**
  * Given an integer return a string representation of that integer
@@ -242,7 +249,10 @@ export const secondsOf = (time: Time) =>
 export const getNameOf = (chunk: Chunk) =>
   chunk.name
     ? chunk.name
-    : `${
-        secondsOf(parseTimeStamp(chunk.endtimestamp)) -
-        secondsOf(parseTimeStamp(chunk.starttimestamp))
-      } second chunk`;
+    : (strings.formatString(
+        strings.defaultChunkName,
+        `${
+          secondsOf(parseTimeStamp(chunk.endtimestamp)) -
+          secondsOf(parseTimeStamp(chunk.starttimestamp))
+        }`
+      ) as string);

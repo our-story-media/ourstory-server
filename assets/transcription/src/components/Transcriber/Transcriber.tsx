@@ -1,4 +1,5 @@
 // External Dependencies
+import LocalizedStrings from "react-localization";
 import {
   Box,
   Button,
@@ -28,11 +29,28 @@ import BackButton from "../BackButton/BackButton";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import SkipForwardBackButtons from "../SkipForwardBackButtons/SkipForwardBackButtons";
 import { api_base_address } from "../../utils/getApiKey";
-import { getNameOf, toShortTimeStamp } from "../../utils/chunkManipulation/chunkManipulation";
+import {
+  getNameOf,
+  toShortTimeStamp,
+} from "../../utils/chunkManipulation/chunkManipulation";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import OnboardingModal from "../OnboardingModal/OnboardingModal";
 import useTranscriberReducer from "./hooks/useTranscriberState";
 import useAutoPauseOnType from "./hooks/useAutoPauseOnType";
+
+const strings = new LocalizedStrings({
+  en: {
+    instructionsOne: "You are about to Transcribe the chunks.",
+    instructionsTwo:
+      "Each chunk has been divided into 5 second clips for you. These clips will loop.",
+    instructionsThree:
+      "When you type, the video will pause until you stop typing",
+    instructionsFour:
+      'When you are done transcribing a clip press the ">" button',
+    last: "Last",
+    first: "First",
+  },
+});
 
 const EmptyComponent: React.FC<{}> = () => {
   return <div />;
@@ -146,10 +164,10 @@ const Transcriber: React.FC<TranscriberProps> = ({
         dismiss={dismissOnboardingModal}
         title={<h2 style={{ margin: 0 }}>Transcribing Instructions</h2>}
         steps={[
-          "You are about to Transcribe the chunks.",
-          "Each chunk has been divided into 5 second clips for you. These clips will loop.",
-          "When you type, the video will pause until you stop typing",
-          'When you are done transcribing a clip press the ">" button',
+          strings.instructionsOne,
+          strings.instructionsTwo,
+          strings.instructionsThree,
+          strings.instructionsFour,
         ]}
         startButtonContent={<div>Start Transcribing</div>}
       />
@@ -181,7 +199,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
                     transcriberDispatch({ actionType: "go to last mini chunk" })
                   }
                 >
-                  Last
+                  {strings.last}
                 </Button>
               }
               backButton={
@@ -192,7 +210,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
                     })
                   }
                 >
-                  First
+                  {strings.first}
                 </Button>
               }
             />
