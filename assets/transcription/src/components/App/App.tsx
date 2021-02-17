@@ -26,9 +26,26 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 const strings = new LocalizedStrings({
   en: {
     loading: "Loading",
-    viewInstructions: "View Instructions"
+    viewInstructions: "View Instructions",
+    chunking: "Chunking",
+    dashboard: "Dashboard",
+    reviewing: "Reviewing",
+    transcribing: "Transcribing"
   }
 })
+
+const getTitle = (view: View) => {
+  switch (view) {
+    case View.Chunking:
+      return strings.chunking;
+    case View.Dashboard:
+      return strings.dashboard;
+    case View.Reviewing:
+      return strings.reviewing;
+    case View.Transcribing:
+      return strings.transcribing;
+  }
+}
 
 const App: React.FC<{}> = () => {
   const [view, setView] = useState<View>(View.Dashboard);
@@ -132,7 +149,7 @@ const App: React.FC<{}> = () => {
             exit={toggleShowContributers}
           />
           <Header
-            title={View[view]}
+            title={getTitle(view)}
             hidden={view === View.Transcribing}
             contextMenuItems={contextMenuItems}
           >
