@@ -3,9 +3,9 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-branches:
-  include:
-    - master
+  branches:
+    include:
+      - master
   tags:
     include:
     - '*'
