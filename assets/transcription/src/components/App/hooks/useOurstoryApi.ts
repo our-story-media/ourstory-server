@@ -71,18 +71,22 @@ const useOurstoryApi = (
   );
 
   useEffect(() => {
-    axios
-      .request<Story>({
-        url: `${api_base_address}/api/watch/edit/${story_id}`,
-        withCredentials: true,
-        transformResponse: (r: string) => JSON.parse(r),
-      })
-      .then((response) => {
-        setStory(response.data);
-        setChunks(
-          response.data?.transcription?.chunks ?? []
-        );
-      });
+    // console.log(story_id)
+    if (story_id)
+    {
+      axios
+        .request<Story>({
+          url: `${api_base_address}/api/watch/edit/${story_id}`,
+          withCredentials: true,
+          transformResponse: (r: string) => JSON.parse(r),
+        })
+        .then((response) => {
+          setStory(response.data);
+          setChunks(
+            response.data?.transcription?.chunks ?? []
+          );
+        });
+    }
   }, [story_id]);
 
   const memoChunks = useMemo<
