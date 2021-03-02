@@ -77,7 +77,7 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
       </Container>
       <VideoPlayer
         progressState={cropPlayerProgressState}
-        url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
+        url={`${api_base_address}/api/watch/getvideo/${story_id}`}
         controller={cropPlayerController}
         playerRef={cropperPlayerRef}
         slider={

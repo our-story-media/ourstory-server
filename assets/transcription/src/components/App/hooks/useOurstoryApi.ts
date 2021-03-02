@@ -7,7 +7,7 @@ import api_key, { api_base_address } from "../../../utils/getApiKey";
 import { Chunk, Story } from "../../../utils/types";
 
 const pushStoryChanges = (new_story: Story, story_id: string) => {
-  const url = `http://${api_base_address}:8845/api/watch/savedit/${story_id}?apikey=${api_key}`;
+  const url = `${api_base_address}/api/watch/savedit/${story_id}?apikey=${api_key}`;
   axios.request<Story>({
     url: url,
     method: "POST",
@@ -51,7 +51,7 @@ const useOurstoryApi = (
         (
           await axios.request<Chunk[]>({
             withCredentials: true,
-            url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
+            url: `${api_base_address}/api/watch/edit/${story_id}`,
             transformResponse: (r: string) =>
               (JSON.parse(r) as Story)?.transcription?.chunks ?? [],
           })
@@ -73,7 +73,7 @@ const useOurstoryApi = (
   useEffect(() => {
     axios
       .request<Story>({
-        url: `http://${api_base_address}:8845/api/watch/edit/${story_id}`,
+        url: `${api_base_address}/api/watch/edit/${story_id}`,
         withCredentials: true,
         transformResponse: (r: string) => JSON.parse(r),
       })

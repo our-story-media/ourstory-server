@@ -249,7 +249,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({
         <VideoPlayer
           playerRef={playerRef}
           progressState={progressState}
-          url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
+          url={`${api_base_address}/api/watch/getvideo/${story_id}`}
           controller={playerController}
         />
       </Box>

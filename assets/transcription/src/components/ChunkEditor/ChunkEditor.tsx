@@ -294,7 +294,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
           controller={videoPlayerController}
           progressState={videoPlayerProgressState}
           playerRef={playerRef}
-          url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
+          url={`${api_base_address}/api/watch/getvideo/${story_id}`}
           sliderMarks={marks}
           onProgressDrag={playerDragHandler}
         />
@@ -332,7 +332,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
                 >
                   <div className={classes.chunkCardBody}>
                     <VideoThumbnail
-                      url={`http://${api_base_address}:8845/api/watch/getvideo/${story_id}`}
+                      url={`${api_base_address}/api/watch/getvideo/${story_id}`}
                       time={
                         c.starttimeseconds +
                         (c.endtimeseconds - c.starttimeseconds) / 2
