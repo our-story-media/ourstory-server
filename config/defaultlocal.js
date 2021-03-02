@@ -15,6 +15,8 @@ module.exports = {
     FAKES3URL_TRANSCODE: 'http://10.10.10.1/upload/transcode/upload/',
 
     NOTRENDERTAGGED: true,
+
+    RENDERPREVIEW: true,
   
     port: 1337,
   

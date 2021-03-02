@@ -53,7 +53,8 @@
 <div style="margin-top:2em">
     <div class="alert alert-info col-sm-8 col-sm-offset-2">
 
-            <i class="fa fa-info-circle fa-3x" style="float:left;margin-right:10px;min-height:110px;"></i>
+            <i class="col-xs-1 fa fa-info-circle fa-3x" style=""></i>
+            <div class="col-xs-11">
 			<h3 style="margin:0">
                 <%- __('Enable Publishing!') %>
                 
@@ -74,9 +75,25 @@
 
             <span ng-show="event.processedits">
                 <% if(sails.config.NOTRENDERTAGGED)  { %>
-                <%- __('Tagged versions of each story will <strong>not</strong> currently be published automatically. Trigger the publishing of a tagged version manually for each story using the menu option.') %>
+                <div>
+                &middot; <%- __('Tagged versions of each story will <strong>not</strong> currently be published automatically. Trigger the publishing of a tagged version manually for each story using the menu option.') %>
+                </div>
+                <% } %>
+
+                <% if(sails.config.RENDERPREVIEW)  { %>
+                <div>
+                &middot; <%- __('Currently, stories will be published at ') %>
+                <%- sails.config.RENDERWIDTH %>x<%- sails.config.RENDERHEIGHT %>
+                    in <%- sails.config.RENDERPROFILE %>.
+                <%- __('Trigger a high quality version manually for each story using the menu option.') %>
+                </div>
+                <% } else { %>
+                <div>
+                &middot; <%- __('Stories are currently published at the highest quality possible.') %>
+                </div>
                 <% } %>
             </span>
+        </div>
         </div>
     </div>
     <div class="clearfix"></div>
@@ -133,39 +150,61 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li class="dropdown-header"><%- __('Exports') %></li>
-                                        <li class="disabled" ng-if="!edit.hastagged && !edit.hasoriginal">
+                                        
+                                        <li class="disabled" ng-if="!edit.hastagged && !edit.hasoriginal && !edit.haspreview">
                                             <a href="#">    
                                                 <%- __('There are no videos to export') %>
+                                        </a></li>
+
+                                        <li class="disabled" ng-if="!event.processedits && !edit.hasoriginal">
+                                            <a href="#">    
+                                                <%- __('Publish (no tags)') %>
+                                        </a></li>
+
+                                        <li ng-if="event.processedits && !edit.hasoriginal">
+                                            <a ng-href="{{ '/api/watch/renderoriginal/<%- theevent.id %>/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                                <%- __('Publish (no tags)') %>
                                         </a></li>
 
                                         <li ng-if="edit.hasoriginal"><a ng-href="{{ '/watch/getvideofull/' + edit.id + '?apikey=<%- apikey %>'}}">
                                                 <%- __('Download (no tags)') %>
                                         </a></li>
-                                        
+
+                                        <li ng-if="edit.hashighquality"><a ng-href="{{ '/watch/getvideohq/' + edit.id + '?apikey=<%- apikey %>'}}">
+                                            <%- __('Download (high quality, no tags)') %>
+                                        </a></li>
+
+                                        <li ng-if="edit.hastagged">
+                                            <a ng-href="{{ '/watch/getvideotags/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                                <%- __('Download (with tags)') %>
+                                        </a></li>
+
+                                        <% if (sails.config.RENDERPREVIEW) { %>
+                                        <li ng-if="event.processedits && !edit.hashighquality">
+                                            <a ng-href="{{ '/api/watch/renderhq/<%- theevent.id %>/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                                <%- __('Publish high quality (no tags)') %>
+                                        </a></li>
+
+                                        <li class="disabled" ng-if="!event.processedits && !edit.hashighquality">
+                                            <a href="#">    
+                                                <%- __('Publish high quality (no tags)') %>
+                                        </a></li>
+                                        <% } %>
+
                                         <% if (sails.config.NOTRENDERTAGGED) { %>
                                         <li ng-if="event.processedits && !edit.hastagged && edit.hasoriginal">
                                             <a ng-href="{{ '/api/watch/rendertagged/<%- theevent.id %>/' + edit.id + '?apikey=<%- apikey %>'}}">    
-                                                <%- __('Publish Tagged Video') %>
+                                                <%- __('Publish tagged video') %>
                                         </a></li>
-                                        <li class="disabled" ng-if="!event.processedits && !edit.hastagge && edit.hasoriginal">
+                                        <li class="disabled" ng-if="!event.processedits && !edit.hastagged && edit.hasoriginal">
                                             <a href="#">    
-                                                <%- __('Publish Tagged Video') %>
-                                        </a></li>
-
-                                        <li ng-if="edit.hastagged">
-                                            <a ng-href="{{ '/watch/getvideotags/' + edit.id + '?apikey=<%- apikey %>'}}">    
-                                                <%- __('Download (with tags)') %>
-                                        </a></li>
-
-                                        <% } else { %>
-                                        <li ng-if="edit.hastagged">
-                                            <a ng-href="{{ '/watch/getvideotags/' + edit.id + '?apikey=<%- apikey %>'}}">    
-                                                <%- __('Download (with tags)') %>
+                                                <%- __('Publish tagged video') %>
                                         </a></li>
                                         <% } %>
+
                                         <li class="dropdown-header"><%- __('Management') %></li>
                                         <li><a ng-href="/api/watch/clone/{{edit.id}}?apikey=<%- apikey %>"><%- __('Duplicate') %></a></li>
-                                        <li><a ng-href="/api/watch/changeownership/{{edit.id}}/{{group}}?apikey=<%- apikey %>"><%- __('Update to Latest User of this Name') %></a></li>
+                                        <li><a ng-href="/api/watch/changeownership/{{edit.id}}/{{group}}?apikey=<%- apikey %>"><%- __('Allocate to latest user of this name') %></a></li>
                                         <li class="dropdown-submenu">
                                             <a tabindex="-1" href="#" class="reassign"><span class="pull-left"><%- __('Re-assign to') %> </span><span class="fa fa-caret-right pull-right"></span>
                                             <div class="clearfix"></div>

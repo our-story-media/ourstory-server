@@ -145,17 +145,34 @@ module.exports.bootstrap = function (cb) {
 			for (var edit of edits)
 			{
 				// console.log(edit);
-				if (edit.path)
+				if (edit.path && edit.code)
 				{
 					// console.log(path.join(__dirname,'..',"upload","edits",edit.code)+".mp4");
 					if (fs.existsSync(path.join(__dirname,'..',"upload","edits",edit.code)+".mp4"))
 					{
 						edit.hasoriginal = true;
 					}
+					else
+					{
+						edit.hasoriginal = false;
+					}
 
 					if (fs.existsSync(path.join(__dirname,'..',"upload","edits",edit.code)+"_tags.mp4"))
 					{
 						edit.hastagged = true;
+					}
+					else
+					{
+						edit.hastagged = false;
+					}
+
+					if (fs.existsSync(path.join(__dirname,'..',"upload","edits",edit.code)+"_hq.mp4"))
+					{
+						edit.hashighquality = true;
+					}
+					else
+					{
+						edit.hashighquality = false;
 					}
 
 					edit.save();

@@ -130,31 +130,37 @@ exports.dropbox = function(config) {
 	}
 }
 
-exports.edit = function(edit) {
-	edit.mode = '';
+exports.edit = function(edit,mode) {
+	edit.mode = mode || '';
 
 	//just render original version (to halve the render time)
-	if (sails.config.NOTRENDERTAGGED && !edit.forcerendertagged)
+	if (sails.config.NOTRENDERTAGGED && edit.mode != 'tagged' && edit.mode != 'high')
 		edit.mode='original';
 
 	//just render tagged version (assuming original exists)
-	if (sails.config.NOTRENDERTAGGED && edit.forcerendertagged)
-		edit.mode='tagged';
+	// if (sails.config.NOTRENDERTAGGED && edit.forcerendertagged)
+		// edit.mode='tagged';
 
-	// console.log(edit);
-
-	if (sails.config.RENDERPROFILE)
-		edit.profile = sails.config.RENDERPROFILE;
+	//render high quality version, assuming the system is set to render a lower quality version as default
+	// if (sails.config.NOTRENDERTAGGED && edit.renderhighquality)
+		//set to high-quality render mode
+		// edit.mode='high';
 	
-	if (sails.config.RENDERWIDTH)
-		edit.width = sails.config.RENDERWIDTH;
+	if (edit.mode == 'original')
+	{
+		//set to preview / lores output:
+		if (sails.config.RENDERPROFILE)
+			edit.profile = sails.config.RENDERPROFILE;
+		
+		if (sails.config.RENDERWIDTH)
+			edit.width = sails.config.RENDERWIDTH;
 
-	if (sails.config.RENDERHEIGHT)
-		edit.height = sails.config.RENDERHEIGHT;
+		if (sails.config.RENDERHEIGHT)
+			edit.height = sails.config.RENDERHEIGHT;
+	}
 		
 	if (client==null)
 	{
-		
 		
 		client = new fivebeans.client(sails.config.BEANSTALK_HOST, sails.config.BEANSTALK_PORT);
 		client

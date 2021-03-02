@@ -60,9 +60,10 @@ services:
     environment: 
       sails_LOGINCODE: "abcd"
       sails_NOTRENDERTAGGED: "true"
-      sails_RENDERPROFILE: "cheese"
-      sails_RENDERWIDTH: 360
-      sails_RENDERHEIGHT: 240
+      sails_RENDERPREVIEW: "true"
+      sails_RENDERPROFILE: "dv_pal_wide"
+      sails_RENDERWIDTH: 720
+      sails_RENDERHEIGHT: 576
     # command: node app.js # -- --verbose
     # expose:
       # - 1337

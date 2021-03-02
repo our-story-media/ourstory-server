@@ -147,6 +147,7 @@ module.exports.routes = {
 
     'get /api/watch/canceleditupdates': 'WatchController.canceleditupdates',
     'get /api/watch/rendertagged/:eventid/:id?': 'WatchController.rendertagged',
+    'get /api/watch/renderhq/:eventid/:id?': 'WatchController.renderhq',
     'post /api/watch/savedit/:id?': 'WatchController.saveedit',
     'post /api/watch/newedit/:id?': 'WatchController.newedit',
     'post /api/watch/deleteedit/:id?': 'WatchController.deleteedit',
@@ -156,6 +157,7 @@ module.exports.routes = {
     'get /api/watch/getvideo/:id?': 'WatchController.getvideo',
     'get /api/watch/getvideofull/:id?': 'WatchController.getvideofull',
     'get /api/watch/getvideotags/:id?': 'WatchController.getvideotags',
+    'get /api/watch/getvideohq/:id?': 'WatchController.getvideohq',
     'get /api/media/mediacount/:id?': 'MediaController.mediacount',
     'get /api/media/mymedia/:id?': 'MediaController.mymedia',
     'get /api/media/directorystructure/:id?': 'MediaController.directorystructure',

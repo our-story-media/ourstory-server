@@ -383,6 +383,28 @@ module.exports = {
 		});
 	},
 
+	//HIGHRES VERSION OF THE EDIT
+	getvideohq: function (req, res) {
+		var id = req.param('id');
+		Edits.findOne(id, function (err, m) {
+			//LOCAL ONLY
+			if (sails.config.LOCALONLY) {
+				return res.redirect(`${sails.config.FAKES3URL}/edits/${m.shortlink}_hq.mp4`);
+			}
+			else {
+				var options = {
+					keypairId: sails.config.CLOUDFRONT_KEY,
+					privateKeyPath: sails.config.CLOUDFRONT_KEYFILE,
+					expireTime: moment().add(1, 'day')
+				}
+
+				var signedUrl = cloudfront.getSignedUrl(`${sails.config.S3_CLOUD_URL}/edits/${m.shortlink}_hq.mp4`, options);
+				//console.log(signedUrl);
+				return res.redirect(signedUrl);
+			}
+		});
+	},
+
 	//for an admin of the shoot to clone the edit:
 	cloneedit: async function (req, res) {
 		// let original = req.param('id');
@@ -559,14 +581,61 @@ module.exports = {
 		}
 	},
 
-	rendertagged: async function(req,res)
-	{
+	renderhq: async function (req, res) {
 		// console.log('render tagged visit')
-
 		let canedit = await Settings.findOne({ name: 'processedits' });
 		if (canedit.value == 'true') {
 			Edits.findOne(req.params.id).exec(function (err, edit) {
 				if (edit) {
+					
+					Edits.genlink(function (newlink) {
+
+
+						console.log("rendering hq");
+						//console.log(edit);
+						//console.log(edit.media);
+						//console.log(edit.media.length > 1);
+
+						//TODO CHANGE THIS BACK
+						if (edit.media && edit.media.length > 0) {
+							edit.code = edit.code || newlink;
+							edit.failed = false;
+							edit.fail = false;
+							edit.path = null;
+							edit.progress = null;
+							edit.save(function (err) {
+								//fire off to editor:
+								//send back to user:
+								console.log("edit submitted");
+								Editor.edit(edit,'high');
+								edit.shortlink = sails.config.master_url + '/v/' + edit.code;
+								res.redirect('/watch/edits/'+req.params.eventid);
+							});
+						}
+						else {
+							res.redirect('/watch/edits/'+req.params.eventid);
+						}
+					});
+				}
+				else {
+					res.redirect('/watch/edits/'+req.params.eventid);
+				}
+			});
+		}
+		else {
+			res.redirect('/watch/edits/'+req.params.eventid);
+		}
+		
+	},
+
+	//can only run this if the original already exists...
+	rendertagged: async function(req,res)
+	{
+		// console.log('render tagged visit')
+		let canedit = await Settings.findOne({ name: 'processedits' });
+		if (canedit.value == 'true') {
+			Edits.findOne(req.params.id).exec(function (err, edit) {
+				if (edit && edit.hasoriginal) {
 					
 					console.log("rendering tagged");
 					//console.log(edit);
@@ -579,12 +648,11 @@ module.exports = {
 						edit.fail = false;
 						edit.path = null;
 						edit.progress = null;
-						edit.forcerendertagged = true;
 						edit.save(function (err) {
 							//fire off to editor:
 							//send back to user:
 							console.log("edit submitted");
-							Editor.edit(edit);
+							Editor.edit(edit,'tagged');
 							edit.shortlink = sails.config.master_url + '/v/' + edit.code;
 							res.redirect('/watch/edits/'+req.params.eventid);
 						});
@@ -594,6 +662,7 @@ module.exports = {
 					}
 				}
 				else {
+					console.log('no edit or original file present');
 					res.redirect('/watch/edits/'+req.params.eventid);
 				}
 			});
