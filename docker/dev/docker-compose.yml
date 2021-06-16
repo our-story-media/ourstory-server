@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 volumes:
   mongo-data:
     external: false
@@ -26,7 +26,7 @@ services:
     image: redis:alpine
     command: redis-server
     ports:
-      - '6379:6379'
+      - "6379:6379"
 
   mongo:
     image: mongo
@@ -34,7 +34,7 @@ services:
       - mongo-data:/data/db
       - ./backup:/backup
     ports:
-      - '27017:27017'
+      - "27017:27017"
 
   beanstalk:
     image: kusmierz/beanstalkd
@@ -53,12 +53,12 @@ services:
     build:
       context: ../..
       dockerfile: Dockerfile.dev
-    depends_on: 
+    depends_on:
       - redis
       - mongo
       - beanstalk
     command: nodemon --watch api app.js -- --verbose
-    environment: 
+    environment:
       sails_LOGINCODE: "abcd"
       # sails_master_url: "http://10.10.10.1:8845"
       # sails_FAKES3URL: "http://10.10.10.1:8845/upload/"
@@ -66,13 +66,15 @@ services:
       # sails_master_url: 'http://10.10.10.1:8845'
     # command: node app.js # -- --verbose
     # expose:
-      # - 1337
+    # - 1337
     volumes:
       - ../../config:/usr/src/app/config
       - "./upload:/usr/src/app/upload"
       - "../../api:/usr/src/app/api"
       - "../../assets:/usr/src/app/assets"
       - "../../views:/usr/src/app/views"
+      - "../../tasks:/usr/src/app/tasks"
+      - "../../transcription:/usr/src/app/transcription:ro"
       # - ../prod/.sailsrc:/usr/src/app/.sailsrc:ro
       # - ../prod/ssl:/usr/src/app/ssl:ro
       - ../../../ourstory-worker:/usr/src/ourstory-worker
