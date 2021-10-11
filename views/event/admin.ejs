@@ -46,7 +46,7 @@
 
 		<%- __('User and Shoots across all deployments are shown here. To administer a specific Shoot, visit the <a href="/">Dashboard</a>.	') %>
 
-		<% if (sails.config.LOCALONLY && !usb) { %>
+		<!-- <% if (sails.config.LOCALONLY && !usb) { %>
 		<div>
 			<a href="/api/backup?apikey=<%- apikey %>">Download Backup</a> &middot;
 			<form id="theform" enctype="multipart/form-data" action="/api/restore?apikey=<%- apikey %>" method="POST"
@@ -57,8 +57,14 @@
 				<a href="#" type="submit" onclick="document.getElementById('theform').submit()">Upload</a>
 			</form>
 		</div>
-		<% } %>
+		<% } %> -->
 
+    <% if (sails.config.LOCALONLY && !usb) { %>
+      <div>
+        Insert a USB drive to perform backup or restore actions.
+      </div>
+    <% }%>
+    
 
 	</div>
 
