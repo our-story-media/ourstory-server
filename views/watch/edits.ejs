@@ -149,38 +149,42 @@
                                         <i class="fa fa-ellipsis-v"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right">
-                                        <li class="dropdown-header"><%- __('Exports') %></li>
+                                        <li class="dropdown-header"><%- __('Publish') %></li>
                                         
+                                        <!-- message for no avail videos -->
                                         <li class="disabled" ng-if="!edit.hastagged && !edit.hasoriginal && !edit.haspreview">
                                             <a href="#">    
-                                                <%- __('There are no videos to export') %>
+                                                <%- __('There are no videos to download') %>
                                         </a></li>
 
-                                        <li class="dropdown-header"><%- __('Publish') %></li>
-
+                                        <!-- publish original (i.e. normal operation, or only the full version if in titan) -->
                                         <li class="disabled" ng-if="!event.processedits && !edit.hasoriginal">
                                             <a href="#">    
                                                 <%- __('Publish (no tags)') %>
                                         </a></li>
-
                                         <li ng-if="event.processedits && !edit.hasoriginal">
                                             <a ng-href="{{ '/api/watch/renderoriginal/<%- theevent.id %>/' + edit.id + '?apikey=<%- apikey %>'}}">    
                                                 <%- __('Publish (no tags)') %>
                                         </a></li>
+                                        <!-- // -->
 
+                                        <!-- Download original version (notags, preview if in titan) -->
                                         <li ng-if="edit.hasoriginal"><a ng-href="{{ '/watch/getvideofull/' + edit.id + '?apikey=<%- apikey %>'}}">
-                                                <%- __('Download (no tags)') %>
+                                          <%- __('Download (no tags)') %>
                                         </a></li>
 
+                                        <!-- Download HQ version if exists -->
                                         <li ng-if="edit.hashighquality"><a ng-href="{{ '/watch/getvideohq/' + edit.id + '?apikey=<%- apikey %>'}}">
                                             <%- __('Download (high quality, no tags)') %>
                                         </a></li>
 
+                                        <!-- Download tagged version if exists -->
                                         <li ng-if="edit.hastagged">
                                             <a ng-href="{{ '/watch/getvideotags/' + edit.id + '?apikey=<%- apikey %>'}}">    
                                                 <%- __('Download (with tags)') %>
                                         </a></li>
 
+                                        <!-- if system set to only render preview quality, manually trigger higher-quality version -->
                                         <% if (sails.config.RENDERPREVIEW) { %>
                                         <li ng-if="event.processedits && !edit.hashighquality">
                                             <a ng-href="{{ '/api/watch/renderhq/<%- theevent.id %>/' + edit.id + '?apikey=<%- apikey %>'}}">    
@@ -192,7 +196,9 @@
                                                 <%- __('Publish high quality (no tags)') %>
                                         </a></li>
                                         <% } %>
+                                        <!-- // -->
 
+                                        <!-- If system set to not render tagged version at same time as primary -->
                                         <% if (sails.config.NOTRENDERTAGGED) { %>
                                         <li ng-if="event.processedits && !edit.hastagged && edit.hasoriginal">
                                             <a ng-href="{{ '/api/watch/rendertagged/<%- theevent.id %>/' + edit.id + '?apikey=<%- apikey %>'}}">    
@@ -203,6 +209,7 @@
                                                 <%- __('Publish tagged video') %>
                                         </a></li>
                                         <% } %>
+                                        <!-- // -->
 
                                         <li class="dropdown-header"><%- __('Management') %></li>
                                         <li><a ng-href="/api/watch/clone/{{edit.id}}?apikey=<%- apikey %>"><%- __('Duplicate') %></a></li>
