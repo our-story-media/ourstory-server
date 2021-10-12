@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DOCKER_BUILDKIT=1
+
 echo "Downloading latest tagged version"
 
 docker pull --platform linux/arm/v7 bootlegger/titan-compact:latest
