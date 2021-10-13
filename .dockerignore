@@ -20,6 +20,7 @@ emails
 docker/build
 docker/local
 docker/dev
+docker/titan
 Dockerfile*
 .DS_Store
 hooks
