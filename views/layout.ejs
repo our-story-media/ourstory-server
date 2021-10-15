@@ -543,8 +543,10 @@
         <%- __('Privacy') %></a> &middot;
       <a class="text-muted" href="/terms">
         <%- __('Terms') %></a> &middot;
+        <% if (!sails.config.LOCALONLY) { %>
       <a class="text-muted" href="https://indaba.dev">
         <%- __('Guide') %></a> &middot;
+        <% } %>
       <span>&copy;
         <%- __('Indaba') %>
         <%- new Date().getFullYear() %>
