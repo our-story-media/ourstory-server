@@ -33,8 +33,15 @@ steps:
 #       - TARGETPLATFORM=linux/arm/v7
 #     context: docker/titan/
 - name: Upload
-  image: debian:10
+  image: docker:dind
+  volumes:
+    - name: dockersock
+      path: /var/run/docker.sock
   commands:
-    - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-    - export PATH=~/bin:$PATH
+    - apt-get update && apt-get install -y awscli
     - docker/titan/uploadtitan-armv7.sh
+
+volumes:
+- name: dockersock
+  host:
+    path: /var/run/docker.sock
