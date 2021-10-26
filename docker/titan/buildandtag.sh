@@ -5,7 +5,9 @@ SERVER_TAG=$(git ls-remote --tags --refs https://github.com/our-story-media/ours
 VERSION=$SERVER_TAG-$WORKER_TAG
 # echo -n "latest,$SERVER_TAG-$WORKER_TAG" > .tags
 # cat .tags
-docker build --build-arg TARGETPLATFORM=linux/arm/v7 -t bootlegger/titan-compact:latest -t bootlegger/titan-compact:$VERSION .
+DOCKER_BUILDKIT=1
+
+docker build --platform=linux/arm/v7 --build-arg TARGETPLATFORM=linux/arm/v7 -t bootlegger/titan-compact:latest -t bootlegger/titan-compact:$VERSION .
 
 apt-get update && apt-get install -y awscli
 
