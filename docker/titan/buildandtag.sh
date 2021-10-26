@@ -1,14 +1,15 @@
 # apt-get update && apt-get install -y git
 WORKER_TAG=$(git ls-remote --tags --refs https://github.com/our-story-media/ourstory-worker | grep -o 'refs/tags/v[0-9]*\.[0-9]*\.[0-9]*' | sort -r -V | head -n 1 | grep -o '[^\/]*$')
 SERVER_TAG=$(git ls-remote --tags --refs https://github.com/our-story-media/ourstory-server | grep -o 'refs/tags/v[0-9]*\.[0-9]*\.[0-9]*' | sort -r -V | head -n 1 | grep -o '[^\/]*$')
-TAG="latest,$SERVER_TAG-$WORKER_TAG"
+# TAG="latest,$SERVER_TAG-$WORKER_TAG"
+VERSION=$SERVER_TAG-$WORKER_TAG
 # echo -n "latest,$SERVER_TAG-$WORKER_TAG" > .tags
 # cat .tags
-docker build -t bootlegger/titan-compact:latest -t bootlegger/titan-compact:$TAG .
+docker build -t bootlegger/titan-compact:latest -t bootlegger/titan-compact:$VERSION .
 
 apt-get update && apt-get install -y awscli
 
-VERSION=$SERVER_TAG-$WORKER_TAG
+
 
 echo $VERSION > indaba-update.version
 
