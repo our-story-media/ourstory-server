@@ -32,11 +32,3 @@ steps:
     build_args:
       - TARGETPLATFORM=linux/arm/v7
     context: docker/titan/
-# - name: Upload
-#   image: docker:dind
-#   volumes:
-#     - name: dockersock
-#       path: /var/run/docker.sock
-#   commands:
-#     - apt-get update && apt-get install -y awscli
-#     - docker/titan/uploadtitan-armv7.sh
