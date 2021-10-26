@@ -6,9 +6,6 @@ version: 2.1
 
 jobs:
   build: # name of your job
-    filters:
-      tags:
-        only: /.*/
     machine: # executor type
       image: ubuntu-2004:202101-01
     resource_class: arm.medium
@@ -24,4 +21,8 @@ jobs:
 workflows:
   main:
     jobs:
-      - build
+      - build:
+          filters:
+            tags:
+              only: /.*/
+        
