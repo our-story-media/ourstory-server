@@ -17,8 +17,33 @@ const useStyles = makeStyles({
     borderBottomRightRadius: "0",
     borderBottomLeftRadius: "0",
   },
+  card: {
+    border: `1px solid ${borderColor}`,
+    padding: "5px",
+    margin: "5px",
+    marginBottom: "20px",
+    minHeight: "320px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  header: {
+    padding: "4px",
+    borderBottom: `1px solid ${borderColor}`,
+    borderBottomRightRadius: "0",
+    borderBottomLeftRadius: "0",
+    backgroundColor: "#f5f5f5",
+  },
+  content: {
+    display: "flex",
+    flexDirection: "column",
+    flexGrow: 1,
+  },
+  actions: {
+    borderTop: `1px solid ${borderColor}`,
+  },
   button: {
-      marginTop: "16px",
+    marginTop: "10px",
   },
 });
 

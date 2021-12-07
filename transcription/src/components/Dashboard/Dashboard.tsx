@@ -37,7 +37,7 @@ type DashboardProps = {
 
 const Greeting: React.FC<{ name: string | undefined }> = ({ name }) => (
   <Typography
-    style={{ fontWeight: "lighter", overflowWrap: "anywhere" }}
+    style={{ fontWeight: "lighter", overflowWrap: "anywhere", marginTop: "10px", }}
     variant="h5"
   >
     {name && strings.formatString(strings.greeting, name)}
@@ -81,12 +81,12 @@ const Dashboard: React.FC<DashboardProps> = ({
           </IndabaLink>
         )}
       </Container>
-      <div style={{ marginBottom: "16px" }}>{strings.steps}</div>
+      <div style={{ marginBottom: "16px", marginTop: "16px", textAlign: "center" }}>{strings.steps}</div>
       <Box>
         <GridList cols={3} cellHeight="auto" spacing={20}>
           {steps.map((step) => (
             <GridListTile key={step.title}>
-              <StepInfo {...step} />
+              <StepInfo {...step}/>
             </GridListTile>
           ))}
         </GridList>

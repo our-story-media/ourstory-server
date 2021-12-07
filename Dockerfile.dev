@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:10
 
 LABEL maintainer="Tom Bartindale <tom.bartindale@ncl.ac.uk>"
 
@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 
 RUN apt-get update && apt-get install -y git python gcc g++ make
 
-RUN npm install sharp
+# RUN npm install sharp
 
 COPY package.json /usr/src/app/
 

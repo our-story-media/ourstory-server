@@ -1,4 +1,4 @@
-FROM node:8-alpine AS builder
+FROM node:10-alpine AS builder
 
 RUN mkdir -p /usr/src/app/upload
 
