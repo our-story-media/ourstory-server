@@ -28,11 +28,8 @@ const Header: React.FC<HeaderProps> = ({
 
   const contextMenuButtonRef = useRef(null);
 
-  const [
-    showContextMenu,
-    toggleShowContextMenu,
-    setShowContextMenu,
-  ] = useToggle(false);
+  const [showContextMenu, toggleShowContextMenu, setShowContextMenu] =
+    useToggle(false);
 
   const hideContextMenu = () => setShowContextMenu(false);
 
@@ -41,29 +38,32 @@ const Header: React.FC<HeaderProps> = ({
       <Container
         style={{
           height: "calc(100vh - 5px)",
-          width: "100%",
+          width: "90%",
           padding: 0,
           marginTop: "5px",
           display: "flex",
           flexDirection: "column",
+          alignItems: "center",
         }}
       >
         {children}
-            <ClickAwayListener onClickAway={hideContextMenu}>
-              <Button
-              variant="outlined" color="primary"
-                onClick={toggleShowContextMenu}
-                ref={contextMenuButtonRef}
-              >
-                All Contributions
-              </Button>
-            </ClickAwayListener>
-            <IndabaMenu
-              show={showContextMenu}
-              anchor={contextMenuButtonRef.current!}
-              menuItems={contextMenuItems}
-            />
-        
+        <ClickAwayListener onClickAway={hideContextMenu}>
+          <Button
+            size="large"
+            style={{ maxWidth: "265px" }}
+            variant="outlined"
+            color="primary"
+            onClick={toggleShowContextMenu}
+            ref={contextMenuButtonRef}
+          >
+            All Contributions
+          </Button>
+        </ClickAwayListener>
+        <IndabaMenu
+          show={showContextMenu}
+          anchor={contextMenuButtonRef.current!}
+          menuItems={contextMenuItems}
+        />
       </Container>
     </>
   );

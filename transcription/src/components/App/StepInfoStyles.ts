@@ -44,6 +44,7 @@ const useStyles = makeStyles({
   },
   button: {
     marginTop: "10px",
+    fontSize: "1.1rem",
   },
 });
 

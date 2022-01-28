@@ -4,7 +4,6 @@ import { Box, Typography } from "@material-ui/core";
 import LocalizedStrings from "react-localization";
 
 // Internal Dependencies
-import FlatPaper from "../FlatPaper/FlatPaper";
 import FlatCard from "../FlatCard/FlatCard";
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import useStyles from "./StepInfoStyles";
@@ -36,17 +35,21 @@ const StepInfo: React.FC<StepInfoProps> = ({
     <div>
       <FlatCard
         className={classes}
-        header={title}
+        header={
+          <Box style={{ margin: "10px 5px 5px" }}>
+            <Typography variant="h5">{title}</Typography>
+          </Box>
+          }
         context={
           <Box style={{ marginTop: "8px" }}>
             <LinearProgressWithLabel value={progress} />
-            <Typography style={{ padding: "6px" }}>{description}</Typography>
+            <Typography style={{ padding: "6px", fontSize: "1.1rem" }}>{description}</Typography>
           </Box>
         }
         actions={
           <Box style={{ marginTop: "8px" }}>
-            <IndabaButton disabled={!enabled} onClick={onSelect}>
-              <Typography style={{ padding: "6px" }}>
+            <IndabaButton disabled={!enabled} onClick={onSelect} style={{  }}>
+              <Typography style={{ padding: "6px", fontSize: "1.1rem", }}>
                 {strings.formatString(strings.perform, title)}
               </Typography>
             </IndabaButton>

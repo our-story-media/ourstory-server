@@ -45,7 +45,7 @@ const Greeting: React.FC<{ name: string | undefined }> = ({ name }) => (
 );
 
 const Title: React.FC<{ storyName: string }> = ({ storyName }) => (
-  <Typography variant="h3" style={{ color: "gray", fontWeight: "lighter" }}>
+  <Typography variant="h4" style={{ color: "gray", fontWeight: "lighter" }}>
     {strings.formatString(
       strings.transcriptionFor,
       <Box component="span" style={{ color: "black" }}>

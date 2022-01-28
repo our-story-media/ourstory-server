@@ -14,7 +14,12 @@ const FlatCard: React.FC<{
     <Card ref={ref} elevation={0} style={style} className={className.card}>
       <CardHeader title={header} className={className.header}></CardHeader>
       <CardContent className={className.content}>{context} </CardContent>
-      <CardActions className={className.actions}>{actions}</CardActions>
+      <CardActions
+        style={{ justifyContent: "center" }}
+        className={className.actions}
+      >
+        {actions}
+      </CardActions>
     </Card>
   );
 });
