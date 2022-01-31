@@ -54,12 +54,16 @@ const strings = new LocalizedStrings({
   en: {
     instructionsOne:
       "You are about to chunk the video. The aim of chunking is to make Transcribing easy.",
+    instructionOneStepLabel: "Faster Transcribing",
     instructionsTwo:
       "Rather than transcribing the entire video at once, you will break the video down into smaller chunks, which you will transcribe individually.",
+    instructionTwoStepLabel: "Small chunks",
     instructionsThree:
       "You should aim to have only one person speaking in each chunk. Create a new chunk when there is a change in who is talking, there is a gap in the talking, or a person begins/ends talking.",
+    instructionThreeStepLabel: "One Speaker per chunk",
     instructionsFour:
-      "To create a chunk, press the '+' button in the bottom right corner. The time that you press the '+' button in the video will be the end of the new chunk.",
+      "To create a chunk, press the 'Add' button in the bottom right corner. The time that you press the 'Add' button in the video will be the end of the new chunk.",
+    instructionFourStepLabel: "Push 'Add' Button",
     instructionsTitle: "Chunking Instructions",
     startChunking: "Start Chunking",
     attemptDeleteWarningTitle: "This chunk has a transcription",
@@ -387,6 +391,12 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
           strings.instructionsTwo,
           strings.instructionsThree,
           strings.instructionsFour,
+        ]}
+        stepsLabels={[
+          strings.instructionOneStepLabel,
+          strings.instructionTwoStepLabel,
+          strings.instructionThreeStepLabel,
+          strings.instructionFourStepLabel,
         ]}
         startButtonContent={<div>{strings.startChunking}</div>}
       />

@@ -48,10 +48,13 @@ const strings = new LocalizedStrings({
   en: {
     instructionsOne:
       "You are about to review the transcriptions made on the video.",
+    instructionOneStepLabel: "Why?",
     instructionsTwo:
       "For each chunk, select one of the transcriptions from the list. You can do this by clicking on the text or the check box to the left of the text.",
+    instructionTwoStepLabel: "What?",
     instructionsThree:
       "You can also edit the transcriptions by clicking on the pencil button above the text.",
+    instructionThreeStepLabel: "How",
     editingTranscriptionWarningHeading: "You are editing {0}'s transcription",
     nameTranscription: "{0}: {1}",
     instructionsTitle: "Reviewing Instructions",
@@ -167,6 +170,11 @@ export const Reviewer: React.FC<ReviewerProps> = ({
           strings.instructionsOne,
           strings.instructionsTwo,
           strings.instructionsThree,
+        ]}
+        stepsLabels={[
+          strings.instructionOneStepLabel,
+          strings.instructionTwoStepLabel,
+          strings.instructionThreeStepLabel,
         ]}
         title={<h2 style={{ margin: 0 }}>{strings.instructionsTitle}</h2>}
         startButtonContent={<div>Start Reviewing</div>}

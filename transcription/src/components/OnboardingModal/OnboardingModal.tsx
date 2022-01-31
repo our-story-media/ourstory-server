@@ -18,6 +18,7 @@ type OnboardingModalProps = {
   dismiss: () => void;
   title: ReactElement;
   steps: string[];
+  stepsLabels: string[];
   startButtonContent: ReactElement;
 };
 
@@ -26,6 +27,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
   dismiss,
   title,
   steps,
+  stepsLabels,
   startButtonContent,
 }) => {
   const { page, goTo, reset } = useSlideshow(steps);
@@ -48,10 +50,10 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
   return (
     <CentralModal header={title} open={show} exit={dismissHandler}>
       <div className={classes.contentContainer}>
-        <Stepper activeStep={page}>
+        <Stepper activeStep={page} alternativeLabel>
           {steps.map((_, idx) => (
             <Step key={idx}>
-              <StepLabel />
+              <StepLabel>{stepsLabels[idx]}</StepLabel>
             </Step>
           ))}
         </Stepper>

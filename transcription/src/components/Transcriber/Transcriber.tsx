@@ -41,12 +41,16 @@ import useAutoPauseOnType from "./hooks/useAutoPauseOnType";
 const strings = new LocalizedStrings({
   en: {
     instructionsOne: "You are about to Transcribe the chunks.",
+    instructionOneStepLabel: "The Aim",
     instructionsTwo:
       "Each chunk has been divided into 5 second clips for you. These clips will loop.",
+    instructionTwoStepLabel: "The Process",
     instructionsThree:
       "When you type, the video will pause until you stop typing",
+    instructionThreeStepLabel: "The Instruction",
     instructionsFour:
       'When you are done transcribing a clip press the ">" button',
+    instructionFourStepLabel: "The Finish",
     last: "Last",
     first: "First",
   },
@@ -168,6 +172,12 @@ const Transcriber: React.FC<TranscriberProps> = ({
           strings.instructionsTwo,
           strings.instructionsThree,
           strings.instructionsFour,
+        ]}
+        stepsLabels={[
+          strings.instructionOneStepLabel,
+          strings.instructionTwoStepLabel,
+          strings.instructionThreeStepLabel,
+          strings.instructionFourStepLabel,
         ]}
         startButtonContent={<div>Start Transcribing</div>}
       />

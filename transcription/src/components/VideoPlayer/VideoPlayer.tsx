@@ -171,7 +171,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       />
       {showControls && (
         <div className={classes.videoControlsContainer}>
-          <div style={{ position: "absolute", right: "380px", bottom: -50 }}>
+          <div
+            className={`${classes.videoControlsRewindButtonsContainer} ${classes.videoControlsRewindButtonsContainerRight}`}
+          >
             <Button
               disableRipple
               className={`${classes.videoPlayerButton} ${classes.roundButton}`}
@@ -191,7 +193,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               <PlayArrow fontSize="large" />
             )}
           </Button>
-          <div style={{ position: "absolute", left: "380px", bottom: -50 }}>
+          <div
+            className={`${classes.videoControlsRewindButtonsContainer} ${classes.videoControlsRewindButtonsContainerLeft}`}
+          >
             <Button
               onClick={skipForwardHandler}
               disableRipple
