@@ -31,6 +31,7 @@ const useStyles = makeStyles({
     bottom: "0",
     marginBottom: "-39px",
     transform: "translateY(calc(-100% - 16px))",
+    width: "100%"
   },
   progressBarColor: {
     color: "#f54414",
