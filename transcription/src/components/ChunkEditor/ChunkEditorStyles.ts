@@ -11,6 +11,8 @@ const useStyles = makeStyles({
   },
   chunksList: {
     flexWrap: "nowrap",
+    overflowX: "scroll",
+    height: "100%",
   },
   backButton: {
     background: "transparent",
@@ -19,6 +21,7 @@ const useStyles = makeStyles({
   },
   backButtonContainer: {
     marginTop: "4px",
+    padding: "0px",
   },
   onboardingTitle: {
     margin: 0,

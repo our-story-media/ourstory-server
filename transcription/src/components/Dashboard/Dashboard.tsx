@@ -3,8 +3,6 @@ import {
   Box,
   Typography,
   Container,
-  GridList,
-  GridListTile,
   Grid,
 } from "@material-ui/core";
 import LocalizedStrings from "react-localization";

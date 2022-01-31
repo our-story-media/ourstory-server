@@ -33,9 +33,22 @@ const ChunkCard: React.FC<{
         <div>
           <span
             className={classes.titleContainer}
-            style={{ display: "flex", flexDirection: "column" }}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: "12px",
+              lineHeight: "normal",
+            }}
           >
-            <span style={{ fontWeight: 600, overflowWrap: "anywhere", display: "flex", justifyContent: "space-between" }}>
+            <span
+              style={{
+                fontWeight: 600,
+                overflowWrap: "anywhere",
+                display: "flex",
+                justifyContent: "space-between",
+                lineHeight: "normal",
+              }}
+            >
               {getNameOf(chunk)}
               {transcriptionIcon}
             </span>

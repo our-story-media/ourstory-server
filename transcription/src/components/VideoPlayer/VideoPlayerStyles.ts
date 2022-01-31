@@ -9,15 +9,14 @@ const useStyles = makeStyles({
     transform: "translate(-50%, 50%)",
   },
   videoPlayerButton: {
-    background: "linear-gradient(45deg, #FE6B8B 30%, #f54414 90%)",
+    background: "linear-gradient(45deg, #d9534f 40%, #d9534f 90%)",
   },
   roundButton: {
-    borderRadius: "50px",
-    width: "64px",
-    height: "64px",
+    borderRadius: "25px",
+    width: "128px",
+    height: "128px",
     color: "white",
     display: "relative",
-    top: "4px",
   },
   videoPlayerContainer: {
     position: "relative",
@@ -43,19 +42,19 @@ const useStyles = makeStyles({
     height: 4,
   },
   progressBarRail: {
-    height: 4
+    height: 4,
   },
   progressBarTrack: {
-    height: 4
+    height: 4,
   },
   progressBarThumb: {
     height: 12,
-    marginTop: -4
+    marginTop: -4,
   },
   progressBarMark: {
     height: 10,
-    marginTop: -3
-  }
+    marginTop: -3,
+  },
 });
 
 export default useStyles;
