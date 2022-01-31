@@ -38,7 +38,7 @@ const Header: React.FC<HeaderProps> = ({
       <Container
         style={{
           height: "calc(100vh - 5px)",
-          width: "90%",
+          width: "85%",
           padding: 0,
           marginTop: "5px",
           display: "flex",

@@ -5,6 +5,7 @@ import {
   Container,
   GridList,
   GridListTile,
+  Grid,
 } from "@material-ui/core";
 import LocalizedStrings from "react-localization";
 import React, { useContext } from "react";
@@ -82,15 +83,13 @@ const Dashboard: React.FC<DashboardProps> = ({
         )}
       </Container>
       <div style={{ marginBottom: "16px", marginTop: "16px", textAlign: "center" }}>{strings.steps}</div>
-      <Box>
-        <GridList cols={3} cellHeight="auto" spacing={20}>
+        <Grid container direction="row" justify="space-between" alignContent="flex-start" alignItems="stretch">
           {steps.map((step) => (
-            <GridListTile key={step.title}>
+            <Grid item key={step.title} style={{display: 'flex', width: "33%"}}>
               <StepInfo {...step}/>
-            </GridListTile>
+            </Grid>
           ))}
-        </GridList>
-      </Box>
+        </Grid>
     </Container>
   );
 };

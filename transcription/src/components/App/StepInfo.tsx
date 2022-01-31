@@ -32,7 +32,6 @@ const StepInfo: React.FC<StepInfoProps> = ({
 }) => {
   const classes = useStyles();
   return (
-    <div>
       <FlatCard
         className={classes}
         header={
@@ -56,7 +55,6 @@ const StepInfo: React.FC<StepInfoProps> = ({
           </Box>
         }
       />
-    </div>
   );
 };
 
