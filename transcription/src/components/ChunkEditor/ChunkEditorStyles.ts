@@ -1,6 +1,14 @@
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+  videoContainer: {
+    height: "50%",
+    minHeight: "300px",
+    maxWidth: "85%",
+    [theme.breakpoints.up("md")]: {
+      maxWidth: "50%",
+    },
+  },
   videoPlayerContainer: {
     margin: "auto",
   },
@@ -13,6 +21,7 @@ const useStyles = makeStyles({
     flexWrap: "nowrap",
     overflowX: "scroll",
     height: "100%",
+    marginTop: "5px",
   },
   backButton: {
     background: "transparent",
@@ -37,6 +46,6 @@ const useStyles = makeStyles({
     margin: "16px 16px 32px 16px",
     display: "flex",
   },
-});
+}));
 
 export default useStyles;

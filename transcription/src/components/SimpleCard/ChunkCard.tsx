@@ -36,8 +36,8 @@ const ChunkCard: React.FC<{
             style={{
               display: "flex",
               flexDirection: "column",
-              fontSize: "12px",
               lineHeight: "normal",
+              margin: "5px",
             }}
           >
             <span
@@ -58,7 +58,8 @@ const ChunkCard: React.FC<{
           </span>
         </div>
       }
-      cardStyle={{ ...style, position: "relative", margin: "8px" }}
+      cardStyle={{ ...style, position: "relative" }}
+      contentStyle={{ ...style, padding: "0px 0px 16px 0px" }}
     >
       {children}
     </SimpleCard>

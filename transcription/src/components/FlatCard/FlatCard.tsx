@@ -7,6 +7,7 @@ import {
 } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import { Classes } from "@material-ui/styles/mergeClasses/mergeClasses";
+import { api_base_address } from "../../utils/getApiKey";
 import React from "react";
 
 const FlatCard: React.FC<{
@@ -19,10 +20,10 @@ const FlatCard: React.FC<{
   ({ className, context, actions, style, title }, ref) => {
     return (
       <Card ref={ref} elevation={0} style={style} className={className.card}>
-        <CardActionArea>
+        <CardActionArea focusRipple={false}>
           <CardMedia
             className={className.card_image}
-            image="http://localhost:8845/images/event_back.png" // TODO: get rid of localhost
+            image={`${api_base_address}/images/event_back.png`}
             title={title}
           />
           <CardContent className={className.content}>{context} </CardContent>

@@ -22,12 +22,10 @@ const useStyles = makeStyles({
   },
   card: {
     border: `1px solid ${borderColor}`,
+    borderRadius: "6px",
     margin: "5px",
     marginBottom: "20px",
     minHeight: "320px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
   },
   header: {
     padding: "4px",

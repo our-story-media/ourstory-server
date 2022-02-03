@@ -9,7 +9,14 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Grid, GridList, GridListTile, Mark } from "@material-ui/core";
+import {
+  Grid,
+  GridList,
+  GridListTile,
+  Mark,
+  useMediaQuery,
+} from "@material-ui/core";
+import { useTheme } from "@material-ui/core/styles";
 
 // Internal Dependencies
 import ChunkCard from "../SimpleCard/ChunkCard";
@@ -94,6 +101,13 @@ const getMarks = (chunks: Chunk[]): Mark[] =>
   chunks.map((chunk) => ({
     value: chunk.endtimeseconds * 100,
   }));
+
+const GetCols = (): number => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
+  console.log(matches);
+  return matches ? 3.5 : 2.5;
+};
 
 const ChunkEditor: React.FC<ChunkEditorProps> = ({
   atExit,
@@ -260,8 +274,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
         container
         alignContent="center"
         alignItems="center"
-        xs={6}
-        style={{ height: "50%", minHeight: "300px" }}
+        className={classes.videoContainer}
       >
         <VideoPlayer
           controller={videoPlayerController}
@@ -273,10 +286,14 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
         />
       </Grid>
       <Grid item container xs={12} style={{ height: "40%" }}>
-        <GridList className={classes.chunksList} cellHeight="auto" cols={4.5}>
+        <GridList
+          className={classes.chunksList}
+          cellHeight="auto"
+          cols={GetCols()}
+        >
           {chunks
             .map((c) => (
-              <GridListTile key={c.id}>
+              <GridListTile key={c.id} style={{ margin: "0px 4px 4px 2px" }}>
                 <ScrollToOnMount>
                   <ChunkCard
                     chunk={c}

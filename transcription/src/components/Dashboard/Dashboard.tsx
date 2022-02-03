@@ -88,7 +88,7 @@ const Dashboard: React.FC<DashboardProps> = ({
         container
         spacing={2}
         direction="row"
-        justify="space-between"
+        justify="center"
         alignContent="flex-start"
         alignItems="stretch"
       >
@@ -98,6 +98,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             key={step.title}
             xs={12}
             md={4}
+            lg={3}
             style={{ display: "flex" }}
           >
             <StepInfo {...step} />

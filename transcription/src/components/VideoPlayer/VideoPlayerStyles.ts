@@ -19,13 +19,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   videoControlsRewindButtonsContainerRight: {
-    right: "380px",
+    right: "180px",
     [theme.breakpoints.up("lg")]: {
       right: "130px",
     },
   },
   videoControlsRewindButtonsContainerLeft: {
-    left: "380px",
+    left: "180px",
     [theme.breakpoints.up("lg")]: {
       left: "130px",
     },

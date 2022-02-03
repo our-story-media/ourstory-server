@@ -57,7 +57,7 @@ const StepInfo: React.FC<StepInfoProps> = ({
       }
       actions={
         <Box style={{ marginTop: "8px" }}>
-          <IndabaButton disabled={!enabled} onClick={onSelect} style={{}}>
+          <IndabaButton disabled={!enabled} onClick={onSelect}>
             <Typography style={{ padding: "6px", fontSize: "1.1rem" }}>
               {strings.formatString(strings.perform, title)}
             </Typography>

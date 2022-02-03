@@ -169,7 +169,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           >
             <Button
               disableRipple
-              className={`${classes.videoPlayerButton} ${classes.roundButton}`}
+              variant="outlined"
+              color="secondary"
+              className={` ${classes.roundButton}`}
               onClick={skipBackwardHandler}
             >
               <Replay5 fontSize="large" />
@@ -191,8 +193,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           >
             <Button
               onClick={skipForwardHandler}
+              variant="outlined"
+              color="secondary"
               disableRipple
-              className={`${classes.videoPlayerButton} ${classes.roundButton}`}
+              className={`${classes.roundButton}`}
             >
               <Forward5 fontSize="large" />
             </Button>
