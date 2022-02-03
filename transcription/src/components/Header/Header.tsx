@@ -1,8 +1,8 @@
 import {
   ClickAwayListener,
-  Container,
   // Divider,
   Button,
+  Grid,
 } from "@material-ui/core";
 import React, { ReactNode, useRef } from "react";
 
@@ -34,25 +34,17 @@ const Header: React.FC<HeaderProps> = ({
   const hideContextMenu = () => setShowContextMenu(false);
 
   return (
-    <>
-      <Container
-        style={{
-          height: "calc(100vh - 5px)",
-          width: "85%",
-          padding: 0,
-          marginTop: "5px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
+    <Grid container direction="column" justify="center" alignItems="center">
+      <Grid container item xs={12} justify="center" alignItems="center">
         {children}
+      </Grid>
+      <Grid container item xs={12} justify="center" alignItems="center">
         <ClickAwayListener onClickAway={hideContextMenu}>
           <Button
             size="large"
             style={{ maxWidth: "265px" }}
             variant="outlined"
-            color="primary"
+            color="secondary"
             onClick={toggleShowContextMenu}
             ref={contextMenuButtonRef}
           >
@@ -64,8 +56,8 @@ const Header: React.FC<HeaderProps> = ({
           anchor={contextMenuButtonRef.current!}
           menuItems={contextMenuItems}
         />
-      </Container>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 

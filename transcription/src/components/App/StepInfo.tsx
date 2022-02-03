@@ -32,29 +32,39 @@ const StepInfo: React.FC<StepInfoProps> = ({
 }) => {
   const classes = useStyles();
   return (
-      <FlatCard
-        className={classes}
-        header={
-          <Box style={{ margin: "10px 5px 5px" }}>
-            <Typography variant="h5">{title}</Typography>
-          </Box>
-          }
-        context={
-          <Box style={{ marginTop: "8px" }}>
-            <LinearProgressWithLabel value={progress} />
-            <Typography style={{ padding: "6px", fontSize: "1.1rem" }}>{description}</Typography>
-          </Box>
-        }
-        actions={
-          <Box style={{ marginTop: "8px" }}>
-            <IndabaButton disabled={!enabled} onClick={onSelect} style={{  }}>
-              <Typography style={{ padding: "6px", fontSize: "1.1rem", }}>
-                {strings.formatString(strings.perform, title)}
-              </Typography>
-            </IndabaButton>
-          </Box>
-        }
-      />
+    <FlatCard
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: "column",
+        flexGrow: 1,
+      }}
+      className={classes}
+      title={title}
+      context={
+        <Box style={{ marginTop: "8px" }}>
+          <Typography
+            variant="h5"
+            style={{ fontFamily: "'Open Sans', 'Helvetica Neue', sans-serif" }}
+          >
+            {title}
+          </Typography>
+          <LinearProgressWithLabel value={progress} color="secondary" />
+          <Typography style={{ padding: "6px", fontSize: "1.1rem" }}>
+            {description}
+          </Typography>
+        </Box>
+      }
+      actions={
+        <Box style={{ marginTop: "8px" }}>
+          <IndabaButton disabled={!enabled} onClick={onSelect} style={{}}>
+            <Typography style={{ padding: "6px", fontSize: "1.1rem" }}>
+              {strings.formatString(strings.perform, title)}
+            </Typography>
+          </IndabaButton>
+        </Box>
+      }
+    />
   );
 };
 

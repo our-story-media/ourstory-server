@@ -35,7 +35,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
   const dismissHandler = useCallback(() => {
     reset();
     dismiss();
-  }, []);
+  }, [dismiss, reset]);
 
   const nextPageHandler = useCallback(() => {
     page === steps.length - 1 ? dismissHandler() : goTo("next");

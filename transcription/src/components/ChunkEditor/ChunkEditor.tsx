@@ -9,13 +9,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  Grid,
-  Container,
-  GridList,
-  GridListTile,
-  Mark,
-} from "@material-ui/core";
+import { Grid, GridList, GridListTile, Mark } from "@material-ui/core";
 
 // Internal Dependencies
 import ChunkCard from "../SimpleCard/ChunkCard";

@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Mark,
-  SliderProps,
-  Typography,
-} from "@material-ui/core";
+import { Button, Grid, Mark, SliderProps, Typography } from "@material-ui/core";
 import { Forward5, Pause, PlayArrow, Replay5 } from "@material-ui/icons";
 import React, { RefObject, useCallback } from "react";
 import ReactPlayer from "react-player";

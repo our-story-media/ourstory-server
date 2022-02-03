@@ -83,7 +83,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       <div style={{ marginBottom: "16px", marginTop: "16px", textAlign: "center" }}>{strings.steps}</div>
         <Grid container direction="row" justify="space-between" alignContent="flex-start" alignItems="stretch">
           {steps.map((step) => (
-            <Grid item key={step.title} style={{display: 'flex', width: "33%"}}>
+            <Grid item key={step.title} xs={12} md={4} style={{ display: 'flex'}}>
               <StepInfo {...step}/>
             </Grid>
           ))}
