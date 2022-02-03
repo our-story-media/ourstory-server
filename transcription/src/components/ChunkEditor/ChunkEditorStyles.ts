@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
   },
   chunkCardBody: {
-    marginTop: "8px",
     position: "relative",
   },
   newChunkButtonContainer: {
