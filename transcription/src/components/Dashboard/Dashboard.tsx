@@ -1,10 +1,5 @@
 // External Dependencies
-import {
-  Box,
-  Typography,
-  Container,
-  Grid,
-} from "@material-ui/core";
+import { Box, Typography, Grid } from "@material-ui/core";
 import LocalizedStrings from "react-localization";
 import React, { useContext } from "react";
 
@@ -36,7 +31,11 @@ type DashboardProps = {
 
 const Greeting: React.FC<{ name: string | undefined }> = ({ name }) => (
   <Typography
-    style={{ fontWeight: "lighter", overflowWrap: "anywhere", marginTop: "10px", }}
+    style={{
+      fontWeight: "lighter",
+      overflowWrap: "anywhere",
+      marginTop: "10px",
+    }}
     variant="h5"
   >
     {name && strings.formatString(strings.greeting, name)}
@@ -64,9 +63,9 @@ const Dashboard: React.FC<DashboardProps> = ({
   const classes = useStyles();
 
   return (
-    <Container>
+    <Grid item xs={9} md={11}>
       <NameModal setName={setName} show={!userName} />
-      <Container className={classes.introContainer}>
+      <Grid item xs={12} className={classes.introContainer}>
         <Title storyName={storyName} />
         <Greeting name={userName} />
         {userName && (
@@ -79,16 +78,33 @@ const Dashboard: React.FC<DashboardProps> = ({
             {strings.notMe}
           </IndabaLink>
         )}
-      </Container>
-      <div style={{ marginBottom: "16px", marginTop: "16px", textAlign: "center" }}>{strings.steps}</div>
-        <Grid container direction="row" justify="space-between" alignContent="flex-start" alignItems="stretch">
-          {steps.map((step) => (
-            <Grid item key={step.title} xs={12} md={4} style={{ display: 'flex'}}>
-              <StepInfo {...step}/>
-            </Grid>
-          ))}
-        </Grid>
-    </Container>
+      </Grid>
+      <div
+        style={{ marginBottom: "16px", marginTop: "16px", textAlign: "center" }}
+      >
+        {strings.steps}
+      </div>
+      <Grid
+        container
+        spacing={2}
+        direction="row"
+        justify="space-between"
+        alignContent="flex-start"
+        alignItems="stretch"
+      >
+        {steps.map((step) => (
+          <Grid
+            item
+            key={step.title}
+            xs={12}
+            md={4}
+            style={{ display: "flex" }}
+          >
+            <StepInfo {...step} />
+          </Grid>
+        ))}
+      </Grid>
+    </Grid>
   );
 };
 
