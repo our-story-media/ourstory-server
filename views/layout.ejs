@@ -547,18 +547,18 @@
       <a class="text-muted" href="https://indaba.dev">
         <%- __('Guide') %></a> &middot;
         <% } %>
-      <span>&copy;
-        <%- __('Indaba') %>
-        <%- new Date().getFullYear() %>
-      </span>
-      <span>&middot;
-        Dashboard: v<%- sails.config.version %>
+      
+      <span>
+        Dashboard: v<%- sails.config.version %> &middot;
       </span>
       <% if (sails.config.workerversion) { %>
-      <span>&middot;
-        Worker: v<%- sails.config.workerversion %>
+      <span>
+        Worker: v<%- sails.config.workerversion %> &middot;
       </span>
       <% } %>
+      <span>
+        The Indaba platform and related static content is licensed under a Creative Commons Attribution 4.0 International license.
+      </span>
     </div>
   </div>
     <% if (event.name) { %>
