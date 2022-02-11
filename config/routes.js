@@ -36,7 +36,7 @@ module.exports.routes = {
     API ENDPOINTS
     */
   "get /api/event/lookupshoot/:shortlink?": "EventController.lookupshoot",
-  "get /api/watch/editupdates": "WatchController.editupdates",
+  "post /api/watch/editupdates": "WatchController.editupdates",
   "get /api/event/myevents": "EventController.myevents",
   "get /api/event/myeventsowned": "EventController.myeventsowned",
   "get /api/event/removelimit/:id?": "EventController.removelimit",
