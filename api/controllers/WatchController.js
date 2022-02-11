@@ -626,119 +626,119 @@ module.exports = {
 
   renderhq: async function (req, res) {
     // console.log('render tagged visit')
-    let canedit = await Settings.findOne({ name: "processedits" });
-    if (canedit.value == "true") {
-      Edits.findOne(req.params.id).exec(function (err, edit) {
-        if (edit) {
-          Edits.genlink(function (newlink) {
-            console.log("rendering hq");
-            //console.log(edit);
-            //console.log(edit.media);
-            //console.log(edit.media.length > 1);
+    // let canedit = await Event.findOne({ name: "processedits" });
+    // if (canedit.value == "true") {
+    Edits.findOne(req.params.id).exec(function (err, edit) {
+      if (edit) {
+        Edits.genlink(function (newlink) {
+          console.log("rendering hq");
+          //console.log(edit);
+          //console.log(edit.media);
+          //console.log(edit.media.length > 1);
 
-            //TODO CHANGE THIS BACK
-            if (edit.media && edit.media.length > 0) {
-              edit.code = edit.code || newlink;
-              edit.failed = false;
-              edit.fail = false;
-              edit.path = null;
-              edit.progress = null;
-              edit.save(function (err) {
-                //fire off to editor:
-                //send back to user:
-                console.log("edit submitted");
-                Editor.edit(edit, "high");
-                edit.shortlink = sails.config.master_url + "/v/" + edit.code;
-                res.redirect("/watch/edits/" + req.params.eventid);
-              });
-            } else {
+          //TODO CHANGE THIS BACK
+          if (edit.media && edit.media.length > 0) {
+            edit.code = edit.code || newlink;
+            edit.failed = false;
+            edit.fail = false;
+            edit.path = null;
+            edit.progress = null;
+            edit.save(function (err) {
+              //fire off to editor:
+              //send back to user:
+              console.log("edit submitted");
+              Editor.edit(edit, "high");
+              edit.shortlink = sails.config.master_url + "/v/" + edit.code;
               res.redirect("/watch/edits/" + req.params.eventid);
-            }
-          });
-        } else {
-          res.redirect("/watch/edits/" + req.params.eventid);
-        }
-      });
-    } else {
-      res.redirect("/watch/edits/" + req.params.eventid);
-    }
+            });
+          } else {
+            res.redirect("/watch/edits/" + req.params.eventid);
+          }
+        });
+      } else {
+        res.redirect("/watch/edits/" + req.params.eventid);
+      }
+    });
+    // } else {
+    //   res.redirect("/watch/edits/" + req.params.eventid);
+    // }
   },
 
   //can only run this if the original already exists...
   rendertagged: async function (req, res) {
     // console.log('render tagged visit')
-    let canedit = await Settings.findOne({ name: "processedits" });
-    if (canedit.value == "true") {
-      Edits.findOne(req.params.id).exec(function (err, edit) {
-        if (edit && edit.hasoriginal) {
-          console.log("rendering tagged");
-          //console.log(edit);
-          //console.log(edit.media);
-          //console.log(edit.media.length > 1);
+    // let canedit = await Settings.findOne({ name: "processedits" });
+    // if (canedit.value == "true") {
+    Edits.findOne(req.params.id).exec(function (err, edit) {
+      if (edit && edit.hasoriginal) {
+        console.log("rendering tagged");
+        //console.log(edit);
+        //console.log(edit.media);
+        //console.log(edit.media.length > 1);
 
-          //TODO CHANGE THIS BACK
-          if (edit.media && edit.media.length > 0) {
-            edit.failed = false;
-            edit.fail = false;
-            edit.path = null;
-            edit.progress = null;
-            edit.save(function (err) {
-              //fire off to editor:
-              //send back to user:
-              console.log("edit submitted");
-              Editor.edit(edit, "tagged");
-              edit.shortlink = sails.config.master_url + "/v/" + edit.code;
-              res.redirect("/watch/edits/" + req.params.eventid);
-            });
-          } else {
+        //TODO CHANGE THIS BACK
+        if (edit.media && edit.media.length > 0) {
+          edit.failed = false;
+          edit.fail = false;
+          edit.path = null;
+          edit.progress = null;
+          edit.save(function (err) {
+            //fire off to editor:
+            //send back to user:
+            console.log("edit submitted");
+            Editor.edit(edit, "tagged");
+            edit.shortlink = sails.config.master_url + "/v/" + edit.code;
             res.redirect("/watch/edits/" + req.params.eventid);
-          }
+          });
         } else {
-          console.log("no edit or original file present");
           res.redirect("/watch/edits/" + req.params.eventid);
         }
-      });
-    } else {
-      res.redirect("/watch/edits/" + req.params.eventid);
-    }
+      } else {
+        console.log("no edit or original file present");
+        res.redirect("/watch/edits/" + req.params.eventid);
+      }
+    });
+    // } else {
+    //   res.redirect("/watch/edits/" + req.params.eventid);
+    // }
   },
 
   renderoriginal: async function (req, res) {
     // console.log('render tagged visit')
-    let canedit = await Settings.findOne({ name: "processedits" });
-    if (canedit.value == "true") {
-      Edits.findOne(req.params.id).exec(function (err, edit) {
-        if (edit) {
-          console.log("rendering original (again)");
-          //console.log(edit);
-          //console.log(edit.media);
-          //console.log(edit.media.length > 1);
+    // let canedit = await Settings.findOne({ name: "processedits" });
+    // if (canedit.value == "true") {
+    Edits.findOne(req.params.id).exec(function (err, edit) {
+      if (edit) {
+        console.log("rendering original (again)");
+        //console.log(edit);
+        //console.log(edit.media);
+        //console.log(edit.media.length > 1);
 
-          //TODO CHANGE THIS BACK
-          if (edit.media && edit.media.length > 0) {
-            edit.failed = false;
-            edit.fail = false;
-            edit.path = null;
-            edit.progress = null;
-            edit.save(function (err) {
-              //fire off to editor:
-              //send back to user:
-              console.log("edit submitted");
-              Editor.edit(edit);
-              edit.shortlink = sails.config.master_url + "/v/" + edit.code;
-              res.redirect("/watch/edits/" + req.params.eventid);
-            });
-          } else {
+        //TODO CHANGE THIS BACK
+        if (edit.media && edit.media.length > 0) {
+          edit.failed = false;
+          edit.fail = false;
+          edit.path = null;
+          edit.progress = null;
+          edit.save(function (err) {
+            //fire off to editor:
+            //send back to user:
+            console.log("edit submitted");
+            Editor.edit(edit);
+            edit.shortlink = sails.config.master_url + "/v/" + edit.code;
             res.redirect("/watch/edits/" + req.params.eventid);
-          }
+          });
         } else {
-          console.log("no edit present");
           res.redirect("/watch/edits/" + req.params.eventid);
         }
-      });
-    } else {
-      res.redirect("/watch/edits/" + req.params.eventid);
-    }
+      } else {
+        console.log("no edit present");
+        res.redirect("/watch/edits/" + req.params.eventid);
+      }
+    });
+    // } else {
+    //   res.redirect("/watch/edits/" + req.params.eventid);
+    // }
   },
 
   /**
@@ -772,6 +772,8 @@ module.exports = {
   editupdates: function (req, res) {
     //for each one, set a time and check-- and then update...
     var ids = req.param("edits");
+    // console.log("edit updates");
+    // console.log(ids);
     Edits.subscribe(req, ids);
     //set a time for them:
     _.each(ids, function (e) {
