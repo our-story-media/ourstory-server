@@ -3,9 +3,8 @@ import {
   Step,
   StepLabel,
   Container,
-  Divider,
+  Button,
   Typography,
-  ButtonBase,
 } from "@material-ui/core";
 import { ChevronLeft, ChevronRight } from "@material-ui/icons";
 import React, { ReactElement, useCallback } from "react";
@@ -53,12 +52,21 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
         <Stepper activeStep={page} alternativeLabel>
           {steps.map((_, idx) => (
             <Step key={idx}>
-              <StepLabel>{stepsLabels[idx]}</StepLabel>
+              <StepLabel
+                StepIconProps={{
+                  classes: {
+                    active: classes.stepIcon,
+                    text: classes.stepText,
+                    completed: classes.stepCompleted,
+                  },
+                }}
+              >
+                {stepsLabels[idx]}
+              </StepLabel>
             </Step>
           ))}
         </Stepper>
         <Container className={classes.instructionsContainer}>
-          <Divider className={classes.divider} />
           <div className={classes.centerVertically}>
             <Typography variant="h5">{steps[page]}</Typography>
           </div>
@@ -67,11 +75,21 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
           {page === 0 ? (
             <div />
           ) : (
-            <ButtonBase onClick={prevPageHandler}>
+            <Button
+              onClick={prevPageHandler}
+              variant="outlined"
+              size="large"
+              color="secondary"
+            >
               <ChevronLeft /> Previous
-            </ButtonBase>
+            </Button>
           )}
-          <ButtonBase onClick={nextPageHandler}>
+          <Button
+            onClick={nextPageHandler}
+            variant="outlined"
+            size="large"
+            color="secondary"
+          >
             {page === steps.length - 1 ? (
               startButtonContent
             ) : (
@@ -79,7 +97,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 Next <ChevronRight />
               </>
             )}
-          </ButtonBase>
+          </Button>
         </Container>
       </div>
     </CentralModal>

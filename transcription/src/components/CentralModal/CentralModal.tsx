@@ -1,7 +1,7 @@
 import {
+  Button,
   Container,
   DialogContent,
-  Divider,
   makeStyles,
   Modal,
   ModalProps,
@@ -9,9 +9,8 @@ import {
 import { Close } from "@material-ui/icons";
 import React, { ReactElement } from "react";
 import FlatPaper from "../FlatPaper/FlatPaper";
-import IndabaButton from "../IndabaButton/IndabaButton";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   modal: {
     outline: "0",
     display: "flex",
@@ -21,7 +20,13 @@ const useStyles = makeStyles({
   modalContentBox: {
     padding: "16px",
   },
-});
+  modalPaper: {
+    maxWith: "100%",
+    [theme.breakpoints.up("md")]: {
+      maxWidth: "70%",
+    },
+  }
+}));
 
 type CentralModalProps = ModalProps & {
   exit?: () => void;
@@ -38,33 +43,35 @@ const CentralModal: React.FC<CentralModalProps> = ({
 
   return (
     <Modal className={classes.modal} {...props}>
-      <DialogContent style={{ outline: "none" }}>
-        <FlatPaper>
-          {header && <Container>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                paddingTop: "8px",
-              }}
-            >
+      <DialogContent style={{ outline: "none" }} className={classes.modalPaper}>
+        <FlatPaper >
+          {header && (
+            <Container>
               <div
                 style={{
                   display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignContent: "center",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingTop: "8px",
                 }}
               >
-                {header}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    width: "80%",
+                  }}
+                >
+                  {header}
+                </div>
+                <Button onClick={exit}>
+                  <Close />
+                </Button>
               </div>
-              <IndabaButton onClick={exit}>
-                <Close />
-              </IndabaButton>
-            </div>
-            <Divider style={{ margin: "12px 0px 12px 0px" }} />
-          </Container>}
+            </Container>
+          )}
           <div className={classes.modalContentBox}>{children}</div>
         </FlatPaper>
       </DialogContent>
