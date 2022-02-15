@@ -5,7 +5,7 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "center",
     flexDirection: "row",
-    alignItems: "flex-end",
+    alignItems: "flex-start",
     width: "100%",
   },
   slideshowContentContainer: {

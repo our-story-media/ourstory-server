@@ -1,12 +1,6 @@
 // External Dependencies
 import LocalizedStrings from "react-localization";
-import {
-  Box,
-  Button,
-  Container,
-  MobileStepper,
-  Slider,
-} from "@material-ui/core";
+import {Button, MobileStepper, Slider, Grid } from "@material-ui/core";
 import { ArrowLeft, ArrowRight, Check } from "@material-ui/icons";
 import React, {
   useContext,
@@ -158,11 +152,24 @@ const Transcriber: React.FC<TranscriberProps> = ({
   const onType = useAutoPauseOnType(playing, setPlaying);
 
   return (
-    <div>
+    <Grid
+      item
+      container
+      direction="row"
+      justify="center"
+      alignItems="center"
+      style={{ height: "85%" }}
+    >
       <LoadingModal open={duration === 0} />
-      <Container style={{ marginBottom: "4px" }}>
+      <Grid
+        item
+        container
+        className={classes.backButtonContainer}
+        xs={12}
+        style={{ height: "10%", minHeight: "40px" }}
+      >
         <BackButton action={exitHandler} />
-      </Container>
+      </Grid>
       <OnboardingModal
         show={showOnboardingModal}
         dismiss={dismissOnboardingModal}
@@ -183,7 +190,13 @@ const Transcriber: React.FC<TranscriberProps> = ({
       />
       {chunks.length && (
         <>
-          <Box className={classes.videoPlayerContainer}>
+          <Grid
+            item
+            container
+            alignContent="center"
+            alignItems="center"
+            className={classes.videoContainer}
+          >
             <VideoPlayer
               progressState={progressState}
               playerRef={playerRef}
@@ -191,8 +204,15 @@ const Transcriber: React.FC<TranscriberProps> = ({
               controller={controller}
               loop
             />
-          </Box>
-          <div style={{ margin: "0 8px 0 8px" }}>
+          </Grid>
+          <Grid
+            item
+            container
+            xs={12}
+            style={{ height: "40%", marginBottom: "16px"}}
+            justify="center"
+            alignItems="center"
+          >
             <MobileStepper
               variant="dots"
               steps={transcriberState.miniChunks.length}
@@ -235,6 +255,11 @@ const Transcriber: React.FC<TranscriberProps> = ({
                     onClick={() =>
                       transcriberDispatch({ actionType: "go to previous page" })
                     }
+                    style={{
+                      height: "300px",
+                      margin: "0px 6px 0px 6px",
+                      width: "70px",
+                    }}
                   >
                     <ArrowLeft />
                   </IndabaButton>
@@ -245,6 +270,9 @@ const Transcriber: React.FC<TranscriberProps> = ({
                   <IndabaButton
                     style={{
                       backgroundColor: lastPage ? "green" : "#d9534f",
+                      height: "300px",
+                      margin: "0px 6px 0px 6px",
+                      width: "70px",
                     }}
                     onClick={() =>
                       transcriberDispatch({ actionType: "go to next page" })
@@ -305,7 +333,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
                 }}
               />
             </Slideshow>
-          </div>
+          </Grid>
         </>
       )}
       <div
@@ -335,7 +363,7 @@ const Transcriber: React.FC<TranscriberProps> = ({
           />
         )}
       </div>
-    </div>
+    </Grid>
   );
 };
 

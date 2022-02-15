@@ -2,10 +2,27 @@ import { makeStyles } from "@material-ui/core";
 
 const chunkProgressHeight = "8px";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   videoPlayerContainer: {
     position: "relative",
     overflow: "hidden",
+  },
+  backButtonContainer: {
+    marginTop: "4px",
+    padding: "0px",
+  },
+  transcribeButton: {
+    height: "300px",
+    margin: "0px 6px 0px 6px",
+    width: "70px",
+  },
+  videoContainer: {
+    height: "40%",
+    minHeight: "350px",
+    maxWidth: "80%",
+    [theme.breakpoints.up("md")]: {
+      maxWidth: "50%",
+    },
   },
   inputField: {
     width: "100%",
@@ -34,6 +51,6 @@ const useStyles = makeStyles({
   stepperDot:{
     margin: "2px"
   }
-  });
+  }));
 
 export default useStyles;

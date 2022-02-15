@@ -285,7 +285,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
           onProgressDrag={playerDragHandler}
         />
       </Grid>
-      <Grid item container xs={12} style={{ height: "40%" }}>
+      <Grid item container xs={12} style={{ height: "40%", margin: "5px" }}>
         <GridList
           className={classes.chunksList}
           cellHeight="auto"
