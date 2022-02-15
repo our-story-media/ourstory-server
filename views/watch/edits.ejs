@@ -76,7 +76,7 @@
             <span ng-show="event.processedits">
                 <% if(sails.config.NOTRENDERTAGGED)  { %>
                 <div>
-                &middot; <%- __('Tagged versions of each story will <strong>not</strong> be published automatically. Trigger the publishing of a high-quality tagged version manually for each story using the menu option.') %>
+                &middot; <%- __('Tagged versions of each story will be published automatically. Trigger the publishing of a high-quality non-tagged version manually for each story using the menu option.') %>
                 </div>
                 <% } %>
 
@@ -92,6 +92,9 @@
                 &middot; <%- __('Stories are currently published at the highest quality possible.') %>
                 </div>
                 <% } %>
+                <div>
+                  &middot; <%- __('Stories are currently tagged in %s',event.defaulttopiclang) %>
+                  </div>
             </span>
         </div>
         <div class="clearfix"></div>
@@ -164,7 +167,7 @@
                                       </a></li>
                                       <!-- Download original version (notags, preview if in titan) -->
                                       <li ng-if="edit.hasoriginal"><a ng-href="{{ '/watch/getvideofull/' + edit.id + '?apikey=<%- apikey %>'}}">
-                                        <%- __('Download (no tags)') %>
+                                        <%- __('Download (with tags)') %>
                                       </a></li>
 
                                       <!-- Download HQ version if exists -->
@@ -184,11 +187,11 @@
                                         <!-- publish original (i.e. normal operation, or only the full version if in titan) -->
                                         <li class="disabled" ng-if="!event.processedits && !edit.hasoriginal">
                                             <a href="#">    
-                                                <%- __('Publish (no tags)') %>
+                                                <%- __('Publish (with tags)') %>
                                         </a></li>
                                         <li ng-if="event.processedits && !edit.hasoriginal">
                                             <a ng-href="{{ '/api/watch/renderoriginal/<%- theevent.id %>/' + edit.id + '?apikey=<%- apikey %>'}}">    
-                                                <%- __('Publish (no tags)') %>
+                                                <%- __('Publish (with tags)') %>
                                         </a></li>
                                         <!-- // -->
 

@@ -137,7 +137,7 @@ exports.dropbox = function (config) {
   }
 };
 
-exports.edit = function (edit, mode) {
+exports.edit = async function (edit, mode) {
   edit.mode = mode || "";
 
   //just render original version (to halve the render time)
@@ -147,6 +147,10 @@ exports.edit = function (edit, mode) {
     edit.mode != "high"
   )
     edit.mode = "original";
+
+  let event = await Event.findOne({ id: edit.media[0].event_id });
+
+  edit.defaulttopiclang = event.defaulttopiclang;
 
   //just render tagged version (assuming original exists)
   // if (sails.config.NOTRENDERTAGGED && edit.forcerendertagged)

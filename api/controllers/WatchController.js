@@ -454,14 +454,19 @@ module.exports = {
     Edits.genlink(function (newlink) {
       //console.log(newlink);
       original.title = req.__("Copy of %s", original.title);
-      delete original.code;
-      delete original.shortlink;
+      // delete original.code;
+      // delete original.shortlink;
       original.progress = 0;
       original.createdAt = new Date();
       original.updatedAt = new Date();
       delete original.fail;
+      delete original.hasoriginal;
+      delete original.hastagged;
+      delete original.hashighquality;
+      original.code = newlink;
+      original.shortlink = newlink;
       original.path = null;
-      original.progress = null;
+      // original.progress = null;
       delete original.id;
 
       //return new edit and shortcode
