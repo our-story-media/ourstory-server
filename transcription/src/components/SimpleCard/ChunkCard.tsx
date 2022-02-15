@@ -37,7 +37,7 @@ const ChunkCard: React.FC<{
               display: "flex",
               flexDirection: "column",
               lineHeight: "normal",
-              margin: "5px",
+              margin: "0px 15px",
             }}
           >
             <span
@@ -46,7 +46,8 @@ const ChunkCard: React.FC<{
                 overflowWrap: "anywhere",
                 display: "flex",
                 justifyContent: "space-between",
-                lineHeight: "normal",
+                lineHeight: "1.5rem",
+                fontSize: "24px"
               }}
             >
               {getNameOf(chunk)}
