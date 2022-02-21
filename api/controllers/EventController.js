@@ -2551,4 +2551,80 @@ module.exports = {
       }
     });
   },
+
+  branding: function (req, res) {
+    try {
+      console.log("uploading");
+      if (req.file("image") != undefined) {
+        req.file("image").upload(function (err, tt) {
+          if (err || tt.length == 0) {
+            req.session.flash = {
+              msg: req.__("Upload Failed"),
+            };
+            res.redirect("/event/admin/");
+          }
+
+          // var uuid = require("uuid");
+          // var fakeid = uuid.v1();
+          // var filename = fakeid + tt[0].filename.replace(" ", "");
+          var tmp = ".tmp/uploads/" + tt[0].fd;
+          // var client = knox.createClient(knox_params);
+
+          sharp(tmp)
+            .resize(1280, 720, {
+              fit: "contain",
+              background: { r: 255, g: 255, b: 255, alpha: 255 },
+            })
+            .png()
+            .toFile(
+              path.join(__dirname, "..", "..", "upload", "branding.png"),
+              function (err) {
+                if (err) {
+                  req.session.flash = {
+                    msg: err,
+                  };
+                  res.redirect("/event/admin/");
+                }
+
+                // fs.copySync(
+                //   tmp,
+                //   path.join(__dirname, "..", "..", "upload", "branding.png")
+                // );
+
+                req.session.flash = {
+                  msg: req.__("Uploaded Brand"),
+                };
+                res.redirect("/event/admin/");
+              }
+            );
+
+          // });
+        });
+      } else {
+        // res.redirect('/shoot/view/'+req.param('id'));
+        req.session.flash = {
+          msg: req.__("Please provide and image"),
+        };
+        res.redirect("/event/admin/");
+      }
+    } catch (e) {
+      req.session.flash = {
+        msg: req.__("Upload Failed"),
+      };
+      res.redirect("/event/admin/");
+    }
+    // });
+  },
+
+  clearbranding: function (req, res) {
+    try {
+      fss.unlinkSync(
+        path.join(__dirname, "..", "..", "upload", "branding.png")
+      );
+    } catch (e) {
+      console.error(e);
+    }
+    req.session.flash = { msg: req.__("Removed Branding") };
+    res.redirect("/event/admin/");
+  },
 };

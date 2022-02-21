@@ -68,6 +68,8 @@ module.exports.policies = {
     imagebackground: ["apiauth", "authenticated", "isowner"],
     clearroleimg: ["apiauth", "authenticated", "isowner"],
     clearbackground: ["apiauth", "authenticated", "isowner"],
+    clearbranding: ["superadmin", "apiauth", "authenticated"],
+    background: ["superadmin", "apiauth", "authenticated"],
     triggeradd: true,
     changephase: ["authenticated", "isowner", "apiauth"],
     addphase: ["authenticated", "isowner", "apiauth"],

@@ -27,10 +27,11 @@ module.exports.routes = {
   "post /event/map/:id/:role": "EventController.map",
   "get /event/backgroundurl": "EventController.backgroundurl",
   "get /event/roleimg/:id/:role?": "EventController.roleimg",
-  "post /event/clearbackground/:id": "EventController.clearbackground",
   "get /event/clearroleimg/:id/:role": "EventController.clearroleimg",
   "get /event/contributors/:id": "EventController.contributors",
   "post /auth/process_admin": "AuthController.process_admin",
+  "get /admin/clearbranding": "EventController.clearbranding",
+  "post /admin/branding": "EventController.branding",
 
   /*
     API ENDPOINTS
