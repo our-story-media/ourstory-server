@@ -162,6 +162,10 @@ module.exports.policies = {
     homog: ["authenticated", "checkmedia_full"],
   },
 
+  transcribe: {
+    index: ["authenticated", "apikeygen", "flash"],
+    subs: ["authenticated", "apiauth"],
+  },
   // 'log':
   // {
   //     '*':['superadmin','flash'],

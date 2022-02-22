@@ -346,4 +346,7 @@ module.exports.routes = {
   "get /api/settings": "WatchController.getsettings",
   "post /api/settings/update/:name/:value": "WatchController.setting",
   "get /api/event/clone/:id": "CommissionController.clone",
+  "get /api/transcribe/subs/:id?": "TranscribeController.subs",
+  "/transcribe/:id?": "TranscribeController.index",
+  "get /api/watch/edit/:id?": "WatchController.edit",
 };
