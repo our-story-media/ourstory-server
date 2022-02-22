@@ -1,2 +1,2 @@
 <!-- <iframe src="/transcription/build/index.html?editid=<%- id %>&apikey=<%- apikey %>" style="border:none;position:fixed; width:100%;height:100vh;top:41px;left:0;" /> -->
-<iframe src="http://localhost:3000/?editid=<%- id %>&apikey=<%- apikey %>&apiurl=<%- apiurl %>" style="border:none;position:fixed; width:100%;height:100vh;top:41px;left:0;" />
+<iframe src="http://localhost:3000/?editid=<%- id %>&apikey=<%- apikey %>&apiurl=<%- apiurl %>" style="border:none;position:fixed; width:100%;height:100vh;left:0;<%- (user && _.contains(sails.config.admin_email,user.profile.emails[0].value))?'top:140px;':'top:42px;' %>" />

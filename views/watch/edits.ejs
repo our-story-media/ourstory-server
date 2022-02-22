@@ -226,16 +226,16 @@
                                         </a></li>
                                         <% } %>
                                         <!-- // -->
-
-                                        <li class="dropdown-header"><%- __('Management') %></li>
-                                        <li ng-if="edit.path && !edit.failed">
-                                            <a ng-href="{{ '/transcribe/' + edit.id + '?apikey=<%- apikey %>'}}">    
-                                                <%- __('Transcribe') %>
-                                        </a></li>
-                                        <li ng-if="edit.path && !edit.failed">
+                                        <li class="dropdown-header" ng-if="edit.hasoriginal"><%- __('Transcription') %></li>
+                                        <li ng-if="edit.hasoriginal">
+                                          <a ng-href="{{ '/transcribe/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                            <%- __('Transcribe') %>
+                                          </a></li>
+                                          <li ng-if="edit.hasoriginal">
                                             <a ng-href="{{ '/api/transcribe/subs/' + edit.id + '?apikey=<%- apikey %>'}}">    
-                                                <%- __('Download Transcription') %>
-                                        </a></li>
+                                              <%- __('Download Transcription') %>
+                                            </a></li>
+                                        <li class="dropdown-header"><%- __('Management') %></li>
                                         <li><a ng-href="/api/watch/clone/{{edit.id}}?apikey=<%- apikey %>"><%- __('Duplicate') %></a></li>
                                         <li><a ng-href="/api/watch/changeownership/{{edit.id}}/{{group}}?apikey=<%- apikey %>"><%- __('Allocate to latest user of this name') %></a></li>
                                         <li class="dropdown-submenu">
