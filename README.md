@@ -33,7 +33,14 @@ To start an online installation, volume map the following:
 
 Use the `docker/dev/docker-compose` file provided to start a local development environment. This includes a basic redis, mongodb and Indaba installation with volume maps to the local development files.
 
-Once started with `docker-compose up`, the server will be accesible at [http://localhost]().
+Once started with `docker-compose up`, the server will be accesible at [http://localhost:8845]().
+
+## Restoring backup / test data
+
+1. Place `mongodump` data into ./backup
+2. Open a terminal into the mongo docker container, and run `mongorestore /backup` to restore data.
+
+File assets need to be placed into `./upload`.
 
 # Production Deployment
 
@@ -59,3 +66,7 @@ To build a new Titan version -- one of the following must be run locally to upda
 `uploadtitan-armv7.sh` tags and uploads the RPi armv7 Docker tar file containing titan-compact.
 
 CircleCI build pushes an ARM7 image for tagged build to S3 after building.
+
+# Transcription React App
+
+The transcription portion of this web app is a standalone React app, stored in `/assets/transcription`. See `/assets/transcription/README.md` for details.

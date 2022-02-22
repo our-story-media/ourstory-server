@@ -144,7 +144,7 @@
                             <div style="padding-left:1em;padding-right:1em;padding-bottom:0.5em;padding-top:1em;">
                                 <h3 style="margin:0;height:1.4em;text-overflow: ellipsis;white-space: nowrap;overflow:hidden;text-align: left;">{{edit.title}}</h3>
                                 <p class="text-left">
-                                    <img style="width:24px;height:auto;border-radius: 50%;" ng-src="{{edit.user.photo}}" />
+                                    <img style="width:24px;height:auto;border-radius: 50%;" ng-src="{{edit.user.photo.replace('<%- sails.config.master_url %>','')}}" />
                                     {{edit.user.name}}
                                 </p>
                                 <p class="pull-right">
@@ -228,6 +228,14 @@
                                         <!-- // -->
 
                                         <li class="dropdown-header"><%- __('Management') %></li>
+                                        <li ng-if="edit.path && !edit.failed">
+                                            <a ng-href="{{ '/transcribe/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                                <%- __('Transcribe') %>
+                                        </a></li>
+                                        <li ng-if="edit.path && !edit.failed">
+                                            <a ng-href="{{ '/api/transcribe/subs/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                                <%- __('Download Transcription') %>
+                                        </a></li>
                                         <li><a ng-href="/api/watch/clone/{{edit.id}}?apikey=<%- apikey %>"><%- __('Duplicate') %></a></li>
                                         <li><a ng-href="/api/watch/changeownership/{{edit.id}}/{{group}}?apikey=<%- apikey %>"><%- __('Allocate to latest user of this name') %></a></li>
                                         <li class="dropdown-submenu">

@@ -411,7 +411,7 @@ bootleggerApp.controller('event', ['$scope', '$bootleggerSails', '$timeout', '$s
   }
 
   $scope.updatestarttime = function () {
-    if (validateTime($('[name=starts_time]').val())) {
+    if ($scope.validateTime($('[name=starts_time]').val())) {
       $scope.startupdate();
       socket.post('/api/event/edit/' + mastereventid, { starts_time: $('[name=starts_time]').val() }).then(function (response) {
         $scope.stopupdate();
@@ -424,7 +424,7 @@ bootleggerApp.controller('event', ['$scope', '$bootleggerSails', '$timeout', '$s
   }
 
   $scope.updateendtime = function () {
-    if (validateTime($('[name=ends_time]').val())) {
+    if ($scope.validateTime($('[name=ends_time]').val())) {
       $scope.startupdate();
       socket.post('/api/event/edit/' + mastereventid, { ends_time: $('[name=ends_time]').val() }).then(function (response) {
         $scope.stopupdate();

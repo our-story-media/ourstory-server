@@ -106,6 +106,7 @@ module.exports.policies = {
     getvideofull: ["authenticated", "apiauth", "checkmedia_full"],
     getvideotags: ["authenticated", "apiauth", "checkmedia_full"],
     edits: ["authenticated", "isowner", "apikeygen", "flash"],
+    edit: ["authenticated", "apikeygen", "flash"],
     alledits: ["authenticated", "isowner", "apiauth"],
     editprogress: ["authenticated", "apiauth"],
     clone: ["authenticated", "apiauth"],
