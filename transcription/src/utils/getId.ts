@@ -4,7 +4,7 @@ export const useStoryId = () => {
   const [storyId, setStoryId] = useState("");
 
   useEffect(() => {
-    // console.log(window.location.href.split('/')[4].split('?')[0]);
+    //console.log(window.location.href.split('/')[4].split('?')[0]);
     let editid = window.location.href.split('editid=')[1].split('&')[0];
     // console.log(editid);
     // if (process.env.NODE_ENV==='production')

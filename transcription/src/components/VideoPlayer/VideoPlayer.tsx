@@ -1,4 +1,4 @@
-import { Box, Button, Mark, SliderProps, Typography } from "@material-ui/core";
+import { Button, Grid, Mark, SliderProps, Typography } from "@material-ui/core";
 import { Forward5, Pause, PlayArrow, Replay5 } from "@material-ui/icons";
 import React, { RefObject, useCallback } from "react";
 import ReactPlayer from "react-player";
@@ -135,7 +135,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     [duration, split.start]
   );
 
-
   const skipForwardHandler = useCallback(() => {
     duration &&
       setProgressWithVideoUpdate((progress) => progress + 5 / duration);
@@ -147,7 +146,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }, [setProgressWithVideoUpdate, duration]);
 
   return (
-    <Box className={classes.videoPlayerContainer}>
+    <Grid
+      container
+      item
+      className={classes.videoPlayerContainer}
+      xs={12}
+      alignContent="center"
+      alignItems="center"
+    >
       <ReactPlayer
         url={url}
         ref={playerRef}
@@ -158,10 +164,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       />
       {showControls && (
         <div className={classes.videoControlsContainer}>
-          <div style={{ position: "absolute", right: "240px", bottom: -4 }}>
+          <div
+            className={`${classes.videoControlsRewindButtonsContainer} ${classes.videoControlsRewindButtonsContainerRight}`}
+          >
             <Button
               disableRipple
-              className={`${classes.videoPlayerButton} ${classes.roundButton}`}
+              variant="outlined"
+              color="secondary"
+              className={` ${classes.roundButton}`}
               onClick={skipBackwardHandler}
             >
               <Replay5 fontSize="large" />
@@ -178,11 +188,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               <PlayArrow fontSize="large" />
             )}
           </Button>
-          <div style={{ position: "absolute", left: "240px", bottom: -4 }}>
+          <div
+            className={`${classes.videoControlsRewindButtonsContainer} ${classes.videoControlsRewindButtonsContainerLeft}`}
+          >
             <Button
               onClick={skipForwardHandler}
+              variant="outlined"
+              color="secondary"
               disableRipple
-              className={`${classes.videoPlayerButton} ${classes.roundButton}`}
+              className={`${classes.roundButton}`}
             >
               <Forward5 fontSize="large" />
             </Button>
@@ -210,7 +224,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           />
         </div>
       )}
-    </Box>
+    </Grid>
   );
 };
 

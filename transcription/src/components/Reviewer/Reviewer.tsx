@@ -1,8 +1,8 @@
 // External Dependencies
 import {
   Box,
-  Container,
   Divider,
+  Grid,
   List,
   ListItem,
   makeStyles,
@@ -48,10 +48,13 @@ const strings = new LocalizedStrings({
   en: {
     instructionsOne:
       "You are about to review the transcriptions made on the video.",
+    instructionOneStepLabel: "Why?",
     instructionsTwo:
       "For each chunk, select one of the transcriptions from the list. You can do this by clicking on the text or the check box to the left of the text.",
+    instructionTwoStepLabel: "What?",
     instructionsThree:
       "You can also edit the transcriptions by clicking on the pencil button above the text.",
+    instructionThreeStepLabel: "How",
     editingTranscriptionWarningHeading: "You are editing {0}'s transcription",
     nameTranscription: "{0}: {1}",
     instructionsTitle: "Reviewing Instructions",
@@ -67,7 +70,7 @@ type ReviewerProps = {
   };
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   doneButton: {
     backgroundColor: "green",
     color: "white",
@@ -78,7 +81,33 @@ const useStyles = makeStyles({
     padding: "0 8px 0 8px",
     width: "100%",
   },
-});
+  backButtonContainer: {
+    marginTop: "4px",
+    padding: "0px",
+  },
+  videoContainer: {
+    height: "40%",
+    minHeight: "350px",
+    maxWidth: "80%",
+    [theme.breakpoints.up("md")]: {
+      maxWidth: "50%",
+    },
+  },
+  textReview: {
+    padding: "8px",
+    overflowWrap: "anywhere",
+    whiteSpace: "pre-line",
+    maxHeight: "500px",
+    overflowY: "scroll",
+    border: "2px solid rgba(0, 0, 0, 0.12)",
+    borderRadius: "6px",
+    marginRight: "12px",
+    flexGrow: 1,
+    [theme.breakpoints.up("md")]: {
+      maxHeight: "250px",
+    },
+  },
+}));
 
 export const Reviewer: React.FC<ReviewerProps> = ({
   atExit,
@@ -155,11 +184,167 @@ export const Reviewer: React.FC<ReviewerProps> = ({
   const updateTranscription = useUpdateTranscription(setChunks);
 
   return (
-    <div>
+    <Grid
+      container
+      alignContent="center"
+      alignItems="center"
+      spacing={1}
+      direction="column"
+    >
       <LoadingModal open={duration === 0} />
-      <Container style={{ marginTop: "4px" }}>
+      <Grid
+        item
+        container
+        className={classes.backButtonContainer}
+        xs={12}
+        style={{ height: "10%", minHeight: "40px" }}
+      >
         <BackButton action={atExit} />
-      </Container>
+      </Grid>
+      <Grid
+        item
+        container
+        alignContent="center"
+        alignItems="center"
+        className={classes.videoContainer}
+      >
+        <VideoPlayer
+          playerRef={playerRef}
+          progressState={progressState}
+          url={`${api_base_address}/api/watch/getvideo/${story_id}`}
+          controller={playerController}
+        />
+      </Grid>
+      <Grid
+        item
+        container
+        xs={12}
+        style={{ height: "40%", marginBottom: "16px" }}
+        justify="center"
+        alignItems="center"
+      >
+        <Slideshow
+          currentPage={page}
+          onNavigate={goTo}
+          numberOfPages={chunksToReview.length}
+          onComplete={atExit}
+          style={{ width: "100%" }}
+          contentContainerStyle={{ margin: "0px 5px" }}
+          leftColumn={
+            <div
+              style={{
+                height: "300px",
+                margin: "0px 6px 0px 6px",
+                width: "70px",
+                zIndex: 1,
+              }}
+            >
+              <IndabaButton
+                onClick={() => goTo("prev")}
+                style={{ height: "300px" }}
+              >
+                <ArrowLeft />
+              </IndabaButton>
+            </div>
+          }
+          rightColumn={
+            <div
+              style={{
+                margin: "0px 6px 0px 6px",
+                width: "70px",
+                zIndex: 1,
+              }}
+            >
+              <IndabaButton
+                onClick={() => (lastPage ? atExit() : goTo("next"))}
+                style={{
+                  backgroundColor: lastPage ? "green" : "#d9534f",
+                  height: "300px",
+                }}
+              >
+                {lastPage ? <Check /> : <ArrowRight />}
+              </IndabaButton>
+            </div>
+          }
+        >
+          <ChunkCard chunk={currentChunk}>
+            {currentChunk.transcriptions.map(
+              (transcription) =>
+                transcription.content && (
+                  <Box key={transcription.id} className={classes.cardContainer}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBottom: "12px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "1.2rem",
+                          display: "flex",
+                          justifyContent: "center",
+                          paddingLeft: "10px",
+                        }}
+                      >
+                        <AccountCircle />
+                        <div
+                          style={{
+                            marginLeft: "4px",
+                            overflowWrap: "anywhere",
+                          }}
+                        >
+                          {transcription.creatorid}
+                        </div>
+                      </div>
+                      <IndabaButton
+                        onClick={() => setEditingTranscription(transcription)}
+                        style={{
+                          padding: "0px",
+                          height: "32px",
+                          width: "32px",
+                        }}
+                      >
+                        <Edit fontSize="small" />
+                      </IndabaButton>
+                    </div>
+                    <div
+                      onClick={() =>
+                        userName &&
+                        (currentChunk.review?.selectedtranscription !==
+                        transcription.id
+                          ? updateReview(currentChunk, transcription, userName)
+                          : deleteReview(currentChunk))
+                      }
+                      style={{ display: "flex", flexDirection: "row" }}
+                    >
+                      <Radio
+                        checked={
+                          currentChunk.review?.selectedtranscription ===
+                          transcription.id
+                        }
+                        onChange={(_, checked) =>
+                          userName &&
+                          (checked
+                            ? updateReview(
+                                currentChunk,
+                                transcription,
+                                userName
+                              )
+                            : deleteReview(currentChunk))
+                        }
+                        style={{ backgroundColor: "initial" }}
+                      />
+                      <Typography variant="h6" className={classes.textReview}>
+                        {transcription.content}
+                      </Typography>
+                    </div>
+                  </Box>
+                )
+            )}
+          </ChunkCard>
+        </Slideshow>
+      </Grid>
       <OnboardingModal
         show={showOnboardingModal}
         dismiss={dismissOnboardingModal}
@@ -167,6 +352,11 @@ export const Reviewer: React.FC<ReviewerProps> = ({
           strings.instructionsOne,
           strings.instructionsTwo,
           strings.instructionsThree,
+        ]}
+        stepsLabels={[
+          strings.instructionOneStepLabel,
+          strings.instructionTwoStepLabel,
+          strings.instructionThreeStepLabel,
         ]}
         title={<h2 style={{ margin: 0 }}>{strings.instructionsTitle}</h2>}
         startButtonContent={<div>Start Reviewing</div>}
@@ -245,144 +435,6 @@ export const Reviewer: React.FC<ReviewerProps> = ({
           </div>
         </div>
       </CentralModal>
-      <Box>
-        <VideoPlayer
-          playerRef={playerRef}
-          progressState={progressState}
-          url={`${api_base_address}/api/watch/getvideo/${story_id}`}
-          controller={playerController}
-        />
-      </Box>
-      <Container>
-        <Slideshow
-          currentPage={page}
-          onNavigate={goTo}
-          numberOfPages={chunksToReview.length}
-          onComplete={atExit}
-          style={{ width: "100%" }}
-          contentContainerStyle={{ margin: "0 64px 0 64px" }}
-          leftColumn={
-            <div
-              style={{
-                position: "fixed",
-                bottom: 0,
-                left: 0,
-                margin: "16px",
-                zIndex: 1,
-              }}
-            >
-              <IndabaButton onClick={() => goTo("prev")}>
-                <ArrowLeft />
-              </IndabaButton>
-            </div>
-          }
-          rightColumn={
-            <div
-              style={{
-                position: "fixed",
-                bottom: 0,
-                right: 0,
-                margin: "16px",
-                zIndex: 1,
-              }}
-            >
-              <IndabaButton
-                onClick={() => (lastPage ? atExit() : goTo("next"))}
-                style={{
-                  backgroundColor: lastPage ? "green" : "#d9534f",
-                }}
-              >
-                {lastPage ? <Check /> : <ArrowRight />}
-              </IndabaButton>
-            </div>
-          }
-        >
-          <ChunkCard chunk={currentChunk}>
-            {currentChunk.transcriptions.map(
-              (transcription) =>
-                transcription.content && (
-                  <Box key={transcription.id} className={classes.cardContainer}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontSize: "1.2rem",
-                          display: "flex",
-                          justifyContent: "center",
-                          paddingLeft: "10px",
-                        }}
-                      >
-                        <AccountCircle />
-                        <div
-                          style={{
-                            marginLeft: "4px",
-                            overflowWrap: "anywhere",
-                          }}
-                        >
-                          {transcription.creatorid}
-                        </div>
-                      </div>
-                      <IndabaButton
-                        onClick={() => setEditingTranscription(transcription)}
-                        style={{
-                          padding: "0px",
-                          height: "32px",
-                          width: "32px",
-                          minWidth: "32px",
-                        }}
-                      >
-                        <Edit fontSize="small" />
-                      </IndabaButton>
-                    </div>
-                    <div
-                      onClick={() =>
-                        userName &&
-                        (currentChunk.review?.selectedtranscription !==
-                        transcription.id
-                          ? updateReview(currentChunk, transcription, userName)
-                          : deleteReview(currentChunk))
-                      }
-                      style={{ display: "flex", flexDirection: "row" }}
-                    >
-                      <Radio
-                        checked={
-                          currentChunk.review?.selectedtranscription ===
-                          transcription.id
-                        }
-                        onChange={(_, checked) =>
-                          userName &&
-                          (checked
-                            ? updateReview(
-                                currentChunk,
-                                transcription,
-                                userName
-                              )
-                            : deleteReview(currentChunk))
-                        }
-                        style={{ backgroundColor: "initial" }}
-                      />
-                      <Typography
-                        variant="h6"
-                        style={{
-                          padding: "8px",
-                          overflowWrap: "anywhere",
-                          whiteSpace: "pre",
-                        }}
-                      >
-                        {transcription.content}
-                      </Typography>
-                    </div>
-                    <Divider style={{ margin: "16px 0 16px 0" }} />
-                  </Box>
-                )
-            )}
-          </ChunkCard>
-        </Slideshow>
-      </Container>
-    </div>
+    </Grid>
   );
 };

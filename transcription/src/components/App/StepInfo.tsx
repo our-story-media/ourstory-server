@@ -4,15 +4,15 @@ import { Box, Typography } from "@material-ui/core";
 import LocalizedStrings from "react-localization";
 
 // Internal Dependencies
-import FlatPaper from "../FlatPaper/FlatPaper";
+import FlatCard from "../FlatCard/FlatCard";
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import useStyles from "./StepInfoStyles";
 import IndabaButton from "../IndabaButton/IndabaButton";
 
 const strings = new LocalizedStrings({
   en: {
-    perform: "Perform {0}"
-  }
+    perform: "Perform {0}",
+  },
 });
 
 export type StepInfoProps = {
@@ -32,27 +32,39 @@ const StepInfo: React.FC<StepInfoProps> = ({
 }) => {
   const classes = useStyles();
   return (
-    <div>
-      <FlatPaper>
-        <div className={classes.stepHeader}>
-          <Typography variant="subtitle1">{title}</Typography>
-          <LinearProgressWithLabel value={progress} />
-        </div>
-      </FlatPaper>
-      <FlatPaper>
-        <div className={classes.paper}>
-          {description}
-          <br />
-          <Box style={{ marginTop: "8px" }}>
-            <IndabaButton disabled={!enabled} onClick={onSelect}>
-              <Typography style={{ padding: "6px" }}>
-                {strings.formatString(strings.perform, title)}
-              </Typography>
-            </IndabaButton>
-          </Box>
-        </div>
-      </FlatPaper>
-    </div>
+    <FlatCard
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: "column",
+        flexGrow: 1,
+      }}
+      className={classes}
+      title={title}
+      context={
+        <Box style={{ marginTop: "8px" }}>
+          <Typography
+            variant="h5"
+            style={{ fontFamily: "'Open Sans', 'Helvetica Neue', sans-serif" }}
+          >
+            {title}
+          </Typography>
+          <LinearProgressWithLabel value={progress} color="secondary" />
+          <Typography style={{ padding: "6px", fontSize: "1.1rem" }}>
+            {description}
+          </Typography>
+        </Box>
+      }
+      actions={
+        <Box style={{ marginTop: "8px" }}>
+          <IndabaButton disabled={!enabled} onClick={onSelect}>
+            <Typography style={{ padding: "6px", fontSize: "1.1rem" }}>
+              {strings.formatString(strings.perform, title)}
+            </Typography>
+          </IndabaButton>
+        </Box>
+      }
+    />
   );
 };
 

@@ -1,8 +1,8 @@
 import {
   ClickAwayListener,
-  Container,
   // Divider,
   Button,
+  Grid,
 } from "@material-ui/core";
 import React, { ReactNode, useRef } from "react";
 
@@ -28,44 +28,36 @@ const Header: React.FC<HeaderProps> = ({
 
   const contextMenuButtonRef = useRef(null);
 
-  const [
-    showContextMenu,
-    toggleShowContextMenu,
-    setShowContextMenu,
-  ] = useToggle(false);
+  const [showContextMenu, toggleShowContextMenu, setShowContextMenu] =
+    useToggle(false);
 
   const hideContextMenu = () => setShowContextMenu(false);
 
   return (
-    <>
-      <Container
-        style={{
-          height: "calc(100vh - 5px)",
-          width: "100%",
-          padding: 0,
-          marginTop: "5px",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+    <Grid container direction="column" justify="center" alignItems="center">
+      <Grid container item xs={12} justify="center" alignItems="center">
         {children}
-            <ClickAwayListener onClickAway={hideContextMenu}>
-              <Button
-              variant="outlined" color="primary"
-                onClick={toggleShowContextMenu}
-                ref={contextMenuButtonRef}
-              >
-                All Contributions
-              </Button>
-            </ClickAwayListener>
-            <IndabaMenu
-              show={showContextMenu}
-              anchor={contextMenuButtonRef.current!}
-              menuItems={contextMenuItems}
-            />
-        
-      </Container>
-    </>
+      </Grid>
+      <Grid container item xs={12} justify="center" alignItems="center">
+        <ClickAwayListener onClickAway={hideContextMenu}>
+          <Button
+            size="large"
+            style={{ maxWidth: "265px" }}
+            variant="outlined"
+            color="secondary"
+            onClick={toggleShowContextMenu}
+            ref={contextMenuButtonRef}
+          >
+            All Contributions
+          </Button>
+        </ClickAwayListener>
+        <IndabaMenu
+          show={showContextMenu}
+          anchor={contextMenuButtonRef.current!}
+          menuItems={contextMenuItems}
+        />
+      </Grid>
+    </Grid>
   );
 };
 

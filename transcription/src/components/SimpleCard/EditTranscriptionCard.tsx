@@ -28,7 +28,7 @@ const EditTranscriptionCard: React.FC<EditTranscriptionCardProps> = ({
   return (
     <SimpleCard
       title={transcriptionIcon}
-      cardStyle={{ margin: "16px 8px 0 8px" }}
+      cardStyle={{ paddingBottom: "0px" }}
     >
       <TextField
         autoFocus
@@ -39,6 +39,7 @@ const EditTranscriptionCard: React.FC<EditTranscriptionCardProps> = ({
         variant="outlined"
         label={strings.transcription}
         value={transcriptionValue}
+        color="secondary"
         onChange={(e) => {
           onChange(e.target.value);
         }}

@@ -33,9 +33,23 @@ const ChunkCard: React.FC<{
         <div>
           <span
             className={classes.titleContainer}
-            style={{ display: "flex", flexDirection: "column" }}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              lineHeight: "normal",
+              margin: "0px 15px",
+            }}
           >
-            <span style={{ fontWeight: 600, overflowWrap: "anywhere", display: "flex", justifyContent: "space-between" }}>
+            <span
+              style={{
+                fontWeight: 600,
+                overflowWrap: "anywhere",
+                display: "flex",
+                justifyContent: "space-between",
+                lineHeight: "1.5rem",
+                fontSize: "24px"
+              }}
+            >
               {getNameOf(chunk)}
               {transcriptionIcon}
             </span>
@@ -45,7 +59,8 @@ const ChunkCard: React.FC<{
           </span>
         </div>
       }
-      cardStyle={{ ...style, position: "relative", margin: "8px" }}
+      cardStyle={{ ...style, position: "relative" }}
+      contentStyle={{ ...style, padding: "0px 0px 16px 0px" }}
     >
       {children}
     </SimpleCard>

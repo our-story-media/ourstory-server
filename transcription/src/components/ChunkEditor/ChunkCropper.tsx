@@ -1,4 +1,3 @@
-import { Container } from "@material-ui/core";
 import React, {
   useState,
   useEffect,
@@ -72,9 +71,6 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
 
   return (
     <div>
-      <Container>
-        <h2 style={{ margin: 0 }}>Cropping:</h2>
-      </Container>
       <VideoPlayer
         progressState={cropPlayerProgressState}
         url={`${api_base_address}/api/watch/getvideo/${story_id}`}

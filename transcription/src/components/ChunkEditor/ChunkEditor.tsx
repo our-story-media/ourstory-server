@@ -10,12 +10,13 @@ import React, {
   useState,
 } from "react";
 import {
-  Box,
-  Container,
+  Grid,
   GridList,
   GridListTile,
   Mark,
+  useMediaQuery,
 } from "@material-ui/core";
+import { useTheme } from "@material-ui/core/styles";
 
 // Internal Dependencies
 import ChunkCard from "../SimpleCard/ChunkCard";
@@ -54,23 +55,29 @@ const strings = new LocalizedStrings({
   en: {
     instructionsOne:
       "You are about to chunk the video. The aim of chunking is to make Transcribing easy.",
+    instructionOneStepLabel: "Faster Transcribing",
     instructionsTwo:
       "Rather than transcribing the entire video at once, you will break the video down into smaller chunks, which you will transcribe individually.",
+    instructionTwoStepLabel: "Small chunks",
     instructionsThree:
       "You should aim to have only one person speaking in each chunk. Create a new chunk when there is a change in who is talking, there is a gap in the talking, or a person begins/ends talking.",
+    instructionThreeStepLabel: "One Speaker per chunk",
     instructionsFour:
-      "To create a chunk, press the '+' button in the bottom right corner. The time that you press the '+' button in the video will be the end of the new chunk.",
+      "To create a chunk, press the 'Add' button in the bottom right corner. The time that you press the 'Add' button in the video will be the end of the new chunk.",
+    instructionFourStepLabel: "Push 'Add' Button",
     instructionsTitle: "Chunking Instructions",
     startChunking: "Start Chunking",
     attemptDeleteWarningTitle: "This chunk has a transcription",
-    attemptDeleteWarningBody: "Attempting to delete chunk {0}, which has a transcription saved to it. Are you sure you want to delete it?",
+    attemptDeleteWarningBody:
+      "Attempting to delete chunk {0}, which has a transcription saved to it. Are you sure you want to delete it?",
     attemptNewChunkTitle: "The enclosing chunk has a transcription",
-    attemptNewChunkBody: 'Creating a new chunk here will delete the transcriptions on the enclosing chunk, "{0}". Are you sure you want to discard these transcriptions?',
+    attemptNewChunkBody:
+      'Creating a new chunk here will delete the transcriptions on the enclosing chunk, "{0}". Are you sure you want to discard these transcriptions?',
     delete: "Delete",
     edit: "Edit",
     viewTranscriptions: "View Transcriptions",
     newChunk: "New Chunk",
-    doneCard: "Done Card"
+    doneCard: "Done Card",
   },
 });
 
@@ -94,6 +101,13 @@ const getMarks = (chunks: Chunk[]): Mark[] =>
   chunks.map((chunk) => ({
     value: chunk.endtimeseconds * 100,
   }));
+
+const GetCols = (): number => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
+  console.log(matches);
+  return matches ? 3.5 : 2.5;
+};
 
 const ChunkEditor: React.FC<ChunkEditorProps> = ({
   atExit,
@@ -171,13 +185,11 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
     userName: string
   ) => newChunk(splitAt, storyDuration, userName);
 
-  const {
-    attemptAction: attemptNewChunk,
-    ...attemptNewChunkActionControls
-  } = useConfirmBeforeAction(createNewChunk, (chunks, time) => {
-    const enclosingChunk = getEnclosingChunk(chunks, time);
-    return enclosingChunk !== undefined && hasTranscription(enclosingChunk);
-  });
+  const { attemptAction: attemptNewChunk, ...attemptNewChunkActionControls } =
+    useConfirmBeforeAction(createNewChunk, (chunks, time) => {
+      const enclosingChunk = getEnclosingChunk(chunks, time);
+      return enclosingChunk !== undefined && hasTranscription(enclosingChunk);
+    });
 
   const handleNewChunk = () => {
     if (userName) {
@@ -217,7 +229,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
   const chunkCardContentStyle = useRef({
     backgroundColor: "green",
     height: "100%",
-    padding: "16px",
+    padding: "0px",
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
@@ -233,30 +245,169 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
 
   const { showOnboardingModal, dismissOnboardingModal } = onboarding;
 
-  const playerDragHandler = useCallback(() => setPlayingChunk(undefined), [
-    setPlayingChunk,
-  ]);
+  const playerDragHandler = useCallback(
+    () => setPlayingChunk(undefined),
+    [setPlayingChunk]
+  );
 
   return (
     /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
-    <Box>
-      <LoadingModal open={duration === 0} />
-      <Container>
-        <div className={classes.backButtonContainer}>
-          <BackButton action={atExit} />
+    <Grid
+      item
+      container
+      direction="row"
+      justify="center"
+      alignItems="center"
+      style={{ height: "85%" }}
+    >
+      <Grid
+        item
+        container
+        className={classes.backButtonContainer}
+        xs={12}
+        style={{ height: "10%", minHeight: "40px" }}
+      >
+        <BackButton action={atExit} />
+      </Grid>
+      <Grid
+        item
+        container
+        alignContent="center"
+        alignItems="center"
+        className={classes.videoContainer}
+      >
+        <VideoPlayer
+          controller={videoPlayerController}
+          progressState={videoPlayerProgressState}
+          playerRef={playerRef}
+          url={`${api_base_address}/api/watch/getvideo/${story_id}`}
+          sliderMarks={marks}
+          onProgressDrag={playerDragHandler}
+        />
+      </Grid>
+      <Grid item container xs={12} style={{ height: "40%", margin: "5px" }}>
+        <GridList
+          className={classes.chunksList}
+          cellHeight="auto"
+          cols={GetCols()}
+        >
+          {chunks
+            .map((c) => (
+              <GridListTile key={c.id} style={{ margin: "0px 4px 4px 2px" }}>
+                <ScrollToOnMount>
+                  <ChunkCard
+                    chunk={c}
+                    transcriptionIcon={
+                      <ChunkCardContextMenu
+                        menuItems={[
+                          {
+                            content: strings.delete,
+                            handler: () => handleAttemptDeleteChunk(c),
+                          },
+                          {
+                            content: strings.edit,
+                            handler: () => setCroppingChunk(c),
+                          },
+                        ].concat(
+                          c.transcriptions.length !== 0
+                            ? [
+                                {
+                                  content: strings.viewTranscriptions,
+                                  handler: () => setShowTranscriptionsFor(c),
+                                },
+                              ]
+                            : []
+                        )}
+                      />
+                    }
+                  >
+                    <div className={classes.chunkCardBody}>
+                      <VideoThumbnail
+                        url={`${api_base_address}/api/watch/getvideo/${story_id}`}
+                        time={
+                          c.starttimeseconds +
+                          (c.endtimeseconds - c.starttimeseconds) / 2
+                        }
+                      />
+                      <IndabaButton
+                        round
+                        color="primary"
+                        style={playButtonStyle as React.CSSProperties}
+                        onClick={() =>
+                          handleChunkPlayButtonClick(
+                            c,
+                            playingChunk,
+                            playingState[0]
+                          )
+                        }
+                      >
+                        {playingChunk?.id === c.id && playingState[0] ? (
+                          <Stop />
+                        ) : (
+                          <PlayArrow />
+                        )}
+                      </IndabaButton>
+                    </div>
+                  </ChunkCard>
+                </ScrollToOnMount>
+              </GridListTile>
+            ))
+            .concat(
+              getLastEndTimeSeconds(chunks) > 0.75
+                ? [
+                    <GridListTile
+                      key={strings.doneCard}
+                      onClick={handleCompleteChunking}
+                    >
+                      <ScrollToOnMount style={{ height: "100%" }}>
+                        <SimpleCard
+                          contentStyle={chunkCardContentStyle.current}
+                          cardStyle={chunkCardStyle.current}
+                        >
+                          <Check
+                            fontSize="large"
+                            style={{ marginRight: "4px" }}
+                          />
+                        </SimpleCard>
+                      </ScrollToOnMount>
+                    </GridListTile>,
+                  ]
+                : []
+            )}
+        </GridList>
+      </Grid>
+      <div>
+        <div className={classes.newChunkButtonContainer}>
+          <IndabaButton
+            round
+            aria-label={strings.newChunk}
+            style={{ margin: "20px" }}
+            onClick={handleNewChunk}
+          >
+            <Add />
+          </IndabaButton>
         </div>
-      </Container>
+      </div>
+      <LoadingModal open={duration === 0} />
       <OnboardingModal
         show={showOnboardingModal}
         dismiss={dismissOnboardingModal}
         title={
-          <h2 className={classes.onboardingTitle}>{strings.instructionsTitle}</h2>
+          <h2 className={classes.onboardingTitle}>
+            {strings.instructionsTitle}
+          </h2>
         }
         steps={[
           strings.instructionsOne,
           strings.instructionsTwo,
           strings.instructionsThree,
           strings.instructionsFour,
+        ]}
+        stepsLabels={[
+          strings.instructionOneStepLabel,
+          strings.instructionTwoStepLabel,
+          strings.instructionThreeStepLabel,
+          strings.instructionFourStepLabel,
         ]}
         startButtonContent={<div>{strings.startChunking}</div>}
       />
@@ -272,7 +423,11 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
       >
         {(...args) => (
           <div style={{ overflowWrap: "anywhere" }}>
-            {strings.formatString(strings.attemptDeleteWarningBody, args[0] && ` "${getNameOf(args[0])}"`)}</div>
+            {strings.formatString(
+              strings.attemptDeleteWarningBody,
+              args[0] && ` "${getNameOf(args[0])}"`
+            )}
+          </div>
         )}
       </ConfirmIntentModal>
       <ConfirmIntentModal
@@ -281,7 +436,10 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
       >
         {(...args) => (
           <div>
-            {strings.formatString(strings.attemptNewChunkBody, getNameOf(getEnclosingChunk(args[0], args[1]) ?? args[0][0]))}
+            {strings.formatString(
+              strings.attemptNewChunkBody,
+              getNameOf(getEnclosingChunk(args[0], args[1]) ?? args[0][0])
+            )}
           </div>
         )}
       </ConfirmIntentModal>
@@ -289,114 +447,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
         chunk={showTranscriptionsFor}
         exit={() => setShowTranscriptionsFor(undefined)}
       />
-      <div className={classes.videoPlayerContainer}>
-        <VideoPlayer
-          controller={videoPlayerController}
-          progressState={videoPlayerProgressState}
-          playerRef={playerRef}
-          url={`${api_base_address}/api/watch/getvideo/${story_id}`}
-          sliderMarks={marks}
-          onProgressDrag={playerDragHandler}
-        />
-      </div>
-      <GridList className={classes.chunksList} cellHeight="auto" cols={2.5}>
-        {chunks
-          .map((c) => (
-            <GridListTile key={c.id}>
-              <ScrollToOnMount>
-                <ChunkCard
-                  chunk={c}
-                  transcriptionIcon={
-                    <ChunkCardContextMenu
-                      menuItems={[
-                        {
-                          content: strings.delete,
-                          handler: () => handleAttemptDeleteChunk(c),
-                        },
-                        {
-                          content: strings.edit,
-                          handler: () => setCroppingChunk(c),
-                        },
-                      ].concat(
-                        c.transcriptions.length !== 0
-                          ? [
-                              {
-                                content: strings.viewTranscriptions,
-                                handler: () => setShowTranscriptionsFor(c),
-                              },
-                            ]
-                          : []
-                      )}
-                    />
-                  }
-                >
-                  <div className={classes.chunkCardBody}>
-                    <VideoThumbnail
-                      url={`${api_base_address}/api/watch/getvideo/${story_id}`}
-                      time={
-                        c.starttimeseconds +
-                        (c.endtimeseconds - c.starttimeseconds) / 2
-                      }
-                    />
-                    <IndabaButton
-                      round
-                      color="primary"
-                      style={playButtonStyle as React.CSSProperties}
-                      onClick={() =>
-                        handleChunkPlayButtonClick(
-                          c,
-                          playingChunk,
-                          playingState[0]
-                        )
-                      }
-                    >
-                      {playingChunk?.id === c.id && playingState[0] ? (
-                        <Stop />
-                      ) : (
-                        <PlayArrow />
-                      )}
-                    </IndabaButton>
-                  </div>
-                </ChunkCard>
-              </ScrollToOnMount>
-            </GridListTile>
-          ))
-          .concat(
-            getLastEndTimeSeconds(chunks) > 0.75
-              ? [
-                  <GridListTile
-                    key={strings.doneCard}
-                    onClick={handleCompleteChunking}
-                  >
-                    <ScrollToOnMount style={{ height: "100%" }}>
-                      <SimpleCard
-                        contentStyle={chunkCardContentStyle.current}
-                        cardStyle={chunkCardStyle.current}
-                      >
-                        <Check
-                          fontSize="large"
-                          style={{ marginRight: "4px" }}
-                        />
-                      </SimpleCard>
-                    </ScrollToOnMount>
-                  </GridListTile>,
-                ]
-              : []
-          )}
-      </GridList>
-      <div>
-        <div className={classes.newChunkButtonContainer}>
-          <IndabaButton
-            round
-            aria-label={strings.newChunk}
-            style={{ margin: "8px" }}
-            onClick={handleNewChunk}
-          >
-            <Add />
-          </IndabaButton>
-        </div>
-      </div>
-    </Box>
+    </Grid>
   );
 };
 

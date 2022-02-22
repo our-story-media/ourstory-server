@@ -17,13 +17,13 @@ const SkipForwardBackButtons: React.FC<SkipForwardBackButtonsProps> = ({
     <div
       style={style ? {...style} : {
         margin: "16px 16px 32px 16px",
-        display: "flex",
+        display: "flex"
       }}
     >
       <IndabaButton
         round
         aria-label="Go Back"
-        style={{ margin: "8px" }}
+        style={{ margin: "8px"}}
         onClick={skipBackward}
       >
         <Replay5 />

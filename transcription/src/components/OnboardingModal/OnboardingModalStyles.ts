@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   contentContainer: {
     paddingBottom: "32px",
     height: "40vh",
@@ -22,6 +22,19 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "space-between",
   },
-});
+  stepIcon: {
+    fill: "#e53935",
+  },
+  stepText: {
+    fill: "#ffffff",
+  },
+  stepCompleted: {
+    fill: "#e53935"
+  },
+  stepLabel: {
+    fontSize: "12px"
+  }
+
+}));
 
 export default useStyles;

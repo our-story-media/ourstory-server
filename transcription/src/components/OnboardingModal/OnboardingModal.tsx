@@ -3,9 +3,8 @@ import {
   Step,
   StepLabel,
   Container,
-  Divider,
+  Button,
   Typography,
-  ButtonBase,
 } from "@material-ui/core";
 import { ChevronLeft, ChevronRight } from "@material-ui/icons";
 import React, { ReactElement, useCallback } from "react";
@@ -18,6 +17,7 @@ type OnboardingModalProps = {
   dismiss: () => void;
   title: ReactElement;
   steps: string[];
+  stepsLabels: string[];
   startButtonContent: ReactElement;
 };
 
@@ -26,6 +26,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
   dismiss,
   title,
   steps,
+  stepsLabels,
   startButtonContent,
 }) => {
   const { page, goTo, reset } = useSlideshow(steps);
@@ -33,7 +34,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
   const dismissHandler = useCallback(() => {
     reset();
     dismiss();
-  }, []);
+  }, [dismiss, reset]);
 
   const nextPageHandler = useCallback(() => {
     page === steps.length - 1 ? dismissHandler() : goTo("next");
@@ -48,15 +49,24 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
   return (
     <CentralModal header={title} open={show} exit={dismissHandler}>
       <div className={classes.contentContainer}>
-        <Stepper activeStep={page}>
+        <Stepper activeStep={page} alternativeLabel>
           {steps.map((_, idx) => (
             <Step key={idx}>
-              <StepLabel />
+              <StepLabel
+                StepIconProps={{
+                  classes: {
+                    active: classes.stepIcon,
+                    text: classes.stepText,
+                    completed: classes.stepCompleted,
+                  },
+                }}
+              >
+                {stepsLabels[idx]}
+              </StepLabel>
             </Step>
           ))}
         </Stepper>
         <Container className={classes.instructionsContainer}>
-          <Divider className={classes.divider} />
           <div className={classes.centerVertically}>
             <Typography variant="h5">{steps[page]}</Typography>
           </div>
@@ -65,11 +75,21 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
           {page === 0 ? (
             <div />
           ) : (
-            <ButtonBase onClick={prevPageHandler}>
+            <Button
+              onClick={prevPageHandler}
+              variant="outlined"
+              size="large"
+              color="secondary"
+            >
               <ChevronLeft /> Previous
-            </ButtonBase>
+            </Button>
           )}
-          <ButtonBase onClick={nextPageHandler}>
+          <Button
+            onClick={nextPageHandler}
+            variant="outlined"
+            size="large"
+            color="secondary"
+          >
             {page === steps.length - 1 ? (
               startButtonContent
             ) : (
@@ -77,7 +97,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 Next <ChevronRight />
               </>
             )}
-          </ButtonBase>
+          </Button>
         </Container>
       </div>
     </CentralModal>

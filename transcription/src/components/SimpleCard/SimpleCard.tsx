@@ -1,4 +1,4 @@
-import { Card, CardContent, Divider, Typography } from "@material-ui/core";
+import { Card, CardContent, Typography } from "@material-ui/core";
 import React, { ReactNode } from "react";
 
 type SimpleCardProps = {
@@ -7,15 +7,19 @@ type SimpleCardProps = {
   cardStyle?: any;
 };
 
-const SimpleCard: React.FC<SimpleCardProps> = ({ title, children, contentStyle, cardStyle }) => {
+const SimpleCard: React.FC<SimpleCardProps> = ({
+  title,
+  children,
+  contentStyle,
+  cardStyle,
+}) => {
   return (
-    <Card variant="outlined" style={{...cardStyle}}>
+    <Card variant="outlined" style={{ ...cardStyle }}>
       <CardContent style={{ ...contentStyle }}>
+        {children}
         <Typography variant="h5" component="h2">
           {title}
         </Typography>
-        {title ? <Divider style={{ margin: "16px 0 16px 0" }} /> : null}
-        {children}
       </CardContent>
     </Card>
     // <div className={classes.cardContainer} style={style}>

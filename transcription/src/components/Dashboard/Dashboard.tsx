@@ -1,11 +1,5 @@
 // External Dependencies
-import {
-  Box,
-  Typography,
-  Container,
-  GridList,
-  GridListTile,
-} from "@material-ui/core";
+import { Box, Typography, Grid } from "@material-ui/core";
 import LocalizedStrings from "react-localization";
 import React, { useContext } from "react";
 
@@ -37,7 +31,11 @@ type DashboardProps = {
 
 const Greeting: React.FC<{ name: string | undefined }> = ({ name }) => (
   <Typography
-    style={{ fontWeight: "lighter", overflowWrap: "anywhere" }}
+    style={{
+      fontWeight: "lighter",
+      overflowWrap: "anywhere",
+      marginTop: "10px",
+    }}
     variant="h5"
   >
     {name && strings.formatString(strings.greeting, name)}
@@ -45,7 +43,7 @@ const Greeting: React.FC<{ name: string | undefined }> = ({ name }) => (
 );
 
 const Title: React.FC<{ storyName: string }> = ({ storyName }) => (
-  <Typography variant="h3" style={{ color: "gray", fontWeight: "lighter" }}>
+  <Typography variant="h4" style={{ color: "gray", fontWeight: "lighter" }}>
     {strings.formatString(
       strings.transcriptionFor,
       <Box component="span" style={{ color: "black" }}>
@@ -65,9 +63,9 @@ const Dashboard: React.FC<DashboardProps> = ({
   const classes = useStyles();
 
   return (
-    <Container>
+    <Grid item xs={9} md={11}>
       <NameModal setName={setName} show={!userName} />
-      <Container className={classes.introContainer}>
+      <Grid item xs={12} className={classes.introContainer}>
         <Title storyName={storyName} />
         <Greeting name={userName} />
         {userName && (
@@ -80,18 +78,34 @@ const Dashboard: React.FC<DashboardProps> = ({
             {strings.notMe}
           </IndabaLink>
         )}
-      </Container>
-      <div style={{ marginBottom: "16px" }}>{strings.steps}</div>
-      <Box>
-        <GridList cols={3} cellHeight="auto" spacing={20}>
-          {steps.map((step) => (
-            <GridListTile key={step.title}>
-              <StepInfo {...step} />
-            </GridListTile>
-          ))}
-        </GridList>
-      </Box>
-    </Container>
+      </Grid>
+      <div
+        style={{ marginBottom: "16px", marginTop: "16px", textAlign: "center" }}
+      >
+        {strings.steps}
+      </div>
+      <Grid
+        container
+        spacing={2}
+        direction="row"
+        justify="center"
+        alignContent="flex-start"
+        alignItems="stretch"
+      >
+        {steps.map((step) => (
+          <Grid
+            item
+            key={step.title}
+            xs={12}
+            md={4}
+            lg={3}
+            style={{ display: "flex" }}
+          >
+            <StepInfo {...step} />
+          </Grid>
+        ))}
+      </Grid>
+    </Grid>
   );
 };
 

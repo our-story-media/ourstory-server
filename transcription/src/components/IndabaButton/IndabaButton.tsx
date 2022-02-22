@@ -5,7 +5,7 @@ const useButtonStyles = makeStyles({
     backgroundColor: "#d9534f",
     color: "#FFFFFF",
     lineHeight: "34px",
-    height: "60px",
+    minHeight: "60px",
     borderRadius: round ? "50%" : "6px",
     padding: round ? "4px" : "3px 8px 3px 8px",
     textTransform: "none",
@@ -28,7 +28,7 @@ const IndabaButton: React.FC<
   const classes = useButtonStyles(!!round);
 
   return (
-    <Button disableRipple className={`${classes.button} ${overrideClass.overrideStyles}`} {...props}>
+    <Button disableRipple className={`${classes.button} ${overrideClass.overrideStyles} ${props.style}`} {...props}>
       {children}
     </Button>
   );

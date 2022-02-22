@@ -17,7 +17,7 @@ const ChunkNameEditor: React.FC<{ nameState: State<string> }> = ({
     <TextField
       variant="outlined"
       label="Edit Name"
-      style={{ marginTop: "8px" }}
+      style={{ marginTop: "8px", width: "100%" }}
       value={name}
       onChange={(e) => setName(e.target.value)}
     />
