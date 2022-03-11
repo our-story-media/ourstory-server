@@ -30,7 +30,7 @@ const ChunkCardContextMenu: React.FC<ChunkCardContextMenuProps> = ({
     >
       <ClickAwayListener onClickAway={() => setShowContextMenu(false)}>
         <IconButton
-          style={{ padding: 0 }}
+          style={{ padding: 4 }}
           onClick={() => setShowContextMenu(true)}
           ref={ref}
         >

@@ -86,7 +86,8 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
           )}
           <Button
             onClick={nextPageHandler}
-            variant="outlined"
+            variant="contained"
+            disableElevation
             size="large"
             color="secondary"
           >

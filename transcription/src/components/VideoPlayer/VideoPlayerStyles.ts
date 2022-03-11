@@ -9,11 +9,12 @@ const useStyles = makeStyles((theme) => ({
     transform: "translate(-50%, 50%)",
   },
   videoPlayerButton: {
-    background: "linear-gradient(45deg, #d9534f 40%, #d9534f 90%)",
+    // background: "linear-gradient(45deg, #d9534f 40%, #d9534f 90%)",
+    borderRadius:'8px'
   },
   videoControlsRewindButtonsContainer: {
     position: "absolute",
-    bottom: -40,
+    bottom: -25,
     [theme.breakpoints.up("lg")]: {
       bottom: -10,
     },
@@ -31,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   roundButton: {
-    borderRadius: "25px",
+    borderRadius: "50%",
+    borderWidth:'4px',
     width: "128px",
     height: "128px",
     color: "white",
@@ -44,7 +46,8 @@ const useStyles = makeStyles((theme) => ({
   },
   videoPlayerContainer: {
     position: "relative",
-    bottom: 0,
+    width:'100vw',
+    // bottom: 0,
     top: 0,
     right: 0,
     left: 0,

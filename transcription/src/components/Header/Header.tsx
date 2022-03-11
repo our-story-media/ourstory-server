@@ -2,9 +2,12 @@ import {
   ClickAwayListener,
   // Divider,
   Button,
+  Fab,
   Grid,
 } from "@material-ui/core";
 import React, { ReactNode, useRef } from "react";
+import { HelpOutline } from "@material-ui/icons";
+
 
 // import useStyles from "./HeaderStyles";
 // import Logo from "../../assets/images/logo_web.svg";
@@ -35,11 +38,16 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <Grid container direction="column" justify="center" alignItems="center">
+      <Fab style={{margin:'10px',position: "fixed",backgroundColor:"#aaa",
+    right: '70px',
+    bottom: 0,}}>
+        <HelpOutline />
+      </Fab>
       <Grid container item xs={12} justify="center" alignItems="center">
         {children}
       </Grid>
-      {/* <Grid container item xs={12} justify="center" alignItems="center"> */}
-        {/* <ClickAwayListener onClickAway={hideContextMenu}>
+      {/* <Grid container item xs={12} justify="center" alignItems="center">
+        <ClickAwayListener onClickAway={hideContextMenu}>
           <Button
             size="large"
             style={{ maxWidth: "265px" }}
@@ -50,13 +58,13 @@ const Header: React.FC<HeaderProps> = ({
           >
             All Contributions
           </Button>
-        </ClickAwayListener> */}
-        {/* <IndabaMenu
+        </ClickAwayListener>
+        <IndabaMenu
           show={showContextMenu}
           anchor={contextMenuButtonRef.current!}
           menuItems={contextMenuItems}
-        /> */}
-      {/* </Grid> */}
+        />
+      </Grid> */}
     </Grid>
   );
 };

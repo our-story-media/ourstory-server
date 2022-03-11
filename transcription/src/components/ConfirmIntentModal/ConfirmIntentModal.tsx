@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import { Typography,Divider,Button } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
 import React, { PropsWithChildren, ReactElement } from "react";
 import { NotAttemptingAction } from "../../hooks/useConfirmBeforeAction";
@@ -32,11 +32,15 @@ const ConfirmIntentModal = <T extends any[]>(
         {attemptingActionWith !== NotAttemptingAction.True &&
           children(...attemptingActionWith)}
         <br />
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <IndabaButton style={{ marginTop: "8px" }} onClick={confirmAction}>
-            <Delete fontSize="large" style={{ marginRight: "8px" }} />
-            <Typography variant="subtitle1">Confirm</Typography>
-          </IndabaButton>
+        <Divider variant="fullWidth" style={{marginLeft:'-8px',marginRight:'-8px'}} />
+        <div style={{ display: "flex", justifyContent: "end", margin:'4px'}}>
+          <Button variant="text" onClick={confirmAction}>
+          <Typography variant="subtitle1">Confirm</Typography>
+            </Button>
+          {/* <IndabaButton style={{ marginTop: "8px" }} onClick={confirmAction}> */}
+            {/* <Delete fontSize="large" style={{ marginRight: "8px" }} /> */}
+            {/* <Typography variant="subtitle1">Confirm</Typography> */}
+          {/* </IndabaButton> */}
         </div>
       </div>
     </CentralModal>

@@ -4,6 +4,7 @@ import {
   DialogContent,
   makeStyles,
   Modal,
+  Divider,
   ModalProps,
 } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "center",
   },
   modalContentBox: {
-    padding: "16px",
+    padding: "8px",
   },
   modalPaper: {
     maxWith: "100%",
@@ -66,12 +67,13 @@ const CentralModal: React.FC<CentralModalProps> = ({
                 >
                   {header}
                 </div>
-                <Button onClick={exit}>
+                <Button onClick={exit} style={{marginRight:"-20px"}}>
                   <Close />
                 </Button>
               </div>
             </Container>
           )}
+          <Divider style={{marginTop:'8px'}} />
           <div className={classes.modalContentBox}>{children}</div>
         </FlatPaper>
       </DialogContent>

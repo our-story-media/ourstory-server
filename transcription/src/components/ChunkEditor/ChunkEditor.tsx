@@ -7,7 +7,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState,
+  useState
 } from "react";
 import {
   Grid,
@@ -15,6 +15,8 @@ import {
   GridListTile,
   Mark,
   useMediaQuery,
+  Fab,
+  Typography
 } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
 
@@ -216,12 +218,11 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
 
   const playButtonStyle = useMemo(
     () => ({
-      marginRight: "4px",
+      
       position: "absolute",
       left: "50%",
       top: "50%",
       transform: "translate(-50%, -50%)",
-      opacity: 0.8,
     }),
     []
   );
@@ -260,15 +261,9 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
       alignItems="center"
       style={{ height: "85%" }}
     >
-      <Grid
-        item
-        container
-        className={classes.backButtonContainer}
-        xs={12}
-        style={{ height: "10%", minHeight: "40px" }}
-      >
-        <BackButton action={atExit} />
-      </Grid>
+      
+      <BackButton action={atExit} />
+      
       <Grid
         item
         container
@@ -304,10 +299,10 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
                             content: strings.delete,
                             handler: () => handleAttemptDeleteChunk(c),
                           },
-                          {
-                            content: strings.edit,
-                            handler: () => setCroppingChunk(c),
-                          },
+                          // {
+                          //   content: strings.edit,
+                          //   handler: () => setCroppingChunk(c),
+                          // },
                         ].concat(
                           c.transcriptions.length !== 0
                             ? [
@@ -342,9 +337,9 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
                         }
                       >
                         {playingChunk?.id === c.id && playingState[0] ? (
-                          <Stop />
+                          <Stop style={{ fontSize: 40 }} />
                         ) : (
-                          <PlayArrow />
+                          <PlayArrow style={{ fontSize: 40 }} />
                         )}
                       </IndabaButton>
                     </div>
@@ -378,14 +373,17 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
       </Grid>
       <div>
         <div className={classes.newChunkButtonContainer}>
-          <IndabaButton
+          <Fab onClick={handleNewChunk} color="primary" style={{margin:'10px'}}>
+            <Add />
+          </Fab>
+          {/* <IndabaButton
             round
             aria-label={strings.newChunk}
             style={{ margin: "20px" }}
-            onClick={handleNewChunk}
+            
           >
             <Add />
-          </IndabaButton>
+          </IndabaButton> */}
         </div>
       </div>
       <LoadingModal open={duration === 0} />
@@ -435,12 +433,12 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
         warningMessage={<div>{strings.attemptNewChunkTitle}</div>}
       >
         {(...args) => (
-          <div>
+          <Typography variant="body1">
             {strings.formatString(
               strings.attemptNewChunkBody,
               getNameOf(getEnclosingChunk(args[0], args[1]) ?? args[0][0])
             )}
-          </div>
+          </Typography>
         )}
       </ConfirmIntentModal>
       <TranscriptionsModal

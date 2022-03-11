@@ -42,11 +42,11 @@ const ChunkCard: React.FC<{
           >
             <span
               style={{
-                fontWeight: 600,
+                fontWeight: 300,
                 overflowWrap: "anywhere",
                 display: "flex",
                 justifyContent: "space-between",
-                lineHeight: "1.5rem",
+                lineHeight: "2rem",
                 fontSize: "24px"
               }}
             >

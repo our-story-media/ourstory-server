@@ -11,9 +11,12 @@ const strings = new LocalizedStrings({
 
 const useStyles = makeStyles({
   backButton: {
-    marginTop:'1em',
-    marginBottom:'1em',
-    marginLeft:0
+    // marginTop:'-1em',
+    // marginLeft:'28px',
+    position:'fixed',
+    bottom:0,
+    left:0,
+    marginBottom:'1.5em'
   },
 });
 

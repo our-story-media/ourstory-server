@@ -174,7 +174,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               className={` ${classes.roundButton}`}
               onClick={skipBackwardHandler}
             >
-              <Replay5 fontSize="large" />
+              <Replay5 style={{ fontSize: 60 }} />
             </Button>
           </div>
           <Button
@@ -184,8 +184,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             className={classes.videoPlayerButton}
             onClick={toggleIsPlaying}
           >
-            {(isPlaying && <Pause fontSize="large" />) || (
-              <PlayArrow fontSize="large" />
+            {(isPlaying && <Pause style={{ fontSize: 60 }} />) || (
+              <PlayArrow style={{ fontSize: 60 }} />
             )}
           </Button>
           <div
@@ -198,7 +198,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               disableRipple
               className={`${classes.roundButton}`}
             >
-              <Forward5 fontSize="large" />
+              <Forward5 style={{ fontSize: 60 }} />
             </Button>
           </div>
         </div>

@@ -39,11 +39,11 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
   },
   newChunkButtonContainer: {
-    position: "absolute",
+    position: "fixed",
     right: 0,
     bottom: 0,
-    margin: "16px 16px 32px 16px",
-    display: "flex",
+    // margin: "16px 16px 32px 16px",
+    // display: "flex",
   },
 }));
 

@@ -15,12 +15,14 @@ const useStyles = makeStyles((theme) => ({
   },
   centerVertically: {
     position: "relative",
-    top: "50%",
+    top: "40%",
     transform: "translateY(-50%)",
+    textAlign:'center'
   },
   buttonsContainer: {
     display: "flex",
     justifyContent: "space-between",
+    marginBottom:'-8px'
   },
   stepIcon: {
     fill: "#e53935",
