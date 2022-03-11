@@ -373,7 +373,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
       </Grid>
       <div>
         <div className={classes.newChunkButtonContainer}>
-          <Fab onClick={handleNewChunk} color="primary" style={{margin:'10px',bottom:'70px',zIndex:-20}}>
+          <Fab onClick={handleNewChunk} color="primary" style={{margin:'10px',bottom:'70px'}}>
             <Add />
           </Fab>
           {/* <IndabaButton

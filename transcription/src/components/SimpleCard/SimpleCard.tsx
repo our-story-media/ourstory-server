@@ -14,14 +14,13 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
   cardStyle,
 }) => {
   return (
-    <Card style={{ ...cardStyle }}>
+    <Card  style={{ ...cardStyle }}>
       <CardContent style={{ ...contentStyle }}>
         {children}
         <Typography variant="subtitle1" component="p">
           {title}
         </Typography>
       </CardContent>
-      <Divider />
     </Card>
     // <div className={classes.cardContainer} style={style}>
     //     <span>

@@ -26,10 +26,10 @@ const EditTranscriptionCard: React.FC<EditTranscriptionCardProps> = ({
   onChange,
 }) => {
   return (
-    <SimpleCard
-      title={transcriptionIcon}
-      cardStyle={{ paddingBottom: "0px" }}
-    >
+      // <SimpleCard
+      //   title={transcriptionIcon}
+      //   cardStyle={{ paddingBottom: "0px" }}
+      // >
       <TextField
         autoFocus
         multiline
@@ -44,7 +44,7 @@ const EditTranscriptionCard: React.FC<EditTranscriptionCardProps> = ({
           onChange(e.target.value);
         }}
       />
-    </SimpleCard>
+    // </SimpleCard>
   );
 };
 

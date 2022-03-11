@@ -209,92 +209,26 @@ const Transcriber: React.FC<TranscriberProps> = ({
             item
             container
             xs={12}
-            style={{ height: "40%", marginBottom: "16px"}}
+            style={{ width: "80%", marginBottom: "16px"}}
             justify="center"
             alignItems="center"
           >
-            <MobileStepper
-              variant="dots"
-              steps={transcriberState.miniChunks.length}
-              activeStep={transcriberState.currentMiniChunk}
-              position="static"
-              classes={{
-                dotActive: classes.stepperDots,
-                dots: classes.stepperDotsContainer,
-                dot: classes.stepperDot,
-              }}
-              nextButton={
-                <Button
-                  onClick={() =>
-                    transcriberDispatch({ actionType: "go to last mini chunk" })
-                  }
-                >
-                  {strings.last}
-                </Button>
-              }
-              backButton={
-                <Button
-                  onClick={() =>
-                    transcriberDispatch({
-                      actionType: "go to first mini chunk",
-                    })
-                  }
-                >
-                  {strings.first}
-                </Button>
-              }
-            />
-            <Slideshow
-              currentPage={transcriberState.currentChunk}
-              onNavigate={() => null}
-              numberOfPages={chunks.length}
-              onComplete={exitHandler}
-              leftColumn={
-                <div>
-                  <IndabaButton
-                    onClick={() =>
-                      transcriberDispatch({ actionType: "go to previous page" })
-                    }
-                    style={{
-                      height: "300px",
-                      margin: "0px 6px 0px 6px",
-                      width: "70px",
-                    }}
-                  >
-                    <ArrowLeft />
-                  </IndabaButton>
-                </div>
-              }
-              rightColumn={
-                <div>
-                  <IndabaButton
-                    style={{
-                      backgroundColor: lastPage ? "green" : "#d9534f",
-                      height: "300px",
-                      margin: "0px 6px 0px 6px",
-                      width: "70px",
-                    }}
-                    onClick={() =>
-                      transcriberDispatch({ actionType: "go to next page" })
-                    }
-                  >
-                    {lastPage ? <Check /> : <ArrowRight />}
-                  </IndabaButton>
-                </div>
-              }
-            >
-              <EditTranscriptionCard
-                transcriptionIcon={
-                  <div
+            <Grid item xs={12}>
+              <div style={{textAlign:'center',overflowWrap: "anywhere" }}>
+                  {getNameOf(chunks[transcriberState.currentChunk])} ({transcriberState.currentChunk+1} of {chunks.length})
+              </div>
+              </Grid>
+            
+            <Grid item xs={12}
                     style={{
                       display: "flex",
                       flexDirection: "column",
-                      margin: "0 8px 0 8px",
+                      marginTop:'-8px',
+                      marginBottom:"-8px",
+                      margin: "0 24px 0 24px",
                     }}
                   >
-                    <span style={{ fontWeight: 600, overflowWrap: "anywhere" }}>
-                      {getNameOf(chunks[transcriberState.currentChunk])}
-                    </span>
+                    
                     <Slider
                       ThumbComponent={EmptyComponent}
                       value={[
@@ -320,8 +254,121 @@ const Transcriber: React.FC<TranscriberProps> = ({
                         },
                       ]}
                     />
-                  </div>
-                }
+                  </Grid>
+                  <Grid item>
+              
+              <MobileStepper
+              
+              variant="dots"
+              steps={transcriberState.miniChunks.length}
+              activeStep={transcriberState.currentMiniChunk}
+              position="static"
+              classes={{
+                root:classes.stepperRoot,
+                dotActive: classes.stepperDots,
+                dots: classes.stepperDotsContainer,
+                dot: classes.stepperDot,
+              }}
+              nextButton={
+                <Button
+                  onClick={() =>
+                    transcriberDispatch({ actionType: "go to last mini chunk" })
+                  }
+                >
+                  {strings.last}
+                </Button>
+              }
+              backButton={
+                <Button
+                  onClick={() =>
+                    transcriberDispatch({
+                      actionType: "go to first mini chunk",
+                    })
+                  }
+                >
+                  {strings.first}
+                </Button>
+              }
+            />
+            </Grid>
+            <Slideshow
+              currentPage={transcriberState.currentChunk}
+              onNavigate={() => null}
+              numberOfPages={chunks.length}
+              onComplete={exitHandler}
+              leftColumn={
+                <div>
+                  <IndabaButton
+                    onClick={() =>
+                      transcriberDispatch({ actionType: "go to previous page" })
+                    }
+                    style={{
+                      height: "300px",
+                      margin: "0px 6px 0px 6px",
+                      width: "70px",
+                    }}
+                  >
+                    <ArrowLeft style={{fontSize:'50'}} />
+                  </IndabaButton>
+                </div>
+              }
+              rightColumn={
+                <div>
+                  <IndabaButton
+                    style={{
+                      backgroundColor: lastPage ? "green" : "#d9534f",
+                      height: "300px",
+                      margin: "0px 6px 0px 6px",
+                      width: "70px",
+                    }}
+                    onClick={() =>
+                      transcriberDispatch({ actionType: "go to next page" })
+                    }
+                  >
+                    {lastPage ? <Check /> : <ArrowRight style={{fontSize:'50'}} />}
+                  </IndabaButton>
+                </div>
+              }
+            >
+              <EditTranscriptionCard
+                // transcriptionIcon={
+                //   <div
+                //     style={{
+                //       display: "flex",
+                //       flexDirection: "column",
+                //       margin: "0 8px 0 8px",
+                //     }}
+                //   >
+                //     <span style={{ fontWeight: 600, overflowWrap: "anywhere" }}>
+                //       {getNameOf(chunks[transcriberState.currentChunk])}
+                //     </span>
+                //     <Slider
+                //       ThumbComponent={EmptyComponent}
+                //       value={[
+                //         chunks[transcriberState.currentChunk].starttimeseconds *
+                //           100,
+                //         chunks[transcriberState.currentChunk].endtimeseconds *
+                //           100,
+                //       ]}
+                //       classes={{
+                //         rail: classes.chunkProgressRail,
+                //         track: classes.chunkProgressTrack,
+                //         mark: classes.chunkProgressMark,
+                //         markActive: classes.chunkProgressMark,
+                //       }}
+                //       marks={[
+                //         {
+                //           value: split.start * 100,
+                //           label: toShortTimeStamp(
+                //             transcriberState.miniChunks[
+                //               transcriberState.currentMiniChunk
+                //             ] * duration
+                //           ),
+                //         },
+                //       ]}
+                //     />
+                //   </div>
+                // }
                 inputRef={inputRef}
                 transcriptionValue={transcriberState.transcription}
                 onChange={(newValue: string) => {

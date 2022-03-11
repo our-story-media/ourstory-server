@@ -5,6 +5,7 @@ import {
   GridList,
   GridListTile,
   List,
+  Divider,
   ListItem,
 } from "@material-ui/core";
 import React, { useMemo } from "react";
@@ -188,6 +189,7 @@ const ContributerListModal: React.FC<{
                     ))}
                   </List>
                 </SimpleCard>
+                {/* <Divider /> */}
               </GridListTile>
             ))}
           </GridList>

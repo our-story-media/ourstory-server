@@ -47,9 +47,14 @@ const useStyles = makeStyles(theme => ({
   stepperDotsContainer: {
     flexWrap: "wrap",
     // width: "90%"
+    background:'none'
   },
   stepperDot:{
     margin: "2px"
+  },
+  stepperRoot:{
+    background:'none',
+    marginTop:'-20px'
   }
   }));
 
