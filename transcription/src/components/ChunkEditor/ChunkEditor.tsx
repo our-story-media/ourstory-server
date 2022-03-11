@@ -354,14 +354,14 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
                       key={strings.doneCard}
                       onClick={handleCompleteChunking}
                     >
-                      <ScrollToOnMount style={{ height: "100%" }}>
+                      <ScrollToOnMount style={{ height: "103%", marginTop:'-14px' }}>
                         <SimpleCard
+                        
                           contentStyle={chunkCardContentStyle.current}
                           cardStyle={chunkCardStyle.current}
                         >
                           <Check
-                            fontSize="large"
-                            style={{ marginRight: "4px" }}
+                            style={{ fontSize:'60' }}
                           />
                         </SimpleCard>
                       </ScrollToOnMount>
@@ -373,7 +373,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
       </Grid>
       <div>
         <div className={classes.newChunkButtonContainer}>
-          <Fab onClick={handleNewChunk} color="primary" style={{margin:'10px'}}>
+          <Fab onClick={handleNewChunk} color="primary" style={{margin:'10px',bottom:'70px',zIndex:-20}}>
             <Add />
           </Fab>
           {/* <IndabaButton

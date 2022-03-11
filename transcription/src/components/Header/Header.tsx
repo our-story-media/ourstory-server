@@ -40,11 +40,13 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <Grid container direction="column" justify="center" alignItems="center">
+      {contextMenuItems.length &&
       <Fab onClick={contextMenuItems[0].handler} style={{margin:'10px',position: "fixed",backgroundColor:"#aaa",
     right: '0',
-    bottom: 0,}}>
+    bottom: 0}}>
         <HelpOutline />
       </Fab>
+      }
       <Grid container item xs={12} justify="center" alignItems="center">
         {children}
       </Grid>

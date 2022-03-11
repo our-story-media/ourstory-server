@@ -133,12 +133,14 @@ const App: React.FC<{}> = () => {
                 setShowReviewerOnboarding("true");
               },
             }]
-          : [{
-            content: <div>{strings.viewInstructions}</div>,
-            handler: (): void => {
-              setShowTranscriberOnboarding("true");
-            },
-          }],
+          : view === View.Transcribing
+          ? [{
+              content: <div>{strings.viewInstructions}</div>,
+              handler: (): void => {
+                setShowTranscriberOnboarding("true");
+              },
+            }]
+          : [],
     [
       view,
       // setShowChunkEditorOnboarding,
