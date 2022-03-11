@@ -90,6 +90,7 @@ const App: React.FC<{}> = () => {
     showChunkEditorOnboarding,
     setShowChunkEditorOnboarding,
   ] = useLocalStorage("showChunkEditorOnboardingModal", "true");
+
   const [
     showTranscriberOnboarding,
     setShowTranscriberOnboarding,
@@ -108,35 +109,41 @@ const App: React.FC<{}> = () => {
 
   const exit = useCallback(() => setView(View.Dashboard), []);
 
+  // const onBoardingItem = ()=>{
+  //   return {
+  //     handler: (): void => {
+  //     setShowChunkEditorOnboarding("true");
+  //   }
+  // };
+  // };
+
   const contextMenuItems = useMemo(
     () =>
-      [
-        {
-          content: <div>{strings.showContributions}</div>,
-          handler: toggleShowContributers,
-        },
-      ].concat(
         view === View.Chunking
-          ? {
+          ? [{
               content: <div>{strings.viewInstructions}</div>,
               handler: (): void => {
                 setShowChunkEditorOnboarding("true");
               },
-            }
+            }]
           : view === View.Reviewing
-          ? {
+          ? [{
               content: <div>{strings.viewInstructions}</div>,
               handler: (): void => {
                 setShowReviewerOnboarding("true");
               },
-            }
-          : []
-      ),
+            }]
+          : [{
+            content: <div>{strings.viewInstructions}</div>,
+            handler: (): void => {
+              setShowTranscriberOnboarding("true");
+            },
+          }],
     [
       view,
-      setShowChunkEditorOnboarding,
-      setShowReviewerOnboarding,
-      toggleShowContributers,
+      // setShowChunkEditorOnboarding,
+      // setShowReviewerOnboarding,
+      // toggleShowContributers,
     ]
   );
 
@@ -153,6 +160,7 @@ const App: React.FC<{}> = () => {
             title={getTitle(view)}
             hidden={view === View.Transcribing}
             contextMenuItems={contextMenuItems}
+            // showOnBoarding={onBoardingItem}
           >
             {view === View.Dashboard ? (
               <Dashboard

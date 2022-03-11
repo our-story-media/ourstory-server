@@ -18,12 +18,14 @@ import IndabaMenu from "../IndabaMenu/IndabaMenu";
 type HeaderProps = {
   title: string;
   contextMenuItems: { content: ReactNode; handler: () => void }[];
+  // showOnBoarding:{ handler: () => void },
   hidden?: boolean;
 };
 
 const Header: React.FC<HeaderProps> = ({
   children,
   // title,
+  // showOnBoarding,
   contextMenuItems,
   // hidden,
 }) => {
@@ -38,8 +40,8 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <Grid container direction="column" justify="center" alignItems="center">
-      <Fab style={{margin:'10px',position: "fixed",backgroundColor:"#aaa",
-    right: '70px',
+      <Fab onClick={contextMenuItems[0].handler} style={{margin:'10px',position: "fixed",backgroundColor:"#aaa",
+    right: '0',
     bottom: 0,}}>
         <HelpOutline />
       </Fab>
