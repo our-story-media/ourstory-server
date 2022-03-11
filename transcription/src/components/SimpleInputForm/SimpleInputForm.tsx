@@ -29,9 +29,9 @@ const SimpleInputForm: React.FC<SimpleInputFormProps> = React.forwardRef<HTMLDiv
       />
       <IndabaButton
         onClick={() => input && onSubmit(input)}
-        styles={{ height: "3rem" as const, borderRadius: "0px 8px 8px 0px" as const }}
+        styles={{  }}
       >
-        <Typography variant="subtitle1">{buttonText}</Typography>
+        <Typography >{buttonText}</Typography>
       </IndabaButton>
     </div>
   );

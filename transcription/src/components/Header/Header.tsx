@@ -38,25 +38,25 @@ const Header: React.FC<HeaderProps> = ({
       <Grid container item xs={12} justify="center" alignItems="center">
         {children}
       </Grid>
-      <Grid container item xs={12} justify="center" alignItems="center">
-        <ClickAwayListener onClickAway={hideContextMenu}>
+      {/* <Grid container item xs={12} justify="center" alignItems="center"> */}
+        {/* <ClickAwayListener onClickAway={hideContextMenu}>
           <Button
             size="large"
             style={{ maxWidth: "265px" }}
             variant="outlined"
-            color="secondary"
+            color="primary"
             onClick={toggleShowContextMenu}
             ref={contextMenuButtonRef}
           >
             All Contributions
           </Button>
-        </ClickAwayListener>
-        <IndabaMenu
+        </ClickAwayListener> */}
+        {/* <IndabaMenu
           show={showContextMenu}
           anchor={contextMenuButtonRef.current!}
           menuItems={contextMenuItems}
-        />
-      </Grid>
+        /> */}
+      {/* </Grid> */}
     </Grid>
   );
 };

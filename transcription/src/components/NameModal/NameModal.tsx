@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import { Divider, Typography } from "@material-ui/core";
 import React from "react";
 import CentralModal from "../CentralModal/CentralModal";
 import { StateSetter } from "../../utils/types";
@@ -16,12 +16,13 @@ const NameModal: React.FC<NameModalProps> = ({ show, setName }) => {
   return (
     <CentralModal open={show}>
       <div>
-        <Typography variant="h3">
+        <Typography variant="h5">
           Please enter your name
         </Typography>
+        <Divider variant="fullWidth" style={{marginTop:'0.5em', marginBottom:'1.5em' }} />
         <SimpleInputForm
-          placeholder="my name"
-          buttonText="Perform Transcription"
+          placeholder="My Name"
+          buttonText="Start Transcribing"
           classes={classes}
           onSubmit={setName}
         />
