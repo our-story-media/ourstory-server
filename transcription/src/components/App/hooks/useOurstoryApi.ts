@@ -7,6 +7,7 @@ import api_key, { api_base_address } from "../../../utils/getApiKey";
 import { Chunk, Story } from "../../../utils/types";
 
 const pushStoryChanges = (new_story: Story, story_id: string) => {
+  // console.log("pushStoryChanges", new_story.transcription.chunks);
   const url = `${api_base_address}/api/watch/savedit/${story_id}?apikey=${api_key}`;
   axios.request<Story>({
     url: url,
@@ -33,9 +34,10 @@ const useOurstoryApi = (
 } => {
   const [story, setStory] = useState<Story | undefined>(undefined);
 
-  const chunks = useMemo(() => story?.transcription.chunks ?? [], [
-    story?.transcription?.chunks,
-  ]);
+  const chunks = useMemo(
+    () => story?.transcription.chunks ?? [],
+    [story?.transcription?.chunks]
+  );
 
   const setChunks = (new_chunks: Chunk[]) => {
     setStory((story) =>
@@ -47,6 +49,10 @@ const useOurstoryApi = (
 
   const setChunksWithUpdate = useCallback(
     async (setter: (new_chunks: Chunk[]) => Chunk[]) => {
+      // console.log(
+      //   "setChunksWithUpdate, currentsstate:",
+      //   story?.transcription.chunks
+      // );
       const new_chunks = setter(
         (
           await axios.request<Chunk[]>({
@@ -57,6 +63,7 @@ const useOurstoryApi = (
           })
         ).data
       );
+      // console.log(new_chunks);
 
       setStory((old_story) => {
         const new_story =
@@ -72,8 +79,7 @@ const useOurstoryApi = (
 
   useEffect(() => {
     // console.log(story_id)
-    if (story_id)
-    {
+    if (story_id) {
       axios
         .request<Story>({
           url: `${api_base_address}/api/watch/edit/${story_id}`,
@@ -82,9 +88,7 @@ const useOurstoryApi = (
         })
         .then((response) => {
           setStory(response.data);
-          setChunks(
-            response.data?.transcription?.chunks ?? []
-          );
+          setChunks(response.data?.transcription?.chunks ?? []);
         });
     }
   }, [story_id]);

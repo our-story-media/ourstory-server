@@ -161,15 +161,16 @@ const Transcriber: React.FC<TranscriberProps> = ({
       style={{ height: "85%" }}
     >
       <LoadingModal open={duration === 0} />
-      <Grid
+      {/* <Grid
         item
         container
         className={classes.backButtonContainer}
         xs={12}
         style={{ height: "10%", minHeight: "40px" }}
       >
-        <BackButton action={exitHandler} />
-      </Grid>
+        
+      </Grid> */}
+      <BackButton action={exitHandler} />
       <OnboardingModal
         show={showOnboardingModal}
         dismiss={dismissOnboardingModal}

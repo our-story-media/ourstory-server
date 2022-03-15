@@ -21,7 +21,7 @@ export const getMiniChunks = (chunk: Chunk, duration: number) => {
     currentTime += 5 / duration;
   }
   if (currentTime !== chunk.endtimeseconds) {
-    miniChunks.push(chunk.endtimeseconds)
+    miniChunks.push(chunk.endtimeseconds);
   }
 
   return miniChunks;
@@ -88,6 +88,8 @@ const useTranscriberReducer = (
         newMiniChunks[newCurrentMiniChunk - 1],
         chunks[newCurrentChunk]
       );
+
+      console.log(newTranscription);
 
       setProgress(newChunkStart);
       setSplit({
@@ -201,7 +203,9 @@ const useTranscriberReducer = (
             ...state,
             currentMiniChunk: 0,
             miniChunks: newMiniChunks,
-            transcription: getUsersTranscription(chunks[state.currentChunk], userName ?? "")?.content ?? ""
+            transcription:
+              getUsersTranscription(chunks[state.currentChunk], userName ?? "")
+                ?.content ?? "",
           };
       }
       return state;

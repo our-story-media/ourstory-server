@@ -8,6 +8,9 @@ import {
   makeStyles,
   Radio,
   Typography,
+  Card,
+  Button,
+  CardActions
 } from "@material-ui/core";
 import LocalizedStrings from "react-localization";
 import {
@@ -22,7 +25,7 @@ import React, { useMemo, useContext, useEffect, useState } from "react";
 
 // Internal Dependencies
 import useSlideshow from "../../hooks/useSlideshow";
-import { hasTranscription } from "../../utils/chunkManipulation/chunkManipulation";
+import { hasTranscription,getNameOf,toShortTimeStamp,secondsOf,parseChunkTimeStamps } from "../../utils/chunkManipulation/chunkManipulation";
 import {
   useDeleteReview,
   useUpdateReview,
@@ -36,7 +39,8 @@ import CentralModal from "../CentralModal/CentralModal";
 import IndabaButton from "../IndabaButton/IndabaButton";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import OnboardingModal from "../OnboardingModal/OnboardingModal";
-import ChunkCard from "../SimpleCard/ChunkCard";
+// import ChunkCard from "../SimpleCard/ChunkCard";
+// import SimpleCard from "../SimpleCard/SimpleCard";
 import EditTranscriptionCard from "../SimpleCard/EditTranscriptionCard";
 import Slideshow from "../Slideshow/Slideshow";
 import { UserContext } from "../UserProvider/UserProvider";
@@ -192,15 +196,16 @@ export const Reviewer: React.FC<ReviewerProps> = ({
       direction="column"
     >
       <LoadingModal open={duration === 0} />
-      <Grid
+      {/* <Grid
         item
         container
         className={classes.backButtonContainer}
         xs={12}
         style={{ height: "10%", minHeight: "40px" }}
       >
-        <BackButton action={atExit} />
-      </Grid>
+        
+      </Grid> */}
+      <BackButton action={atExit} />
       <Grid
         item
         container
@@ -214,7 +219,15 @@ export const Reviewer: React.FC<ReviewerProps> = ({
           url={`${api_base_address}/api/watch/getvideo/${story_id}`}
           controller={playerController}
         />
+        
       </Grid>
+      <Grid item alignContent="center" style={{marginTop:'-10px'}}>
+          {getNameOf(currentChunk)}&nbsp;
+           
+          ({`${toShortTimeStamp(secondsOf(parseChunkTimeStamps(currentChunk).start))} - ${toShortTimeStamp(
+            secondsOf(parseChunkTimeStamps(currentChunk).end)
+          )}`})
+          </Grid>
       <Grid
         item
         container
@@ -228,8 +241,8 @@ export const Reviewer: React.FC<ReviewerProps> = ({
           onNavigate={goTo}
           numberOfPages={chunksToReview.length}
           onComplete={atExit}
-          style={{ width: "100%" }}
-          contentContainerStyle={{ margin: "0px 5px" }}
+          style={{ width: "100%",marginLeft:'-28px' }}
+          contentContainerStyle={{ margin: "0px 0px", marginLeft:'18px',marginRight:'-10px' }}
           leftColumn={
             <div
               style={{
@@ -243,7 +256,7 @@ export const Reviewer: React.FC<ReviewerProps> = ({
                 onClick={() => goTo("prev")}
                 style={{ height: "300px" }}
               >
-                <ArrowLeft />
+                <ArrowLeft style={{ fontSize: 50 }} />
               </IndabaButton>
             </div>
           }
@@ -262,51 +275,46 @@ export const Reviewer: React.FC<ReviewerProps> = ({
                   height: "300px",
                 }}
               >
-                {lastPage ? <Check /> : <ArrowRight />}
+                {lastPage ? <Check style={{ fontSize: 50 }} /> : <ArrowRight style={{ fontSize: 50 }} />}
               </IndabaButton>
             </div>
           }
         >
-          <ChunkCard chunk={currentChunk}>
-            {currentChunk.transcriptions.map(
+          <div>
+            {
+            currentChunk.transcriptions.map(
               (transcription) =>
                 transcription.content && (
+                  <Card variant="outlined" style={{marginBottom:'8px'}}>
+                    
                   <Box key={transcription.id} className={classes.cardContainer}>
                     <div
                       style={{
                         display: "flex",
-                        justifyContent: "space-between",
-                        marginBottom: "12px",
+                        justifyContent: "end",
+                        marginBottom: "4px",
                       }}
                     >
                       <div
                         style={{
                           fontSize: "1.2rem",
+                          marginTop:'-6px',
                           display: "flex",
-                          justifyContent: "center",
-                          paddingLeft: "10px",
+                          // justifyContent: "center",
+                          // paddingLeft: "10px",
                         }}
                       >
-                        <AccountCircle />
-                        <div
+                        {/* <AccountCircle /> */}
+                        {/* <div
                           style={{
-                            marginLeft: "4px",
+                            // marginLeft: "4px",
                             overflowWrap: "anywhere",
                           }}
-                        >
+                        > */}
                           {transcription.creatorid}
-                        </div>
+                        {/* </div> */}
                       </div>
-                      <IndabaButton
-                        onClick={() => setEditingTranscription(transcription)}
-                        style={{
-                          padding: "0px",
-                          height: "32px",
-                          width: "32px",
-                        }}
-                      >
-                        <Edit fontSize="small" />
-                      </IndabaButton>
+                      
                     </div>
                     <div
                       onClick={() =>
@@ -318,7 +326,24 @@ export const Reviewer: React.FC<ReviewerProps> = ({
                       }
                       style={{ display: "flex", flexDirection: "row" }}
                     >
-                      <Radio
+                      
+                      <Typography style={{fontSize:'1.3em',padding:'8px'}}>
+                        {transcription.content}
+                      </Typography>
+                    </div>
+                  </Box>
+                  <Divider />
+                  <CardActions style={{justifyContent:"space-between"}}>
+                    
+                  <Button
+                        onClick={() => setEditingTranscription(transcription)}
+                      >
+                        {/* <Edit fontSize="small" /> */}
+                        Correct
+                      </Button>
+                      <div>
+                      Select for Final
+                  <Radio
                         checked={
                           currentChunk.review?.selectedtranscription ===
                           transcription.id
@@ -335,14 +360,12 @@ export const Reviewer: React.FC<ReviewerProps> = ({
                         }
                         style={{ backgroundColor: "initial" }}
                       />
-                      <Typography variant="h6" className={classes.textReview}>
-                        {transcription.content}
-                      </Typography>
-                    </div>
-                  </Box>
+                      </div>
+                      </CardActions>
+                  </Card>
                 )
             )}
-          </ChunkCard>
+          </div>
         </Slideshow>
       </Grid>
       <OnboardingModal

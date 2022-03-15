@@ -14,7 +14,7 @@ import {
   removeReview,
   getTranscriptionByCreator,
   renameChunk,
-  deleteNegativeChunks
+  deleteNegativeChunks,
 } from "../chunkManipulation/chunkManipulation";
 import oneSatisfies from "../oneSatisfies";
 import { Chunk, Transcription } from "../types";
@@ -31,21 +31,28 @@ export const useDeleteChunk = (
    * @param toDelete - the chunk to delete
    */
   const deleteFn = useCallback(
-    (toDelete: Chunk) =>
-      setChunks((chunks) =>
+    (toDelete: Chunk) => {
+      // console.log(setChunks);
+      return setChunks((chunks) => {
         /*
-      This call to adjacentMap is checking if, after deleting the chunk, there
-      is a gap in the chunks. If so, we need to create a new chunk that closes
-      the gap
-
-      At a high level:
-      If we have chunks A B C D, and we delete chunk B we now have a gap
-      between chunks A and C. To fix this, we need to create a new chunk
-      that has the same start time as A and the same end time as C,
-      so we end up with: E D, where E is a new chunk that we create in this
-      call to adjacentMap
-      */
-        adjacentMap(
+                This call to adjacentMap is checking if, after deleting the chunk, there
+                is a gap in the chunks. If so, we need to create a new chunk that closes
+                the gap
+          
+                At a high level:
+                If we have chunks A B C D, and we delete chunk B we now have a gap
+                between chunks A and C. To fix this, we need to create a new chunk
+                that has the same start time as A and the same end time as C,
+                so we end up with: E D, where E is a new chunk that we create in this
+                call to adjacentMap
+                */
+        // console.log("deleting chunk: ", toDelete);
+        // console.log("Before filter: ", chunks.length);
+        // console.log(
+        //   "After filter: ",
+        //   chunks.filter((c) => c.id !== toDelete.id).length
+        // );
+        return adjacentMap(
           chunks.filter((c) => c.id !== toDelete.id),
           (a: Chunk, b: Chunk) => {
             if (a.endtimeseconds !== b.starttimeseconds) {
@@ -78,8 +85,21 @@ export const useDeleteChunk = (
                     ]
                 : [])(chunks.filter((c) => c.id !== toDelete.id)[0])
           )
-          .sort((a, b) => a.endtimeseconds - b.endtimeseconds)
-      ),
+          .sort((a, b) => a.endtimeseconds - b.endtimeseconds);
+        /*
+          This call to adjacentMap is checking if, after deleting the chunk, there
+          is a gap in the chunks. If so, we need to create a new chunk that closes
+          the gap
+        
+          At a high level:
+          If we have chunks A B C D, and we delete chunk B we now have a gap
+          between chunks A and C. To fix this, we need to create a new chunk
+          that has the same start time as A and the same end time as C,
+          so we end up with: E D, where E is a new chunk that we create in this
+          call to adjacentMap
+          */
+      });
+    },
     [setChunks]
   );
 

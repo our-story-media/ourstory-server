@@ -25,6 +25,7 @@ const EditTranscriptionCard: React.FC<EditTranscriptionCardProps> = ({
   transcriptionIcon,
   onChange,
 }) => {
+  // console.log(transcriptionValue)
   return (
       // <SimpleCard
       //   title={transcriptionIcon}

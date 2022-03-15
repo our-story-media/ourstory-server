@@ -36,14 +36,11 @@ const Header: React.FC<HeaderProps> = ({
   const [showContextMenu, toggleShowContextMenu, setShowContextMenu] =
     useToggle(false);
 
-  const hideContextMenu = () => setShowContextMenu(false);
+  // const hideContextMenu = () => setShowContextMenu(false);
 
   return (
     <Grid container direction="column" justify="center" alignItems="center">
-      {contextMenuItems.length &&
-      <Fab onClick={contextMenuItems[0].handler} style={{margin:'10px',position: "fixed",backgroundColor:"#aaa",
-    right: '0',
-    bottom: 0}}>
+      {contextMenuItems.length > 0 && <Fab onClick={contextMenuItems[0].handler} style={{margin:'10px',position: "fixed",backgroundColor:"#aaa", right: '0px', bottom: '0px'}}>
         <HelpOutline />
       </Fab>
       }

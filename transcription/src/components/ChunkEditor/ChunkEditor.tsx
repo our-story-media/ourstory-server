@@ -262,7 +262,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
       style={{ height: "85%" }}
     >
       
-      <BackButton action={atExit} />
+      
       
       <Grid
         item
@@ -445,6 +445,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
         chunk={showTranscriptionsFor}
         exit={() => setShowTranscriptionsFor(undefined)}
       />
+      <BackButton action={atExit} />
     </Grid>
   );
 };
