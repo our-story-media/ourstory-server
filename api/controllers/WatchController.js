@@ -265,6 +265,7 @@ module.exports = {
         tmpedit.media = req.param("media");
         tmpedit.title = req.param("title");
         tmpedit.description = req.param("description");
+        tmpedit.transcription = req.param("transcription");
         var newmedia = [];
         _.each(tmpedit.media, function (m) {
           var newm = {
@@ -283,6 +284,7 @@ module.exports = {
           newmedia.push(newm);
         });
         tmpedit.media = newmedia;
+        // console.log(req);
         tmpedit.save(function (err) {
           return res.json(tmpedit);
         });
