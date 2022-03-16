@@ -1,17 +1,21 @@
 // External Dependencies
-import { Box, Typography, Grid } from "@material-ui/core";
+import { Box, Typography, Grid, Chip, Avatar, Button } from "@material-ui/core";
 import LocalizedStrings from "react-localization";
+import { ChevronLeft } from "@material-ui/icons";
 import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
+
 
 // Internal Dependencies
 import StepInfo, { StepInfoProps } from "../App/StepInfo";
 import useStyles from "./DashboardStyles";
 import { UserContext } from "../UserProvider/UserProvider";
 import NameModal from "../NameModal/NameModal";
-import IndabaLink from "../IndabaLink/IndabaLink";
+// import IndabaLink from "../IndabaLink/IndabaLink";
 
 const strings = new LocalizedStrings({
   en: {
+    back: "Back",
     greeting: "Hello {0}",
     transcriptionFor: "Field Transcription for {0}",
     notMe: "This is not me!",
@@ -30,16 +34,14 @@ type DashboardProps = {
 };
 
 const Greeting: React.FC<{ name: string | undefined }> = ({ name }) => (
-  <Typography
+  <Chip
+    avatar={<Avatar>M</Avatar>}
+    variant="outlined"
+    label={name}
     style={{
-      fontWeight: "lighter",
-      overflowWrap: "anywhere",
-      marginTop: "10px",
+      
     }}
-    variant="h5"
-  >
-    {name && strings.formatString(strings.greeting, name)}
-  </Typography>
+    />
 );
 
 const Title: React.FC<{ storyName: string }> = ({ storyName }) => (
@@ -58,6 +60,9 @@ const Dashboard: React.FC<DashboardProps> = ({
   steps,
   logOutAction,
 }) => {
+
+  const history = useHistory();
+
   const { userName, setName, clearName } = useContext(UserContext);
 
   const classes = useStyles();
@@ -66,9 +71,13 @@ const Dashboard: React.FC<DashboardProps> = ({
     <Grid item xs={9} md={11}>
       <NameModal setName={setName} show={!userName} />
       <Grid item xs={12} className={classes.introContainer}>
+      {/* <Button component="a" href="/">
+        <ChevronLeft fontSize="large" />
+        {strings.back}
+        </Button> */}
         <Title storyName={storyName} />
-        <Greeting name={userName} />
-        {userName && (
+        {/* <Greeting name={userName} /> */}
+        {/* {userName && (
           <IndabaLink
             onClick={() => {
               clearName();
@@ -77,10 +86,23 @@ const Dashboard: React.FC<DashboardProps> = ({
           >
             {strings.notMe}
           </IndabaLink>
-        )}
+        )} */}
+        {userName && (
+        <Chip
+        onDelete={() => {
+          clearName();
+          logOutAction();
+        }}
+    avatar={<Avatar>{userName.substring(0,1)}</Avatar>}
+    variant="outlined"
+    label={userName}
+    style={{
+      marginTop:'10px'
+    }}
+    />)}
       </Grid>
       <div
-        style={{ marginBottom: "16px", marginTop: "16px", textAlign: "center" }}
+        style={{ marginBottom: "16px", marginTop: "16px", textAlign: "center",color:"#333" }}
       >
         {strings.steps}
       </div>

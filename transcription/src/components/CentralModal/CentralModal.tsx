@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "center",
   },
   modalContentBox: {
-    padding: "8px",
+   
   },
   modalPaper: {
     maxWith: "100%",

@@ -1,4 +1,4 @@
-import { ButtonBase, makeStyles, Typography } from "@material-ui/core";
+import { ButtonBase, Fab, makeStyles, Typography } from "@material-ui/core";
 import LocalizedStrings from "react-localization";
 import { ChevronLeft } from "@material-ui/icons";
 import React from "react";
@@ -14,9 +14,9 @@ const useStyles = makeStyles({
     // marginTop:'-1em',
     // marginLeft:'28px',
     position:'fixed',
-    bottom:0,
-    left:0,
-    marginBottom:'1.5em'
+    top:0,
+    left:'8px',
+    // marginBottom:'1.5em'
   },
 });
 
@@ -28,12 +28,14 @@ const BackButton: React.FC<BackButtonProps> = ({ action }) => {
   const classes = useStyles();
 
   return (
-    <ButtonBase className={classes.backButton} onClick={action}>
+    // <ButtonBase className={classes.backButton} onClick={action}>
+    <Fab onClick={action} className={classes.backButton}>
       <ChevronLeft fontSize="large" />
-      <Typography variant="h5" style={{ position: "relative", left: -5 }}>
+      {/* <Typography variant="h5" style={{ position: "relative", left: -5 }}>
         {strings.back}
-      </Typography>
-    </ButtonBase>
+      </Typography> */}
+    {/* </ButtonBase> */}
+    </Fab>
   );
 };
 

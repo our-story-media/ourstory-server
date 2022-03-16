@@ -1,6 +1,6 @@
 // External Dependencies
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
+import { Box, Typography,Button } from "@material-ui/core";
 import LocalizedStrings from "react-localization";
 
 // Internal Dependencies
@@ -43,12 +43,12 @@ const StepInfo: React.FC<StepInfoProps> = ({
       title={title}
       context={
         <Box style={{ marginTop: "8px" }}>
-          <Typography
+          {/* <Typography
             variant="h5"
             style={{ fontFamily: "'Open Sans', 'Helvetica Neue', sans-serif" }}
           >
             {title}
-          </Typography>
+          </Typography> */}
           <LinearProgressWithLabel value={progress} color="secondary" />
           <Typography style={{ padding: "6px", fontSize: "1.1rem" }}>
             {description}
@@ -57,11 +57,11 @@ const StepInfo: React.FC<StepInfoProps> = ({
       }
       actions={
         <Box style={{ marginTop: "8px" }}>
-          <IndabaButton disabled={!enabled} onClick={onSelect}>
+          <Button disabled={!enabled} onClick={onSelect}>
             <Typography style={{ padding: "6px", fontSize: "1.1rem" }}>
               {strings.formatString(strings.perform, title)}
             </Typography>
-          </IndabaButton>
+          </Button>
         </Box>
       }
     />

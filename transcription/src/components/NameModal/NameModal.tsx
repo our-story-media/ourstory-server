@@ -16,17 +16,19 @@ const NameModal: React.FC<NameModalProps> = ({ show, setName }) => {
   return (
     <CentralModal open={show}>
       <div>
-        <Typography variant="h5">
+        <Typography variant="h5" style={{padding:'4px',paddingLeft:'4px'}}>
           Please enter your name
         </Typography>
-        <Divider variant="fullWidth" style={{marginTop:'0.5em', marginBottom:'1.5em' }} />
-        <SimpleInputForm
-          placeholder="My Name"
-          buttonText="Start Transcribing"
-          classes={classes}
-          onSubmit={setName}
-        />
-      </div>
+        <Divider variant="fullWidth" style={{}} />
+        <div style={{}}>
+          <SimpleInputForm
+            placeholder="My Name"
+            buttonText="Start Transcribing"
+            classes={classes}
+            onSubmit={setName}
+          />
+        </div>
+        </div>
     </CentralModal>
   );
 };

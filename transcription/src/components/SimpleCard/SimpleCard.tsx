@@ -17,7 +17,7 @@ const SimpleCard: React.FC<SimpleCardProps> = ({
     <Card  style={{ ...cardStyle }} variant="outlined">
       <CardContent style={{ ...contentStyle }}>
         {children}
-        <Typography variant="subtitle1" component="div">
+        <Typography variant="subtitle1" component="div" >
           {title}
         </Typography>
       </CardContent>

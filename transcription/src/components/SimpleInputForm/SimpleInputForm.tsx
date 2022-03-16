@@ -1,6 +1,6 @@
-import { Typography, InputBase } from "@material-ui/core";
+import { InputBase, Divider, Button } from "@material-ui/core";
 import React, { useState } from "react";
-import IndabaButton from "../IndabaButton/IndabaButton";
+// import IndabaButton from "../IndabaButton/IndabaButton";
 
 type SimpleInputFormProps = {
   /** Placeholder for the Text Input */
@@ -23,16 +23,20 @@ const SimpleInputForm: React.FC<SimpleInputFormProps> = React.forwardRef<HTMLDiv
   return (
     <div ref={ref}>
       <InputBase
+      style={{margin:'8px'}}
         className={classes.input}
         onChange={(e) => setInput(e.target.value)}
         placeholder={placeholder}
       />
-      <IndabaButton
+      <Divider variant="fullWidth" />
+      <div>
+      <Button
         onClick={() => input && onSubmit(input)}
-        styles={{  }}
+        style={{  }}
       >
-        <Typography >{buttonText}</Typography>
-      </IndabaButton>
+        {buttonText}
+      </Button>
+      </div>
     </div>
   );
 });

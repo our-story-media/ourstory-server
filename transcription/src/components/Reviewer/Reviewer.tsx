@@ -412,14 +412,14 @@ export const Reviewer: React.FC<ReviewerProps> = ({
                 <ListItem style={{ display: "flex", whiteSpace: "pre" }}>
                   {strings.formatString(
                     strings.nameTranscription,
-                    <span
+                    <div
                       style={{
                         alignSelf: "flex-start",
                         fontWeight: 600,
                       }}
                     >
                       {t.creatorid}
-                    </span>,
+                    </div>,
                     <div
                       style={{ whiteSpace: "pre", overflowWrap: "anywhere" }}
                     >
@@ -429,12 +429,16 @@ export const Reviewer: React.FC<ReviewerProps> = ({
                 </ListItem>
               ))}
           </List>
+          <div style={{margin:'10px'}}> 
           <EditTranscriptionCard
             transcriptionValue={transcriptionEdit}
             onChange={setTranscriptionEdit}
           />
+          
+          </div>
+          <Divider variant="fullWidth" />
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <IndabaButton
+            <Button
               onClick={() => {
                 editingTranscription &&
                   updateTranscription(
@@ -446,15 +450,16 @@ export const Reviewer: React.FC<ReviewerProps> = ({
               }}
               style={{
                 margin: "8px",
-                backgroundColor: "green",
+                // backgroundColor: "green",
                 position: "relative",
                 bottom: 0,
                 right: 0,
               }}
               disabled={transcriptionEdit === ""}
             >
-              <Done />
-            </IndabaButton>
+              Complete
+              {/* <Done /> */}
+            </Button>
           </div>
         </div>
       </CentralModal>

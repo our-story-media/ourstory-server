@@ -3,7 +3,7 @@ import { getNameOf } from "../../utils/chunkManipulation/chunkManipulation";
 import { Chunk } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
 import SimpleCard from "../SimpleCard/SimpleCard";
-import { Divider } from "@material-ui/core";
+import { Card, Divider } from "@material-ui/core";
 
 type TranscriptionsModalProps = {
   /* The chunk to show the transcriptions for.
@@ -29,11 +29,11 @@ const TranscriptionsModal: React.FC<TranscriptionsModalProps> = ({
   >
     <div style={{ overflow: "scroll" }}>
       {chunk?.transcriptions.map((transcription) => (
-        <div>
+        <div style={{margin:'8px'}}>
           <SimpleCard
             key={transcription.id}
             title={<b>{transcription.creatorid}</b>}
-            contentStyle={{ whiteSpace: "pre" }}
+            contentStyle={{ whiteSpace: "pre", marginBottom:'-10px' }}
           >
             {transcription.content}
           </SimpleCard>
