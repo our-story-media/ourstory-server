@@ -28,12 +28,12 @@ const ConfirmIntentModal = <T extends any[]>(
       exit={cancelAction}
       header={<WarningMessage message={warningMessage} />}
     >
-      <div>
+      <div style={{padding:'8px'}}>
         {attemptingActionWith !== NotAttemptingAction.True &&
           children(...attemptingActionWith)}
         <br />
         <Divider variant="fullWidth" style={{marginLeft:'-8px',marginRight:'-8px'}} />
-        <div style={{ display: "flex", justifyContent: "end", margin:'4px'}}>
+        <div style={{ display: "flex", justifyContent: "end", margin:'4px', marginBottom:'0'}}>
           <Button variant="text" onClick={confirmAction}>
           <Typography variant="subtitle1">Confirm</Typography>
             </Button>
