@@ -1,20 +1,20 @@
-import { ButtonBase, Fab, makeStyles, Typography } from "@material-ui/core";
-import LocalizedStrings from "react-localization";
+import { Fab, makeStyles } from "@material-ui/core";
+// import LocalizedStrings from "react-localization";
 import { ChevronLeft } from "@material-ui/icons";
 import React from "react";
 
-const strings = new LocalizedStrings({
-  en: {
-    back: "Back",
-  },
-});
+// const strings = new LocalizedStrings({
+//   en: {
+//     back: "Back",
+//   },
+// });
 
 const useStyles = makeStyles({
   backButton: {
     // marginTop:'-1em',
     // marginLeft:'28px',
     position:'fixed',
-    top:0,
+    top:'8px',
     left:'8px',
     // marginBottom:'1.5em'
   },

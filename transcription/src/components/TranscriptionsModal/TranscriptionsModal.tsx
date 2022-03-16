@@ -3,7 +3,7 @@ import { getNameOf } from "../../utils/chunkManipulation/chunkManipulation";
 import { Chunk } from "../../utils/types";
 import CentralModal from "../CentralModal/CentralModal";
 import SimpleCard from "../SimpleCard/SimpleCard";
-import { Card, Divider } from "@material-ui/core";
+// import { Card, Divider } from "@material-ui/core";
 
 type TranscriptionsModalProps = {
   /* The chunk to show the transcriptions for.

@@ -4,7 +4,7 @@ import LocalizedStrings from "react-localization";
 import React, { ReactNode } from "react";
 
 // Internal Dependencies
-import SimpleCard from "./SimpleCard";
+// import SimpleCard from "./SimpleCard";
 
 const strings = new LocalizedStrings({
   en: {

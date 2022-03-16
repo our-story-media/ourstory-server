@@ -5,7 +5,7 @@ import {
   GridList,
   GridListTile,
   List,
-  Divider,
+  // Divider,
   ListItem,
 } from "@material-ui/core";
 import React, { useMemo } from "react";

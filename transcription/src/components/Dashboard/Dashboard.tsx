@@ -1,9 +1,9 @@
 // External Dependencies
-import { Box, Typography, Grid, Chip, Avatar, Button } from "@material-ui/core";
+import { Box, Typography, Grid, Chip, Avatar } from "@material-ui/core";
 import LocalizedStrings from "react-localization";
-import { ChevronLeft } from "@material-ui/icons";
+// import { ChevronLeft } from "@material-ui/icons";
 import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 
 // Internal Dependencies
@@ -33,16 +33,16 @@ type DashboardProps = {
   logOutAction: () => void;
 };
 
-const Greeting: React.FC<{ name: string | undefined }> = ({ name }) => (
-  <Chip
-    avatar={<Avatar>M</Avatar>}
-    variant="outlined"
-    label={name}
-    style={{
+// const Greeting: React.FC<{ name: string | undefined }> = ({ name }) => (
+//   <Chip
+//     avatar={<Avatar>M</Avatar>}
+//     variant="outlined"
+//     label={name}
+//     style={{
       
-    }}
-    />
-);
+//     }}
+//     />
+// );
 
 const Title: React.FC<{ storyName: string }> = ({ storyName }) => (
   <Typography variant="h4" style={{ color: "gray", fontWeight: "lighter", marginTop:'0.4em' }}>
@@ -61,7 +61,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   logOutAction,
 }) => {
 
-  const history = useHistory();
+  // const history = useHistory();
 
   const { userName, setName, clearName } = useContext(UserContext);
 

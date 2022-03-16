@@ -14,12 +14,12 @@ import {
 } from "@material-ui/core";
 import LocalizedStrings from "react-localization";
 import {
-  AccountCircle,
+  // AccountCircle,
   ArrowLeft,
   ArrowRight,
   Check,
-  Done,
-  Edit,
+  // Done,
+  // Edit,
 } from "@material-ui/icons";
 import React, { useMemo, useContext, useEffect, useState } from "react";
 

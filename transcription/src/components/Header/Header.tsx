@@ -1,19 +1,19 @@
 import {
-  ClickAwayListener,
+  // ClickAwayListener,
   // Divider,
-  Button,
+  // Button,
   Fab,
   Grid,
 } from "@material-ui/core";
-import React, { ReactNode, useRef } from "react";
+import React, { ReactNode } from "react";
 import { HelpOutline } from "@material-ui/icons";
 
 
 // import useStyles from "./HeaderStyles";
 // import Logo from "../../assets/images/logo_web.svg";
 // import { MoreVert } from "@material-ui/icons";
-import useToggle from "../../hooks/useToggle";
-import IndabaMenu from "../IndabaMenu/IndabaMenu";
+// import useToggle from "../../hooks/useToggle";
+// import IndabaMenu from "../IndabaMenu/IndabaMenu";
 
 type HeaderProps = {
   title: string;
@@ -31,10 +31,9 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   // const classes = useStyles();
 
-  const contextMenuButtonRef = useRef(null);
+  // const contextMenuButtonRef = useRef(null);
 
-  const [showContextMenu, toggleShowContextMenu, setShowContextMenu] =
-    useToggle(false);
+  // const [showContextMenu, toggleShowContextMenu, setShowContextMenu] = useToggle(false);
 
   // const hideContextMenu = () => setShowContextMenu(false);
 

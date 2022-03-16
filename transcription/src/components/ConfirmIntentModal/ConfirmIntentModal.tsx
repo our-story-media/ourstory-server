@@ -1,9 +1,9 @@
 import { Typography,Divider,Button } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
+// import { Delete } from "@material-ui/icons";
 import React, { PropsWithChildren, ReactElement } from "react";
 import { NotAttemptingAction } from "../../hooks/useConfirmBeforeAction";
 import CentralModal from "../CentralModal/CentralModal";
-import IndabaButton from "../IndabaButton/IndabaButton";
+// import IndabaButton from "../IndabaButton/IndabaButton";
 import WarningMessage from "../WarningMessage/WarningMessage";
 
 type ConfirmIntentModalProps<T extends any[]> = {

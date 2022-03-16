@@ -7,7 +7,7 @@ import LocalizedStrings from "react-localization";
 import FlatCard from "../FlatCard/FlatCard";
 import LinearProgressWithLabel from "../LinearProgressWithLabel/LinearProgressWithLabel";
 import useStyles from "./StepInfoStyles";
-import IndabaButton from "../IndabaButton/IndabaButton";
+// import IndabaButton from "../IndabaButton/IndabaButton";
 
 const strings = new LocalizedStrings({
   en: {

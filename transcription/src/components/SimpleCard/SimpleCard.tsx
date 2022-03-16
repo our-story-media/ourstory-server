@@ -1,4 +1,4 @@
-import { Card, CardContent, Divider, Typography } from "@material-ui/core";
+import { Card, CardContent, Typography } from "@material-ui/core";
 import React, { ReactNode } from "react";
 
 type SimpleCardProps = {

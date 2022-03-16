@@ -1,7 +1,7 @@
 import {
   Card,
-  CardHeader,
-  Avatar,
+  // CardHeader,
+  // Avatar,
   CardActions,
   CardContent,
   CardMedia,
