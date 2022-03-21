@@ -164,7 +164,8 @@ module.exports.policies = {
 
   transcribe: {
     index: ["authenticated", "apikeygen", "flash"],
-    subs: ["authenticated", "apiauth"],
+    // srt: [],
+    vtt: [],
   },
   // 'log':
   // {
