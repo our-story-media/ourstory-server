@@ -181,7 +181,7 @@
                                               <%- __('Download (high quality, with tags)') %>
                                       </a></li>
 
-                                        <li class="dropdown-header" ng-if="!(edit.hasoriginal && edit.hashighquality && edit.hastagged)"><%- __('Publish') %></li>
+                                        <li class="dropdown-header" ng-if="edit.hasoriginal || !(edit.hasoriginal && edit.hashighquality && edit.hastagged)"><%- __('Publish') %></li>
                                         
 
                                         <!-- publish original (i.e. normal operation, or only the full version if in titan) -->
@@ -193,6 +193,10 @@
                                             <a ng-href="{{ '/api/watch/renderoriginal/<%- theevent.id %>/' + edit.id + '?apikey=<%- apikey %>'}}">    
                                                 <%- __('Publish (with tags)') %>
                                         </a></li>
+                                        <li ng-if="event.processedits && edit.hasoriginal">
+                                          <a ng-href="{{ '/api/watch/renderoriginal/<%- theevent.id %>/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                              <%- __('Re-Publish (with tags)') %>
+                                      </a></li>
                                         <!-- // -->
 
                                         
@@ -233,7 +237,7 @@
                                           </a></li>
                                           <li ng-if="edit.hasoriginal">
                                             <a ng-href="{{ '/api/transcribe/subs/' + edit.id + '?apikey=<%- apikey %>'}}">    
-                                              <%- __('Download Transcription') %>
+                                              <%- __('Download Transcription (.srt)') %>
                                             </a></li>
                                         <li class="dropdown-header"><%- __('Management') %></li>
                                         <li><a ng-href="/api/watch/clone/{{edit.id}}?apikey=<%- apikey %>"><%- __('Duplicate') %></a></li>
