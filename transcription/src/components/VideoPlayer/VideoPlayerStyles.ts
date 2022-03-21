@@ -10,43 +10,43 @@ const useStyles = makeStyles((theme) => ({
   },
   videoPlayerButton: {
     // background: "linear-gradient(45deg, #d9534f 40%, #d9534f 90%)",
-    borderRadius:'8px'
+    borderRadius: "8px",
   },
   videoControlsRewindButtonsContainer: {
     position: "absolute",
     bottom: -25,
-    [theme.breakpoints.up("lg")]: {
-      bottom: -10,
-    },
+    // [theme.breakpoints.up("lg")]: {
+    //   bottom: -10,
+    // },
   },
   videoControlsRewindButtonsContainerRight: {
     right: "180px",
-    [theme.breakpoints.up("lg")]: {
-      right: "130px",
-    },
+    // [theme.breakpoints.up("lg")]: {
+    //   right: "130px",
+    // },
   },
   videoControlsRewindButtonsContainerLeft: {
     left: "180px",
-    [theme.breakpoints.up("lg")]: {
-      left: "130px",
-    },
+    // [theme.breakpoints.up("lg")]: {
+    //   left: "130px",
+    // },
   },
   roundButton: {
     borderRadius: "50%",
-    borderWidth:'4px',
+    // borderWidth: "4px",
     width: "128px",
     height: "128px",
-    color: "white",
+    // color: "white",
     display: "relative",
-    [theme.breakpoints.up("lg")]: {
-      borderRadius: "10px",
-      width: "64px",
-      height: "64px",
-    },
+    // [theme.breakpoints.up("lg")]: {
+    //   borderRadius: "10px",
+    //   width: "64px",
+    //   height: "64px",
+    // },
   },
   videoPlayerContainer: {
     position: "relative",
-    width:'100vw',
+    width: "100vw",
     // bottom: 0,
     top: 0,
     right: 0,

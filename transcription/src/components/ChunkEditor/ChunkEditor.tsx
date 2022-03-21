@@ -252,7 +252,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
   );
 
   return (
-    /* The 'http://localhost:8845' part of the url below is temporary, and not needed in production*/
     <Grid
       item
       container
@@ -261,9 +260,6 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
       alignItems="center"
       style={{ height: "85%" }}
     >
-      
-      
-      
       <Grid
         item
         container
@@ -299,10 +295,10 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
                             content: strings.delete,
                             handler: () => handleAttemptDeleteChunk(c),
                           },
-                          // {
-                          //   content: strings.edit,
-                          //   handler: () => setCroppingChunk(c),
-                          // },
+                          {
+                            content: strings.edit,
+                            handler: () => setCroppingChunk(c),
+                          },
                         ].concat(
                           c.transcriptions.length !== 0
                             ? [
@@ -428,7 +424,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
           </div>
         )}
       </ConfirmIntentModal>
-      <ConfirmIntentModal
+      {/* <ConfirmIntentModal
         actionControls={attemptNewChunkActionControls}
         warningMessage={<div>{strings.attemptNewChunkTitle}</div>}
       >
@@ -440,7 +436,7 @@ const ChunkEditor: React.FC<ChunkEditorProps> = ({
             )}
           </Typography>
         )}
-      </ConfirmIntentModal>
+      </ConfirmIntentModal> */}
       <TranscriptionsModal
         chunk={showTranscriptionsFor}
         exit={() => setShowTranscriptionsFor(undefined)}

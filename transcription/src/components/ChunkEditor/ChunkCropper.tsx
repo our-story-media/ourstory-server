@@ -10,6 +10,8 @@ import IndabaSlider from "../IndabaSlider/IndabaSlider";
 import useVideoPlayerController from "../VideoPlayer/Hooks/useVideoPlayerController";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
+import useStyles from "../VideoPlayer/VideoPlayerStyles";
+
 const CropThumbComponent: React.FC<{}> = (props) => {
   const isProgressThumb = (props as any)["data-index"] === 1;
   return (
@@ -17,17 +19,17 @@ const CropThumbComponent: React.FC<{}> = (props) => {
       {...props}
       style={{
         ...(props as any).style,
-        transform: isProgressThumb ? "0" : "translateY(14px)",
-        backgroundColor: !isProgressThumb ? "#f77965" : "#d9534f",
+        transform: isProgressThumb ? "0" : "translateY(35px)",
+        backgroundColor: !isProgressThumb ? "green" : "#d9534f",
       }}
     >
       {!isProgressThumb ? (
         <div
           style={{
-            height: "14px",
+            height: "46px",
             width: "4px",
-            transform: "translateY(-9px)",
-            backgroundColor: "#f77965",
+            transform: "translateY(-15px)",
+            backgroundColor: "green",
           }}
         />
       ) : null}
@@ -69,6 +71,8 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
     setCroppedSplit([chunk.starttimeseconds, chunk.endtimeseconds]);
   }, [chunk.starttimeseconds, chunk.endtimeseconds, storyDuration, setProgressWithVideoUpdate, setCroppedSplit]);
 
+  const classes = useStyles();
+
   return (
     <div>
       <VideoPlayer
@@ -77,6 +81,7 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
         controller={cropPlayerController}
         playerRef={cropperPlayerRef}
         slider={
+          <div className={classes.progressBarContainer}>
           <IndabaSlider
             value={[
               croppedSplit[0] * 100,
@@ -89,11 +94,29 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
             ThumbComponent={CropThumbComponent}
             onChange={
               ((_: any, newValue: number | number[]) => {
+                // console.log(_);
                 setCroppedSplit([
                   (newValue as number[])[0] / 100,
                   (newValue as number[])[2] / 100,
                 ]);
-                cropPlayerProgressState.setProgressWithVideoUpdate((newValue as number[])[1] / 100);
+
+                //TODO: which handle was it?
+                let handle = _.target.dataset.index;
+                // console.log(_);
+                console.log(handle);
+                
+                let moveTo:number = (newValue as number[])[1] / 100;
+                
+                // if (handle >= 0 && handle < 3) 
+                //   moveTo = (newValue as number[])[handle] / 100;
+                // if (handle == 0)
+
+                console.log(moveTo)
+
+                // if ((newValue as number[])[0] < (newValue as number[])[1])
+                  // moveTo = (newValue as number[])[0] / 100;
+                // if (handle === 1 || handle === undefined)
+                cropPlayerProgressState.setProgressWithVideoUpdate(moveTo);
               }) as ((
                 event: ChangeEvent<{}>,
                 value: number | number[]
@@ -101,6 +124,7 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
                 ((event: FormEvent<HTMLSpanElement>) => void)
             }
           />
+          </div>
         }
       />
     </div>

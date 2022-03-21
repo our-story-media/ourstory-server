@@ -3,6 +3,7 @@ import { TextField } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
 import { useCropChunk } from "../../utils/ChunksContext/chunksActions";
 import chunksContext from "../../utils/ChunksContext/chunksContext";
+import { getNameOf } from "../../utils/chunkManipulation/chunkManipulation";
 
 // Internal Dependencies
 import { Chunk, State } from "../../utils/types";
@@ -34,9 +35,9 @@ const EditChunkModal: React.FC<{
 
   const [, setChunks] = chunksContext.useChunksState();
 
-  useEffect(() => {
-    chunk && setName(chunk.name ? chunk.name : "");
-  }, [chunk]);
+  // useEffect(() => {
+  //   chunk && setName(chunk.name ? chunk.name : "");
+  // }, [chunk]);
 
   const cropChunk = useCropChunk(setChunks);
 
@@ -51,9 +52,11 @@ const EditChunkModal: React.FC<{
         exit();
       }}
       open={chunk !== undefined}
-      header={<ChunkNameEditor nameState={[name, setName]} />}
+      header={ <h2
+        style={{ margin: 0, overflowWrap: "anywhere" }}
+      >Editing {chunk && getNameOf(chunk)}</h2>}
     >
-      <div style={{paddingBottom: "24px"}}>
+      <div style={{paddingBottom: "50px"}}>
         {chunk && <ChunkCropper story_id={story_id} croppedSplitState={[newCropSplit, setNewCropSplit]} storyDuration={storyDuration} chunk={chunk} />}
       </div>
     </CentralModal>
