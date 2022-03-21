@@ -164,6 +164,19 @@ bootleggerApp.controller("edits", [
       return dateOut.toDate();
     };
 
+    $scope.hasTranscription = function (edit) {
+      let hasTrans = false;
+
+      if (edit.transcription) {
+        hasTrans = _.every(edit.transcription.chunks, function (c) {
+          return typeof c.review != "undefined";
+        });
+      }
+      return hasTrans;
+      // console.log(edit);
+      // return true;
+    };
+
     $scope.updateSetting = function () {
       // console.log('updating setting')
       socket

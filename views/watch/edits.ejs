@@ -130,9 +130,9 @@
                                 <span class="label label-warning" ng-show="!edit.failed && edit.progress>0 && edit.progress < 98 && !edit.hasoriginal"
                                     ><%- __('PROCESSING') %></span>
                                 <span class="label label-default" ng-show="!edit.hasoriginal" ><%- __('DRAFT') %></span>
+                                <span class="label label-default" ng-show="hasTranscription(edit)"
+                                    ><%- __('COMPLETED TRANSCRIPTION') %></span>
                               </div>
-
-
 
                                 <span style="position:absolute;top:0;left:0px;width:100%;height:100%;" ng-show="edit.failed">
                                     <div ng-show="edit.failed && edit.failreason" class="bg-danger" style="padding: 5px;">{{edit.failreason}}</div>
@@ -225,10 +225,6 @@
                                         <a ng-href="{{ '/transcribe/' + edit.id + '?apikey=<%- apikey %>'}}">    
                                           <%- __('Transcribe') %>
                                         </a></li>
-                                        <!-- <li ng-if="edit.hasoriginal">
-                                          <a ng-href="{{ '/api/transcribe/srt/' + edit.id + '?apikey=<%- apikey %>'}}">    
-                                            <%- __('Download Transcription (srt)') %>
-                                          </a></li> -->
                                           <li ng-if="edit.hasoriginal">
                                             <a ng-href="{{ '/api/transcribe/vtt/' + edit.id + '?download=true'}}">    
                                               <%- __('Download Transcription (vtt)') %>
