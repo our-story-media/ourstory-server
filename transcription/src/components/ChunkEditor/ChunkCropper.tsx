@@ -73,6 +73,12 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
 
   const classes = useStyles();
 
+  useEffect(() => {
+    if (cropPlayerProgressState.progress > croppedSplit[1]) {
+      setProgressWithVideoUpdate(croppedSplit[0])
+    }
+  }, [croppedSplit, cropPlayerProgressState, setProgressWithVideoUpdate]);
+
   return (
     <div>
       <VideoPlayer
@@ -100,10 +106,9 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
                   (newValue as number[])[2] / 100,
                 ]);
 
-                //TODO: which handle was it?
-                let handle = _.target.dataset.index;
+                // let handle = _.target.dataset.index;
                 // console.log(_);
-                console.log(handle);
+                // console.log(handle);
                 
                 let moveTo:number = (newValue as number[])[1] / 100;
                 
@@ -111,7 +116,7 @@ const ChunkCropper: React.FC<ChunkCropperProps> = ({
                 //   moveTo = (newValue as number[])[handle] / 100;
                 // if (handle == 0)
 
-                console.log(moveTo)
+                // console.log(moveTo)
 
                 // if ((newValue as number[])[0] < (newValue as number[])[1])
                   // moveTo = (newValue as number[])[0] / 100;
