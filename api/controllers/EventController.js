@@ -927,77 +927,94 @@ module.exports = {
     });
   },
 
-  myeventsowned: function (req, res) {
-    var foundalready = new Array();
+  myeventsowned: async function (req, res) {
+    // var foundalready = new Array();
 
-    User.find({}).exec(function (err, users) {
-      //OWNER
-      Event.find({
-        ownedby: {
-          contains: req.session.passport.user.id,
-        },
-      }).exec(function (err, data) {
-        _.each(data, function (d) {
-          d.status = "OWNER";
-        });
-        var output = [];
-        _.each(data, function (d) {
-          if (d.groupevent) {
-            //console.log("grouping");
-            var mm = _.find(users, { id: d.ownedby[0] });
-            //console.log(mm);
-            if (!_.contains(output, { group: mm.profile.displayName })) {
-              //console.log('creating group');
+    if (sails.config.LOCALONLY) {
+      let data = await Event.find({});
+      // let output = [];
+
+      // console.log(events);
+      _.each(data, function (d) {
+        d.status = "OWNER";
+        (d.iconbackground =
+          sails.config.master_url + "/event/backgroundurl/" + d.id),
+          (d.icon =
+            d.icon && d.icon != ""
+              ? sails.config.master_url + "/event/iconurl/" + d.id
+              : "");
+      });
+      return res.json(data);
+    } else {
+      User.find({}).exec(function (err, users) {
+        //OWNER
+        Event.find({
+          ownedby: {
+            contains: req.session.passport.user.id,
+          },
+        }).exec(function (err, data) {
+          _.each(data, function (d) {
+            d.status = "OWNER";
+          });
+          var output = [];
+          _.each(data, function (d) {
+            if (d.groupevent) {
+              //console.log("grouping");
+              var mm = _.find(users, { id: d.ownedby[0] });
+              //console.log(mm);
+              if (!_.contains(output, { group: mm.profile.displayName })) {
+                //console.log('creating group');
+                output.push({
+                  group: mm.profile.displayName,
+                  icon: mm.profile.photos[0].value,
+                  events: [],
+                });
+              }
+              _.find(output, { group: mm.profile.displayName }).events.push({
+                status: d.status,
+                iconbackground:
+                  sails.config.master_url + "/event/backgroundurl/" + d.id,
+                icon:
+                  d.icon && d.icon != ""
+                    ? sails.config.master_url + "/event/iconurl/" + d.id
+                    : "",
+                name: d.name,
+                id: d.id,
+                starts: d.starts,
+                ends: d.ends,
+                ends_time: d.ends_time,
+                starts_time: d.starts_time,
+                joincode: d.joincode,
+                description: d.eventtype.description,
+                offlinecode: d.offlinecode,
+                public: d.public,
+              });
+            } else {
               output.push({
-                group: mm.profile.displayName,
-                icon: mm.profile.photos[0].value,
-                events: [],
+                status: d.status,
+                iconbackground:
+                  sails.config.master_url + "/event/backgroundurl/" + d.id,
+                icon:
+                  d.icon && d.icon != ""
+                    ? sails.config.master_url + "/event/iconurl/" + d.id
+                    : "",
+                name: d.name,
+                id: d.id,
+                starts: d.starts,
+                ends: d.ends,
+                joincode: d.joincode,
+                ends_time: d.ends_time,
+                starts_time: d.starts_time,
+                description: d.eventtype.description,
+                offlinecode: d.offlinecode,
+                public: d.public,
               });
             }
-            _.find(output, { group: mm.profile.displayName }).events.push({
-              status: d.status,
-              iconbackground:
-                sails.config.master_url + "/event/backgroundurl/" + d.id,
-              icon:
-                d.icon && d.icon != ""
-                  ? sails.config.master_url + "/event/iconurl/" + d.id
-                  : "",
-              name: d.name,
-              id: d.id,
-              starts: d.starts,
-              ends: d.ends,
-              ends_time: d.ends_time,
-              starts_time: d.starts_time,
-              joincode: d.joincode,
-              description: d.eventtype.description,
-              offlinecode: d.offlinecode,
-              public: d.public,
-            });
-          } else {
-            output.push({
-              status: d.status,
-              iconbackground:
-                sails.config.master_url + "/event/backgroundurl/" + d.id,
-              icon:
-                d.icon && d.icon != ""
-                  ? sails.config.master_url + "/event/iconurl/" + d.id
-                  : "",
-              name: d.name,
-              id: d.id,
-              starts: d.starts,
-              ends: d.ends,
-              joincode: d.joincode,
-              ends_time: d.ends_time,
-              starts_time: d.starts_time,
-              description: d.eventtype.description,
-              offlinecode: d.offlinecode,
-              public: d.public,
-            });
-          }
+          });
+          return res.json(output);
         });
-        return res.json(output);
       });
-    });
+    }
   },
 
   /**
