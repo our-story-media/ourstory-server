@@ -68,6 +68,8 @@ module.exports.policies = {
     imagebackground: ["apiauth", "authenticated", "isowner"],
     clearroleimg: ["apiauth", "authenticated", "isowner"],
     clearbackground: ["apiauth", "authenticated", "isowner"],
+    clearbranding: ["superadmin", "apiauth", "authenticated"],
+    background: ["superadmin", "apiauth", "authenticated"],
     triggeradd: true,
     changephase: ["authenticated", "isowner", "apiauth"],
     addphase: ["authenticated", "isowner", "apiauth"],
@@ -88,14 +90,7 @@ module.exports.policies = {
     roleimg: true,
     contributors: ["authenticated", "isowner", "apiauth"],
   },
-  transcribe: {
-    "*": ["superadmin", "authenticated", "apiauth"],
-    index: ["superadmin", "authenticated", "apiauth", "apikeygen", "flash"],
-    step1: ["superadmin", "authenticated", "apiauth", "apikeygen", "flash"],
-    step2: ["superadmin", "authenticated", "apiauth", "apikeygen", "flash"],
-    step3: ["superadmin", "authenticated", "apiauth", "apikeygen", "flash"],
-    subs: ["superadmin", "authenticated", "apiauth"],
-  },
+
   watch: {
     view: ["authenticated", "viewonly", "flash", "apikeygen"],
     shortlink: true,
@@ -108,8 +103,8 @@ module.exports.policies = {
     editupdates: ["authenticated", "apiauth"],
     canceleditupdates: ["authenticated", "apiauth"],
     getvideo: ["shortlink"],
-    getvideofull: ["authenticated", "apiauth", "checkedit"],
-    getvideotags: ["authenticated", "apiauth", "checkedit"],
+    getvideofull: ["authenticated", "apiauth", "checkmedia_full"],
+    getvideotags: ["authenticated", "apiauth", "checkmedia_full"],
     edits: ["authenticated", "isowner", "apikeygen", "flash"],
     edit: ["authenticated", "apikeygen", "flash"],
     alledits: ["authenticated", "isowner", "apiauth"],
@@ -118,6 +113,9 @@ module.exports.policies = {
     changeownership: ["authenticated", "apiauth"],
     setting: ["superadmin", "authenticated", "apiauth"],
     getsettings: ["superadmin", "authenticated", "apiauth"],
+    rendertagged: ["superadmin", "authenticated", "apiauth"],
+    renderhq: ["superadmin", "authenticated", "apiauth"],
+    renderoriginal: ["superadmin", "authenticated", "apiauth"],
   },
 
   shoot: {
@@ -164,6 +162,11 @@ module.exports.policies = {
     homog: ["authenticated", "checkmedia_full"],
   },
 
+  transcribe: {
+    index: ["authenticated", "apikeygen", "flash"],
+    // srt: [],
+    vtt: [],
+  },
   // 'log':
   // {
   //     '*':['superadmin','flash'],

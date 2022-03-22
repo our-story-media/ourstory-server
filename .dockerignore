@@ -1,6 +1,6 @@
 .git
 .gitignore
-node_modules
+**/node_modules
 ssl
 .vscode
 cast
@@ -20,6 +20,7 @@ emails
 docker/build
 docker/local
 docker/dev
+docker/titan
 Dockerfile*
 .DS_Store
 hooks

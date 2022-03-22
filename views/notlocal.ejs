@@ -6,11 +6,12 @@
   <h2>
     <form action="/auth/process_admin" method="POST">
       <input type="hidden" name="username" value="admin" />
-    <div class="input-group" style="max-width:500px;margin:auto auto">
+    <div style="max-width:500px;margin:auto auto">
       <input placeholder="<%- __('enter access code') %>" class="form-control input-lg"  name="password" />
-      <span class="input-group-btn">
+      <div >
+        <br>
       <input type="submit" class="btn btn-primary btn-lg" value="<%- __('Access Dashboard') %>" />
-      </span>
+    </div>
     </div>
     </form>
   </h2>

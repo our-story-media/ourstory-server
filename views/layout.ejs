@@ -540,24 +540,28 @@
   <div class="container">
     <!-- Site footer -->
     <div class="footer text-muted" style="min-height:100%;text-align:center;">
+      <% if (!sails.config.LOCALONLY) { %>
       <a class="text-muted" href="/privacy">
         <%- __('Privacy') %></a> &middot;
       <a class="text-muted" href="/terms">
         <%- __('Terms') %></a> &middot;
+      
       <a class="text-muted" href="https://indaba.dev">
         <%- __('Guide') %></a> &middot;
-      <span>&copy;
-        <%- __('Indaba') %>
-        <%- new Date().getFullYear() %>
-      </span>
-      <span>&middot;
-        Dashboard: v<%- sails.config.version %>
+        <% } %>
+      
+      <span>
+        Dashboard: v<%- sails.config.version %> &middot;
       </span>
       <% if (sails.config.workerversion) { %>
-      <span>&middot;
-        Worker: v<%- sails.config.workerversion %>
+      <span>
+        Worker: v<%- sails.config.workerversion %> &middot;
       </span>
       <% } %>
+      <span>
+        <img src="/images/by.png" style="height:14px;" />  The Indaba platform and related static content is licensed under a Creative Commons Attribution 4.0 International license.
+      </span>
+      
     </div>
   </div>
     <% if (event.name) { %>

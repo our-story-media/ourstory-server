@@ -1,7 +1,9 @@
-'use strict';
+"use strict";
 
 var shuffleArray = function (array) {
-  var m = array.length, t, i;
+  var m = array.length,
+    t,
+    i;
 
   // While there remain elements to shuffle
   while (m) {
@@ -15,195 +17,245 @@ var shuffleArray = function (array) {
   }
 
   return array;
-}
+};
 
-bootleggerApp.filter('isMine', function () {
+bootleggerApp.filter("isMine", function () {
   return function (items, params) {
     var filtered = [];
     // If time is with the range
     angular.forEach(items, function (item) {
-
-      if ((typeof (params.created_by) != 'undefined' && item.created_by == params.created_by) || typeof (params.created_by) == 'undefined')
+      if (
+        (typeof params.created_by != "undefined" &&
+          item.created_by == params.created_by) ||
+        typeof params.created_by == "undefined"
+      )
         filtered.push(item);
     });
     return filtered;
   };
 });
 
-bootleggerApp.controller('list', ['$scope', '$http', '$sce', '$localStorage', '$timeout', '$interval', '$bootleggerSails', function ($scope, $http, $sce, $storage, $timeout, $interval, socket) {
+bootleggerApp.controller("list", [
+  "$scope",
+  "$http",
+  "$sce",
+  "$localStorage",
+  "$timeout",
+  "$interval",
+  "$bootleggerSails",
+  function ($scope, $http, $sce, $storage, $timeout, $interval, socket) {
+    $scope.sources = [];
+    $scope.playlist = [];
+    $scope.loading = true;
 
-  $scope.sources = [];
-  $scope.playlist = [];
-  $scope.loading = true;
+    $scope.edit = { title: "", description: "" };
 
-  $scope.edit = { title: '', description: '' };
-
-  $scope.getMediaThumb = function (media) {
-    //update to find first actual media file:
-    var found = false;
-    i = 0;
-    while (!found)
-    {
-      if (media[i].thumb)
-        found = media[i].id;
-      i++;
-    }
-    return found;
-  }
-
-  // $scope.restartedit = function (id, event) {
-  //   socket.post('/watch/restartedit/' + id).then(function (resp) {
-  //     //done
-  //   });
-
-  //   if (event) {
-  //     event.stopPropagation();
-  //     event.preventDefault();
-  //   }
-  // };
-
-  $scope.formatDate = function (date) {
-    var dateOut = moment(date, 'DD-MM-YYYY');
-    return dateOut.toDate();
-  };
-
-  (function () {
-    //usSpinnerService.spin('spinner-1');
-
-    try {
-      // addthis.init();
-    }
-    catch (e) {
-      console.log("AddThis not defined in localmode");
-    }
-
-    socket.on('edits', function (resp) {
-      //update the progress...
-      for (var i = 0; i < $scope.edits.length; i++) {
-        if ($scope.edits[i].id == resp.data.edit.id) {
-          $scope.edits[i] = resp.data.edit;
-        }
+    $scope.getMediaThumb = function (media) {
+      //update to find first actual media file:
+      var found = false;
+      i = 0;
+      while (!found) {
+        if (media[i].thumb) found = media[i].id;
+        i++;
       }
-    });
+      return found;
+    };
 
-    // Using .success() and .error()
-    socket.get('/watch/mymedia/')
-      .then(function (resp) {
+    // $scope.restartedit = function (id, event) {
+    //   socket.post('/watch/restartedit/' + id).then(function (resp) {
+    //     //done
+    //   });
+
+    //   if (event) {
+    //     event.stopPropagation();
+    //     event.preventDefault();
+    //   }
+    // };
+
+    $scope.formatDate = function (date) {
+      var dateOut = moment(date, "DD-MM-YYYY");
+      return dateOut.toDate();
+    };
+
+    (function () {
+      //usSpinnerService.spin('spinner-1');
+
+      // try {
+      //   // addthis.init();
+      // } catch (e) {
+      //   console.log("AddThis not defined in localmode");
+      // }
+
+      socket.on("edits", function (resp) {
+        // console.log(resp);
+        //update the progress...
+        for (var i = 0; i < $scope.edits.length; i++) {
+          if ($scope.edits[i].id == resp.data.edit.id) {
+            $scope.edits[i] = resp.data.edit;
+          }
+        }
+      });
+
+      // Using .success() and .error()
+      socket.get("/watch/mymedia/").then(function (resp) {
         $scope.edits = resp.data.edits;
 
-        socket.post('/watch/editupdates', { edits: _.pluck($scope.edits, 'id') }).then(function (resp) {
+        console.log("subscribing");
+        socket
+          .post("/api/watch/editupdates", {
+            edits: _.pluck($scope.edits, "id"),
+          })
+          .then(function (resp) {
+            console.log(resp);
+          });
 
-        });
-
-        $timeout(function () {
-          // addthis.toolbox('.addthis_toolbox');
-        }, 0);
+        // $timeout(function () {
+        //   // addthis.toolbox('.addthis_toolbox');
+        // }, 0);
 
         // $scope.shoots = resp.data.shoots;
         // $scope.owned = resp.data.owned;
         $scope.loading = false;
       });
+    })();
+  },
+]);
 
-  })();
+bootleggerApp.controller("edits", [
+  "$scope",
+  "$http",
+  "$sce",
+  "$localStorage",
+  "$timeout",
+  "$interval",
+  "$bootleggerSails",
+  function ($scope, $http, $sce, $storage, $timeout, $interval, socket) {
+    $scope.sources = [];
+    $scope.playlist = [];
+    $scope.loading = true;
 
-}]);
+    $scope.edit = { title: "", description: "" };
+    // console.log("loading");
 
-bootleggerApp.controller('edits', ['$scope', '$http', '$sce', '$localStorage', '$timeout', '$interval', '$bootleggerSails', function ($scope, $http, $sce, $storage, $timeout, $interval, socket) {
+    $scope.restartedit = function (id, event) {
+      socket.post("/watch/restartedit/" + id).then(function (resp) {
+        //done
+      });
 
-  $scope.sources = [];
-  $scope.playlist = [];
-  $scope.loading = true;
-
-  $scope.edit = { title: '', description: '' };
-
-  $scope.restartedit = function (id, event) {
-    socket.post('/watch/restartedit/' + id).then(function (resp) {
-      //done
-    });
-
-    if (event) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
-  };
-
-  $scope.getMediaThumb = function (media) {
-    //update to find first actual media file:
-    var found = false;
-    var i = 0;
-    while (!found)
-    {
-      if (media[i].thumb)
-        found = media[i].id;
-      i++;
-    }
-    return found;
-  }
-
-  $scope.formatDate = function (date) {
-    var dateOut = moment(date, 'DD-MM-YYYY');
-    return dateOut.toDate();
-  };
-
-  $scope.updateSetting = function()
-  {
-    // console.log('updating setting')
-    socket
-    .post('/api/event/edit/' + mastereventid, { processedits: $scope.event.processedits })
-    .then(function (response) {
-      //done!
-      // console.log(response);
-    });
-  };
-
-  (function () {
-    
-    
-    $scope.getClipLength = function (point) {
-      // if (media.inpoint) {
-        var lena = point.split(':');
-        var time = (parseInt(lena[0]) * 3600) + (parseInt(lena[1]) * 60) + (parseFloat(lena[2]));
-        return time * 1000;
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
     };
 
-    $scope.medialength = function (media) {
-      //aggregate media length:
-      //TODO:
-      var total = 0;
-      _.each(media,function(m){
-        // console.log(m);
-        
-        total += $scope.getClipLength(m.outpoint) - $scope.getClipLength(m.inpoint);
-      })
+    $scope.getMediaThumb = function (media) {
+      //update to find first actual media file:
+      var found = false;
+      var i = 0;
+      while (!found) {
+        if (media[i].thumb) found = media[i].id;
+        i++;
+      }
+      return found;
+    };
 
-      return msToTimeS(total);
-    }
+    $scope.formatDate = function (date) {
+      var dateOut = moment(date, "DD-MM-YYYY");
+      return dateOut.toDate();
+    };
 
-    socket.get('/commission/templateinfo/'+mastereventid)
-    .then(function (resp) {
-      $scope.event = resp.data;
-    });
+    $scope.hasTranscription = function (edit) {
+      let hasTrans = false;
 
-    socket.get('/event/contributors/'+mastereventid)
-    .then(function (resp) {
-      
-      $scope.groups = _.uniq(_.map(resp.data, function (e) {
-        return e.profile.displayName;
-      }));
-    });
+      if (edit.transcription) {
+        hasTrans = _.every(edit.transcription.chunks, function (c) {
+          return typeof c.review != "undefined";
+        });
+      }
+      return hasTrans;
+      // console.log(edit);
+      // return true;
+    };
 
-    // Using .success() and .error()
-    socket.get('/watch/alledits/' + mastereventid)
-      .then(function (resp) {
-        $scope.edits = resp.data;
+    $scope.updateSetting = function () {
+      // console.log('updating setting')
+      socket
+        .post("/api/event/edit/" + mastereventid, {
+          processedits: $scope.event.processedits,
+        })
+        .then(function (response) {
+          //done!
+          // console.log(response);
+        });
+    };
 
-        socket.post('/watch/editupdates', { edits: _.pluck($scope.edits, 'id') }).then(function (resp) {
+    (function () {
+      socket.on("edits", function (resp) {
+        // console.log(resp);
+        //update the progress...
+        for (var i = 0; i < $scope.edits.length; i++) {
+          if ($scope.edits[i].id == resp.data.edit.id) {
+            // console.log($scope.edits[i]);
+            $scope.edits[i].progress = resp.data.edit.progress;
+            $scope.edits[i].fail = resp.data.edit.fail;
+            $scope.edits[i].failed = resp.data.edit.failed;
+          }
+        }
+      });
 
+      $scope.getClipLength = function (point) {
+        // if (media.inpoint) {
+        var lena = point.split(":");
+        var time =
+          parseInt(lena[0]) * 3600 +
+          parseInt(lena[1]) * 60 +
+          parseFloat(lena[2]);
+        return time * 1000;
+      };
+
+      $scope.medialength = function (media) {
+        //aggregate media length:
+        var total = 0;
+        _.each(media, function (m) {
+          // console.log(m);
+
+          total +=
+            $scope.getClipLength(m.outpoint) - $scope.getClipLength(m.inpoint);
         });
 
+        return msToTimeS(total);
+      };
+
+      socket
+        .get("/commission/templateinfo/" + mastereventid)
+        .then(function (resp) {
+          $scope.event = resp.data;
+        });
+
+      socket.get("/event/contributors/" + mastereventid).then(function (resp) {
+        $scope.groups = _.uniq(
+          _.map(resp.data, function (e) {
+            return e.profile.displayName;
+          })
+        );
+      });
+
+      // Using .success() and .error()
+      socket.get("/watch/alledits/" + mastereventid).then(function (resp) {
+        $scope.edits = resp.data;
+
+        // console.log("subscribing");
+        socket
+          .post("/api/watch/editupdates", {
+            edits: _.pluck($scope.edits, "id"),
+          })
+          .then(function (resp) {
+            console.log(resp);
+          });
+
         $timeout(function () {
-          $('.dropdown-submenu a.reassign').on("click", function(e){
-            $(this).next('ul').toggle();
+          $(".dropdown-submenu a.reassign").on("click", function (e) {
+            $(this).next("ul").toggle();
             e.stopPropagation();
             e.preventDefault();
           });
@@ -211,15 +263,13 @@ bootleggerApp.controller('edits', ['$scope', '$http', '$sce', '$localStorage', '
 
         $scope.loading = false;
       });
-
-  })();
-
-}]);
+    })();
+  },
+]);
 
 function msToTime(s) {
-
   function addZ(n) {
-    return (n < 10 ? '0' : '') + n;
+    return (n < 10 ? "0" : "") + n;
   }
 
   var ms = s % 1000;
@@ -229,13 +279,12 @@ function msToTime(s) {
   var mins = s % 60;
   var hrs = (s - mins) / 60;
 
-  return addZ(hrs) + ':' + addZ(mins) + ':' + addZ(secs) + '.' + ms;
+  return addZ(hrs) + ":" + addZ(mins) + ":" + addZ(secs) + "." + ms;
 }
 
 function msToTimeS(s) {
-
   function addZ(n) {
-    return (n < 10 ? '0' : '') + n;
+    return (n < 10 ? "0" : "") + n;
   }
 
   var ms = s % 1000;
@@ -245,5 +294,5 @@ function msToTimeS(s) {
   var mins = s % 60;
   var hrs = (s - mins) / 60;
 
-  return addZ(mins) + ':' + addZ(secs);
+  return addZ(mins) + ":" + addZ(secs);
 }

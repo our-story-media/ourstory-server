@@ -46,7 +46,7 @@
 
 		<%- __('User and Shoots across all deployments are shown here. To administer a specific Shoot, visit the <a href="/">Dashboard</a>.	') %>
 
-		<% if (sails.config.LOCALONLY && !usb) { %>
+		<!-- <% if (sails.config.LOCALONLY && !usb) { %>
 		<div>
 			<a href="/api/backup?apikey=<%- apikey %>">Download Backup</a> &middot;
 			<form id="theform" enctype="multipart/form-data" action="/api/restore?apikey=<%- apikey %>" method="POST"
@@ -57,12 +57,59 @@
 				<a href="#" type="submit" onclick="document.getElementById('theform').submit()">Upload</a>
 			</form>
 		</div>
-		<% } %>
+		<% } %> -->
 
+    <% if (sails.config.LOCALONLY && !usb) { %>
+      <div>
+        Insert a USB drive to perform backup or restore actions.
+      </div>
+    <% }%>
+    
 
 	</div>
+  <% if (sails.config.LOCALONLY) { %>
+  <div class="clearfix">
+  <form action="/admin/branding?apikey=<%- apikey%>" method="post" enctype="multipart/form-data">
+    
+    <div class="row">
+      <div class="col-sm-6">
+        <label class="control-label col-sm-6">
+          <%- __('Organisation Branding') %>
+        </label>
+        <div class="fileinput fileinput-new col-sm-6" data-provides="fileinput">
+          <!-- <div class="fileinput-new thumbnail" style="width: 150px; height: 60px;float:left;"> -->
+            <!-- <img data-src="holder.js/140x50?text=png \n jpg" alt="..."> -->
+          <!-- </div> -->
+          <!-- <div class="fileinput-preview fileinput-exists thumbnail" style="width: 150px; height: 60px;overflow:hidden;float:left;"> -->
 
+          <!-- </div> -->
+          <!-- <div class="flip text-center"  style="width:32px;"> -->
+            <span class="btn btn-primary btn-file">
+              <span class="fileinput-new">
+                <i class="fa fa-folder-open"></i> <%- __('Upload') %>
+              </span>
+              <!-- <span class="fileinput-exists">
+                <i class="fa fa-folder-open"></i>
+              </span> -->
+              <input type="file" accept="image/png, image/jpeg" name="image" required />
+            </span>
+            <a href="/admin/clearbranding/?apikey=<%- apikey%>" class="btn btn-border" >
+              <i class="fa fa-times"></i> Remove
+            </a>
+          </div>
 
+        </div>
+      <!-- </div> -->
+      <div class="col-sm-6" >
+        <div style="aspect-ratio: 16/ 9; background:#eeeeee;border:solid silver 1px;">
+        <img src="/upload/branding.png?<%- Date.now() %>" style="width:100%;aspect-ratio: 16/9;" alt="No image set" />
+      </div>
+      </div>
+      
+    </div>
+  </form>
+</div>
+<% } %>
 
 
 	<% if (sails.config.LOCALONLY && usb) { %>
@@ -113,7 +160,7 @@
 		</div>
 	</div>
 	<% } %>
-
+  <div class="clearfix"></div>
 	<tabset>
 
 		<tab select="showshoots()" heading="<%- __('Shoots') %>">

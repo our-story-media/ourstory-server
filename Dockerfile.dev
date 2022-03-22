@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:10
 
 LABEL maintainer="Tom Bartindale <tom.bartindale@ncl.ac.uk>"
 
@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 
 RUN apt-get update && apt-get install -y git python gcc g++ make
 
-RUN npm install sharp
+# RUN npm install sharp
 
 COPY package.json /usr/src/app/
 
@@ -19,7 +19,7 @@ COPY . /usr/src/app
 
 EXPOSE 1337
 
-RUN npm install -g nodemon
+# RUN npm install -g nodemon
 
 RUN wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add - && echo "deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.2 main" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list && apt-get update && apt-get install -y mongodb-org-tools
 

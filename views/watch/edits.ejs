@@ -51,9 +51,10 @@
     </div>
 
 <div style="margin-top:2em">
-    <div class="alert alert-info col-sm-8 col-sm-offset-2">
+    <div class="alert alert-info col-md-8 col-md-offset-2">
 
-            <i class="fa fa-info-circle fa-3x" style="float:left;margin-right:10px;min-height:75px;"></i>
+            <i class="col-xs-1 fa fa-info-circle fa-3x"></i>
+            <div class="col-xs-11">
 			<h3 style="margin:0">
                 <%- __('Enable Publishing!') %>
                 
@@ -65,11 +66,39 @@
             </div>
 
 				<small style="display:block;">
-						<%- __('Control your computer resources by only enabling publishing during the right phase of the workflow.') %></small>
+                        <%- __('Control your computer resources by only enabling publishing during the right phase of the workflow.') %>
+                    
+                        
+                    </small>
+                
 			</h3>
 
-        
-            </div>
+            <span ng-show="event.processedits">
+                <% if(sails.config.NOTRENDERTAGGED)  { %>
+                <div>
+                &middot; <%- __('Tagged versions of each story will be published automatically. Trigger the publishing of a high-quality non-tagged version manually for each story using the menu option.') %>
+                </div>
+                <% } %>
+
+                <% if(sails.config.RENDERPREVIEW)  { %>
+                <div>
+                &middot; <%- __('Currently, stories will be published at ') %>
+                <%- sails.config.RENDERWIDTH || '1920' %>x<%- sails.config.RENDERHEIGHT || '1080' %>
+                    in <%- sails.config.RENDERPROFILE || 'high-quality' %>.
+                <%- __('Trigger a high quality version manually for each story using the menu option.') %>
+                </div>
+                <% } else { %>
+                <div>
+                &middot; <%- __('Stories are currently published at the highest quality possible.') %>
+                </div>
+                <% } %>
+                <div>
+                  &middot; <%- __('Stories are currently tagged in %s',event.defaulttopiclang) %>
+                  </div>
+            </span>
+        </div>
+        <div class="clearfix"></div>
+        </div>
     </div>
     <div class="clearfix"></div>
 
@@ -85,19 +114,25 @@
                     <div style="padding:2px;position:relative;">
                         <div style="background:#f8f8f8;">
                             <a style="padding-bottom:56.25%;overflow:hidden;width:100%;display:block;position:relative;"
-                                ng-href="{{ (!edit.path && !edit.failed) ? '#' : '/v/'+edit.shortlink }}">
+                                ng-href="{{ (!edit.hasoriginal && !edit.failed) ? '#' : '/v/'+edit.shortlink }}">
                                 <img style="width:100%;position: absolute;top:0;left:0;" ng-src="/media/thumbnail/{{getMediaThumb(edit.media)}}" />
 
                                 <progressbar style="position:absolute;bottom:0;width:100%;height:8px;" class="determinate"
-                                    max="100" value="edit.progress" type="info" ng-show="(edit.progress && !edit.failed && !edit.path)"></progressbar>
+                                    max="100" value="edit.progress" type="info" ng-show="(edit.progress && !edit.failed && edit.progress < 98)"></progressbar>
 
-                                <span class="label label-success" ng-show="!edit.failed && edit.path && edit.progress>98"
-                                    style="position:absolute;top:4px;left:4px;"><%- __('COMPLETE') %></span>
-                                <span class="label label-warning" ng-show="!edit.failed && !edit.path && edit.progress>0"
-                                    style="position:absolute;top:4px;left:4px;"><%- __('PROCESSING') %></span>
-                                <span class="label label-default" ng-show="!edit.path && !edit.progress" style="position:absolute;top:4px;left:4px;"><%- __('DRAFT') %></span>
-
-
+                                    <div style="position:absolute;top:4px;left:4px;">
+                                <span class="label label-success" ng-show="edit.hasoriginal"
+                                    ><%- __('ORIGINAL') %></span>
+                                  <span class="label label-success" ng-show="edit.hashighquality"
+                                    ><%- __('HQ') %></span>
+                                    <span class="label label-success" ng-show="edit.hastagged"
+                                    ><%- __('TAGGED') %></span>
+                                <span class="label label-warning" ng-show="!edit.failed && edit.progress>0 && edit.progress < 98 && !edit.hasoriginal"
+                                    ><%- __('PROCESSING') %></span>
+                                <span class="label label-default" ng-show="!edit.hasoriginal" ><%- __('DRAFT') %></span>
+                                <span class="label label-default" ng-show="hasTranscription(edit)"
+                                    ><%- __('COMPLETED TRANSCRIPTION') %></span>
+                              </div>
 
                                 <span style="position:absolute;top:0;left:0px;width:100%;height:100%;" ng-show="edit.failed">
                                     <div ng-show="edit.failed && edit.failreason" class="bg-danger" style="padding: 5px;">{{edit.failreason}}</div>
@@ -106,8 +141,107 @@
 
                             </a>
 
-                            <div style="padding-left:1em;padding-right:1em;padding-bottom:0.5em;padding-top:1em;">
-                                <h3 style="margin:0;height:1.4em;text-overflow: ellipsis;white-space: nowrap;overflow:hidden;text-align: left;">{{edit.title}}</h3>
+                            <div style="padding-left:1em;padding-right:1em;padding-bottom:0.5em;padding-top:1em;position: relative;">
+                                <h3 style="margin:0;height:1.4em;text-overflow: ellipsis;white-space: nowrap;overflow:hidden;text-align: left;margin-right:30px;">{{edit.title}}</h3>
+                                <div class="btn-group" style="position:absolute;right:8px;top:8px;">
+                                  <button type="button" class="btn dropdown-toggle " data-toggle="dropdown"
+                                      aria-haspopup="true" aria-expanded="false">
+                                      <i class="fa fa-cog"></i>
+                                  </button>
+                                  <ul class="dropdown-menu dropdown-menu-right">
+                                    <li class="dropdown-header"><%- __('Download') %></li>
+                                    <!-- message for no avail videos -->
+                                    <li class="disabled" ng-if="!edit.hastagged && !edit.hasoriginal && !edit.haspreview">
+                                        <a href="#">    
+                                            <%- __('There are no videos to download') %>
+                                    </a></li>
+                                    <!-- Download original version (notags, preview if in titan) -->
+                                    <li ng-if="edit.hasoriginal"><a ng-href="{{ '/watch/getvideofull/' + edit.id + '?apikey=<%- apikey %>'}}">
+                                      <%- __('Download (with tags)') %>
+                                    </a></li>
+
+                                    <!-- Download HQ version if exists -->
+                                    <li ng-if="edit.hashighquality"><a ng-href="{{ '/watch/getvideohq/' + edit.id + '?apikey=<%- apikey %>'}}">
+                                        <%- __('Download (high quality, no tags)') %>
+                                    </a></li>
+
+                                    <!-- Download tagged version if exists -->
+                                    <li ng-if="edit.hastagged">
+                                        <a ng-href="{{ '/watch/getvideotags/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                            <%- __('Download (high quality, with tags)') %>
+                                    </a></li>
+
+                                      <li class="dropdown-header" ng-if="edit.hasoriginal || !(edit.hasoriginal && edit.hashighquality && edit.hastagged)"><%- __('Publish') %></li>
+                                      
+
+                                      <!-- publish original (i.e. normal operation, or only the full version if in titan) -->
+                                      <li class="disabled" ng-if="!event.processedits && !edit.hasoriginal">
+                                          <a href="#">    
+                                              <%- __('Publish (with tags)') %>
+                                      </a></li>
+                                      <li ng-if="event.processedits && !edit.hasoriginal">
+                                          <a ng-href="{{ '/api/watch/renderoriginal/<%- theevent.id %>/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                              <%- __('Publish (with tags)') %>
+                                      </a></li>
+                                      <li ng-if="event.processedits && edit.hasoriginal">
+                                        <a ng-href="{{ '/api/watch/renderoriginal/<%- theevent.id %>/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                            <%- __('Re-Publish (with tags)') %>
+                                    </a></li>
+                                      <!-- // -->
+
+                                      
+
+                                      <!-- if system set to only render preview quality, manually trigger higher-quality version -->
+                                      <% if (sails.config.RENDERPREVIEW) { %>
+                                      <li ng-if="event.processedits && !edit.hashighquality">
+                                          <a ng-href="{{ '/api/watch/renderhq/<%- theevent.id %>/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                            <i class="glyphicon glyphicon-alert"></i>
+                                              <%- __('Publish high quality (no tags)') %>
+                                      </a></li>
+
+                                      <li class="disabled" ng-if="!event.processedits && !edit.hashighquality">
+                                          <a href="#">    
+                                            <i class="glyphicon glyphicon-alert"></i>
+                                              <%- __('Publish high quality (no tags)') %>
+                                      </a></li>
+                                      <% } %>
+                                      <!-- // -->
+
+                                      <!-- If system set to not render tagged version at same time as primary -->
+                                      <% if (sails.config.NOTRENDERTAGGED) { %>
+                                      <li ng-if="event.processedits && !edit.hastagged && edit.hashighquality">
+                                          <a ng-href="{{ '/api/watch/rendertagged/<%- theevent.id %>/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                            <i class="glyphicon glyphicon-alert"></i>
+                                              <%- __('Publish high quality (tags)') %>
+                                      </a></li>
+                                      <li class="disabled" ng-if="!event.processedits && !edit.hastagged && edit.hashighquality">
+                                          <a href="#">
+                                              <%- __('Publish high quality (tags)') %>
+                                      </a></li>
+                                      <% } %>
+                                      <!-- // -->
+                                      <li class="dropdown-header" ng-if="edit.hasoriginal"><%- __('Transcription') %></li>
+                                      <li ng-if="edit.hasoriginal">
+                                        <a ng-href="{{ '/transcribe/' + edit.id + '?apikey=<%- apikey %>'}}">    
+                                          <%- __('Transcribe') %>
+                                        </a></li>
+                                          <li ng-if="edit.hasoriginal">
+                                            <a ng-href="{{ '/api/transcribe/vtt/' + edit.id + '?download=true'}}">    
+                                              <%- __('Download Transcription (vtt)') %>
+                                            </a></li>
+                                      <li class="dropdown-header"><%- __('Management') %></li>
+                                      <li><a ng-href="/api/watch/clone/{{edit.id}}?apikey=<%- apikey %>"><%- __('Duplicate') %></a></li>
+                                      <li><a ng-href="/api/watch/changeownership/{{edit.id}}/{{group}}?apikey=<%- apikey %>"><%- __('Allocate to latest user of this name') %></a></li>
+                                      <li class="dropdown-submenu">
+                                          <a tabindex="-1" href="#" class="reassign"><span class="pull-left"><%- __('Re-assign to') %> </span><span class="fa fa-caret-right pull-right"></span>
+                                          <div class="clearfix"></div>
+                                          </a>
+                                          <ul class="dropdown-menu">
+                                              <li ng-repeat="u in groups"><a ng-href="/api/watch/changeownership/{{edit.id}}/{{u}}?apikey=<%- apikey %>">{{u}}</a></li>
+                                          </ul>
+                                      </li>
+                                  </ul>
+                              </div>
                                 <p class="text-left">
                                     <img style="width:24px;height:auto;border-radius: 50%;" ng-src="{{edit.user.photo.replace('<%- sails.config.master_url %>','')}}" />
                                     {{edit.user.name}}
@@ -118,39 +252,7 @@
                                 </p>
                                 <p class="pull-left"><i class="fa fa-clock-o"></i> {{edit.updatedAt | date:'d/M/yy h:mm a'}}</p>
                                 <div class="clearfix"></div>
-                                <div class="btn-group" style="position:absolute;right:4px;top:0;">
-                                    <button type="button" class="btn btn-lg btn-link dropdown-toggle" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-ellipsis-v"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <li ng-if="edit.path && !edit.failed"><a ng-href="{{ '/watch/getvideofull/' + edit.id + '?apikey=<%- apikey %>'}}">
-                                                <%- __('Download') %>
-                                            </a></li>
-                                        <li ng-if="edit.path && !edit.failed">
-                                            <a ng-href="{{ '/watch/getvideotags/' + edit.id + '?apikey=<%- apikey %>'}}">    
-                                                <%- __('Download (with tags)') %>
-                                        </a></li>
-                                        <!-- <li ng-if="edit.path && !edit.failed">
-                                            <a ng-href="{{ '/transcribe/' + edit.id + '?apikey=<%- apikey %>'}}">    
-                                                <%- __('Transcribe') %>
-                                        </a></li>
-                                        <li ng-if="edit.path && !edit.failed">
-                                            <a ng-href="{{ '/api/transcribe/subs/' + edit.id + '?apikey=<%- apikey %>'}}">    
-                                                <%- __('Download Transcription') %>
-                                        </a></li> -->
-                                        <li><a ng-href="/api/watch/clone/{{edit.id}}?apikey=<%- apikey %>"><%- __('Duplicate') %></a></li>
-                                        <li><a ng-href="/api/watch/changeownership/{{edit.id}}/{{group}}?apikey=<%- apikey %>"><%- __('Update to Latest User of this Name') %></a></li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="#" class="reassign"><span class="pull-left"><%- __('Re-assign to') %> </span><span class="fa fa-caret-right pull-right"></span>
-                                            <div class="clearfix"></div>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li ng-repeat="u in groups"><a ng-href="/api/watch/changeownership/{{edit.id}}/{{u}}?apikey=<%- apikey %>">{{u}}</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

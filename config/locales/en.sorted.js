@@ -101,7 +101,7 @@
  "Indaba complies with GDPR and any external services that are not based in the EU comply with the EU-US Privacy Shield Frameworks as set forth by the U.S. Department of Commerce regarding the collection, use, and retention of personal data from the EU and Switzerland. For more information about the Privacy Shield generally, and to view the certificates online, please visit https://www.privacyshield.gov.": "Indaba complies with GDPR and any external services that are not based in the EU comply with the EU-US Privacy Shield Frameworks as set forth by the U.S. Department of Commerce regarding the collection, use, and retention of personal data from the EU and Switzerland. For more information about the Privacy Shield generally, and to view the certificates online, please visit https://www.privacyshield.gov.",
  "I understand and want to continue": "I understand and want to continue",
  "Joined": "Joined",
- "Kill Event": "Kill Event",
+ "Kill Event": "Remove Shoot",
  "Key Points": "Key Points",
  "Language to Burn Tags in": "Language to Burn Tags in",
  "Lang to Burn": "Lang to Burn",

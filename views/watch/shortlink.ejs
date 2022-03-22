@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <link href='/styles/opensans.css' rel='stylesheet' type='text/css'>
+        <!-- <link href='/styles/opensans.css' rel='stylesheet' type='text/css'> -->
         <style>
         body
         {
@@ -69,7 +69,7 @@
     </head>
     <% if (typeof(edit) != 'undefined'){ %>
     <body style="height:100%;width:100%;overflow:hidden;background:#1f1f1f">
-     <% if (edit.path) { %>
+     <% if (edit.hasoriginal) { %>
      <div style="position:absolute;left:5px;top:5px;" class="addthis_toolbox" addthis:url="<%- sails.config.master_url %>/v/<%- edit.shortlink %>" addthis:title="<%- edit.title %>">
         <a class="addthis_button_preferred_1"></a>
         <a class="addthis_button_preferred_2"></a>
@@ -81,6 +81,7 @@
      
         <video controls autoplay >
             <source src="/watch/getvideo/<%- edit.id %>"></source>
+            <track label="Transcription" kind="subtitles" srclang="en" src="/api/transcribe/vtt/<%- edit.id %>" default>
         </video>
         <% } else { %>
         <% if (edit.failed) { %>
