@@ -73,6 +73,8 @@ services:
       - ../../.tmp:/usr/src/app/.tmp
       - ../../config:/usr/src/app/config
       - "./upload:/usr/src/app/upload"
+      - "../../package.json:/usr/src/app/package.json"
+      # - "../../package-lock.json:/usr/src/app/package-lock.json"
       - "../../api:/usr/src/app/api"
       - "../../assets:/usr/src/app/assets"
       - "../../views:/usr/src/app/views"
