@@ -250,7 +250,7 @@ bootleggerApp.controller("edits", [
             edits: _.pluck($scope.edits, "id"),
           })
           .then(function (resp) {
-            console.log(resp);
+            // console.log(resp);
           });
 
         $timeout(function () {
