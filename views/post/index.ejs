@@ -63,7 +63,7 @@
                   <div style="padding:2px;position:relative;">
                       <div style="background:#f8f8f8;">
                           <a style="padding-bottom:56.25%;overflow:hidden;width:100%;display:block;position:relative;"
-                          ng-href="{{ '/transcribe/' + edit.id + '?apikey=<%- apikey %>'}}">
+                          ng-href="{{(edit.hasoriginal)? '/transcribe/' + edit.id + '?apikey=<%- apikey %>':'#'}}">
                               
                               <img style="width:100%;position: absolute;top:0;left:0;" ng-src="/media/thumbnail/{{getMediaThumb(edit.media)}}" />
                                   <div style="position:absolute;top:4px;left:4px;">
