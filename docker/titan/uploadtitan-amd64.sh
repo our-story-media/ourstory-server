@@ -5,9 +5,14 @@ echo "Downloading latest tagged version"
 docker pull redis:alpine
 docker pull mvertes/alpine-mongo
 docker pull kusmierz/beanstalkd
-docker pull bootlegger/ourstory-worker:latest
-docker pull bootlegger/ourstory-server:latest
+docker pull bootlegger/ourstory-worker:v1.1.13
+docker pull bootlegger/ourstory-server:v1.2.29
 docker pull bootlegger/nginx-local:latest
+
+# force latest tag, so that it will be loaded properly in the client
+docker tag bootlegger/ourstory-server:v1.2.29 bootlegger/ourstory-server:latest 
+
+docker tag bootlegger/ourstory-worker:v1.1.13 bootlegger/ourstory-worker:latest t
 
 # echo "Exporting Images"
 docker save redis:alpine mvertes/alpine-mongo kusmierz/beanstalkd bootlegger/nginx-local:latest bootlegger/ourstory-worker:latest bootlegger/ourstory-server:latest -o images.tar
