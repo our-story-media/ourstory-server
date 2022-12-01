@@ -11,7 +11,8 @@ import { ThemeProvider } from '@material-ui/core/styles';
 const theme = createMuiTheme({
   typography: {
     fontFamily: [
-      'Open Sans'
+      '"Open Sans"',
+      '"Helvetica Neue"'
     ].join(',')},
   palette: {
     primary: {
