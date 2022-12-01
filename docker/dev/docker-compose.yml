@@ -12,8 +12,8 @@ services:
       context: ../..
       dockerfile: Dockerfile.nginx
     ports:
-      - "80:80"
-      # - "8845:80"
+      # - "80:80"
+      - "8845:80"
     volumes:
       # - "../server.local.conf:/etc/nginx/conf.d/default.conf:ro"
       - "../bootlegger.dev.conf:/etc/nginx/vhost.d/default"
@@ -30,7 +30,7 @@ services:
       - "6379:6379"
 
   mongo:
-    image: mongo
+    image: mongo:4
     volumes:
       - mongo-data:/data/db
       - ./backup:/backup
@@ -80,8 +80,8 @@ services:
       - "../../views:/usr/src/app/views"
       - "../../tasks:/usr/src/app/tasks"
       - "../../transcription:/usr/src/app/transcription:ro"
-      # - ../prod/.sailsrc:/usr/src/app/.sailsrc:ro
-      # - ../prod/ssl:/usr/src/app/ssl:ro
+      - ../prod/.sailsrc:/usr/src/app/.sailsrc:ro
+      - ../prod/ssl:/usr/src/app/ssl:ro
       - ../../../ourstory-worker:/usr/src/ourstory-worker
       # - "../prod/.sailsrc:/usr/src/app/.sailsrc"
       - ./usbdrive:/usbdrive
