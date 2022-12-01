@@ -182,7 +182,8 @@ const getSubs = function (edit) {
 module.exports = {
   index: async function (req, res) {
     // console.log("id", req.params.id);
-    let apiurl = req.protocol + "://" + req.host + ":" + req.port;
+    // let apiurl = req.protocol + "://" + req.host + ":" + req.port;
+    let apiurl = sails.config.master_url;
     // console.log(apiurl);
     return res.view("transcribe/index", {
       id: req.params.id,
