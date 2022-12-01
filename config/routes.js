@@ -30,8 +30,8 @@ module.exports.routes = {
   "get /event/clearroleimg/:id/:role": "EventController.clearroleimg",
   "get /event/contributors/:id": "EventController.contributors",
   "post /auth/process_admin": "AuthController.process_admin",
-  "get /admin/clearbranding": "EventController.clearbranding",
-  "post /admin/branding": "EventController.branding",
+  "get /admin/clearbranding/:eventid": "EventController.clearbranding",
+  "post /admin/branding/:eventid": "EventController.branding",
 
   /*
     API ENDPOINTS

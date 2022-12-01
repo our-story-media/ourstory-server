@@ -2578,7 +2578,7 @@ module.exports = {
             req.session.flash = {
               msg: req.__("Upload Failed"),
             };
-            res.redirect("/event/admin/");
+            res.redirect(`/event/view/${req.params.eventid}`);
           }
 
           // var uuid = require("uuid");
@@ -2594,13 +2594,20 @@ module.exports = {
             })
             .png()
             .toFile(
-              path.join(__dirname, "..", "..", "upload", "branding.png"),
+              path.join(
+                __dirname,
+                "..",
+                "..",
+                "upload",
+                req.params.eventid,
+                "branding.png"
+              ),
               function (err) {
                 if (err) {
                   req.session.flash = {
                     msg: err,
                   };
-                  res.redirect("/event/admin/");
+                  res.redirect(`/event/view/${req.params.eventid}`);
                 }
 
                 // fs.copySync(
@@ -2611,7 +2618,7 @@ module.exports = {
                 req.session.flash = {
                   msg: req.__("Uploaded Brand"),
                 };
-                res.redirect("/event/admin/");
+                res.redirect(`/event/view/${req.params.eventid}`);
               }
             );
 
@@ -2636,12 +2643,19 @@ module.exports = {
   clearbranding: function (req, res) {
     try {
       fss.unlinkSync(
-        path.join(__dirname, "..", "..", "upload", "branding.png")
+        path.join(
+          __dirname,
+          "..",
+          "..",
+          "upload",
+          req.params.eventid,
+          "branding.png"
+        )
       );
     } catch (e) {
       console.error(e);
     }
     req.session.flash = { msg: req.__("Removed Branding") };
-    res.redirect("/event/admin/");
+    res.redirect(`/event/view/${req.params.eventid}`);
   },
 };
