@@ -2587,6 +2587,10 @@ module.exports = {
           var tmp = ".tmp/uploads/" + tt[0].fd;
           // var client = knox.createClient(knox_params);
 
+          fs.ensureDirSync(
+            path.join(__dirname, "..", "..", "upload", req.params.eventid)
+          );
+
           sharp(tmp)
             .resize(1280, 720, {
               fit: "contain",
@@ -2606,7 +2610,7 @@ module.exports = {
                 if (err) {
                   console.error(err);
                   req.session.flash = {
-                    msg: err,
+                    msg: req.__("Upload Failed"),
                   };
                   return res.redirect(`/event/view/${req.params.eventid}`);
                 }
