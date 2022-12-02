@@ -184,8 +184,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             className={classes.videoPlayerButton}
             onClick={toggleIsPlaying}
           >
-            {(isPlaying && <Pause style={{ fontSize: 60 }} />) || (
-              <PlayArrow style={{ fontSize: 60 }} />
+            {(isPlaying && <Pause style={{ fontSize: 40 }} />) || (
+              <PlayArrow style={{ fontSize: 40 }} />
             )}
           </Button>
           <div
