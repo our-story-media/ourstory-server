@@ -2578,7 +2578,7 @@ module.exports = {
             req.session.flash = {
               msg: req.__("Upload Failed"),
             };
-            res.redirect(`/event/view/${req.params.eventid}`);
+            return res.redirect(`/event/view/${req.params.eventid}`);
           }
 
           // var uuid = require("uuid");
@@ -2604,10 +2604,11 @@ module.exports = {
               ),
               function (err) {
                 if (err) {
+                  console.error(err);
                   req.session.flash = {
                     msg: err,
                   };
-                  res.redirect(`/event/view/${req.params.eventid}`);
+                  return res.redirect(`/event/view/${req.params.eventid}`);
                 }
 
                 // fs.copySync(
@@ -2627,15 +2628,16 @@ module.exports = {
       } else {
         // res.redirect('/shoot/view/'+req.param('id'));
         req.session.flash = {
-          msg: req.__("Please provide and image"),
+          msg: req.__("Please provide an image"),
         };
-        res.redirect("/event/admin/");
+        res.redirect(`/event/view/${req.params.eventid}`);
       }
     } catch (e) {
+      console.error(e);
       req.session.flash = {
         msg: req.__("Upload Failed"),
       };
-      res.redirect("/event/admin/");
+      res.redirect(`/event/view/${req.params.eventid}`);
     }
     // });
   },
