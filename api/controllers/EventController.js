@@ -73,14 +73,19 @@ module.exports = {
       if (isusb) {
         if (fs.existsSync("/usbdrive/usb/indaba")) {
           files = await readdir("/usbdrive/usb/indaba");
-          backups = _.sortBy(
-            _.map(files, function (f) {
-              return {
-                name: moment(new Date(parseInt(f))).fromNow(),
-                path: f,
-              };
-            }),
-            "path"
+          backups = _.filter(
+            _.sortBy(
+              _.map(files, function (f) {
+                return {
+                  name: moment(new Date(parseInt(f))).fromNow(),
+                  path: f,
+                };
+              }),
+              "path"
+            ),
+            function (f) {
+              return f.path != "indaba-logs";
+            }
           );
         }
 

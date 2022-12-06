@@ -2,8 +2,11 @@ FROM node:10-stretch
 
 ARG TARGETPLATFORM
 
-RUN echo "BUILDING FOR $TARGETPLATFORM" && if [ "$TARGETPLATFORM" = "linux/arm/v7" ] ; then wget https://andyfelong.com/downloads/mongodb_stretch_3_0_14_core.zip && \
+RUN echo "BUILDING FOR $TARGETPLATFORM" && if [ "$TARGETPLATFORM" = "linux/arm/v7" ] ; then wget https://andyfelong.com/downloads/mongodb_stretch_3_0_14_core.zip && wget https://andyfelong.com/downloads/mongodb_stretch_3_0_14_tools.zip && \
   unzip mongodb_stretch_3_0_14_core.zip && \
+  unzip mongodb_stretch_3_0_14_tools.zip && \
+  chmod 755 ./tools/* && \
+  cp ./tools/* /usr/bin && \
   adduser --ingroup nogroup --shell /etc/false --disabled-password --gecos "" \
   --no-create-home mongodb && \
   cd core && \
@@ -13,12 +16,14 @@ RUN echo "BUILDING FOR $TARGETPLATFORM" && if [ "$TARGETPLATFORM" = "linux/arm/v
   cp -p mongo* /usr/bin && \
   cd .. && \
   rm -R core && \
+  rm -R tools && \
+  rm mongodb_stretch_3_0_14_tools.zip && \
   rm mongodb_stretch_3_0_14_core.zip ; \
   fi && \
   PACKAGES="" && \ 
   if [ ! "$TARGETPLATFORM" = "linux/arm/v7" ] ; then PACKAGES="mongodb" ; fi && \
   apt-get update -q && \
-  apt-get install -q -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y nginx redis-server beanstalkd libav-tools melt rsync mongo-tools $PACKAGES && \
+  apt-get install -q -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y nginx redis-server beanstalkd libav-tools melt rsync $PACKAGES && \
   WORKER_TAG=$(git ls-remote --tags --refs https://github.com/our-story-media/ourstory-worker | grep -o 'refs/tags/v[0-9]*\.[0-9]*\.[0-9]*' | sort -r -V | head -n 1 | grep -o '[^\/]*$') && \
   SERVER_TAG=$(git ls-remote --tags --refs https://github.com/our-story-media/ourstory-server | grep -o 'refs/tags/v[0-9]*\.[0-9]*\.[0-9]*' | sort -r -V | head -n 1 | grep -o '[^\/]*$') && \
   git clone --branch $SERVER_TAG --depth=1 https://github.com/our-story-media/ourstory-server && git clone --branch $WORKER_TAG --depth=1 https://github.com/our-story-media/ourstory-worker
