@@ -2058,6 +2058,11 @@ module.exports = {
           //var e = req.params.all();
           //console.log(req.params.all());
           var neevent = _.extend(req.params.all(), {
+            ends: "1/1/3000",
+            ends_time: "00:00",
+            starts: "1/1/2000",
+            starts_time: "00:00",
+
             publicshare: 0,
             public: 1,
             publicview: 1,

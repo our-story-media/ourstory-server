@@ -63,6 +63,7 @@
 
   <div class="form-horizontal col-xs-12">
     <div class="form-group">
+      <% if (!sails.config.LOCALONLY) {%>
       <div class="row">
         <label for="inputEmail2" class="col-sm-4 control-label">
           <%- __('Contribution starts') %></label>
@@ -104,6 +105,7 @@
         </div>
       </div>
     </div>
+    <% } %>
 
     <div class="clearfix">
       <form action="/admin/branding/<%- event.id %>?apikey=<%- apikey%>" method="post" enctype="multipart/form-data">
@@ -183,6 +185,7 @@
 
       <% } %>
       <div class="clearfix"></div>
+      <% if (!sails.config.LOCALONLY) {%>
       <div id="info" class="col-xs-12 col-sm-8 col-sm-offset-2">
 
         <div class="form-group">
@@ -193,6 +196,7 @@
           <textarea type="text" ng-model="event.description" class="form-control" rows="3"></textarea>
         </div>
       </div>
+      <% } %>
 
     </div>
 
