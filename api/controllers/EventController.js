@@ -70,9 +70,13 @@ module.exports = {
         //not a usb mounted
       }
 
+      // //TODO: For dev:
+      // isusb = true;
+
       if (isusb) {
         if (fs.existsSync("/usbdrive/usb/indaba")) {
           files = await readdir("/usbdrive/usb/indaba");
+          // console.log(files);
           backups = _.filter(
             _.sortBy(
               _.map(files, function (f) {
@@ -84,7 +88,11 @@ module.exports = {
               "path"
             ),
             function (f) {
-              return f.path != "indaba-logs";
+              return (
+                f.path != "indaba-logs" &&
+                f.path != ".DS_Store" &&
+                f.path != "indaba-em-backup"
+              );
             }
           );
         }
