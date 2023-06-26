@@ -4,17 +4,6 @@
     <div class="indeterminate"></div>
   </div>
 
-  <!-- <div class="hidden-xs row" ng-show="event.eventtype.roleimg" style="margin-top:2em;">
-    <div class="alert alert-success col-sm-8 col-sm-offset-2">
-      <i class="fa fa-check fa-3x" style="float:left;margin-right:10px;"></i>
-      <h3 style="margin:0">
-        <%- __('Ready to Shoot!') %>
-        <small style="display:block;">
-          <%- __('Contributors should download the App to get started...') %></small>
-      </h3>
-    </div>
-  </div> -->
-
   <div class="row" ng-show="!ifRoleImages()" style="margin-top:2em;">
     <div class="col-sm-8 col-sm-offset-2">
     <div class="alert alert-warning ">
@@ -36,7 +25,7 @@
       <h3 style="margin:0">
         <%- __('Not Quite Ready!') %>
         <small style="display:block;">
-          <%- __('Make sure to add a Particiant Release as your shoot is public') %></small>
+          <%- __('Make sure to add a Participant Release as your shoot is public') %></small>
       </h3>
     </div>
   </div>
@@ -108,14 +97,13 @@
     <% } %>
 
     <div class="clearfix">
+      <h2><%- __('Organisation Branding') %></h1>
       <form action="/admin/branding/<%- event.id %>?apikey=<%- apikey%>" method="post" enctype="multipart/form-data">
         
-        <div class="row">
-          <div class="col-sm-4 text-right">
+        <div class="row text-center">
+          <div>
             <div>
-            <label class="control-label">
-              <%- __('Organisation Branding') %>
-            </label>
+              <%- __('This image will be included at the start of every story when it is published.') %>
           </div>
             <div class="fileinput fileinput-new" data-provides="fileinput" style="margin-top:1em;">
                 <span class="btn btn-primary btn-file">
@@ -125,82 +113,21 @@
                   <input type="file" accept="image/png, image/jpeg" name="image" required />
                 </span>
               </div>
-              <div>
               <a href="/admin/clearbranding/<%- event.id %>?apikey=<%- apikey%>" class="btn btn-border" >
-                <i class="fa fa-times"></i> Remove
+                <i class="fa fa-times"></i> <%- __('Remove') %>
               </a>
+              <div>
+              
               </div>
-
-            
-    
             </div>
-          <!-- </div> -->
-          <div class="col-sm-6" >
+          <div class="col-sm-6 col-sm-offset-3" >
             <div style="aspect-ratio: 16/ 9; background:#eeeeee;border:solid silver 1px;">
-            <img src="/upload/<%- event.id %>/branding.png?<%- Date.now() %>" style="width:100%;aspect-ratio: 16/9;" alt="No image set" />
+            <img src="/upload/<%- event.id %>/branding.png?<%- Date.now() %>" style="width:100%;aspect-ratio: 16/9;" alt="No image set" class="brandingimage" />
           </div>
           </div>
-          
         </div>
       </form>
     </div>
-
-    <div class="row">
-      <% if (!sails.config.LOCALONLY && false) { %>
-      <form action="/event/background/<%- event.id %>?apikey=<%- apikey%>" method="post" enctype="multipart/form-data">
-        <label class="col-sm-4 control-label" data-delay="300" tooltip="Loads a background that contributors will see when they log into the mobile app">
-          <%- __('Background Image for Shoot') %>
-          <i style="color:silver" class="fa fa-question-circle"></i>
-        </label>
-        <div class="col-sm-6">
-
-
-          <div class="fileinput fileinput-new" data-provides="fileinput">
-            <div class="fileinput-new thumbnail" style="width: 150px; height: 60px;float:left;">
-              <img data-src="holder.js/140x50?text=png \n jpg" alt="...">
-            </div>
-            <div class="fileinput-preview fileinput-exists thumbnail" style="width: 150px; height: 60px;overflow:hidden;float:left;">
-
-            </div>
-            <div class="pull-right flip text-center"  style="width:32px;">
-              <span class="btn btn-link btn-file">
-                <span class="fileinput-new">
-                  <i class="fa fa-folder-open"></i>
-                </span>
-                <span class="fileinput-exists">
-                  <i class="fa fa-folder-open"></i>
-                </span>
-                <input type="file" accept="image/png, image/jpeg" name="image" required />
-              </span>
-              <a href="/event/clearbackground/<%- event.id %>?apikey=<%- apikey%>" class="btn btn-link" 
-                tooltip="<%- __('remove background') %>">
-                <i class="fa fa-times"></i>
-              </a>
-            </div>
-
-          </div>
-        </div>
-
-      </form>
-
-      <% } %>
-      <div class="clearfix"></div>
-      <% if (!sails.config.LOCALONLY) {%>
-      <div id="info" class="col-xs-12 col-sm-8 col-sm-offset-2">
-
-        <div class="form-group">
-          <label tooltip-popup-delay="300" tooltip=" <%- __('A description of what this template can be used for.') %>">
-            <%- __('Shoot Description') %>
-            <i style="color:silver" class="fa fa-question-circle"></i>
-          </label>
-          <textarea type="text" ng-model="event.description" class="form-control" rows="3"></textarea>
-        </div>
-      </div>
-      <% } %>
-
-    </div>
-
-
   </div>
 
 
