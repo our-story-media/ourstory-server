@@ -9,17 +9,33 @@ const path = require("path");
 exports.backuprunning = false;
 exports.copyprogress = -1;
 
+const collections = [
+  "edits",
+  "event",
+  "eventtemplate",
+  "media",
+  "shot",
+  "user",
+];
+
 exports.backup = async function () {
   try {
     this.backuprunning = true;
 
     let pp = path.join(__dirname, "..", "..", "upload");
-    let mongofile = path.join(pp, "indaba.mongodb");
+    let mongolocation = path.join(pp);
     let redisfile = path.join(pp, "indaba.redis");
 
-    await exec(
-      `mongodump --host mongo --db bootlegger --archive=${mongofile} --gzip`
-    );
+    // await exec(
+    //   `mongodump --host mongo --db bootlegger --archive=${mongofile} --gzip`
+    // );
+
+    for (const collection of collections) {
+      const loc = path.join(mongolocation, collection + ".json");
+      await exec(
+        `mongoexport --host mongo --db bootlegger --collection ${collection} --out=${loc}`
+      );
+    }
 
     //create redis dump:
     await exec(`tar cvf ${redisfile} /redis`);
@@ -35,6 +51,7 @@ exports.backup = async function () {
 
     this.copyprogress = 0;
 
+    //run rsync for media dirs:
     await new Promise((res, rej) => {
       let command = realexec(
         `rsync -a --info=progress2 ${path.join(
@@ -74,11 +91,16 @@ exports.restore = async function (source) {
   try {
     this.backuprunning = true;
 
-    await exec(
-      `mongorestore --host mongo --db bootlegger --drop --archive=/usbdrive/usb/indaba/${source}/upload/indaba.mongodb --gzip`
-    );
+    for (const collection of collections) {
+      await exec(
+        `mongoimport --host mongo --db bootlegger --drop --collection ${collection} /usbdrive/usb/indaba/${source}/upload/${collection}.json`
+      );
+    }
 
-    await exec(`pkill redis-server`);
+    try {
+      //this will throw on dev machine, as redis-server is not running inside the container
+      await exec(`pkill redis-server`);
+    } catch {}
 
     await exec(
       `cd /redis && tar xvf /usbdrive/usb/indaba/${source}/upload/indaba.redis --strip 1`
