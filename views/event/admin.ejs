@@ -163,6 +163,7 @@
 
 		</tab>
 		<tab select="showusers()" heading="<%- __('Participants') %>">
+			<div style="margin-top:6px;margin-bottom: 6px;">
 			<span class="text-muted"><%- __('Order By:') %></span>
 			<a href="" ng-click="order('profile.name.familyName')"><%- __('Name') %></a><span class="sortorder"
 				ng-show="predicate === 'profile.name.familyName'" ng-class="{reverse:reverse}"></span> |
@@ -176,10 +177,10 @@
 				ng-show="predicate === 'created'" ng-class="{reverse:reverse}"></span> |
 			<a href="" ng-click="order('edits')"><%- __('Edits') %></a><span class="sortorder"
 				ng-show="predicate === 'edits'" ng-class="{reverse:reverse}"></span>
-
+			</div>
 			<div class="list-group">
 				<a class="list-group-item" href="#"><input type="text" placeholder="<%- __('search...') %>"
-						ng-model="search_users" class="form-control input-lg" /></a>
+						ng-model="search_users" class="form-control" /></a>
 				<div dir-paginate="user in users | filter:search_users | orderBy:predicate:reverse | itemsPerPage:20"
 					pagination-id="users" class="list-group-item">
 					<div class="row">
