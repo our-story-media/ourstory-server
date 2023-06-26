@@ -7,17 +7,21 @@ RUN mkdir -p /usr/src/app/upload
 
 WORKDIR /usr/src/app
 
-# RUN apt-get update && apt-get install -y git python gcc g++ make rsync
+
 
 RUN npm install -g nodemon
 
-# RUN wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add - && echo "deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.2 main" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list && apt-get update && apt-get install -y mongodb-org-tools
+RUN wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu1604-arm64-100.7.2.deb
+
+RUN apt install -y ./mongodb-database-tools-ubuntu1604-arm64-100.7.2.deb
 
 COPY package.json /usr/src/app/
 
 COPY package-lock.json /usr/src/app/
 
-RUN npm install
+RUN npm install 
+
+RUN apt-get update && apt-get install -y rsync
 
 COPY . /usr/src/app
 
