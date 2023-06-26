@@ -38,3 +38,14 @@ stages:
                 $(tag)
                 latest
               addPipelineData: false
+          - task: Bash@3
+            env:
+              CIRCLECITOKEN: $(CIRCLECITOKEN)
+            inputs:
+              targetType: 'inline'
+              script: |
+                curl --request POST \
+                  --url https://circleci.com/api/v2/project/vcs-slug/org-name/repo-name/pipeline \
+                  --header 'Circle-Token: $(CIRCLECITOKEN)' \
+                  --header 'content-type: application/json' \
+                  --data '{"parameters":{"run_update":true,"run_deploy":false}'
