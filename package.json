@@ -72,7 +72,7 @@
   "scripts": {
     "start": "node app.js --prod",
     "debug": "node debug app.js",
-    "build": "sails www --prod",
+    "build": "docker/builddocs.sh && sails www --prod",
     "buildgrunt": "grunt buildProd"
   },
   "main": "app.js",
