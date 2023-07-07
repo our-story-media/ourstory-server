@@ -152,11 +152,12 @@ module.exports.bootstrap = function (cb) {
     setInterval(async () => {
       const now = Date.now();
       const before = now - 48 * 60 * 60 * 1000;
-      //get all events where createdAt time < now - 48h
+      //get all events where createdAt time < now - 48h and after 1/1/2023
       //   console.log("EVENTS:");
       const events = await Event.find({
         createdAt: {
           "<": new Date(before),
+          ">": new Date("2023-01-01T00:00:00"),
         },
       });
 
