@@ -207,7 +207,13 @@
     <%- sails.config.maintenance %>
   </div>
   <% } %>
-  <div class="container" <% if (typeof(sails.config.maintenance)!='undefined' ) { %>style="margin-top:50px"
+  <% if (sails.config.DEMOMODE) { %>
+    <div style="position:absolute;top:0;width:100%;z-index:1000;height:50px;border-radius:0" class="alert alert-warning text-center">
+      <i class="fa fa-warning"></i>
+This site is for training ONLY. Content will be removed after 48 hours. DO NOT POST PRIVATE CONTENT.
+    </div>
+    <% } %>
+  <div class="container" <% if (typeof(sails.config.maintenance)!='undefined' || sails.config.DEMOMODE ) { %>style="margin-top:50px"
     <%}%>>
 
     <div class="modal fade" id="nameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -242,15 +248,15 @@
 
       <div class="visible-xs col-xs-1" style="padding-left:0">
         <a href="/" class="logo-xs">&nbsp;</a>
-        <% if (sails.config.LOCALONLY) { %>
-        <span style="position: absolute;top:-7px;left:33px;" class="buildversion bvsmall">TITAN</span>
+        <% if (sails.config.DEMOMODE) { %>
+        <span style="position: absolute;top:-7px;left:33px;" class="buildversion bvsmall">TRAINING</span>
         <% } %>
       </div>
 
       <div class="hidden-xs col-sm-3" style="padding-left:0">
         <a href="/" class="logo">&nbsp;</a>
-        <% if (sails.config.LOCALONLY) { %>
-        <span style="position: absolute;top:-5px;left:122px;" class="buildversion">TITAN</span>
+        <% if (sails.config.DEMOMODE) { %>
+        <span style="position: absolute;top:-5px;left:122px;" class="buildversion">TRAINING</span>
         <% } %>
       </div>
 
@@ -288,8 +294,8 @@
         <a href="#" class="super hidden-xs hidden-sm" data-toggle="modal" data-target="#nameModal">
           <%= user.profile.displayName %>
         </a>
-        <img class="profilephoto" style="border-radius:15px;width:26px;height:26px;margin-right:2px;" src="<%= user.profile.photos[0].value.replace(sails.config.master_url,'') %>" />
-          <% if (!sails.config.LOCALONLY) { %>
+        <!-- <img class="profilephoto" style="border-radius:15px;width:26px;height:26px;margin-right:2px;" src="<%= user.profile.photos[0].value.replace(sails.config.master_url,'') %>" /> -->
+          <% if (sails.config.DEMOMODE) { %>
             <a class="logoutbtn" href="/auth/logout">
               <i style=" vertical-align: middle;margin-left:2px;" class="fa fa-2x fa-sign-out"></i>
             </a>
@@ -307,13 +313,19 @@
         <%- __('My Shoots') %></a>
         
       <% } %> &middot;
+      
+      <% if (sails.config.LOCALONLY && !sails.config.DEMOMODE){ %>
       <a href="/docs" target="_blank">
         <%- __('Documentation') %></a>
+        <% } else { %>
+          <a href="https://indaba.dev" target="_blank">
+            <%- __('Documentation') %></a>
+        <% } %>
     </div>
   </div>
 
-  <% if (user && _.contains(sails.config.admin_email,user.profile.emails[0].value)) { %>
-  <div class="row" ng-controller="adminlists" >
+  <!-- <% if (user && _.contains(sails.config.admin_email,user.profile.emails[0].value)) { %> -->
+  <!-- <div class="row" ng-controller="adminlists" >
     <div class="bg-success clearfix" style="padding-top:1em;padding-bottom: 1em;margin-left:15px;margin-right:15px;border-radius: 0 0 6px 6px;">
       <div class="col-xs-12 col-sm-4 col-xs-2">
 
@@ -331,7 +343,7 @@
           </div>
 
 
-        <!-- </div> -->
+        
       <div class="col-sm-4 col-xs-10 text-right flip">
         <span class="form-inline">
           <input type="text" ng-model="shootsearch" typeahead-on-select="searchEvent($item, $model, $label)" style="display:inline-block;"
@@ -344,10 +356,10 @@
 
     </div>
 
-  </div>
+  </div> -->
 
-  <!-- </div> -->
-  <% } %>
+  
+  <!-- <% } %> -->
   <!--</div>-->
   <div class="clear:both"></div>
   <% if (user && typeof(viewonly)=='undefined') { %>

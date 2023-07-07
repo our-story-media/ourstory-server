@@ -206,16 +206,18 @@ module.exports = {
       }
     } else {
       //console.log("resetting login");
-      if (sails.config.LOCALONLY) {
-        // console.log('sending to dashboard')
+      if (sails.config.LOCALONLY && !sails.config.DEMOMODE) {
+        console.log("sending to dashboard");
         return res.redirect("/dashboard");
       }
 
       req.session.ismobile = false;
       req.session.isios = false;
       if (req.session.passport.user) {
-        if (!req.wantsJSON) return res.redirect("/dashboard");
-        else return res.json({ msg: "Logged In" }, 200);
+        if (!req.wantsJSON) {
+          // console.log("CASE 1");
+          return res.redirect("/dashboard");
+        } else return res.json({ msg: "Logged In" }, 200);
       } else {
         if (!req.wantsJSON) {
           // Event.find({ public: [1, true] }).exec(function (err, upcoming) {
@@ -337,12 +339,12 @@ module.exports = {
     if (req.session.ismobile) {
       passport.authenticate("google", {
         successRedirect: "/auth/sessionkey",
-        failureRedirect: "/auth/login",
+        failureRedirect: "/auth",
       })(req, res, next);
     } else {
       passport.authenticate("google", {
         successRedirect: "/dashboard",
-        failureRedirect: "/auth/login",
+        failureRedirect: "/auth",
       })(req, res, next);
     }
   },

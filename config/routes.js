@@ -18,7 +18,7 @@ module.exports.routes = {
   "get /join/:id?": "AuthController.join",
   "post /joincode": "AuthController.joincode",
   "get /joincomplete": "AuthController.joincomplete",
-  "get /dashboard": "EventController.dashboard",
+  "get /dashboard": "EventController.admin",
   "get /commission/new": "CommissionController.new",
   "get /commission/:id?": "CommissionController.index",
   "get /post/:id?": "PostController.index",

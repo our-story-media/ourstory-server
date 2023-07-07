@@ -38,10 +38,6 @@
 		<div class="indeterminate"></div>
 	</div>
 
-	<div class="page-header">
-		<h1><%- __('Administration') %></h1>
-	</div>
-
 	<% if (!sails.config.LOCALONLY) {%>
 	<div class="alert alert-info">
 		
@@ -108,11 +104,16 @@
 	</div>
 	<% } %>
   <div class="clearfix"></div>
-	<tabset>
 
-		<tab select="showshoots()" heading="<%- __('Shoots') %>">
-			<div style="margin-top:6px;margin-bottom: 6px;">
-			<span class="text-muted"><%- __('Order By:') %></span>
+  <div class="page-header">
+	<h1><%- __('My Shoots') %></h1>
+	</div>
+	<!-- <tabset>
+
+		<tab select="showshoots()" heading="<%- __('Shoots') %>"> -->
+			
+			<!-- <div style="margin-top:6px;margin-bottom: 6px;"> -->
+			<!-- <span class="text-muted"><%- __('Order By:') %></span>
 			<a href="" ng-click="ordere('name')"><%- __('Name') %></a><span class="sortorder"
 				ng-show="predicatee === 'name'" ng-class="{reverse:reversee}"></span> |
 			<a href="" ng-click="ordere('createdAt')"><%- __('Joined') %></a><span class="sortorder"
@@ -125,45 +126,67 @@
 				ng-show="predicatee === 'participants'" ng-class="{reverse:reversee}"></span> |
 			<a href="" ng-click="ordere('totalfilesize')"><%- __('Filesize') %></a><span class="sortorder"
 				ng-show="predicatee === 'totalfilesize'" ng-class="{reverse:reversee}"></span>
+			</div> -->
+
+			<!-- <input type="text" placeholder="<%- __('search...') %>" ng-model="search.$" class="form-control" style="margin-bottom:8px;" />		 -->
+			<div class="panel panel-default" style="margin-bottom:8px;text-align: center;">
+				<div class="bg-success" style="padding:16px;">
+					<a href="/commission/new" class="btn-lg">
+						<i class="fa fa-plus"></i> <%- __('Start a Shoot Now') %>
+					</a>
+				</div>
 			</div>
 
-			<div class="list-group">
-				<a class="list-group-item" href="#"><input type="text" placeholder="<%- __('search...') %>"
-						ng-model="search.$" class="form-control" /></a>
 				<div ng-repeat="(server,events) in events" >
 					<div dir-paginate="event in events | filter:search | orderBy:predicatee:reversee | itemsPerPage:20"
-						pagination-id="shoots" class="list-group-item" style="border-radius: 0;">
+						pagination-id="shoots">
+					<div class="panel panel-default" style="padding:16px;margin-bottom:8px;">
 						<div class="row">
 							<div class="col-xs-12 col-sm-10">
-								<h4 class="list-group-item-heading">
+								<h3 class="list-group-item-heading">
 									<a href="/event/view/{{event.id}}">{{event.name}}</a>
-								</h4>
-								<span ng-if="event.joincode"><i class="fa fa-key"></i> {{event.joincode}}</span>
+								</h3>
+								<!-- <span ng-if="event.joincode"><i class="fa fa-key"></i> {{event.joincode}}</span> -->
 								<i class="fa fa-clock-o" tooltip="shoot last touched" ng-show="event.lasttouched"></i>
 								{{event.lasttouched | date:short}}
+
+								<% if(sails.config.DEMOMODE) { %>
+								<i class="fa fa-calendar"  tooltip-append-to-body="true" tooltip="created at" ng-show="event.createdAt"></i>
+								{{event.createdAt | date:short}}
+								<% } %>
 								<i class="fa fa-video-camera" tooltip="total videos"></i> {{event.totalmedia}}
 								<i class="fa fa-user" tooltip="total contributors"></i> {{event.participants}}
 								<i class="fa fa-film" tooltip="total filesize"></i> {{event.totalfilesize | number:2}}MB
-								<br>
-								<i class="fa fa-users" tooltip="owners"></i> <a href="#"
-									ng-click="search.$=user.profile.displayName"
-									ng-repeat="user in event.users track by $index">{{user.profile.displayName}},
-								</a><br>
+								<% if(sails.config.DEMOMODE) { %>
+									<i class="fa fa-users" tooltip="owners"></i> <span 
+									ng-repeat="user in event.users track by $index">{{user.profile.displayName}}
+								</span><br>
+								<% } %>
 							</div>
 							<div class="col-xs-12 col-sm-2">
-								<a ng-href="/event/kill/{{event.id}}?apikey=<%-apikey%>"
+								<a ng-href="/event/kill/{{event.id}}?apikey=<%-apikey%>" tooltip-append-to-body="true" tooltip="<%- __('Kill Event') %>"
 									onclick="return confirm('<%- __('Really Kill Event?') %>')"
-									class="btn btn-link btn-sm btn-danger pull-right"><%- __('Kill Event') %></a>
+									class="btn btn-link btn-sm btn-danger pull-right">
+									<i class="fa fa-2x fa-trash"></i>
+								</a>
+								<a class="btn btn-link btn-sm btn-danger pull-right" tooltip-append-to-body="true" ng-href="/api/event/clone/{{event.id}}?apikey=<%- apikey %>" tooltip="<%- __('Duplicate') %>">
+									<i class="fa fa-2x fa-copy"></i>
+									</a>
 							</div>
 						</div>
 					</div>
+					</div>
 				</div>
 				<dir-pagination-controls pagination-id="shoots"></dir-pagination-controls>
-			</div>
+			
 
-		</tab>
-		<tab select="showusers()" heading="<%- __('Participants') %>">
-			<div style="margin-top:6px;margin-bottom: 6px;">
+		<!-- </tab> -->
+		<!-- <tab select="showusers()" heading="<%- __('Participants') %>"> -->
+			<div class="page-header" style="margin-top:16px;">
+				<h1><%- __('Participants') %></h1>
+				</div>
+
+			<!-- <div style="margin-top:6px;margin-bottom: 6px;">
 			<span class="text-muted"><%- __('Order By:') %></span>
 			<a href="" ng-click="order('profile.name.familyName')"><%- __('Name') %></a><span class="sortorder"
 				ng-show="predicate === 'profile.name.familyName'" ng-class="{reverse:reverse}"></span> |
@@ -177,20 +200,20 @@
 				ng-show="predicate === 'created'" ng-class="{reverse:reverse}"></span> |
 			<a href="" ng-click="order('edits')"><%- __('Edits') %></a><span class="sortorder"
 				ng-show="predicate === 'edits'" ng-class="{reverse:reverse}"></span>
-			</div>
-			<div class="list-group">
-				<a class="list-group-item" href="#"><input type="text" placeholder="<%- __('search...') %>"
+			</div> -->
+			<div>
+				<a href="#"><input style="margin-bottom: 8px;" type="text" placeholder="<%- __('search...') %>"
 						ng-model="search_users" class="form-control" /></a>
 				<div dir-paginate="user in users | filter:search_users | orderBy:predicate:reverse | itemsPerPage:20"
-					pagination-id="users" class="list-group-item">
+					pagination-id="users" class="panel panel-default" style="padding:8px;margin-bottom:4px;">
 					<div class="row">
 						<div class="col-xs-12 col-sm-8">
 							<h4 class="list-group-item-heading">
-								<img style="width:26px;height:auto;border-radius: 50%;"
-									ng-src="{{user.profile.photos[0].value.replace('<%- sails.config.master_url %>','')}}" />
-								<strong>{{user.profile.displayName}}</strong> <em>{{user.profile.emails[0].value}}</em>
+									<!-- <img style="width:26px;height:auto;border-radius: 50%;"
+										ng-src="{{user.profile.photos[0].value.replace('<%- sails.config.master_url %>','')}}" /> -->
+								{{user.profile.displayName}} <em>{{user.profile.emails[0].value}}</em>
 							</h4>
-							<i class="fa fa-clock-o" tooltip="<%- __('user joined') %>"></i>
+							<i class="fa fa-clock-o" tooltip-append-to-body="true" tooltip="<%- __('user joined') %>"></i>
 							{{user.createdAt | date:'short'}}
 							<i class="fa fa-users" tooltip="<%- __('shoots owned') %>"></i> {{user.owned}}
 							<i class="fa fa-user" tooltip="<%- __('shoots participated in') %>"></i>
@@ -204,19 +227,19 @@
 								onclick="return confirm('<%- __('Really Remove User?') %>')"
 								class="btn btn-link btn-danger btn-sm pull-right"><%- __('Remove') %></a>
 							&nbsp
-							<a ng-show="!user.nolimit" href="/event/removelimit/{{user.id}}?apikey=<%-apikey%>"
-								class="btn btn-primary btn-sm  btn-link pull-right"><%- __('Remove Limit') %></a>
-							&nbsp
-							<a ng-show="user.nolimit" href="/event/restorelimit/{{user.id}}?apikey=<%-apikey%>"
-								class="btn btn-primary btn-sm  btn-link pull-right"><%- __('Restore Limit') %></a>
+							<!-- <a ng-show="!user.nolimit" href="/event/removelimit/{{user.id}}?apikey=<%-apikey%>"
+								class="btn btn-primary btn-sm  btn-link pull-right"><%- __('Remove Limit') %></a> -->
+							<!-- &nbsp -->
+							<!-- <a ng-show="user.nolimit" href="/event/restorelimit/{{user.id}}?apikey=<%-apikey%>"
+								class="btn btn-primary btn-sm  btn-link pull-right"><%- __('Restore Limit') %></a> -->
 						</div>
 					</div>
 				</div>
 				<dir-pagination-controls pagination-id="users"></dir-pagination-controls>
 			</div>
 
-		</tab>
+		<!-- </tab> -->
 		<div class="clearfix"></div>
-	</tabset>
+	<!-- </tabset> -->
 </div>
 <div class="clearfix"></div>

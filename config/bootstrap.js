@@ -142,9 +142,8 @@ module.exports.bootstrap = function (cb) {
   if (sails.config.LOCALONLY) Log.info("bootstrap", `Loading LOCAL_MODE`);
 
   /**
-   * Update edit records if the edit file exists:
+   * When in demo mode, clear out content older than 48h
    */
-
   if (sails.config.DEMOMODE) {
     //set timer to check if events need to be cleared:
 
@@ -204,6 +203,10 @@ module.exports.bootstrap = function (cb) {
       }
     }, 5 * 60 * 1000); //every 5 mins
   }
+
+  /**
+   * Update edit records if the edit file exists:
+   */
 
   //if we are in online mode -- update .hasoriginal and .hastagged if there is a .path in the object.
   if (sails.config.LOCALONLY) {

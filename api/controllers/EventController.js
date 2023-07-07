@@ -70,8 +70,8 @@ module.exports = {
         //not a usb mounted
       }
 
-      // //TODO: For dev:
-      // isusb = true;
+      //For dev:
+      // if (sails.config.DEMOMODE) isusb = true;
 
       if (isusb) {
         if (fs.existsSync("/usbdrive/usb/indaba")) {
@@ -104,6 +104,8 @@ module.exports = {
   },
 
   admin_events: function (req, res) {
+    //if in demo mode -- only show shoots for that admin:
+
     User.find({}).exec(function (err, users) {
       // console.log(users);
       Media.find({}).exec(function (err, allmedia) {
@@ -126,6 +128,22 @@ module.exports = {
                 })
               ) / 1024.0;
           });
+
+          // console.log(req.session.passport.user);
+
+          const isSuper = _.contains(
+            sails.config.admin_email,
+            req.session.passport.user.profile.emails[0].value
+          );
+
+          console.log(isSuper);
+
+          if (sails.config.DEMOMODE && !isSuper) {
+            events = _.filter(events, (ev) => {
+              return _.includes(ev.ownedby, req.session.passport.user.id);
+            });
+          }
+
           return res.json({ events: _.groupBy(events, "server") });
         });
       });
@@ -943,7 +961,7 @@ module.exports = {
   myeventsowned: async function (req, res) {
     // var foundalready = new Array();
 
-    if (sails.config.LOCALONLY) {
+    if (sails.config.LOCALONLY && !sails.config.DEMOMODE) {
       let data = await Event.find({});
       // let output = [];
 
