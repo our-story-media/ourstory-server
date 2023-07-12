@@ -171,7 +171,7 @@
         </div>
 
         <div class="clearfix">
-          <div class="col-md-3 col-sm-4 col-xs-6" style="padding-left:0;padding-right:0;" dir-paginate="m in filteredmedia = (media | hasVideoFilter:hasvideo | deletedFilter:isdeleted | rangeFilter:slider | timeFilter:{from:timefilterfrom, to:timefilterto} | topicFilter:topicfilter | checkFilter:{scope:this,name:'user.profile.displayName', value:contributorfilter} | checkFilter:{scope:this,name:'meta.shot_ex.id', value:shotfilter} | areaFilter:{circle:circlefilter,filterbylocation:filterbylocation} | checkFilter:{scope:this,name:'meta.phase_ex.name', value:phasefilter} | checkFilter:{scope:this,name:'meta.role_ex.name', value:rolefilter} | filter:mapfilter | orderBy:'-createdAt') | itemsPerPage: 40">
+          <div class="col-md-3 col-sm-4 col-xs-6" style="padding-left:0;padding-right:0;" dir-paginate="m in filteredmedia = (media | hasVideoFilter:hasvideo | deletedFilter:isdeleted | rangeFilter:slider | timeFilter:{from:timefilterfrom, to:timefilterto} | topicFilter:topicfilter | checkFilter:{scope:this,name:'user.profile.displayName', value:contributorfilter} | checkFilter:{scope:this,name:'meta.shot_ex.id', value:shotfilter} | checkFilter:{scope:this,name:'meta.phase_ex.name', value:phasefilter} | checkFilter:{scope:this,name:'meta.role_ex.name', value:rolefilter} | filter:mapfilter | orderBy:'-createdAt') | itemsPerPage: 40">
             <div style="padding:2px;position:relative;">
               <div style="background:#f8f8f8;">
               <a style="padding-bottom:56.25%;overflow:hidden;width:100%;display:block;position:relative;"
@@ -207,7 +207,7 @@
           </div>
           </div>
       </tab>
-<% if (!sails.config.LOCALONLY) { %>
+<!-- <% if (!sails.config.LOCALONLY) { %>
         <tab heading="<%- __('Map View') %>" active="tabs.tab1" select="fixMap()">
           <button tooltip="re-center map" ng-click="fit();log('fit');" class="btn btn-link">
             <i class="fa fa-dot-circle-o fa-2x"></i>
@@ -224,7 +224,7 @@
               control="c.control" events="c.events"></ui-gmap-circle>
           </ui-gmap-google-map>
         </tab>
-  <% } %>
+  <% } %> -->
 
     </tabset>
   </div>
