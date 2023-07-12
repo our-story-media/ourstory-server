@@ -1118,7 +1118,7 @@ module.exports = {
   myevents: function (req, res) {
     var foundalready = new Array();
 
-    //TODO: fix for public access (i.e. do not expect user login profile)
+    //for public access (i.e. do not expect user login profile)
 
     User.find({}).exec(function (err, users) {
       //OWNER
@@ -2084,10 +2084,10 @@ module.exports = {
           //var e = req.params.all();
           //console.log(req.params.all());
           var neevent = _.extend(req.params.all(), {
-            ends: "1/1/3000",
-            ends_time: "00:00",
-            starts: "1/1/2000",
-            starts_time: "00:00",
+            ends: "01-01-3000",
+            ends_time: "0:00",
+            starts: "01-01-2000",
+            starts_time: "0:00",
 
             publicshare: 0,
             public: 1,
