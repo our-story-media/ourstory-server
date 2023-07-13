@@ -22,7 +22,6 @@ var bootleggerApp = angular.module("bootleggerApp", [
   "ui.grid.moveColumns",
   "ui.grid.resizeColumns",
   "angularUtils.directives.dirPagination",
-  "uiGmapgoogle-maps",
   "ui.slider",
   "ngDragDrop",
   "rzModule",

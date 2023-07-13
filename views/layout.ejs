@@ -130,7 +130,6 @@
   <script src="/js/angular-bootstrap-switch.js"></script>
   <script src="/js/angular-bootstrap-tokenfield.js"></script>
   <script src="/js/angular-dragdrop.js"></script>
-  <script src="/js/angular-google-maps.min.js"></script>
   <script src="/js/angular-knob.js"></script>
   <script src="/js/angular-loading-spinner.js"></script>
   <script src="/js/angular-sanitize.min.js"></script>
@@ -208,9 +207,9 @@
   </div>
   <% } %>
   <% if (sails.config.DEMOMODE) { %>
-    <div style="position:absolute;top:0;width:100%;z-index:1000;height:50px;border-radius:0" class="alert alert-warning text-center">
+    <div style="position:absolute;top:0;width:100%;z-index:1000;height:50px;border-radius:0;" class="alert alert-warning text-center">
       <i class="fa fa-warning"></i>
-This site is for training ONLY. Content will be removed after 48 hours. DO NOT POST PRIVATE CONTENT.
+This site is for training ONLY. Content will be removed after 48 hours.
     </div>
     <% } %>
   <div class="container" <% if (typeof(sails.config.maintenance)!='undefined' || sails.config.DEMOMODE ) { %>style="margin-top:50px"
