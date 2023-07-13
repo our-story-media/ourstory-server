@@ -172,6 +172,8 @@ bootleggerApp.filter("topicFilter", function () {
   return function (items, params) {
     var filtered = [];
 
+    // console.log(params);
+
     // console.log("params: "+typeof(params[0]));
 
     // If time is with the range
@@ -191,7 +193,7 @@ bootleggerApp.filter("topicFilter", function () {
         // if (_.intersection(t,params).length > 0)
         if (intersection.length > 0) filtered.push(item);
       } else {
-        if (params == false) filtered.push(item);
+        if (params.length === 0) filtered.push(item);
       }
     });
     return filtered;
