@@ -136,7 +136,9 @@ module.exports = {
             req.session.passport.user.profile.emails[0].value
           );
 
-          console.log(isSuper);
+          // if (sails.config.LOCALONLY) isSuper = true;
+
+          // console.log(isSuper);
 
           if (sails.config.DEMOMODE && !isSuper) {
             events = _.filter(events, (ev) => {

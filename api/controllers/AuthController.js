@@ -205,7 +205,7 @@ module.exports = {
         return res.status(403).json({ error: "Please login" });
       }
     } else {
-      //console.log("resetting login");
+      //skip login page if not online
       if (sails.config.LOCALONLY && !sails.config.DEMOMODE) {
         console.log("sending to dashboard");
         return res.redirect("/dashboard");

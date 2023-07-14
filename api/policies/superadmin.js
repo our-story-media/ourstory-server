@@ -8,8 +8,7 @@
  */
 module.exports = function (req, res, ok) {
   // User is allowed, proceed to controller
-
-  //THIS DOES NOT SEEM TO WORK FOR WEBSOCKET CONNECTIONS
+  // console.log("checking superadmin");
 
   //console.log(req.session.passport.user);
   if (
@@ -29,7 +28,7 @@ module.exports = function (req, res, ok) {
       if (
         req.session.passport &&
         req.session.passport.user &&
-        sails.config.DEMOMODE
+        sails.config.LOCALONLY
       )
         return ok();
       else
@@ -38,10 +37,12 @@ module.exports = function (req, res, ok) {
           .send("You are not permitted to perform this action.");
     } else {
       //if its demo mode:
+      // console.log(req.session.passport);
+
       if (
         req.session.passport &&
         req.session.passport.user &&
-        sails.config.DEMOMODE
+        sails.config.LOCALONLY
       )
         return ok();
 

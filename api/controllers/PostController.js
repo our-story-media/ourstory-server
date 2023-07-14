@@ -65,7 +65,7 @@ module.exports = {
         return res.view({
           theevent: ev,
           event: ev,
-          pagetitle: req.__("Stories for "),
+          pagetitle: req.__("Transcriptions for "),
         });
       else return res.redirect("/dashboard");
     });

@@ -61,7 +61,7 @@ module.exports.policies = {
     server: true,
     list: ["superadmin", "apiauth"],
     addevent: ["flash", "eventlimit", "apiauth"],
-    admin: ["superadmin", "flash", "apikeygen"],
+    admin: ["authenticated", "superadmin", "flash", "apikeygen"],
     kill: ["superadmin", "flash", "apiauth"],
     map: ["authenticated", "isowner", "apiauth"],
     image: ["apiauth", "authenticated", "isowner"],

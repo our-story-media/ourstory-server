@@ -25,7 +25,7 @@ module.exports = function (req, res, ok) {
     //check its not from mobile:
     // console.log(req.headers);
 
-    // console.log('IS VALID LOCAL ADMIN');
+    // console.log("IS VALID LOCAL ADMIN");
 
     req.session.api = false;
     req.session.ismobile = true;
