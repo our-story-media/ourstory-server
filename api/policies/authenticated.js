@@ -127,6 +127,7 @@ module.exports = function (req, res, ok) {
             res.locals.inspect = require("util").inspect;
             res.locals.moment = require("moment");
             res.locals.user = "";
+            res.locals.rtl = "ltr";
             if (!res.locals.flash) res.locals.flash = "";
 
             if (!res.locals.event) {
