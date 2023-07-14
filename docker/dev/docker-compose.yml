@@ -79,16 +79,13 @@ services:
       - ../../config:/usr/src/app/config
       - "./upload:/usr/src/app/upload"
       - "../../package.json:/usr/src/app/package.json"
-      # - "../../package-lock.json:/usr/src/app/package-lock.json"
       - "../../api:/usr/src/app/api"
       - "../../assets:/usr/src/app/assets"
       - "../../views:/usr/src/app/views"
       - "../../tasks:/usr/src/app/tasks"
       - "../../transcription:/usr/src/app/transcription:ro"
-      - ../prod/.sailsrc:/usr/src/app/.sailsrc:ro
-      - ../prod/ssl:/usr/src/app/ssl:ro
+      # - ../prod/.sailsrc:/usr/src/app/.sailsrc:ro
       - ../../../ourstory-worker:/usr/src/ourstory-worker
-      # - "../prod/.sailsrc:/usr/src/app/.sailsrc"
       - ./usbdrive:/usbdrive
       - ./redis:/redis
-      # - /var/run/docker.sock:/var/run/docker.sock
+    
