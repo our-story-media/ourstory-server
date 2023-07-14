@@ -106,7 +106,7 @@ exports.restore = async function (source) {
       `cd /redis && tar xvf /usbdrive/usb/indaba/${source}/upload/indaba.redis --strip 1`
     );
 
-    await exec(`redis-server &`);
+    await exec(`redis-server --dir /redis --appendonly yes &`);
 
     this.copyprogress = 0;
 
