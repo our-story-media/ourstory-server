@@ -211,28 +211,28 @@ module.exports = {
     return res.json(users);
   },
 
-  removeuser: function (req, res) {
-    //find user
-    User.findOne(req.params.id).exec(function (err, user) {
-      //remove all personal info
+  // removeuser: function (req, res) {
+  //   //find user
+  //   User.findOne(req.params.id).exec(function (err, user) {
+  //     //remove all personal info
 
-      user.profile = {
-        emails: [{ value: "no-reply@anon.com" }],
-        displayName: "Deleted User",
-        name: { givenName: "Deleted User" },
-      };
-      user.deleted = { by: req.session.passport.user.id, on: new Date() };
-      user.name = "Deleted User";
-      user.pushcode = "";
-      user.platform = "";
-      user.currentevent = "";
-      user.save(function (err, done) {
-        //console.log(done);
-        req.session.flash = { msg: req.__("User Removed") };
-        return res.redirect("/event/admin");
-      });
-    });
-  },
+  //     user.profile = {
+  //       emails: [{ value: "no-reply@anon.com" }],
+  //       displayName: "Deleted User",
+  //       name: { givenName: "Deleted User" },
+  //     };
+  //     user.deleted = { by: req.session.passport.user.id, on: new Date() };
+  //     user.name = "Deleted User";
+  //     user.pushcode = "";
+  //     user.platform = "";
+  //     user.currentevent = "";
+  //     user.save(function (err, done) {
+  //       //console.log(done);
+  //       req.session.flash = { msg: req.__("User Removed") };
+  //       return res.redirect("/event/admin");
+  //     });
+  //   });
+  // },
 
   dashboard: function (req, res) {
     //JOIN CODE
