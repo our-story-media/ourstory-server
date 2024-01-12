@@ -1,7 +1,7 @@
 {
   "name": "bootlegger",
   "private": true,
-  "version": "2.2.10",
+  "version": "2.2.11",
   "description": "Real time production control system for participatory video.",
   "devDependencies": {
     "grunt-contrib-clean": "^0.5.0",
