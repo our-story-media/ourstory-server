@@ -73,7 +73,7 @@
     "start": "node app.js --prod",
     "debug": "node debug app.js",
     "build": "docker/builddocs.sh && sails www --prod",
-    "buildgrunt": "grunt buildProd"
+    "buildgrunt": "docker/builddocs.sh && grunt buildProd"
   },
   "main": "app.js",
   "author": "Tom Bartindale",
