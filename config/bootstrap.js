@@ -176,16 +176,9 @@ module.exports.bootstrap = function (cb) {
         //for each edit, remove (+transcode)
 
         for (const edit of edits) {
-          console.log(`Removing upload/edits/${edit.shortcode}*.mp4`);
+          console.log(`Removing upload/edits/${edit.code}*.mp4`);
           await fse.remove(
-            path.join(
-              __dirname,
-              "..",
-              "upload",
-              "edits",
-              edit.shortcode,
-              "*.mp4"
-            )
+            path.join(__dirname, "..", "upload", "edits", edit.code, "*.mp4")
           );
           await fse.remove(
             path.join(
@@ -194,7 +187,7 @@ module.exports.bootstrap = function (cb) {
               "upload",
               "trancode",
               "edits",
-              edit.shortcode,
+              edit.code,
               "*.mp4"
             )
           );
