@@ -37,8 +37,8 @@ exports.backup = async function () {
       );
     }
 
-    //create redis dump:
-    await exec(`tar cvf ${redisfile} /redis`);
+    //TODO: create redis dump:
+    // await exec(`tar cvf ${redisfile} /redis`);
 
     let dest = `/usbdrive/usb/indaba/${Date.now()}`;
 
@@ -97,16 +97,18 @@ exports.restore = async function (source) {
       );
     }
 
-    try {
-      //this will throw on dev machine, as redis-server is not running inside the container
-      await exec(`pkill redis-server`);
-    } catch {}
+    //TODO: come up with alternative redis backup?
 
-    await exec(
-      `cd /redis && tar xvf /usbdrive/usb/indaba/${source}/upload/indaba.redis --strip 1`
-    );
+    // try {
+    //   //this will throw on dev machine, as redis-server is not running inside the container
+    //   await exec(`pkill redis-server`);
+    // } catch {}
 
-    await exec(`redis-server --dir /redis --appendonly yes &`);
+    // await exec(
+    //   `cd /redis && tar xvf /usbdrive/usb/indaba/${source}/upload/indaba.redis --strip 1`
+    // );
+
+    // await exec(`redis-server --dir /redis --appendonly yes &`);
 
     this.copyprogress = 0;
 
