@@ -1309,11 +1309,13 @@ module.exports = {
               if (u != null) {
                 //console.log(u);
                 //el.name = u.profile.displayName;
-                output.push({
-                  id: el,
-                  name: u.profile.displayName,
-                  isme: u.id == req.session.passport.user.id,
-                });
+                if (u.profile) {
+                  output.push({
+                    id: el,
+                    name: u.profile.displayName,
+                    isme: u.id == req.session.passport.user.id,
+                  });
+                }
               }
               callback();
             });
