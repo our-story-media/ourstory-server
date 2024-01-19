@@ -172,7 +172,9 @@ bootleggerApp.filter("topicFilter", function () {
   return function (items, params) {
     var filtered = [];
 
-    // console.log(params);
+    // console.log(items);
+
+    if (params.length === 0) return items;
 
     // console.log("params: "+typeof(params[0]));
 
@@ -192,10 +194,15 @@ bootleggerApp.filter("topicFilter", function () {
         // console.log('union:'+_.intersection(t,params))
         // if (_.intersection(t,params).length > 0)
         if (intersection.length > 0) filtered.push(item);
-      } else {
-        if (params.length === 0) filtered.push(item);
       }
+
+      // else {
+      //   console.log("show all");
+      //   if (params.length === 0) filtered.push(item);
+      // }
     });
+
+    // console.log(filtered);
     return filtered;
   };
 });
