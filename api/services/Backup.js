@@ -114,7 +114,7 @@ exports.restore = async function (source) {
 
     await new Promise((res, rej) => {
       let command = realexec(
-        `rsync -a --info=progress2 /usbdrive/usb/indaba/${source}/upload/* ${path.join(
+        `rsync -a --perms --chmod=777 --info=progress2 /usbdrive/usb/indaba/${source}/upload/* ${path.join(
           __dirname,
           "..",
           "..",
