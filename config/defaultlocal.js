@@ -11,9 +11,9 @@ module.exports = {
   bootlegger: false,
   ifrc: false,
 
-  FAKES3URL: "http://10.10.10.1/upload/",
+  FAKES3URL: "http://10.10.10.1:8845/upload/",
 
-  FAKES3URL_TRANSCODE: "http://10.10.10.1/upload/transcode/upload/",
+  FAKES3URL_TRANSCODE: "http://10.10.10.1:8845/upload/transcode/upload/",
 
   NOTRENDERTAGGED: true,
 
@@ -46,9 +46,9 @@ module.exports = {
 
   CURRENT_EDIT_KEY: "replaceme",
 
-  central_url: "http://localhost",
+  central_url: "http://localhost:8845",
 
-  master_url: "http://10.10.10.1",
+  master_url: "http://10.10.10.1:8845",
 
   S3_BUCKET: "bootleggerlive",
 
